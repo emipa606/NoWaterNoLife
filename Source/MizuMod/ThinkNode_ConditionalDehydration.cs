@@ -11,7 +11,7 @@ namespace MizuMod
     {
         protected override bool Satisfied(Pawn pawn)
         {
-            return pawn.needs.water() != null && pawn.needs.water().CurCategory >= ThirstCategory.Dehydration;
+            return pawn.needs.Water() != null && pawn.needs.Water().CurCategory >= ThirstCategory.Dehydration;
         }
     }
 }

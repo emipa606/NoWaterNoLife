@@ -12,20 +12,18 @@ namespace MizuMod
     {
         public SectionLayer_WaterNet(Section section) : base(section)
 		{
-            this.requireAddToMapMesh = false;
-            this.relevantChangeTypes = MapMeshFlag.Buildings;
+            requireAddToMapMesh = false;
+            relevantChangeTypes = MapMeshFlag.Buildings;
         }
 
         public override void DrawLayer()
         {
             ThingDef thingDef = null;
-            Designator_Build designator_build = Find.DesignatorManager.SelectedDesignator as Designator_Build;
-            if (designator_build != null)
+            if (Find.DesignatorManager.SelectedDesignator is Designator_Build designator_build)
             {
                 thingDef = designator_build.PlacingDef as ThingDef;
             }
-            Designator_Install designator_install = Find.DesignatorManager.SelectedDesignator as Designator_Install;
-            if (designator_install != null)
+            if (Find.DesignatorManager.SelectedDesignator is Designator_Install designator_install)
             {
                 thingDef = designator_install.PlacingDef as ThingDef;
             }
@@ -38,8 +36,7 @@ namespace MizuMod
 
         protected override void TakePrintFrom(Thing t)
         {
-            IBuilding_WaterNet building = t as IBuilding_WaterNet;
-            if (building != null)
+            if (t is IBuilding_WaterNet building)
             {
                 building.PrintForGrid(this);
             }

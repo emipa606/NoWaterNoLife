@@ -18,26 +18,26 @@ namespace MizuMod
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
-            this.compPowerTrader = this.GetComp<CompPowerTrader>();
+            compPowerTrader = GetComp<CompPowerTrader>();
         }
 
         public override void TickRare()
         {
             base.TickRare();
 
-            if (this.compPowerTrader.PowerOn)
+            if (compPowerTrader.PowerOn)
             {
                 // 電源ON、故障無し、稼働時間範囲内の時
-                if (this.InputWaterNet != null)
+                if (InputWaterNet != null)
                 {
                     // 設備の置かれた部屋
-                    var room = this.Position.GetRoom(this.Map);
+                    var room = Position.GetRoom(Map);
 
                     // 部屋内もしくは隣接した火災
                     var fireList = room.ContainedAndAdjacentThings.Where((t) => t is Fire);
 
                     // 水やり範囲
-                    var cells = GenRadial.RadialCellsAround(base.Position, this.def.specialDisplayRadius, true);
+                    var cells = GenRadial.RadialCellsAround(base.Position, def.specialDisplayRadius, true);
 
                     // 消火範囲内の部屋内火災or隣接火災
                     var targetFireList = fireList.Where((t) => cells.Contains(t.Position));
@@ -46,20 +46,20 @@ namespace MizuMod
                     if (targetFireList.Count() >= 1)
                     {
                         // 部屋内の水やり範囲
-                        var roomCells = cells.Where((c) => c.GetRoom(this.Map) == room);
+                        var roomCells = cells.Where((c) => c.GetRoom(Map) == room);
 
                         var targetFireCells = targetFireList.Select((t) => t.Position);
 
                         var wateringCells = roomCells.Union(targetFireCells);
 
                         // 水が足りているかチェック
-                        float useWaterVolume = UseWaterVolumePerOne * wateringCells.Count();
+                        var useWaterVolume = UseWaterVolumePerOne * wateringCells.Count();
 
-                        if (this.InputWaterNet.StoredWaterVolumeForFaucet >= useWaterVolume)
+                        if (InputWaterNet.StoredWaterVolumeForFaucet >= useWaterVolume)
                         {
-                            var wateringComp = this.Map.GetComponent<MapComponent_Watering>();
+                            var wateringComp = Map.GetComponent<MapComponent_Watering>();
 
-                            this.InputWaterNet.DrawWaterVolumeForFaucet(useWaterVolume);
+                            InputWaterNet.DrawWaterVolumeForFaucet(useWaterVolume);
 
                             foreach (var fire in targetFireList)
                             {
@@ -77,10 +77,10 @@ namespace MizuMod
                                 GenSpawn.Spawn(mote, c, base.Map);
 
                                 // 水やり効果
-                                if (this.Map.terrainGrid.TerrainAt(this.Map.cellIndices.CellToIndex(c)).fertility >= 0.01f)
+                                if (Map.terrainGrid.TerrainAt(Map.cellIndices.CellToIndex(c)).fertility >= 0.01f)
                                 {
-                                    wateringComp.Add(this.Map.cellIndices.CellToIndex(c), 1);
-                                    this.Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+                                    wateringComp.Add(Map.cellIndices.CellToIndex(c), 1);
+                                    Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
                                 }
                             }
                         }

@@ -29,12 +29,12 @@ namespace MizuMod
 
         public static Toil DoRecipeWorkDrawing(TargetIndex billGiverIndex)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
                 Job curJob = actor.jobs.curJob;
-                JobDriver_DoBill jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
+                var jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
 
                 jobDriver_DoBill.workLeft = curJob.bill.recipe.WorkAmountTotal(null);
                 jobDriver_DoBill.billStartTick = Find.TickManager.TicksGame;
@@ -46,22 +46,20 @@ namespace MizuMod
             {
                 Pawn actor = toil.actor;
                 Job curJob = actor.jobs.curJob;
-                JobDriver_DoBill jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
+                var jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
 
                 jobDriver_DoBill.ticksSpentDoingRecipeWork++;
                 curJob.bill.Notify_PawnDidWork(actor);
 
-                IBillGiverWithTickAction billGiverWithTickAction = actor.CurJob.GetTarget(billGiverIndex).Thing as IBillGiverWithTickAction;
-                if (billGiverWithTickAction != null)
+                if (actor.CurJob.GetTarget(billGiverIndex).Thing is IBillGiverWithTickAction billGiverWithTickAction)
                 {
                     // 設備の時間経過処理
                     billGiverWithTickAction.UsedThisTick();
                 }
 
                 // 工数を進める処理
-                float num = (curJob.RecipeDef.workSpeedStat != null) ? actor.GetStatValue(curJob.RecipeDef.workSpeedStat, true) : 1f;
-                Building_WorkTable building_WorkTable = jobDriver_DoBill.BillGiver as Building_WorkTable;
-                if (building_WorkTable != null)
+                var num = (curJob.RecipeDef.workSpeedStat != null) ? actor.GetStatValue(curJob.RecipeDef.workSpeedStat, true) : 1f;
+                if (jobDriver_DoBill.BillGiver is Building_WorkTable building_WorkTable)
                 {
                     num *= building_WorkTable.GetStatValue(StatDefOf.WorkTableWorkSpeedFactor, true);
                 }
@@ -87,7 +85,7 @@ namespace MizuMod
             {
                 Pawn actor = toil.actor;
                 Job curJob = actor.CurJob;
-                return 1f - ((JobDriver_DoBill)actor.jobs.curDriver).workLeft / curJob.bill.recipe.WorkAmountTotal(null);
+                return 1f - (((JobDriver_DoBill)actor.jobs.curDriver).workLeft / curJob.bill.recipe.WorkAmountTotal(null));
             }, false, -0.5f);
             toil.FailOn(() => toil.actor.CurJob.bill.suspended);
             return toil;
@@ -95,17 +93,17 @@ namespace MizuMod
 
         public static Toil FinishRecipeAndStartStoringProduct(Func<Thing> makeRecipeProduct)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
                 Job curJob = actor.jobs.curJob;
-                JobDriver_DoBill jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
+                var jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
 
                 // 経験値取得
                 if (curJob.RecipeDef.workSkill != null)
                 {
-                    float xp = (float)jobDriver_DoBill.ticksSpentDoingRecipeWork * 0.11f * curJob.RecipeDef.workSkillLearnFactor;
+                    var xp = (float)jobDriver_DoBill.ticksSpentDoingRecipeWork * 0.11f * curJob.RecipeDef.workSkillLearnFactor;
                     actor.skills.GetSkill(curJob.RecipeDef.workSkill).Learn(xp, false);
                 }
 
@@ -143,8 +141,7 @@ namespace MizuMod
 
                 // 最適な倉庫まで持っていく
                 thing.SetPositionDirect(actor.Position);
-                IntVec3 c;
-                if (StoreUtility.TryFindBestBetterStoreCellFor(thing, actor, actor.Map, StoragePriority.Unstored, actor.Faction, out c, true))
+                if (StoreUtility.TryFindBestBetterStoreCellFor(thing, actor, actor.Map, StoragePriority.Unstored, actor.Faction, out IntVec3 c, true))
                 {
                     actor.carryTracker.TryStartCarry(thing);
                     curJob.targetA = thing;
@@ -170,7 +167,7 @@ namespace MizuMod
 
         public static Toil AddPlacedThing()
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = () =>
             {
                 var actor = toil.actor;
@@ -185,22 +182,22 @@ namespace MizuMod
         }
         public static Toil FinishPourRecipe(TargetIndex billGiverIndex, TargetIndex ingListIndex)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
                 Job curJob = actor.jobs.curJob;
-                JobDriver_DoBill jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
+                var jobDriver_DoBill = (JobDriver_DoBill)actor.jobs.curDriver;
 
                 // 経験値取得
                 if (curJob.RecipeDef.workSkill != null)
                 {
-                    float xp = (float)jobDriver_DoBill.ticksSpentDoingRecipeWork * 0.11f * curJob.RecipeDef.workSkillLearnFactor;
+                    var xp = (float)jobDriver_DoBill.ticksSpentDoingRecipeWork * 0.11f * curJob.RecipeDef.workSkillLearnFactor;
                     actor.skills.GetSkill(curJob.RecipeDef.workSkill).Learn(xp, false);
                 }
 
                 // 注ぎ込んだ水の総量と水質を求める
-                float totalWaterVolume = 0f;
+                var totalWaterVolume = 0f;
                 var totalWaterType = WaterType.NoWater;
                 foreach (var tspc in curJob.placedThings)
                 {
@@ -217,8 +214,7 @@ namespace MizuMod
                     totalWaterType = totalWaterType.GetMinType(compprop.waterType);
                 }
 
-                var billGiver = curJob.GetTarget(billGiverIndex).Thing as Building_WaterNetWorkTable;
-                if (billGiver == null)
+                if (!(curJob.GetTarget(billGiverIndex).Thing is Building_WaterNetWorkTable billGiver))
                 {
                     Log.Error("billGiver is null");
                     actor.jobs.EndCurrentJob(JobCondition.Incompletable);
@@ -256,7 +252,7 @@ namespace MizuMod
         public static Toil StartCarryFromInventory(TargetIndex thingIndex)
         {
             // 水(食事)を持ち物から取り出す
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = () =>
             {
                 Pawn actor = toil.actor;
@@ -275,7 +271,7 @@ namespace MizuMod
 
         public static Toil StartPathToDrinkSpot(TargetIndex thingIndex)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
@@ -291,7 +287,7 @@ namespace MizuMod
 
         private static Toil DrinkSomeone(TargetIndex thingIndex, Func<Toil, Func<LocalTargetInfo>> funcGetter)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
@@ -327,7 +323,7 @@ namespace MizuMod
                 {
                     return 1f;
                 }
-                return 1f - (float)toil.actor.jobs.curDriver.ticksLeftThisToil / (float)comp.BaseDrinkTicks;
+                return 1f - ((float)toil.actor.jobs.curDriver.ticksLeftThisToil / (float)comp.BaseDrinkTicks);
             }, false, -0.5f);
             toil.defaultCompleteMode = ToilCompleteMode.Delay;
             toil.FailOnDestroyedOrNull(thingIndex);
@@ -394,49 +390,51 @@ namespace MizuMod
 
         public static Toil Drink(TargetIndex thingIndex)
         {
-            return Toils_Mizu.DrinkSomeone(thingIndex, (toil) =>
-            {
-                return () =>
+            return Toils_Mizu.DrinkSomeone(thingIndex, (toil) => () =>
                 {
                     if (!toil.actor.CurJob.GetTarget(thingIndex).HasThing)
                     {
                         return null;
                     }
                     return toil.actor.CurJob.GetTarget(thingIndex).Thing;
-                };
-            });
+                });
         }
 
         public static Toil FeedToPatient(TargetIndex thingIndex, TargetIndex patientIndex)
         {
-            return Toils_Mizu.DrinkSomeone(thingIndex, (toil) =>
-            {
-                return () =>
+            return Toils_Mizu.DrinkSomeone(thingIndex, (toil) => () =>
                 {
-                    if (!toil.actor.CurJob.GetTarget(patientIndex).HasThing) return null;
+                    if (!toil.actor.CurJob.GetTarget(patientIndex).HasThing)
+                    {
+                        return null;
+                    }
 
-                    var patient = toil.actor.CurJob.GetTarget(patientIndex).Thing as Pawn;
-                    if (patient == null) return null;
+                    if (!(toil.actor.CurJob.GetTarget(patientIndex).Thing is Pawn patient))
+                    {
+                        return null;
+                    }
 
                     return patient;
-                };
-            });
+                });
         }
 
         private static Toil FinishDrinkSomeone(TargetIndex thingIndex, Func<Toil, Pawn> pawnGetter)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = () =>
             {
                 Thing thing = toil.actor.jobs.curJob.GetTarget(thingIndex).Thing;
                 Pawn getter = pawnGetter(toil);
-                if (getter == null) return;
+                if (getter == null)
+                {
+                    return;
+                }
 
-                float wantedWaterAmount = getter.needs.water().WaterWanted;
-                float gotWaterAmount = MizuUtility.GetWater(getter, thing, wantedWaterAmount, false);
+                var wantedWaterAmount = getter.needs.Water().WaterWanted;
+                var gotWaterAmount = MizuUtility.GetWater(getter, thing, wantedWaterAmount, false);
                 if (!getter.Dead)
                 {
-                    getter.needs.water().CurLevel += gotWaterAmount;
+                    getter.needs.Water().CurLevel += gotWaterAmount;
                 }
                 getter.records.AddTo(MizuDef.Record_WaterDrank, gotWaterAmount);
             };
@@ -446,17 +444,17 @@ namespace MizuMod
 
         public static Toil FinishDrink(TargetIndex thingIndex)
         {
-            return Toils_Mizu.FinishDrinkSomeone(thingIndex, (toil) =>
-            {
-                return toil.actor;
-            });
+            return Toils_Mizu.FinishDrinkSomeone(thingIndex, (toil) => toil.actor);
         }
 
         public static Toil FinishDrinkPatient(TargetIndex thingIndex, TargetIndex patientIndex)
         {
             return Toils_Mizu.FinishDrinkSomeone(thingIndex, (toil) =>
             {
-                if (!toil.actor.CurJob.GetTarget(patientIndex).HasThing) return null;
+                if (!toil.actor.CurJob.GetTarget(patientIndex).HasThing)
+                {
+                    return null;
+                }
 
                 return toil.actor.CurJob.GetTarget(patientIndex).Thing as Pawn;
             });
@@ -465,14 +463,14 @@ namespace MizuMod
         public static Toil DrinkTerrain(TargetIndex cellIndex, int baseDrinkTicksFromTerrain)
         {
             // 地形から水を飲む
-            int initialTicks = 1;
+            var initialTicks = 1;
 
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
             	var actor = toil.actor;
                 var cell = actor.CurJob.GetTarget(cellIndex).Cell;
-                var need_water = actor.needs.water();
+                var need_water = actor.needs.Water();
                 if (need_water == null)
                 {
                     actor.jobs.EndCurrentJob(JobCondition.Incompletable);
@@ -498,7 +496,7 @@ namespace MizuMod
                 if (actor.needs.mood != null)
                 {
                     // 水分摂取による心情変化
-                    List<ThoughtDef> thoughtList = new List<ThoughtDef>();
+                    var thoughtList = new List<ThoughtDef>();
                     MizuUtility.ThoughtsFromWaterTypeDef(actor, waterTypeDef, true, thoughtList);
                     foreach (var thoughtDef in thoughtList)
                     {
@@ -531,7 +529,7 @@ namespace MizuMod
             toil.tickAction = delegate
             {
                 toil.actor.GainComfortFromCellIfPossible();
-                var need_water = toil.actor.needs.water();
+                var need_water = toil.actor.needs.Water();
                 var cell = toil.actor.CurJob.GetTarget(cellIndex).Cell;
                 if (need_water == null)
                 {
@@ -540,12 +538,12 @@ namespace MizuMod
                 }
 
                 // 徐々に飲む
-                float riseNeedWater = 1 / (float)baseDrinkTicksFromTerrain;
+                var riseNeedWater = 1 / (float)baseDrinkTicksFromTerrain;
                 need_water.CurLevel = Mathf.Min(need_water.CurLevel + riseNeedWater, need_water.MaxLevel);
             };
             toil.WithProgressBar(cellIndex, delegate
             {
-                return 1f - (float)toil.actor.jobs.curDriver.ticksLeftThisToil / initialTicks;
+                return 1f - ((float)toil.actor.jobs.curDriver.ticksLeftThisToil / initialTicks);
             }, false, -0.5f);
             toil.defaultCompleteMode = ToilCompleteMode.Delay;
             toil.FailOn((t) =>
@@ -557,20 +555,20 @@ namespace MizuMod
             // エフェクト追加
             toil.PlaySustainerOrSound(delegate
             {
-                return DefDatabase<SoundDef>.GetNamed("Ingest_Beer");
+                return DefDatabase<SoundDef>.GetNamed("Ingest_Water");
             });
             return toil;
         }
 
         public static Toil FinishDrinkTerrain(TargetIndex terrainVecIndex)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
-                Need_Water need_water = actor.needs.water();
+                Need_Water need_water = actor.needs.Water();
 
-                float numWater = need_water.MaxLevel - need_water.CurLevel;
+                var numWater = need_water.MaxLevel - need_water.CurLevel;
 
                 TerrainDef terrain = actor.Map.terrainGrid.TerrainAt(actor.CurJob.GetTarget(terrainVecIndex).Cell);
                 WaterTerrainType drankTerrainType = terrain.GetWaterTerrainType();
@@ -603,7 +601,7 @@ namespace MizuMod
 
                 if (!actor.Dead)
                 {
-                    actor.needs.water().CurLevel += numWater;
+                    actor.needs.Water().CurLevel += numWater;
                 }
                 actor.records.AddTo(MizuDef.Record_WaterDrank, numWater);
             };
@@ -613,21 +611,26 @@ namespace MizuMod
 
         public static Toil DropCarriedThing(TargetIndex prisonerIndex, TargetIndex dropSpotIndex)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
 
                 // そもそも何も運んでいない
-                if (actor.carryTracker == null || actor.carryTracker.CarriedThing == null) return;
+                if (actor.carryTracker == null || actor.carryTracker.CarriedThing == null)
+                {
+                    return;
+                }
 
                 // ターゲットが場所ではなく物
-                if (actor.CurJob.GetTarget(dropSpotIndex).HasThing) return;
+                if (actor.CurJob.GetTarget(dropSpotIndex).HasThing)
+                {
+                    return;
+                }
 
-                Thing dropThing = null;
 
                 // その場に置いてみる
-                bool isDropSuccess = actor.carryTracker.TryDropCarriedThing(actor.CurJob.GetTarget(dropSpotIndex).Cell, ThingPlaceMode.Direct, out dropThing);
+                var isDropSuccess = actor.carryTracker.TryDropCarriedThing(actor.CurJob.GetTarget(dropSpotIndex).Cell, ThingPlaceMode.Direct, out Thing dropThing);
 
                 if (!isDropSuccess)
                 {
@@ -636,7 +639,10 @@ namespace MizuMod
                 }
 
                 // その場or近くに置けなかった
-                if (!isDropSuccess) return;
+                if (!isDropSuccess)
+                {
+                    return;
+                }
 
                 if (actor.Map.reservationManager.ReservedBy(dropThing, actor))
                 {
@@ -645,12 +651,17 @@ namespace MizuMod
                 }
 
                 // 相手が囚人でない可能性
-                if (!actor.CurJob.GetTarget(prisonerIndex).HasThing) return;
+                if (!actor.CurJob.GetTarget(prisonerIndex).HasThing)
+                {
+                    return;
+                }
 
-                Pawn prisoner = actor.CurJob.GetTarget(prisonerIndex).Thing as Pawn;
 
                 // 囚人がポーンではない
-                if (prisoner == null) return;
+                if (!(actor.CurJob.GetTarget(prisonerIndex).Thing is Pawn prisoner))
+                {
+                    return;
+                }
 
                 //// 置いた水を囚人が飲むジョブを作成
                 //Job job = new Job(MizuDef.Job_DrinkWater, dropThing)
@@ -669,12 +680,19 @@ namespace MizuMod
 
         public static Toil AddCarriedThingToInventory()
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = () =>
             {
                 var actor = toil.actor;
-                if (actor.carryTracker == null || actor.carryTracker.innerContainer == null) return;
-                if (actor.inventory == null || actor.inventory.innerContainer == null) return;
+                if (actor.carryTracker == null || actor.carryTracker.innerContainer == null)
+                {
+                    return;
+                }
+
+                if (actor.inventory == null || actor.inventory.innerContainer == null)
+                {
+                    return;
+                }
 
                 Thing takeThing = actor.carryTracker.innerContainer.Take(actor.carryTracker.CarriedThing);
                 actor.inventory.innerContainer.TryAdd(takeThing);
@@ -686,23 +704,22 @@ namespace MizuMod
 
         public static Toil DrinkFromBuilding(TargetIndex buildingIndex)
         {
-            int initialTicks = 1;
+            var initialTicks = 1;
 
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 var actor = toil.actor;
                 var thing = actor.CurJob.GetTarget(buildingIndex).Thing;
                 var comp = thing.TryGetComp<CompWaterSource>();
-                var building = thing as IBuilding_DrinkWater;
 
-                if (actor.needs == null || actor.needs.water() == null || building == null || comp == null || !comp.IsWaterSource)
+                if (actor.needs == null || actor.needs.Water() == null || !(thing is IBuilding_DrinkWater building) || comp == null || !comp.IsWaterSource)
                 {
                     actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                     return;
                 }
 
-                var need_water = actor.needs.water();
+                var need_water = actor.needs.Water();
                 var waterTypeDef = MizuDef.Dic_WaterTypeDef[comp.WaterType];
 
                 // 向きを変更
@@ -738,24 +755,23 @@ namespace MizuMod
             toil.tickAction = delegate
             {
                 toil.actor.GainComfortFromCellIfPossible();
-                var need_water = toil.actor.needs.water();
+                var need_water = toil.actor.needs.Water();
                 var thing = toil.actor.CurJob.GetTarget(buildingIndex).Thing;
                 var comp = thing.TryGetComp<CompWaterSource>();
-                var building = thing as IBuilding_DrinkWater;
-                if (thing == null || comp == null || !comp.IsWaterSource || building == null || building.IsEmpty)
+                if (thing == null || comp == null || !comp.IsWaterSource || !(thing is IBuilding_DrinkWater building) || building.IsEmpty)
                 {
                     toil.actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                     return;
                 }
 
                 // 徐々に飲む
-                float riseNeedWater = 1 / (float)comp.BaseDrinkTicks;
+                var riseNeedWater = 1 / (float)comp.BaseDrinkTicks;
                 need_water.CurLevel = Mathf.Min(need_water.CurLevel + riseNeedWater, need_water.MaxLevel);
                 building.DrawWater(riseNeedWater * Need_Water.NeedWaterVolumePerDay);
             };
             toil.WithProgressBar(buildingIndex, delegate
             {
-                return 1f - (float)toil.actor.jobs.curDriver.ticksLeftThisToil / initialTicks;
+                return 1f - ((float)toil.actor.jobs.curDriver.ticksLeftThisToil / initialTicks);
             }, false, -0.5f);
             toil.defaultCompleteMode = ToilCompleteMode.Delay;
             toil.FailOn((t) =>
@@ -778,20 +794,19 @@ namespace MizuMod
             // エフェクト追加
             toil.PlaySustainerOrSound(delegate
             {
-                return DefDatabase<SoundDef>.GetNamed("Ingest_Beer");
+                return DefDatabase<SoundDef>.GetNamed("Ingest_Water");
             });
             return toil;
         }
 
         public static Toil DrawWater(TargetIndex drawerIndex, int drawTicks)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
                 Thing thing = actor.CurJob.GetTarget(drawerIndex).Thing;
-                var building = thing as IBuilding_DrinkWater;
-                if (building == null
+                if (!(thing is IBuilding_DrinkWater building)
                     || building.WaterType == WaterType.Undefined
                     || building.WaterType == WaterType.NoWater
                     || !building.CanDrawFor(actor))
@@ -812,13 +827,13 @@ namespace MizuMod
 
             // エフェクト追加
             toil.WithEffect(DefDatabase<EffecterDef>.GetNamed("Cook"), drawerIndex);
-            toil.PlaySustainerOrSound(DefDatabase<SoundDef>.GetNamed("Recipe_CookMeal"));
+            toil.PlaySustainerOrSound(DefDatabase<SoundDef>.GetNamed("Pour_Water"));
             return toil;
         }
 
         public static Toil FinishDrawWater(TargetIndex drawerIndex)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
@@ -830,8 +845,7 @@ namespace MizuMod
                     return;
                 }
 
-                var building = thing as IBuilding_DrinkWater;
-                if (building == null)
+                if (!(thing is IBuilding_DrinkWater building))
                 {
                     actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                     return;
@@ -896,8 +910,7 @@ namespace MizuMod
             var toil = new Toil();
             toil.initAction = () =>
             {
-                var billProduction = toil.actor.jobs.curJob.bill as Bill_Production;
-                if (billProduction != null && billProduction.repeatMode == BillRepeatModeDefOf.TargetCount)
+                if (toil.actor.jobs.curJob.bill is Bill_Production billProduction && billProduction.repeatMode == BillRepeatModeDefOf.TargetCount)
                 {
                     toil.actor.Map.resourceCounter.UpdateResourceCounts();
                 }
@@ -908,7 +921,7 @@ namespace MizuMod
 
         public static Toil ClearConditionSatisfiedTargets(TargetIndex ind, Predicate<LocalTargetInfo> cond)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 Pawn actor = toil.actor;
@@ -921,14 +934,13 @@ namespace MizuMod
 
         public static Toil TryFindStoreCell(TargetIndex thingInd, TargetIndex storeInd)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = () =>
             {
                 var actor = toil.actor;
                 var thing = actor.jobs.curJob.GetTarget(thingInd).Thing;
 
-                IntVec3 storeCell;
-                if (!StoreUtility.TryFindBestBetterStoreCellFor(thing, actor, actor.Map, StoragePriority.Unstored, actor.Faction, out storeCell, true))
+                if (!StoreUtility.TryFindBestBetterStoreCellFor(thing, actor, actor.Map, StoragePriority.Unstored, actor.Faction, out IntVec3 storeCell, true))
                 {
                     // 最適な倉庫が見つからなかった→そこで終了
                     actor.jobs.EndCurrentJob(JobCondition.Succeeded);

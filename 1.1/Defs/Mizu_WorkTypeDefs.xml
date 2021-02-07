@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <WorkTypeDef>
+    <defName>Mizu_Drawing</defName>
+    <labelShort>Draw</labelShort>
+    <pawnLabel>Drawer</pawnLabel>
+    <gerundLabel>Drawing</gerundLabel>
+    <description>Drawing water for drinking</description>
+    <verb>Draw</verb>
+    <naturalPriority>990</naturalPriority>
+    <requireCapableColonist>true</requireCapableColonist>
+    <workTags>
+      <li>ManualDumb</li>
+    </workTags>
+  </WorkTypeDef>
+  <WorkTypeDef>
+    <defName>Mizu_Cleaning</defName>
+    <labelShort>Clean</labelShort>
+    <pawnLabel>Cleaner</pawnLabel>
+    <gerundLabel>cleaning</gerundLabel>
+    <description>Clean the floor with tools.</description>
+    <verb>Clean</verb>
+    <naturalPriority>190</naturalPriority>
+    <alwaysStartActive>true</alwaysStartActive>
+    <requireCapableColonist>true</requireCapableColonist>
+    <workTags>
+      <li>ManualDumb</li>
+      <li>Cleaning</li>
+    </workTags>
+  </WorkTypeDef>
+</Defs>

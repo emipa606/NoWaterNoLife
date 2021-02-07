@@ -1,16 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  
   <Mizu_Mop.label>モップ</Mizu_Mop.label>
   <Mizu_Mop.description>掃除用具です。人工のフロアをよりきれいに掃除することが出来ます。</Mizu_Mop.description>
-  
   <Mizu_Towel.label>タオル</Mizu_Towel.label>
   <Mizu_Towel.description>看病に使う道具です。病人を看病して病気からの回復を助けることが出来ます。</Mizu_Towel.description>
-  
   <Mizu_WateringPot.label>じょうろ</Mizu_WateringPot.label>
   <Mizu_WateringPot.description>栽培に使う道具です。農地に水やりをして肥沃度を上昇させることが出来ます。</Mizu_WateringPot.description>
-  
   <Mizu_Bucket.label>バケツ</Mizu_Bucket.label>
   <Mizu_Bucket.description>消火に使う道具です。これを使えば効率的に消火することが出来ます。</Mizu_Bucket.description>
-  
 </LanguageData>

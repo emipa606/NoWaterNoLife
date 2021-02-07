@@ -10,29 +10,11 @@ namespace MizuMod
 {
     public class Area_Mop : Area
     {
-        public override string Label
-        {
-            get
-            {
-                return MizuStrings.AreaMop.Translate();
-            }
-        }
+        public override string Label => MizuStrings.AreaMop.Translate();
 
-        public override Color Color
-        {
-            get
-            {
-                return new Color(0.3f, 0.3f, 0.9f);
-            }
-        }
+        public override Color Color => new Color(0.3f, 0.3f, 0.9f);
 
-        public override int ListPriority
-        {
-            get
-            {
-                return 3999;
-            }
-        }
+        public override int ListPriority => 3999;
 
         public Area_Mop()
         {
@@ -44,7 +26,7 @@ namespace MizuMod
 
         public override string GetUniqueLoadID()
         {
-            return "Area_" + this.ID + "_MizuMop";
+            return "Area_" + ID + "_MizuMop";
         }
     }
 }

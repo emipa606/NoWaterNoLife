@@ -10,37 +10,13 @@ namespace MizuMod
 {
     public class Building_DrawingWaterSpot : Building_WorkTable, IBuilding_DrinkWater
     {
-        public bool IsActivated
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsActivated => true;
 
-        public WaterType WaterType
-        {
-            get
-            {
-                return this.Map.terrainGrid.TerrainAt(this.Position).ToWaterType();
-            }
-        }
+        public WaterType WaterType => Map.terrainGrid.TerrainAt(Position).ToWaterType();
 
-        public float WaterVolume
-        {
-            get
-            {
-                return 100000f;
-            }
-        }
+        public float WaterVolume => 100000f;
 
-        public bool IsEmpty
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsEmpty => false;
 
         public bool CanDrinkFor(Pawn p)
         {

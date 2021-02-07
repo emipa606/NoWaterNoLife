@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_NeedWater.stages.0.label>Um pouco de sede</Mizu_NeedWater.stages.0.label>
   <Mizu_NeedWater.stages.0.description>Estou com um pouco de sede.</Mizu_NeedWater.stages.0.description>
   <Mizu_NeedWater.stages.1.label>Sede</Mizu_NeedWater.stages.1.label>
@@ -31,6 +30,4 @@
   <Mizu_DrankScoopedWater.stages.0.description>Eu peguei água com minha mão. Quero um copo. </Mizu_DrankScoopedWater.stages.0.description>
 
   <Mizu_SippedWaterLikeBeast.stages.0.label>Bebendo como uma fera</Mizu_SippedWaterLikeBeast.stages.0.label>
-  <Mizu_SippedWaterLikeBeast.stages.0.description>Eu não tenho escolha a não ser beber como uma fera.</Mizu_SippedWaterLikeBeast.stages.0.description>
-
-</LanguageData>
+  <Mizu_SippedWaterLikeBeast.stages.0.description>Eu não tenho escolha a não ser beber como uma fera.</Mizu_SippedWaterLikeBeast.stages.0.description></LanguageData>

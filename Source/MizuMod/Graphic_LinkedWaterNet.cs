@@ -21,9 +21,9 @@ namespace MizuMod
 
         public override bool ShouldLinkWith(IntVec3 c, Thing parent)
         {
-            IBuilding_WaterNet thing = parent as IBuilding_WaterNet;
+            var thing = parent as IBuilding_WaterNet;
 
-            bool foundWaterNetBase = false;
+            var foundWaterNetBase = false;
             foreach (var net in thing.WaterNetManager.Nets)
             {
                 foreach (var t in net.AllThings)
@@ -37,7 +37,10 @@ namespace MizuMod
                         }
                     }
                 }
-                if (foundWaterNetBase) break;
+                if (foundWaterNetBase)
+                {
+                    break;
+                }
             }
 
             if (!foundWaterNetBase)
@@ -60,15 +63,15 @@ namespace MizuMod
 
         public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
         {
-            return new Graphic_LinkedWaterNet(this.subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
+            return new Graphic_LinkedWaterNet(subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
             {
-                data = this.data
+                data = data
             };
         }
 
         public override void Print(SectionLayer layer, Thing parent)
         {
-            Printer_Plane.PrintPlane(layer, parent.TrueCenter(), Vector2.one, this.LinkedDrawMatFrom(parent, parent.Position), 0f, false, null, null, 0.01f);
+            Printer_Plane.PrintPlane(layer, parent.TrueCenter(), Vector2.one, LinkedDrawMatFrom(parent, parent.Position), 0f, false, null, null, 0.01f);
         }
     }
 }

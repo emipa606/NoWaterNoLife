@@ -12,29 +12,28 @@ namespace MizuMod
     {
         public abstract MapComponent_WaterGrid WaterGrid { get; }
 
-        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol)
+        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
         {
-            this.WaterGrid.MarkForDraw();
+            WaterGrid.MarkForDraw();
         }
 
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null)
+        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
         {
-            ThingDef def = checkingDef as ThingDef;
-            if (def == null)
+            if (!(checkingDef is ThingDef def))
             {
                 return false;
             }
 
-            int curID = 0;
+            var curID = 0;
 
-            for (int x = 0; x < def.Size.x; x++)
+            for (var x = 0; x < def.Size.x; x++)
             {
-                for (int z = 0; z < def.Size.z; z++)
+                for (var z = 0; z < def.Size.z; z++)
                 {
-                    IntVec3 relVec = (new IntVec3(x, 0, z)).RotatedBy(rot);
+                    IntVec3 relVec = new IntVec3(x, 0, z).RotatedBy(rot);
                     IntVec3 curVec = loc + relVec;
 
-                    int poolID = this.WaterGrid.GetID(map.cellIndices.CellToIndex(curVec));
+                    var poolID = WaterGrid.GetID(map.cellIndices.CellToIndex(curVec));
                     if (poolID == 0)
                     {
                         return false;

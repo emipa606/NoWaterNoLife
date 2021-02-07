@@ -11,28 +11,31 @@ namespace MizuMod
 {
     public class CompWaterSource : ThingComp
     {
-        public CompProperties_WaterSource Props { get { return (CompProperties_WaterSource)this.props; } }
+        public CompProperties_WaterSource Props => (CompProperties_WaterSource)props;
 
-        public CompProperties_WaterSource.SourceType SourceType {  get { return this.Props.sourceType; } }
-        public EffecterDef GetEffect { get { return this.Props.getEffect; } }
-        public SoundDef GetSound { get { return this.Props.getSound; } }
-        public int BaseDrinkTicks { get { return this.Props.baseDrinkTicks; } }
-        public bool NeedManipulate { get { return this.Props.needManipulate; } }
-        public float WaterAmount { get { return this.Props.waterAmount; } }
-        public int MaxNumToGetAtOnce { get { return this.Props.maxNumToGetAtOnce; } }
-        public float WaterVolume { get { return this.Props.waterVolume; } }
+        public CompProperties_WaterSource.SourceType SourceType => Props.sourceType;
+        public EffecterDef GetEffect => Props.getEffect;
+        public SoundDef GetSound => Props.getSound;
+        public int BaseDrinkTicks => Props.baseDrinkTicks;
+        public bool NeedManipulate => Props.needManipulate;
+        public float WaterAmount => Props.waterAmount;
+        public int MaxNumToGetAtOnce => Props.maxNumToGetAtOnce;
+        public float WaterVolume => Props.waterVolume;
 
         public WaterType WaterType
         {
             get
             {
-                switch (this.SourceType)
+                switch (SourceType)
                 {
                     case CompProperties_WaterSource.SourceType.Item:
-                        return this.Props.waterType;
+                        return Props.waterType;
                     case CompProperties_WaterSource.SourceType.Building:
-                        var building = this.parent as IBuilding_DrinkWater;
-                        if (building == null) return WaterType.Undefined;
+                        if (!(parent is IBuilding_DrinkWater building))
+                        {
+                            return WaterType.Undefined;
+                        }
+
                         return building.WaterType;
                     default:
                         return WaterType.Undefined;
@@ -40,29 +43,11 @@ namespace MizuMod
             }
         }
 
-        public bool DependIngredients
-        {
-            get
-            {
-                return this.Props.dependIngredients;
-            }
-        }
+        public bool DependIngredients => Props.dependIngredients;
 
-        public bool IsWaterSource
-        {
-            get
-            {
-                return (this.WaterType != WaterType.Undefined && this.WaterType != WaterType.NoWater);
-            }
-        }
+        public bool IsWaterSource => WaterType != WaterType.Undefined && WaterType != WaterType.NoWater;
 
-        public float DrainWaterFlow
-        {
-            get
-            {
-                return this.Props.drainWaterFlow;
-            }
-        }
+        public float DrainWaterFlow => Props.drainWaterFlow;
 
         private CompFlickable compFlickable = null;
 
@@ -70,7 +55,7 @@ namespace MizuMod
         {
             base.PostSpawnSetup(respawningAfterLoad);
 
-            this.compFlickable = this.parent.GetComp<CompFlickable>();
+            compFlickable = parent.GetComp<CompFlickable>();
         }
         //public override void PostIngested(Pawn ingester)
         //{
@@ -94,16 +79,16 @@ namespace MizuMod
                 yield return floatMenuOption;
             }
 
-            if (this.SourceType == CompProperties_WaterSource.SourceType.Item && !this.parent.def.IsIngestible)
+            if (SourceType == CompProperties_WaterSource.SourceType.Item && !parent.def.IsIngestible)
             {
                 // 水アイテムで、食べることが出来ないものは飲める
 
                 if (selPawn.IsColonistPlayerControlled)
                 {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.Append(string.Format(MizuStrings.FloatMenuGetWater.Translate(), this.parent.LabelNoCount).CapitalizeFirst());
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.Append(string.Format(MizuStrings.FloatMenuGetWater.Translate(), parent.LabelNoCount).CapitalizeFirst());
 
-                    if (!this.parent.IsSociallyProper(selPawn))
+                    if (!parent.IsSociallyProper(selPawn))
                     {
                         // 囚人部屋のものは表示を追加
                         stringBuilder.Append(string.Concat(
@@ -112,9 +97,9 @@ namespace MizuMod
                             ")"
                         ));
                     }
-                    foreach (var p in this.parent.Map.mapPawns.AllPawns)
+                    foreach (var p in parent.Map.mapPawns.AllPawns)
                     {
-                        if (this.parent.Map.reservationManager.ReservedBy(this.parent, p))
+                        if (parent.Map.reservationManager.ReservedBy(parent, p))
                         {
                             // 予約されている物は表示を追加
                             stringBuilder.AppendLine();
@@ -129,9 +114,9 @@ namespace MizuMod
 
                     yield return new FloatMenuOption(stringBuilder.ToString(), () =>
                     {
-                        Job job = new Job(MizuDef.Job_DrinkWater, this.parent)
+                        var job = new Job(MizuDef.Job_DrinkWater, parent)
                         {
-                            count = MizuUtility.WillGetStackCountOf(selPawn, this.parent)
+                            count = MizuUtility.WillGetStackCountOf(selPawn, parent)
                         };
                         selPawn.jobs.TryTakeOrderedJob(job, JobTag.SatisfyingNeeds);
                     });

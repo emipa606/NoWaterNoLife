@@ -13,13 +13,13 @@ namespace MizuMod
     {
         public Designator_DeconstructPipe()
         {
-            this.defaultLabel = MizuStrings.DesignatorDeconstructPipe.Translate();
-            this.defaultDesc = MizuStrings.DesignatorDeconstructPipeDescription.Translate();
-            this.icon = ContentFinder<Texture2D>.Get("UI/Designators/Deconstruct", true);
-            this.soundDragSustain = SoundDefOf.Designate_DragStandard;
-            this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-            this.useMouseIcon = true;
-            this.soundSucceeded = SoundDefOf.Designate_Deconstruct;
+            defaultLabel = MizuStrings.DesignatorDeconstructPipe.Translate();
+            defaultDesc = MizuStrings.DesignatorDeconstructPipeDescription.Translate();
+            icon = ContentFinder<Texture2D>.Get("UI/Designators/Deconstruct", true);
+            soundDragSustain = SoundDefOf.Designate_DragStandard;
+            soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+            useMouseIcon = true;
+            soundSucceeded = SoundDefOf.Designate_Deconstruct;
             //this.hotKey = KeyBindingDefOf.DesignatorDeconstruct;
         }
 
@@ -43,10 +43,16 @@ namespace MizuMod
         public override AcceptanceReport CanDesignateThing(Thing t)
         {
             // 建設済みのパイプなら〇
-            if (base.CanDesignateThing(t).Accepted && (t is Building_Pipe)) return true;
+            if (base.CanDesignateThing(t).Accepted && (t is Building_Pipe))
+            {
+                return true;
+            }
 
             // パイプの設計or施行なら〇
-            if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe || t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater)) return true;
+            if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe || t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater))
+            {
+                return true;
+            }
 
             // それ以外は×
             return false;

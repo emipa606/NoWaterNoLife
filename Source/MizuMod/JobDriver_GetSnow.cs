@@ -17,17 +17,11 @@ namespace MizuMod
 
         private const float GetWorkPerSnowDepth = 100f;
 
-        private float TotalNeededWork
-        {
-            get
-            {
-                return GetWorkPerSnowDepth * WorkGiver_GetSnow.ConsumeSnowPerOne;
-            }
-        }
+        private float TotalNeededWork => GetWorkPerSnowDepth * WorkGiver_GetSnow.ConsumeSnowPerOne;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            return this.pawn.Reserve(this.job.targetA, this.job);
+            return pawn.Reserve(job.targetA, job);
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
@@ -40,22 +34,22 @@ namespace MizuMod
             getToil.tickAction = () =>
             {
                 var actor = getToil.actor;
-                float statValue = actor.GetStatValue(StatDefOf.WorkSpeedGlobal, true);
-                float num = statValue;
-                this.workDone += num;
-                if (this.workDone >= WorkGiver_GetSnow.ConsumeSnowPerOne * 100f)
+                var statValue = actor.GetStatValue(StatDefOf.WorkSpeedGlobal, true);
+                var num = statValue;
+                workDone += num;
+                if (workDone >= WorkGiver_GetSnow.ConsumeSnowPerOne * 100f)
 				{
-                    var snowDepth = this.Map.snowGrid.GetDepth(this.TargetLocA);
+                    var snowDepth = Map.snowGrid.GetDepth(TargetLocA);
                     snowDepth = Math.Max(0f, snowDepth - WorkGiver_GetSnow.ConsumeSnowPerOne);
-                    this.Map.snowGrid.SetDepth(this.TargetLocA, snowDepth);
-                    this.ReadyForNextToil();
+                    Map.snowGrid.SetDepth(TargetLocA, snowDepth);
+                    ReadyForNextToil();
                     return;
                 }
             };
             getToil.defaultCompleteMode = ToilCompleteMode.Never;
             getToil.WithEffect(EffecterDefOf.ClearSnow, GetSnowCellIndex);
             getToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
-            getToil.WithProgressBar(GetSnowCellIndex, () => this.workDone / this.TotalNeededWork, true, -0.5f);
+            getToil.WithProgressBar(GetSnowCellIndex, () => workDone / TotalNeededWork, true, -0.5f);
             getToil.FailOnCannotTouch(GetSnowCellIndex, PathEndMode.Touch);
             yield return getToil;
 
@@ -75,7 +69,7 @@ namespace MizuMod
                         " could not drop recipe product ",
                         snowThing,
                         " near ",
-                        this.TargetLocA
+                        TargetLocA
                     }));
                 }
             };

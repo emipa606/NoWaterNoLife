@@ -14,79 +14,76 @@ namespace MizuMod
         public const int IntervalTicks = 250;
 
         // 水やり効果がなくなるまでの残りTick
-        private ushort[] wateringGrid;
+        private readonly ushort[] wateringGrid;
 
         private int elapsedTicks;
         private int randomIndex;
         public MapComponent_Watering(Map map) : base(map)
         {
-            this.elapsedTicks = 0;
-            this.randomIndex = 0;
-            this.wateringGrid = new ushort[map.cellIndices.NumGridCells];
+            elapsedTicks = 0;
+            randomIndex = 0;
+            wateringGrid = new ushort[map.cellIndices.NumGridCells];
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            Scribe_Values.Look(ref this.elapsedTicks, "elapsedTicks");
-            Scribe_Values.Look(ref this.randomIndex, "randomIndex");
-            MapExposeUtility.ExposeUshort(this.map, (c) => this.wateringGrid[this.map.cellIndices.CellToIndex(c)], (c, val) =>
-            {
-                this.wateringGrid[this.map.cellIndices.CellToIndex(c)] = val;
-            }, "wateringGrid");
+            Scribe_Values.Look(ref elapsedTicks, "elapsedTicks");
+            Scribe_Values.Look(ref randomIndex, "randomIndex");
+            MapExposeUtility.ExposeUshort(map, (c) => wateringGrid[map.cellIndices.CellToIndex(c)], (c, val) => wateringGrid[map.cellIndices.CellToIndex(c)] = val, "wateringGrid");
         }
 
         public ushort Get(int index)
         {
-            return this.wateringGrid[index];
+            return wateringGrid[index];
         }
 
         public void Set(int index, ushort val)
         {
-            this.wateringGrid[index] = (val < MaxWateringValue) ? val : MaxWateringValue;
+            wateringGrid[index] = (val < MaxWateringValue) ? val : MaxWateringValue;
         }
 
         public void Add(int index, ushort val)
         {
-            this.Set(index, (ushort)(this.Get(index) + val));
+            Set(index, (ushort)(Get(index) + val));
         }
 
         public override void MapComponentTick()
         {
             base.MapComponentTick();
             
-            this.elapsedTicks++;
-            if (this.elapsedTicks >= IntervalTicks)
+            elapsedTicks++;
+            if (elapsedTicks >= IntervalTicks)
             {
-                this.elapsedTicks = 0;
+                elapsedTicks = 0;
 
-                int numCells = this.map.Area * IntervalTicks / 60000 * 10;
+                var numCells = map.Area * IntervalTicks / 60000 * 10;
 
-                for (int i = 0; i < numCells; i++)
+                for (var i = 0; i < numCells; i++)
                 {
-                    var c = this.map.cellsInRandomOrder.Get(this.randomIndex);
-                    var terrain = this.map.terrainGrid.TerrainAt(c);
-                    if (this.map.weatherManager.RainRate > 0.5f && !this.map.roofGrid.Roofed(c) && terrain.fertility >= 0.01f)
+                    var c = map.cellsInRandomOrder.Get(randomIndex);
+                    var terrain = map.terrainGrid.TerrainAt(c);
+                    if (map.weatherManager.RainRate > 0.5f && !map.roofGrid.Roofed(c) && terrain.fertility >= 0.01f)
                     {
                         // 雨が降れば水やり効果
-                        this.wateringGrid[this.map.cellIndices.CellToIndex(c)] = 10;
-                        this.map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+                        wateringGrid[map.cellIndices.CellToIndex(c)] = 10;
+                        map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
                     }
-                    else if (this.wateringGrid[this.map.cellIndices.CellToIndex(c)] > 0)
+                    else if (wateringGrid[map.cellIndices.CellToIndex(c)] > 0)
                     {
                         // 水が渇く
-                        this.wateringGrid[this.map.cellIndices.CellToIndex(c)]--;
-                        if (this.wateringGrid[this.map.cellIndices.CellToIndex(c)] == 0)
+                        wateringGrid[map.cellIndices.CellToIndex(c)]--;
+                        if (wateringGrid[map.cellIndices.CellToIndex(c)] == 0)
                         {
-                            this.map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+                            map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
                         }
                     }
 
-                    this.randomIndex++;
-                    if (this.randomIndex >= this.map.cellIndices.NumGridCells)
+                    randomIndex++;
+                    if (randomIndex >= map.cellIndices.NumGridCells)
                     {
-                        this.randomIndex = 0;
+                        randomIndex = 0;
                     }
                 }
             }

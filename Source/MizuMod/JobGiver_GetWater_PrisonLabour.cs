@@ -25,24 +25,29 @@ namespace MizuMod
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
 			var jobGiver_GetWater_PrisonLabour = base.DeepCopy(resolve) as JobGiver_GetWater_PrisonLabour;
-			jobGiver_GetWater_PrisonLabour.minCategory = this.minCategory;
+			jobGiver_GetWater_PrisonLabour.minCategory = minCategory;
 			return jobGiver_GetWater_PrisonLabour;
 		}
         
 		protected override Job TryGiveJob(Pawn pawn)
 		{
-			Need_Water need_water = pawn.needs.water();
+			Need_Water need_water = pawn.needs.Water();
 			if (need_water == null)
-				return null;
+            {
+                return null;
+            }
 
-			if (need_water.lastSearchWaterTick + SearchWaterIntervalTick > Find.TickManager.TicksGame)
-				return null;
-			// Only trink if we're really thirsty.  
-			if (need_water.CurLevelPercentage > need_water.PercentageThreshThirsty) 
-				return null;
-			
-			
-			need_water.lastSearchWaterTick = Find.TickManager.TicksGame;
+            if (need_water.lastSearchWaterTick + SearchWaterIntervalTick > Find.TickManager.TicksGame)
+            {
+                return null;
+            }
+            // Only trink if we're really thirsty.  
+            if (need_water.CurLevelPercentage > need_water.PercentageThreshThirsty)
+            {
+                return null;
+            }
+
+            need_water.lastSearchWaterTick = Find.TickManager.TicksGame;
 
 			
 			Thing thing = MizuUtility.TryFindBestWaterSourceFor(pawn, pawn, false, true);
@@ -56,17 +61,18 @@ namespace MizuMod
 				}
 			}
 
-			// 何も見つからなかった場合は隠し水飲み場を探す
-			// 人間、家畜、野生の動物全て
-			IntVec3 hiddenWaterSpot;
-			if (MizuUtility.TryFindHiddenWaterSpot(pawn, out hiddenWaterSpot)) {
-				return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) {
-					count = 1
-				};
-			}
+            // 何も見つからなかった場合は隠し水飲み場を探す
+            // 人間、家畜、野生の動物全て
+            if (MizuUtility.TryFindHiddenWaterSpot(pawn, out IntVec3 hiddenWaterSpot))
+            {
+                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot)
+                {
+                    count = 1
+                };
+            }
 
-			// 水を発見できず
-			return null;
+            // 水を発見できず
+            return null;
 		}
 	}
 }

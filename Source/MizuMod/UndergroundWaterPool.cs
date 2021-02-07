@@ -15,94 +15,55 @@ namespace MizuMod
         public int ID;
 
         private WaterType waterType;
-        public WaterType WaterType
-        {
-            get
-            {
-                return this.waterType;
-            }
-        }
+        public WaterType WaterType => waterType;
 
         private float maxWaterVolume;
-        public float MaxWaterVolume
-        {
-            get
-            {
-                return maxWaterVolume;
-            }
-        }
+        public float MaxWaterVolume => maxWaterVolume;
         private float currentWaterVolume;
         public float CurrentWaterVolume
         {
-            get
-            {
-                return currentWaterVolume;
-            }
+            get => currentWaterVolume;
             set
             {
-                currentWaterVolume = Mathf.Max(0, Mathf.Min(this.maxWaterVolume, value));
-                var curMaterialIndex = Mathf.RoundToInt(this.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount);
+                currentWaterVolume = Mathf.Max(0, Mathf.Min(maxWaterVolume, value));
+                var curMaterialIndex = Mathf.RoundToInt(CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount);
                 if (lastMaterialIndex != curMaterialIndex)
                 {
                     lastMaterialIndex = curMaterialIndex;
-                    this.waterGrid.SetDirty();
+                    waterGrid.SetDirty();
                 }
             }
         }
         private float baseRegenRate;
-        public float BaseRegenRate
-        {
-            get
-            {
-                return this.baseRegenRate;
-            }
-        }
+        public float BaseRegenRate => baseRegenRate;
         private float rainRegenRatePerCell;
-        public float RainRegenRatePerCell
-        {
-            get
-            {
-                return this.rainRegenRatePerCell;
-            }
-        }
+        public float RainRegenRatePerCell => rainRegenRatePerCell;
         private float outputWaterFlow;
         public float OutputWaterFlow
         {
-            get
-            {
-                return this.outputWaterFlow;
-            }
-            set
-            {
-                this.outputWaterFlow = Mathf.Max(value, 0f);
-            }
+            get => outputWaterFlow;
+            set => outputWaterFlow = Mathf.Max(value, 0f);
         }
         private int lastTick;
 
         private int lastMaterialIndex = UndergroundWaterMaterials.MaterialCount;
 
-        public float CurrentWaterVolumePercent
-        {
-            get
-            {
-                return this.CurrentWaterVolume / this.maxWaterVolume;
-            }
-        }
+        public float CurrentWaterVolumePercent => CurrentWaterVolume / maxWaterVolume;
 
-        private MapComponent_WaterGrid waterGrid;
+        private readonly MapComponent_WaterGrid waterGrid;
 
         private List<IntVec3> poolCells = null;
 
         public UndergroundWaterPool(MapComponent_WaterGrid waterGrid)
         {
             this.waterGrid = waterGrid;
-            this.lastTick = Find.TickManager.TicksGame;
+            lastTick = Find.TickManager.TicksGame;
         }
 
         public UndergroundWaterPool(MapComponent_WaterGrid waterGrid, float maxWaterVolume, WaterType waterType, float baseRegenRate, float rainRegenRatePerCell) : this(waterGrid)
         {
             this.maxWaterVolume = maxWaterVolume;
-            this.currentWaterVolume = maxWaterVolume;
+            currentWaterVolume = maxWaterVolume;
             this.waterType = waterType;
             this.baseRegenRate = baseRegenRate;
             this.rainRegenRatePerCell = rainRegenRatePerCell;
@@ -110,38 +71,38 @@ namespace MizuMod
 
         public void ExposeData()
         {
-            Scribe_Values.Look<int>(ref this.ID, "ID");
-            Scribe_Values.Look<float>(ref this.maxWaterVolume, "maxWaterVolume");
-            Scribe_Values.Look<float>(ref this.currentWaterVolume, "currenteWaterVolume");
-            Scribe_Values.Look<WaterType>(ref this.waterType, "waterType");
-            Scribe_Values.Look<float>(ref this.baseRegenRate, "baseRegenRate");
-            Scribe_Values.Look<float>(ref this.rainRegenRatePerCell, "rainRegenRatePerCell");
-            Scribe_Values.Look<int>(ref this.lastTick, "lastTick");
-            Scribe_Values.Look<float>(ref this.outputWaterFlow, "outputWaterFlow");
+            Scribe_Values.Look<int>(ref ID, "ID");
+            Scribe_Values.Look<float>(ref maxWaterVolume, "maxWaterVolume");
+            Scribe_Values.Look<float>(ref currentWaterVolume, "currenteWaterVolume");
+            Scribe_Values.Look<WaterType>(ref waterType, "waterType");
+            Scribe_Values.Look<float>(ref baseRegenRate, "baseRegenRate");
+            Scribe_Values.Look<float>(ref rainRegenRatePerCell, "rainRegenRatePerCell");
+            Scribe_Values.Look<int>(ref lastTick, "lastTick");
+            Scribe_Values.Look<float>(ref outputWaterFlow, "outputWaterFlow");
 
-            if (this.debugFlag)
+            if (debugFlag)
             {
-                this.debugFlag = false;
+                debugFlag = false;
                 if (MizuDef.GlobalSettings.forDebug.enableChangeWaterPoolType)
                 {
-                    this.waterType = MizuDef.GlobalSettings.forDebug.changeWaterPoolType;
+                    waterType = MizuDef.GlobalSettings.forDebug.changeWaterPoolType;
                 }
                 if (MizuDef.GlobalSettings.forDebug.enableChangeWaterPoolVolume)
                 {
-                    this.maxWaterVolume *= MizuDef.GlobalSettings.forDebug.waterPoolVolumeRate;
-                    this.currentWaterVolume *= MizuDef.GlobalSettings.forDebug.waterPoolVolumeRate;
+                    maxWaterVolume *= MizuDef.GlobalSettings.forDebug.waterPoolVolumeRate;
+                    currentWaterVolume *= MizuDef.GlobalSettings.forDebug.waterPoolVolumeRate;
                 }
                 if (MizuDef.GlobalSettings.forDebug.enableResetRegenRate)
                 {
-                    if (this.waterGrid is MapComponent_ShallowWaterGrid)
+                    if (waterGrid is MapComponent_ShallowWaterGrid)
                     {
-                        this.baseRegenRate = MizuDef.GlobalSettings.forDebug.resetBaseRegenRateRangeForShallow.RandomInRange;
-                        this.rainRegenRatePerCell = MizuDef.GlobalSettings.forDebug.resetRainRegenRatePerCellForShallow;
+                        baseRegenRate = MizuDef.GlobalSettings.forDebug.resetBaseRegenRateRangeForShallow.RandomInRange;
+                        rainRegenRatePerCell = MizuDef.GlobalSettings.forDebug.resetRainRegenRatePerCellForShallow;
                     }
-                    if (this.waterGrid is MapComponent_DeepWaterGrid)
+                    if (waterGrid is MapComponent_DeepWaterGrid)
                     {
-                        this.baseRegenRate = MizuDef.GlobalSettings.forDebug.resetBaseRegenRateRangeForDeep.RandomInRange;
-                        this.rainRegenRatePerCell = MizuDef.GlobalSettings.forDebug.resetRainRegenRatePerCellForDeep;
+                        baseRegenRate = MizuDef.GlobalSettings.forDebug.resetBaseRegenRateRangeForDeep.RandomInRange;
+                        rainRegenRatePerCell = MizuDef.GlobalSettings.forDebug.resetRainRegenRatePerCellForDeep;
                     }
                 }
             }
@@ -149,72 +110,75 @@ namespace MizuMod
 
         public void MergeWaterVolume(UndergroundWaterPool p)
         {
-            this.maxWaterVolume += p.maxWaterVolume;
-            this.CurrentWaterVolume += p.CurrentWaterVolume;
+            maxWaterVolume += p.maxWaterVolume;
+            CurrentWaterVolume += p.CurrentWaterVolume;
         }
 
         public void MergePool(UndergroundWaterPool p, ushort[] idGrid)
         {
-            this.MergeWaterVolume(p);
-            for (int i = 0; i < idGrid.Length; i++)
+            MergeWaterVolume(p);
+            for (var i = 0; i < idGrid.Length; i++)
             {
                 if (idGrid[i] == p.ID)
                 {
-                    idGrid[i] = (ushort)this.ID;
+                    idGrid[i] = (ushort)ID;
                 }
             }
         }
 
         public void Update()
         {
-            if (this.poolCells == null)
+            if (poolCells == null)
             {
-                this.GeneratePoolCells();
+                GeneratePoolCells();
             }
 
-            int curTick = Find.TickManager.TicksGame;
+            var curTick = Find.TickManager.TicksGame;
 
             // 基本回復量
-            float addWaterVolumeBase = this.baseRegenRate / 60000.0f * (curTick - lastTick);
+            var addWaterVolumeBase = baseRegenRate / 60000.0f * (curTick - lastTick);
 
             // 屋根チェック
-            int unroofedCells = 0;
-            foreach (var c in this.poolCells)
+            var unroofedCells = 0;
+            foreach (var c in poolCells)
             {
-                if (!c.Roofed(this.waterGrid.map))
+                if (!c.Roofed(waterGrid.map))
                 {
                     unroofedCells++;
                 }
             }
 
             // 雨による回復量
-            float addWaterVolumeRain = this.rainRegenRatePerCell * unroofedCells / 60000.0f * this.waterGrid.map.weatherManager.RainRate * (curTick - lastTick);
+            var addWaterVolumeRain = rainRegenRatePerCell * unroofedCells / 60000.0f * waterGrid.map.weatherManager.RainRate * (curTick - lastTick);
 
             // 合計回復量
-            float addWaterVolumeTotal = addWaterVolumeBase + addWaterVolumeRain;
-            if (addWaterVolumeTotal < 0.0f) addWaterVolumeTotal = 0.0f;
+            var addWaterVolumeTotal = addWaterVolumeBase + addWaterVolumeRain;
+            if (addWaterVolumeTotal < 0.0f)
+            {
+                addWaterVolumeTotal = 0.0f;
+            }
 
             // 出力量(吸い上げられる量)との差分
-            float deltaWaterVolume = addWaterVolumeTotal - this.outputWaterFlow / 60000.0f;
+            var deltaWaterVolume = addWaterVolumeTotal - (outputWaterFlow / 60000.0f);
 
             // 差分を加算
-            this.CurrentWaterVolume = Math.Min(this.CurrentWaterVolume + deltaWaterVolume, this.MaxWaterVolume);
+            CurrentWaterVolume = Math.Min(CurrentWaterVolume + deltaWaterVolume, MaxWaterVolume);
 
             // 設定された量を減らしたのでクリア
-            this.outputWaterFlow = 0f;
+            outputWaterFlow = 0f;
 
             lastTick = curTick;
         }
 
         private void GeneratePoolCells()
         {
-            this.poolCells = new List<IntVec3>();
+            poolCells = new List<IntVec3>();
 
-            foreach (var c in this.waterGrid.map.AllCells)
+            foreach (var c in waterGrid.map.AllCells)
             {
-                if (this.ID == this.waterGrid.GetID(c))
+                if (ID == waterGrid.GetID(c))
                 {
-                    this.poolCells.Add(c);
+                    poolCells.Add(c);
                 }
             }
         }

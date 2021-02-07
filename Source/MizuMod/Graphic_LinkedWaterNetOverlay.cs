@@ -22,9 +22,8 @@ namespace MizuMod
 
         public override bool ShouldLinkWith(IntVec3 c, Thing parent)
         {
-            bool isFound = false;
-            IBuilding_WaterNet thing = parent as IBuilding_WaterNet;
-            if (thing == null)
+            var isFound = false;
+            if (!(parent is IBuilding_WaterNet thing))
             {
                 return false;
             }
@@ -55,7 +54,10 @@ namespace MizuMod
                         isFound = true;
                     }
                 }
-                if (isFound) break;
+                if (isFound)
+                {
+                    break;
+                }
             }
 
             return GenGrid.InBounds(c, parent.Map) && isFound;

@@ -13,12 +13,12 @@ namespace MizuMod
     {
         public Designator_AreaMopExpand() : base(DesignateMode.Add)
         {
-            this.defaultLabel = MizuStrings.DesignatorAreaMopExpand.Translate();
-            this.defaultDesc = MizuStrings.DesignatorAreaMopExpandDescription.Translate();
-            this.icon = ContentFinder<Texture2D>.Get("UI/Designators/HomeAreaOn", true);
-            this.soundDragSustain = SoundDefOf.Designate_DragAreaAdd;
-            this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-            this.soundSucceeded = SoundDefOf.Designate_AreaAdd;
+            defaultLabel = MizuStrings.DesignatorAreaMopExpand.Translate();
+            defaultDesc = MizuStrings.DesignatorAreaMopExpandDescription.Translate();
+            icon = ContentFinder<Texture2D>.Get("UI/Designators/HomeAreaOn", true);
+            soundDragSustain = SoundDefOf.Designate_DragAreaAdd;
+            soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+            soundSucceeded = SoundDefOf.Designate_ZoneAdd;
         }
     }
 }

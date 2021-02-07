@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- 生食材を扱っているトレーダーの商品に水を追加する -->
+  <Operation Class="PatchOperationInsert">
+    <xpath>*/TraderKindDef/stockGenerators/li[@Class="StockGenerator_Category" and categoryDef="FoodRaw"]</xpath>
+    <value>
+      <li Class="StockGenerator_Category">
+        <categoryDef>Mizu_Waters</categoryDef>
+        <thingDefCountRange>
+          <min>3</min>
+          <max>3</max>
+        </thingDefCountRange>
+        <totalPriceRange>
+          <min>5</min>
+          <max>10</max>
+        </totalPriceRange>
+      </li>
+    </value>
+  </Operation>
+</Patch>

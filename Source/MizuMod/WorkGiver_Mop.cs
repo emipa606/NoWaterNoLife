@@ -12,21 +12,9 @@ namespace MizuMod
 {
     public class WorkGiver_Mop : WorkGiver_Scanner
     {
-        public override PathEndMode PathEndMode
-        {
-            get
-            {
-                return PathEndMode.Touch;
-            }
-        }
+        public override PathEndMode PathEndMode => PathEndMode.Touch;
 
-        public override int LocalRegionsToScanFirst
-        {
-            get
-            {
-                return 4;
-            }
-        }
+        public override int MaxRegionsToScanBeforeGlobalSearch => 4;
 
         public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
         {
@@ -36,46 +24,84 @@ namespace MizuMod
         public override bool HasJobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
         {
             // プレイヤー派閥でないなら絶対モップ掛けしない
-            if (pawn.Faction != Faction.OfPlayer) return false;
+            if (pawn.Faction != Faction.OfPlayer)
+            {
+                return false;
+            }
 
             // モップエリア外はやらない
-            if (pawn.Map.areaManager.Mop()[c] == false) return false;
+            if (pawn.Map.areaManager.Mop()[c] == false)
+            {
+                return false;
+            }
 
             // 人工フロアかつカーペット以外の場所ならOK
             //   自然地形の汚れが付く＝人工フロア
             //   カーペットの研究が必要なもの＝カーペット
             var terrain = c.GetTerrain(pawn.Map);
-            if (terrain.acceptTerrainSourceFilth == false || (terrain.researchPrerequisites != null && terrain.researchPrerequisites.Contains(ResearchProjectDefOf.CarpetMaking))) return false;
+            if (terrain.filthAcceptanceMask == FilthSourceFlags.None || (terrain.researchPrerequisites != null && terrain.researchPrerequisites.Contains(ResearchProjectDefOf.CarpetMaking)))
+            {
+                return false;
+            }
 
             // その場所に汚れがあったらやらない
             var thingList = c.GetThingList(pawn.Map);
-            var filthList = thingList.Where((t) => { return t is Filth; });
-            if (filthList != null && filthList.Count() > 0) return false;
+            var filthList = thingList.Where((t) => t is Filth);
+            if (filthList != null && filthList.Count() > 0)
+            {
+                return false;
+            }
 
             // 既にモップ掛けされている場所にはやらない
-            var moppedThingList = thingList.Where((t) => { return t.def == MizuDef.Thing_MoppedThing; });
-            if (moppedThingList != null && moppedThingList.Count() > 0) return false;
+            var moppedThingList = thingList.Where((t) => t.def == MizuDef.Thing_MoppedThing);
+            if (moppedThingList != null && moppedThingList.Count() > 0)
+            {
+                return false;
+            }
 
             // その場所を予約できないならやらない
-            if (!pawn.CanReserve(c)) return false;
+            if (!pawn.CanReserve(c))
+            {
+                return false;
+            }
 
             // モップアイテムのチェック
             var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((t) =>
             {
                 // 使用禁止チェック
-                if (t.IsForbidden(pawn)) return false;
+                if (t.IsForbidden(pawn))
+                {
+                    return false;
+                }
 
                 var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null) return false;
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop)) return false;
+                if (comp == null)
+                {
+                    return false;
+                }
 
-                int maxQueueLength = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                if (maxQueueLength <= 0) return false;
+                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+                {
+                    return false;
+                }
+
+                var maxQueueLength = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                if (maxQueueLength <= 0)
+                {
+                    return false;
+                }
 
                 return true;
             });
-            if (mopList.Count() == 0) return false;
-            if (mopList.Where((t) => pawn.CanReserve(t)).Count() == 0) return false;
+            if (mopList.Count() == 0)
+            {
+                return false;
+            }
+
+            if (mopList.Where((t) => pawn.CanReserve(t)).Count() == 0)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -83,23 +109,36 @@ namespace MizuMod
         public override Job JobOnCell(Pawn pawn, IntVec3 cell, bool forced = false)
         {
             // モップジョブ作成
-            Job job = new Job(MizuDef.Job_Mop);
+            var job = new Job(MizuDef.Job_Mop);
             job.AddQueuedTarget(TargetIndex.A, cell);
 
             // 一番近いモップを探す
             Thing candidateMop = null;
-            int minDist = int.MaxValue;
+            var minDist = int.MaxValue;
             var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((t) =>
             {
                 // 使用禁止チェック
-                if (t.IsForbidden(pawn)) return false;
+                if (t.IsForbidden(pawn))
+                {
+                    return false;
+                }
 
                 var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null) return false;
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop)) return false;
+                if (comp == null)
+                {
+                    return false;
+                }
 
-                int maxQueueLengthForCheck = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                if (maxQueueLengthForCheck <= 0) return false;
+                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+                {
+                    return false;
+                }
+
+                var maxQueueLengthForCheck = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                if (maxQueueLengthForCheck <= 0)
+                {
+                    return false;
+                }
 
                 return true;
             });
@@ -107,9 +146,12 @@ namespace MizuMod
             foreach (var mop in mopList)
             {
                 // 予約できないモップはパス
-                if (!pawn.CanReserve(mop)) continue;
+                if (!pawn.CanReserve(mop))
+                {
+                    continue;
+                }
 
-                int mopDist = (mop.Position - pawn.Position).LengthHorizontalSquared;
+                var mopDist = (mop.Position - pawn.Position).LengthHorizontalSquared;
                 if (minDist > mopDist)
                 {
                     minDist = mopDist;
@@ -128,24 +170,27 @@ namespace MizuMod
             job.count = 1;
 
             var compTool = candidateMop.TryGetComp<CompWaterTool>();
-            int maxQueueLength = Mathf.RoundToInt(compTool.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+            var maxQueueLength = Mathf.RoundToInt(compTool.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
             Map map = pawn.Map;
             Room room = cell.GetRoom(map);
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 // 対象の汚れの周囲100マスをサーチ
                 IntVec3 intVec = cell + GenRadial.RadialPattern[i];
                 if (intVec.InBounds(map) && intVec.GetRoom(map, RegionType.Set_Passable) == room)
                 {
                     // そこが同じ部屋の中
-                    if (this.HasJobOnCell(pawn, intVec) && intVec != cell)
+                    if (HasJobOnCell(pawn, intVec) && intVec != cell)
                     {
                         // 同じジョブが作成可能(汚れがある等)あるならこのジョブの処理対象に追加
                         job.AddQueuedTarget(TargetIndex.A, intVec);
                     }
 
                     // 掃除最大個数チェック
-                    if (job.GetTargetQueue(TargetIndex.A).Count >= maxQueueLength) break;
+                    if (job.GetTargetQueue(TargetIndex.A).Count >= maxQueueLength)
+                    {
+                        break;
+                    }
                 }
             }
 

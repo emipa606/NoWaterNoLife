@@ -14,15 +14,15 @@ namespace MizuMod
         {
             get
             {
-                if (this.waterGrid == null)
+                if (waterGrid == null)
                 {
-                    this.waterGrid = this.Map.GetComponent<MapComponent_ShallowWaterGrid>();
-                    if (this.waterGrid == null)
+                    waterGrid = Map.GetComponent<MapComponent_ShallowWaterGrid>();
+                    if (waterGrid == null)
                     {
                         Log.Error("waterGrid is null");
                     }
                 }
-                return this.waterGrid;
+                return waterGrid;
             }
         }
     }

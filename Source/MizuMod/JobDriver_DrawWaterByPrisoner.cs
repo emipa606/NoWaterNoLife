@@ -15,12 +15,12 @@ namespace MizuMod
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            return this.pawn.Reserve(this.job.targetA, this.job);
+            return pawn.Reserve(job.targetA, job);
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            var drawer = this.job.targetA.Thing;
+            var drawer = job.targetA.Thing;
             PathEndMode peMode = drawer.def.hasInteractionCell ? PathEndMode.InteractionCell : PathEndMode.ClosestTouch;
 
             yield return Toils_Goto.GotoThing(DrawerIndex, peMode);

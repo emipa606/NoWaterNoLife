@@ -12,7 +12,7 @@ using Verse;
 using Verse.Sound;
 using Verse.AI;
 
-using Harmony;
+using HarmonyLib;
 
 namespace MizuMod
 {
@@ -21,7 +21,7 @@ namespace MizuMod
     {
         static Main()
         {
-            var harmony = HarmonyInstance.Create("com.himesama.mizumod");
+            var harmony = new Harmony("com.himesama.mizumod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
@@ -36,24 +36,36 @@ namespace MizuMod
         {
             // キャラバンのポーンの水分要求の処理
             foreach (Pawn pawn in ___caravan.pawns) {
-            	if (pawn.needs == null) continue;
+            	if (pawn.needs == null)
+                {
+                    continue;
+                }
 
-            	Need_Water need_water = pawn.needs.water();
-            	if (need_water == null) continue;
+                Need_Water need_water = pawn.needs.Water();
+            	if (need_water == null)
+                {
+                    continue;
+                }
 
-            	// 喉が渇いてない場合は飲まない
-            	if (need_water.CurCategory <= ThirstCategory.Healthy) continue;
+                // 喉が渇いてない場合は飲まない
+                if (need_water.CurCategory <= ThirstCategory.Healthy)
+                {
+                    continue;
+                }
 
-	            // タイルが0以上(?)、死んでない、ローカルではなく惑星マップ上にいる(キャラバンしてる)、そのポーンが地形から水を飲める(心情がある/ない、脱水症状まで進んでいる/いない、など)
-	            if (pawn.Tile >= 0 && !pawn.Dead && pawn.IsWorldPawn() && pawn.CanDrinkFromTerrain())
+                // タイルが0以上(?)、死んでない、ローカルではなく惑星マップ上にいる(キャラバンしてる)、そのポーンが地形から水を飲める(心情がある/ない、脱水症状まで進んでいる/いない、など)
+                if (pawn.Tile >= 0 && !pawn.Dead && pawn.IsWorldPawn() && pawn.CanDrinkFromTerrain())
 	            {
 	                WaterTerrainType drankTerrainType = ___caravan.GetWaterTerrainType();
 
 	                // 水を飲めない場所
-	                if (drankTerrainType == WaterTerrainType.NoWater) continue;
+	                if (drankTerrainType == WaterTerrainType.NoWater)
+                    {
+                        continue;
+                    }
 
-	                // 地形から水を飲む
-	                need_water.CurLevel = 1.0f;
+                    // 地形から水を飲む
+                    need_water.CurLevel = 1.0f;
 
 	                if (drankTerrainType == WaterTerrainType.SeaWater)
 	                {
@@ -62,10 +74,13 @@ namespace MizuMod
 	                }
 
 	                // 心情要求がなければここで終了
-	                if (pawn.needs.mood == null) continue;
-	
-               		// 直接水を飲んだ心情付加
-                	if (pawn.CanManipulate())
+	                if (pawn.needs.mood == null)
+                    {
+                        continue;
+                    }
+
+                    // 直接水を飲んだ心情付加
+                    if (pawn.CanManipulate())
                 	{
                     	pawn.needs.mood.thoughts.memories.TryGainMemory(MizuDef.Thought_DrankScoopedWater);
                 	}
@@ -84,22 +99,26 @@ namespace MizuMod
                 	continue;
             	}
 
-            	// 水アイテムを探す
-            	Thing waterThing;
-            	Pawn inventoryPawn;
+                // 水アイテムを探す
 
-            	// アイテムが見つからない
-            	if (!MizuCaravanUtility.TryGetBestWater(___caravan, pawn, out waterThing, out inventoryPawn)) continue;
+                // アイテムが見つからない
+                if (!MizuCaravanUtility.TryGetBestWater(___caravan, pawn, out Thing waterThing, out Pawn inventoryPawn))
+                {
+                    continue;
+                }
 
-            	// アイテムに応じた水分を摂取＆心情変化＆健康変化
-            	float numWater = MizuUtility.GetWater(pawn, waterThing, need_water.WaterWanted, false);
+                // アイテムに応じた水分を摂取＆心情変化＆健康変化
+                var numWater = MizuUtility.GetWater(pawn, waterThing, need_water.WaterWanted, false);
             	need_water.CurLevel += numWater;
             	pawn.records.AddTo(MizuDef.Record_WaterDrank, numWater);
 
             	// 水アイテムが消滅していない場合(スタックの一部だけ消費した場合等)はここで終了
-            	if (!waterThing.Destroyed) continue;
+            	if (!waterThing.Destroyed)
+                {
+                    continue;
+                }
 
-            	if (inventoryPawn != null)
+                if (inventoryPawn != null)
             	{
                 	// 誰かの所持品にあった水スタックを飲みきったのであれば、所持品欄から除去
 	                inventoryPawn.inventory.innerContainer.Remove(waterThing);
@@ -137,36 +156,47 @@ namespace MizuMod
             // 1アイコンにつき幅24f
             // 情報アイコン、ドロップアイコン、食べるアイコンを考慮すれば3個
             // 食べると飲むを分離できたはずなので2で良い
-            float dbRight = width - 24f * 2;
-            float dbTop = y - 28f;
+            var dbRight = width - (24f * 2);
+            var dbTop = y - 28f;
 
-            Pawn selPawn = Find.Selector.SingleSelectedThing as Pawn;
-            Corpse selCorpse = Find.Selector.SingleSelectedThing as Corpse;
-            if (selPawn == null && selCorpse != null)
+            var selPawn = Find.Selector.SingleSelectedThing as Pawn;
+            if (selPawn == null && Find.Selector.SingleSelectedThing is Corpse selCorpse)
             {
                 selPawn = selCorpse.InnerPawn;
             }
 
             // ポーンデータがないなら終了
-            if (selPawn == null) return;
+            if (selPawn == null)
+            {
+                return;
+            }
 
             // プレイヤーが操作するポーンではない、またはそのポーンは倒れている→終了
-            if (!selPawn.IsColonistPlayerControlled || selPawn.Downed) return;
+            if (!selPawn.IsColonistPlayerControlled || selPawn.Downed)
+            {
+                return;
+            }
 
             // 水として飲めないアイテムなら終了
-            if (!thing.CanGetWater() || !thing.CanDrinkWaterNow()) return;
+            if (!thing.CanGetWater() || !thing.CanDrinkWaterNow())
+            {
+                return;
+            }
 
             // 水アイテムでなかったり、食べられるものは能動的に飲むことはできない
             var comp = thing.TryGetComp<CompWaterSource>();
-            if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item || thing.IsIngestibleFor(selPawn)) return;
+            if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item || thing.IsIngestibleFor(selPawn))
+            {
+                return;
+            }
 
             // ツールチップとボタンを追加
-            Rect dbRect = new Rect(dbRight - dbWidth, dbTop, dbWidth, dbHeight);
+            var dbRect = new Rect(dbRight - dbWidth, dbTop, dbWidth, dbHeight);
             TooltipHandler.TipRegion(dbRect, string.Format(MizuStrings.FloatMenuGetWater.Translate(), thing.LabelNoCount));
             if (Widgets.ButtonImage(dbRect, MizuGraphics.Texture_ButtonIngest))
             {
                 SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-                Job job = new Job(MizuDef.Job_DrinkWater, thing)
+                var job = new Job(MizuDef.Job_DrinkWater, thing)
                 {
                     count = MizuUtility.WillGetStackCountOf(selPawn, thing)
                 };
@@ -191,9 +221,9 @@ namespace MizuMod
     class CaravanIUUtility_DrawCaravanInfo {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            int insert_index = -1;
+            var insert_index = -1;
             var codes = new List<CodeInstruction>(instructions);
-            for (int i = 0; i < codes.Count; i++)
+            for (var i = 0; i < codes.Count; i++)
             {
                 //if (codes[i].operand != null)
                 //{
@@ -223,10 +253,12 @@ namespace MizuMod
 
             if (insert_index > -1)
             {
-                List<CodeInstruction> new_codes = new List<CodeInstruction>();
-                new_codes.Add(new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(CaravanUIUtility), "tmpInfo")));
-                new_codes.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.DrawDaysWorthOfWater))));
-                
+                var new_codes = new List<CodeInstruction>
+                {
+                    new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(CaravanUIUtility), "tmpInfo")),
+                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.DrawDaysWorthOfWater)))
+                };
+
                 codes.InsertRange(insert_index + 1, new_codes);
 
             }
@@ -236,6 +268,8 @@ namespace MizuMod
 
     // 水アイテム不足で出発しようとしたとき、警告ダイアログを出す
     // 実際の処理は、食料不足の警告ダイアログに便乗する形
+    //This is broken in Rimworld 1.1. Quick-fixing to remove it temporarily in 1.8.1 with the goal of fixing it in 1.8.2
+    /*
     [HarmonyPatch(typeof(Dialog_FormCaravan))]
     [HarmonyPatch("DoBottomButtons")]
     class Dialog_FormCaravan_DoBottomButtons
@@ -306,7 +340,8 @@ namespace MizuMod
             return codes.AsEnumerable();
         }
     }
-
+    */
+    
     // キャラバン編成画面で積荷の内容が変化したときに、水の総量再計算フラグを立てる処理を追加
     [HarmonyPatch(typeof(Dialog_FormCaravan))]
     [HarmonyPatch("CountToTransferChanged")]
@@ -325,11 +360,11 @@ namespace MizuMod
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            bool found_caravanDaysOfFood = false;
-            int foundNum_Pop = 0;
-            int insert_index = -1;
+            var found_caravanDaysOfFood = false;
+            var foundNum_Pop = 0;
+            var insert_index = -1;
             var codes = new List<CodeInstruction>(instructions);
-            for (int i = 0; i < codes.Count; i++)
+            for (var i = 0; i < codes.Count; i++)
             {
                 if (found_caravanDaysOfFood == false)
                 {
@@ -355,10 +390,12 @@ namespace MizuMod
 
             if (insert_index > -1)
             {
-                List<CodeInstruction> new_codes = new List<CodeInstruction>();
-                new_codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
-                new_codes.Add(new CodeInstruction(OpCodes.Ldloc_0));
-                new_codes.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.AppendWaterWorthToCaravanInspectString))));
+                var new_codes = new List<CodeInstruction>
+                {
+                    new CodeInstruction(OpCodes.Ldarg_0),
+                    new CodeInstruction(OpCodes.Ldloc_0),
+                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.AppendWaterWorthToCaravanInspectString)))
+                };
 
                 codes.InsertRange(insert_index + 1, new_codes);
             }
@@ -373,7 +410,10 @@ namespace MizuMod
     {
         static void Postfix(Pawn p)
         {
-            if (p.kindDef.invNutrition <= 0.001f) return;
+            if (p.kindDef.invNutrition <= 0.001f)
+            {
+                return;
+            }
 
             ThingDef thingDef = null;
             if (p.kindDef.itemQuality > QualityCategory.Normal)
@@ -386,7 +426,7 @@ namespace MizuMod
             }
             else
             {
-                float value = Rand.Value;
+                var value = Rand.Value;
                 if (value < 0.7f)
                 {
                     // 70%
@@ -405,7 +445,10 @@ namespace MizuMod
             }
 
             var compprop = thingDef.GetCompProperties<CompProperties_WaterSource>();
-            if (compprop == null) return;
+            if (compprop == null)
+            {
+                return;
+            }
 
             Thing thing = ThingMaker.MakeThing(thingDef, null);
             thing.stackCount = GenMath.RoundRandom(p.kindDef.invNutrition / compprop.waterAmount);
@@ -437,10 +480,10 @@ namespace MizuMod
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            int insert_index = -1;
+            var insert_index = -1;
             var codes = new List<CodeInstruction>(instructions);
 
-            for (int i = 0; i < codes.Count; i++)
+            for (var i = 0; i < codes.Count; i++)
             {
                 if (codes[i].opcode == OpCodes.Callvirt && codes[i].operand.ToString().Contains("PostIngested"))
                 {
@@ -451,12 +494,12 @@ namespace MizuMod
 
             if (insert_index > -1)
             {
-                List<CodeInstruction> insert_codes = new List<CodeInstruction>();
+                var insert_codes = new List<CodeInstruction>();
                 codes[insert_index - 1].opcode = OpCodes.Nop;
 
                 insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_1));
                 insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
-                insert_codes.Add(new CodeInstruction(OpCodes.Ldloc_S, 3));
+                insert_codes.Add(new CodeInstruction(OpCodes.Ldloc_0));
                 insert_codes.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuUtility), nameof(MizuUtility.PrePostIngested), new Type[] { typeof(Pawn), typeof(Thing), typeof(int) })));
 
                 insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
@@ -474,10 +517,10 @@ namespace MizuMod
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            int insert_index = -1;
+            var insert_index = -1;
             var codes = new List<CodeInstruction>(instructions);
 
-            for (int i = 0; i < codes.Count; i++)
+            for (var i = 0; i < codes.Count; i++)
             {
                 if (codes[i].opcode == OpCodes.Call && codes[i].operand.ToString().Contains("DropSupplies"))
                 {
@@ -487,12 +530,13 @@ namespace MizuMod
 
             if (insert_index > -1)
             {
-                List<CodeInstruction> insert_codes = new List<CodeInstruction>();
-
-                insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
-                insert_codes.Add(new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(MizuDef), nameof(MizuDef.Thing_ClearWater))));
-                insert_codes.Add(new CodeInstruction(OpCodes.Ldc_I4_S, 20));
-                insert_codes.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LordToil_Siege), "DropSupplies", new Type[] { typeof(ThingDef), typeof(int) })));
+                var insert_codes = new List<CodeInstruction>
+                {
+                    new CodeInstruction(OpCodes.Ldarg_0),
+                    new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(MizuDef), nameof(MizuDef.Thing_ClearWater))),
+                    new CodeInstruction(OpCodes.Ldc_I4_S, 20),
+                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LordToil_Siege), "DropSupplies", new Type[] { typeof(ThingDef), typeof(int) }))
+                };
 
                 codes.InsertRange(insert_index, insert_codes);
             }

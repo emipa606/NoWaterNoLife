@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_DrawingWaterSpot.label>local de coleta de água</Mizu_DrawingWaterSpot.label>
   <Mizu_DrawingWaterSpot.description>Especifica um local para retirar água. Pode ser colocado em água ou pântanos.</Mizu_DrawingWaterSpot.description>
 
@@ -23,9 +22,7 @@
   <Mizu_WaterValve.description>Usado para controlar o fluxo de água.</Mizu_WaterValve.description>
 
   <Mizu_GroundWaterPump.label>Bomba dágua</Mizu_GroundWaterPump.label>
-  <Mizu_GroundWaterPump.description>É usado para bombear água de rios, lagos, oceanos e pântanos. Precisa de eletricidade.</Mizu_GroundWaterPump.description>
- 
-  <Mizu_UndergroundWaterPumpShallow.label>Bomba subterrânea (Superficial)</Mizu_UndergroundWaterPumpShallow.label>
+  <Mizu_GroundWaterPump.description>É usado para bombear água de rios, lagos, oceanos e pântanos. Precisa de eletricidade.</Mizu_GroundWaterPump.description><Mizu_UndergroundWaterPumpShallow.label>Bomba subterrânea (Superficial)</Mizu_UndergroundWaterPumpShallow.label>
   <Mizu_UndergroundWaterPumpShallow.description>Bombeando a água do solo raso. Precisa de eletricidade.</Mizu_UndergroundWaterPumpShallow.description>
 
   <Mizu_UndergroundWaterPumpDeep.label>Bomba subterrânea (profunda)</Mizu_UndergroundWaterPumpDeep.label>
@@ -44,6 +41,4 @@
   <Mizu_DirtyWaterFilter.description>Transforma água impura, lama e água do mar em água normal. Precisa de eletricidade.</Mizu_DirtyWaterFilter.description>
 
   <Mizu_ClearWaterFilter.label>Filtro de água Pura</Mizu_ClearWaterFilter.label>
-  <Mizu_ClearWaterFilter.description>Filtra a água comum em água purificada. Precisa de eletricidade.</Mizu_ClearWaterFilter.description>
-
-</LanguageData>
+  <Mizu_ClearWaterFilter.description>Filtra a água comum em água purificada. Precisa de eletricidade.</Mizu_ClearWaterFilter.description></LanguageData>

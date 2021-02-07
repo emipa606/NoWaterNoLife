@@ -17,25 +17,13 @@ namespace MizuMod
         private const int WorkTicks = 300;
         public const float ConsumeWaterVolume = 0.5f;
 
-        private Pawn Patient
-        {
-            get
-            {
-                return (Pawn)this.job.GetTarget(PatientInd).Thing;
-            }
-        }
-        private ThingWithComps Tool
-        {
-            get
-            {
-                return (ThingWithComps)this.job.GetTarget(ToolInd).Thing;
-            }
-        }
+        private Pawn Patient => (Pawn)job.GetTarget(PatientInd).Thing;
+        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            this.pawn.Reserve(this.Patient, this.job);
-            this.pawn.Reserve(this.Tool, this.job);
+            pawn.Reserve(Patient, job);
+            pawn.Reserve(Tool, job);
             return true;
         }
 
@@ -48,10 +36,13 @@ namespace MizuMod
             this.FailOn(() =>
             {
                 // 寝ていない状態になったら失敗
-                if (!WorkGiver_Tend.GoodLayingStatusForTend(this.Patient, this.pawn)) return true;
+                if (!WorkGiver_Tend.GoodLayingStatusForTend(Patient, pawn))
+                {
+                    return true;
+                }
 
                 // 看護師と患者が同一人物だったら失敗
-                return this.pawn == this.Patient;
+                return pawn == Patient;
             });
             // 精神崩壊状態次第で失敗とする
             this.FailOnAggroMentalState(PatientInd);
@@ -59,7 +50,10 @@ namespace MizuMod
             {
                 // 看病が必要な状況なら続ける
                 // 免疫を得る系の病気を持っている＆看病Hediffが無い
-                if (Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null) return JobCondition.Ongoing;
+                if (Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null)
+                {
+                    return JobCondition.Ongoing;
+                }
 
                 // 既に看病されていたら終了
                 return JobCondition.Succeeded;
@@ -75,33 +69,35 @@ namespace MizuMod
             yield return Toils_Goto.GotoThing(PatientInd, PathEndMode.Touch);
 
             // 看病
-            Toil workToil = new Toil();
-            workToil.initAction = () =>
+            var workToil = new Toil
             {
-                // 必要工数の計算
-                this.ticksLeftThisToil = WorkTicks;
+                initAction = () =>
+                    // 必要工数の計算
+                    ticksLeftThisToil = WorkTicks,
+                // 細々とした設定
+                defaultCompleteMode = ToilCompleteMode.Delay
             };
-            // 細々とした設定
-            workToil.defaultCompleteMode = ToilCompleteMode.Delay;
-            workToil.WithProgressBar(PatientInd, () => 1f - (float)this.ticksLeftThisToil / WorkTicks, true, -0.5f);
+            workToil.WithProgressBar(PatientInd, () => 1f - ((float)ticksLeftThisToil / WorkTicks), true, -0.5f);
             workToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             yield return workToil;
 
             // 看病完了時の処理
-            var finishToil = new Toil();
-            finishToil.initAction = () =>
+            var finishToil = new Toil
             {
+                initAction = () =>
+                {
                 // 看病状態追加
                 if (Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null)
-                {
-                    Patient.health.AddHediff(HediffMaker.MakeHediff(MizuDef.Hediff_Nursed, Patient));
-                }
+                    {
+                        Patient.health.AddHediff(HediffMaker.MakeHediff(MizuDef.Hediff_Nursed, Patient));
+                    }
 
                 // 水減少
                 var comp = Tool.GetComp<CompWaterTool>();
-                comp.StoredWaterVolume -= ConsumeWaterVolume;
+                    comp.StoredWaterVolume -= ConsumeWaterVolume;
+                },
+                defaultCompleteMode = ToilCompleteMode.Instant
             };
-            finishToil.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finishToil;
 
             // ツールを片付ける場所を決める

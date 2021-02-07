@@ -1,13 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_WaterDrank.label>水分を摂った回数</Mizu_WaterDrank.label>
   <Mizu_WaterDrank.description>水分を摂った回数</Mizu_WaterDrank.description>
-
   <Mizu_WaterDrew.label>汲んだ水の数</Mizu_WaterDrew.label>
   <Mizu_WaterDrew.description>汲んだ水の数</Mizu_WaterDrew.description>
-
   <Mizu_TimeDrinkingWater.label>水飲み (総時間)</Mizu_TimeDrinkingWater.label>
   <Mizu_TimeDrinkingWater.description>水飲み (総時間)</Mizu_TimeDrinkingWater.description>
-
 </LanguageData>

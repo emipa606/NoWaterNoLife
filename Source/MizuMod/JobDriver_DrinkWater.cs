@@ -11,7 +11,7 @@ namespace MizuMod
 {
     public class JobDriver_DrinkWater : JobDriver
     {
-        private static int BaseDrinkTicksFromTerrain = 2000;
+        private static readonly int BaseDrinkTicksFromTerrain = 2000;
 
         private const TargetIndex WaterIndex = TargetIndex.A;
 
@@ -20,34 +20,34 @@ namespace MizuMod
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref this.drinkingFromInventory, "drinkingFromInventory", false, false);
+            Scribe_Values.Look<bool>(ref drinkingFromInventory, "drinkingFromInventory", false, false);
         }
 
         public override void Notify_Starting()
         {
             base.Notify_Starting();
-            this.drinkingFromInventory = (this.pawn.inventory != null && this.pawn.inventory.Contains(this.TargetA.Thing));
+            drinkingFromInventory = pawn.inventory != null && pawn.inventory.Contains(TargetA.Thing);
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            if (this.job.targetA.HasThing)
+            if (job.targetA.HasThing)
             {
-                return this.pawn.Reserve(this.job.targetA, this.job, 1, this.job.count);
+                return pawn.Reserve(job.targetA, job, 1, job.count);
             }
             return true;
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            if (this.job.targetA.HasThing)
+            if (job.targetA.HasThing)
             {
                 // ターゲットがThing=水アイテムを摂取する場合
                 // 水が使用不可能になったらFail
                 ToilFailConditions.FailOnDestroyedNullOrForbidden<JobDriver_DrinkWater>(this, WaterIndex);
 
                 // 水を取得
-                if (this.drinkingFromInventory)
+                if (drinkingFromInventory)
                 {
                     // 所持品から取り出す
                     yield return Toils_Mizu.StartCarryFromInventory(WaterIndex);
@@ -58,7 +58,7 @@ namespace MizuMod
                     yield return Toils_Goto.Goto(WaterIndex, PathEndMode.OnCell);
 
                     // 水を拾う
-                    yield return Toils_Ingest.PickupIngestible(WaterIndex, this.pawn);
+                    yield return Toils_Ingest.PickupIngestible(WaterIndex, pawn);
                 }
 
                 // 飲む場所を決めてそこへ移動
@@ -70,7 +70,7 @@ namespace MizuMod
                 // 水の摂取終了(心情、水分、アイテム個数の処理)
                 yield return Toils_Mizu.FinishDrink(WaterIndex);
 
-                if (this.drinkingFromInventory && !this.TargetA.ThingDestroyed)
+                if (drinkingFromInventory && !TargetA.ThingDestroyed)
                 {
                     // 所持品から取り出した＆まだ残っている場合は所持品に戻す
                     yield return Toils_Mizu.AddCarriedThingToInventory();
@@ -81,10 +81,7 @@ namespace MizuMod
                 // ターゲットがThingではない=水アイテムを摂取しない場合=水地形を利用する場合
 
                 // 選んだ水地形が使用不可能or到達不可能になったらFail
-                ToilFailConditions.FailOn<JobDriver_DrinkWater>(this, () =>
-                {
-                    return this.job.targetA.Cell.IsForbidden(pawn) || !pawn.CanReach(this.job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly);
-                });
+                ToilFailConditions.FailOn<JobDriver_DrinkWater>(this, () => job.targetA.Cell.IsForbidden(pawn) || !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
 
                 // 水地形まで移動
                 yield return Toils_Goto.GotoCell(WaterIndex, PathEndMode.OnCell);

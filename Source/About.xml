@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>No Water, No Life [1.0] </name>
+  <author>himesama, schoos</author>
+  <supportedVersions>
+    <li>1.0</li>
+  </supportedVersions>
+  <url>https://github.com/schoos76/MizuMod</url>
+  <description>
+
+for RimWorld 1.0
+mod version 1.7.2
+
+Description
+
+This mod adds "Need Water" to pawns. There are various means to get and transport water, such as: wells, pumps, water pipes, faucets, water cleaners, and more.
+This mod should NOT be applied to saved games.
+
+Direct download from github
+
+https://github.com/schoos76/MizuMod/releases
+
+Please click "Source code (zip)" of the version what you want.
+The downloaded zip file contains all the data as well as the source code.
+
+License
+
+This mod includes the following
+- Harmony (MIT License)
+
+This mod depends on ModCheck mod.
+
+The other files are licensed under the Unlicense. 
+https://github.com/schoos76/MizuMod/blob/master/LICENSE_Unlicense
+
+Contributors
+
+himesama1301 (Original creator of this mod)
+Valerate (VGP_Core and VGP_Gourmet patch)
+Dango998 (ChineseSimplified, ChineseTraditional translation)
+Firty (PortugueseBrazilian translation)
+Oblivionburn (Most of the B19 XML changes)
+Silt (some of the textures)
+crustymonkey (VGP Garden Drinks patch)
+
+
+  </description>
+</ModMetaData>

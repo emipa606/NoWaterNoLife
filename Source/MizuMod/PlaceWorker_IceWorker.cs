@@ -9,19 +9,21 @@ namespace MizuMod
 {
     public class PlaceWorker_IceWorker : PlaceWorker
     {
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null)
+        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
         {
-            var def = checkingDef as ThingDef;
-            if (def == null) return false;
+            if (!(checkingDef is ThingDef def))
+            {
+                return false;
+            }
 
-            bool cond_building = false;
+            var cond_building = false;
             var terrainLoc = map.terrainGrid.TerrainAt(loc);
             if (terrainLoc.IsIce())
             {
                 cond_building = true;
             }
 
-            bool cond_interaction = true;
+            var cond_interaction = true;
             if (def.hasInteractionCell)
             {
                 var terrainInteraction = map.terrainGrid.TerrainAt(ThingUtility.InteractionCellWhenAt(def, loc, rot, map));
@@ -31,7 +33,7 @@ namespace MizuMod
                 }
             }
 
-            return (cond_building && cond_interaction);
+            return cond_building && cond_interaction;
         }
     }
 }

@@ -17,75 +17,42 @@ namespace MizuMod
         private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.1f, 0.8f, 0.8f), false);
         private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f), false);
 
-        public new CompProperties_WaterNetTank Props
-        {
-            get
-            {
-                return (CompProperties_WaterNetTank)this.props;
-            }
-        }
+        public new CompProperties_WaterNetTank Props => (CompProperties_WaterNetTank)props;
 
         public float AmountCanAccept
         {
             get
             {
-                if (!this.IsActivated)
+                if (!IsActivated)
                 {
                     return 0f;
                 }
-                return (this.MaxWaterVolume - this.StoredWaterVolume);
+                return MaxWaterVolume - StoredWaterVolume;
             }
         }
 
-        public float MaxWaterVolume
-        {
-            get
-            {
-                return this.Props.maxWaterVolume;
-            }
-        }
-        public bool ShowBar
-        {
-            get
-            {
-                return this.Props.showBar;
-            }
-        }
-        public int FlatID
-        {
-            get
-            {
-                return this.Props.flatID;
-            }
-        }
-        public List<CompProperties_WaterNetTank.DrawType> DrawTypes
-        {
-            get
-            {
-                return this.Props.drawTypes;
-            }
-        }
+        public float MaxWaterVolume => Props.maxWaterVolume;
+        public bool ShowBar => Props.showBar;
+        public int FlatID => Props.flatID;
+        public List<CompProperties_WaterNetTank.DrawType> DrawTypes => Props.drawTypes;
 
         private float storedWaterVolume = 0;
         public float StoredWaterVolume
         {
-            get
-            {
-                return this.storedWaterVolume;
-            }
+            get => storedWaterVolume;
             set
             {
-                if (value > this.MaxWaterVolume)
+                if (value > MaxWaterVolume)
                 {
-                    this.storedWaterVolume = this.MaxWaterVolume;
+                    storedWaterVolume = MaxWaterVolume;
                 }
                 else if (value < 0.0f)
                 {
-                    this.storedWaterVolume = 0.0f;
+                    storedWaterVolume = 0.0f;
                 }
                 else
                 {
-                    this.storedWaterVolume = value;
+                    storedWaterVolume = value;
                 }
             }
         }
@@ -94,48 +61,46 @@ namespace MizuMod
         {
             get
             {
-                if (this.MaxWaterVolume <= 0f) return 0f;
-                return this.StoredWaterVolume / this.MaxWaterVolume;
+                if (MaxWaterVolume <= 0f)
+                {
+                    return 0f;
+                }
+
+                return StoredWaterVolume / MaxWaterVolume;
             }
         }
 
         private WaterType storedWaterType = WaterType.NoWater;
         public WaterType StoredWaterType
         {
-            get
-            {
-                return this.storedWaterType;
-            }
-            set
-            {
-                this.storedWaterType = value;
-            }
+            get => storedWaterType;
+            set => storedWaterType = value;
         }
 
         private CompFlickable compFlickable = null;
 
         public CompWaterNetTank() : base()
         {
-            this.storedWaterVolume = 0.0f;
-            this.storedWaterType = WaterType.NoWater;
+            storedWaterVolume = 0.0f;
+            storedWaterType = WaterType.NoWater;
         }
 
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look<float>(ref this.storedWaterVolume, "storedWaterVolume");
-            Scribe_Values.Look<WaterType>(ref this.storedWaterType, "storedWaterType", WaterType.NoWater);
+            Scribe_Values.Look<float>(ref storedWaterVolume, "storedWaterVolume");
+            Scribe_Values.Look<WaterType>(ref storedWaterType, "storedWaterType", WaterType.NoWater);
 
-            if (this.storedWaterVolume > this.MaxWaterVolume)
+            if (storedWaterVolume > MaxWaterVolume)
             {
-                this.storedWaterVolume = this.MaxWaterVolume;
+                storedWaterVolume = MaxWaterVolume;
             }
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-            compFlickable = this.parent.GetComp<CompFlickable>();
+            compFlickable = parent.GetComp<CompFlickable>();
         }
 
         public float AddWaterVolume(float amount)
@@ -146,9 +111,9 @@ namespace MizuMod
                 return 0.0f;
             }
 
-            float prevWaterVolume = this.StoredWaterVolume;
-            this.StoredWaterVolume += amount;
-            return this.StoredWaterVolume - prevWaterVolume;
+            var prevWaterVolume = StoredWaterVolume;
+            StoredWaterVolume += amount;
+            return StoredWaterVolume - prevWaterVolume;
         }
 
         public float DrawWaterVolume(float amount)
@@ -158,14 +123,14 @@ namespace MizuMod
                 Log.Error("Cannot draw negative water volume " + amount);
                 return 0.0f;
             }
-            float prevWaterVolume = this.StoredWaterVolume;
-            this.StoredWaterVolume -= amount;
-            return prevWaterVolume - this.StoredWaterVolume;
+            var prevWaterVolume = StoredWaterVolume;
+            StoredWaterVolume -= amount;
+            return prevWaterVolume - StoredWaterVolume;
         }
 
         public override string CompInspectStringExtra()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append(base.CompInspectStringExtra());
             if (stringBuilder.ToString() != string.Empty)
             {
@@ -176,15 +141,15 @@ namespace MizuMod
             {
                 MizuStrings.InspectWaterTankStored.Translate(),
                 ": ",
-                this.StoredWaterVolume.ToString("F2"),
+                StoredWaterVolume.ToString("F2"),
                 " / ",
-                this.MaxWaterVolume.ToString("F2"),
+                MaxWaterVolume.ToString("F2"),
                 " L"
             }));
             stringBuilder.Append(string.Concat(new string[]
             {
                 "(",
-                MizuStrings.GetInspectWaterTypeString(this.StoredWaterType),
+                MizuStrings.GetInspectWaterTypeString(StoredWaterType),
                 ")",
             }));
 
@@ -195,17 +160,19 @@ namespace MizuMod
         {
             base.PostDraw();
 
-            if (this.ShowBar)
+            if (ShowBar)
             {
-                GenDraw.FillableBarRequest r = new GenDraw.FillableBarRequest();
-                r.center = this.parent.DrawPos + Vector3.up * 0.1f + Vector3.back * this.parent.def.size.z / 4.0f;
-                r.size = new Vector2(this.parent.RotatedSize.x, BarThick);
-                //r.center = new Vector3(this.parent.DrawPos.x, 0.1f, 1.0f - r.size.y / 2.0f);
-                //Log.Message(this.parent.DrawPos.ToString());
-                r.fillPercent = this.StoredWaterVolume / this.MaxWaterVolume;
-                r.filledMat = BarFilledMat;
-                r.unfilledMat = BarUnfilledMat;
-                r.margin = 0.15f;
+                var r = new GenDraw.FillableBarRequest
+                {
+                    center = parent.DrawPos + (Vector3.up * 0.1f) + (Vector3.back * parent.def.size.z / 4.0f),
+                    size = new Vector2(parent.RotatedSize.x, BarThick),
+                    //r.center = new Vector3(this.parent.DrawPos.x, 0.1f, 1.0f - r.size.y / 2.0f);
+                    //Log.Message(this.parent.DrawPos.ToString());
+                    fillPercent = StoredWaterVolume / MaxWaterVolume,
+                    filledMat = BarFilledMat,
+                    unfilledMat = BarUnfilledMat,
+                    margin = 0.15f
+                };
                 GenDraw.DrawFillableBar(r);
             }
         }

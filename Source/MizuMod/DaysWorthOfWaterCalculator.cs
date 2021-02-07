@@ -17,14 +17,14 @@ namespace MizuMod
             tmpThingDefCounts.Clear();
             tmpPawns.Clear();
 
-            for (int i = 0; i < transferables.Count; i++)
+            for (var i = 0; i < transferables.Count; i++)
             {
                 TransferableOneWay transferableOneWay = transferables[i];
                 if (transferableOneWay.HasAnyThing)
                 {
                     if (transferableOneWay.AnyThing is Pawn)
                     {
-                        for (int j = 0; j < transferableOneWay.CountToTransfer; j++)
+                        for (var j = 0; j < transferableOneWay.CountToTransfer; j++)
                         {
                             tmpPawns.Add((Pawn)transferableOneWay.things[j]);
                         }
@@ -35,7 +35,7 @@ namespace MizuMod
                     }
                 }
             }
-            float result = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(tmpPawns, tmpThingDefCounts, ignoreInventory);
+            var result = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(tmpPawns, tmpThingDefCounts, ignoreInventory);
             tmpThingDefCounts.Clear();
             tmpPawns.Clear();
             return result;
@@ -43,9 +43,9 @@ namespace MizuMod
 
         private static bool AnyNonTerrainDrinkingPawn(List<Pawn> pawns)
         {
-            for (int i = 0; i < pawns.Count; i++)
+            for (var i = 0; i < pawns.Count; i++)
             {
-                if (pawns[i].needs.mood != null && pawns[i].needs.water() != null)
+                if (pawns[i].needs.mood != null && pawns[i].needs.Water() != null)
                 {
                     return true;
                 }
@@ -64,19 +64,18 @@ namespace MizuMod
             {
                 return 1000f;
             }
-            List<ThingDefCount> tmpWater = new List<ThingDefCount>();
+            var tmpWater = new List<ThingDefCount>();
             tmpWater.Clear();
 
             if (extraWater != null)
             {
 
-                for (int i = 0; i < extraWater.Count; i++)
+                for (var i = 0; i < extraWater.Count; i++)
                 {
-                    bool canGetWater = false;
-                    for (int j = 0; j < extraWater[i].ThingDef.comps.Count; j++)
+                    var canGetWater = false;
+                    for (var j = 0; j < extraWater[i].ThingDef.comps.Count; j++)
                     {
-                        var compprop = extraWater[i].ThingDef.comps[j] as CompProperties_WaterSource;
-                        if (compprop != null && compprop.sourceType == CompProperties_WaterSource.SourceType.Item && compprop.waterAmount > 0.0f)
+                        if (extraWater[i].ThingDef.comps[j] is CompProperties_WaterSource compprop && compprop.sourceType == CompProperties_WaterSource.SourceType.Item && compprop.waterAmount > 0.0f)
                         {
                             canGetWater = true;
                             break;
@@ -89,12 +88,12 @@ namespace MizuMod
                 }
 
             }
-            for (int j = 0; j < pawns.Count; j++)
+            for (var j = 0; j < pawns.Count; j++)
             {
                 if (!InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawns[j], ignoreInventory))
                 {
                     ThingOwner<Thing> innerContainer = pawns[j].inventory.innerContainer;
-                    for (int k = 0; k < innerContainer.Count; k++)
+                    for (var k = 0; k < innerContainer.Count; k++)
                     {
                         if (innerContainer[k].CanGetWater())
                         {
@@ -107,35 +106,35 @@ namespace MizuMod
             {
                 return 0f;
             }
-            List<float> tmpDaysWorthOfFoodPerPawn = new List<float>();
-            List<bool> tmpAnyFoodLeftIngestibleByPawn = new List<bool>();
+            var tmpDaysWorthOfFoodPerPawn = new List<float>();
+            var tmpAnyFoodLeftIngestibleByPawn = new List<bool>();
             tmpDaysWorthOfFoodPerPawn.Clear();
             tmpAnyFoodLeftIngestibleByPawn.Clear();
-            for (int l = 0; l < pawns.Count; l++)
+            for (var l = 0; l < pawns.Count; l++)
             {
                 tmpDaysWorthOfFoodPerPawn.Add(0f);
                 tmpAnyFoodLeftIngestibleByPawn.Add(true);
             }
-            float num = 0f;
+            var num = 0f;
             bool flag;
             do
             {
                 flag = false;
-                for (int m = 0; m < pawns.Count; m++)
+                for (var m = 0; m < pawns.Count; m++)
                 {
                     Pawn pawn = pawns[m];
                     if (tmpAnyFoodLeftIngestibleByPawn[m])
                     {
                         do
                         {
-                            int num2 = DaysWorthOfWaterCalculator.BestEverGetWaterIndexFor(pawns[m], tmpWater);
+                            var num2 = DaysWorthOfWaterCalculator.BestEverGetWaterIndexFor(pawns[m], tmpWater);
                             if (num2 < 0)
                             {
                                 tmpAnyFoodLeftIngestibleByPawn[m] = false;
                                 break;
                             }
                             CompProperties_WaterSource compprop = null;
-                            for (int x = 0; x < tmpWater[num2].ThingDef.comps.Count; x++)
+                            for (var x = 0; x < tmpWater[num2].ThingDef.comps.Count; x++)
                             {
                                 compprop = tmpWater[num2].ThingDef.comps[x] as CompProperties_WaterSource;
                                 if (compprop != null && compprop.sourceType == CompProperties_WaterSource.SourceType.Item)
@@ -148,14 +147,14 @@ namespace MizuMod
                                 tmpAnyFoodLeftIngestibleByPawn[m] = false;
                                 break;
                             }
-                            Need_Water need_water = pawn.needs.water();
+                            Need_Water need_water = pawn.needs.Water();
                             if (need_water == null)
                             {
                                 tmpAnyFoodLeftIngestibleByPawn[m] = false;
                                 break;
                             }
-                            float num3 = Mathf.Min(compprop.waterAmount, need_water.WaterAmountBetweenThirstyAndHealthy);
-                            float num4 = num3 / need_water.WaterAmountBetweenThirstyAndHealthy * (float)need_water.TicksUntilThirstyWhenHealthy / 60000f;
+                            var num3 = Mathf.Min(compprop.waterAmount, need_water.WaterAmountBetweenThirstyAndHealthy);
+                            var num4 = num3 / need_water.WaterAmountBetweenThirstyAndHealthy * (float)need_water.TicksUntilThirstyWhenHealthy / 60000f;
                             tmpDaysWorthOfFoodPerPawn[m] = tmpDaysWorthOfFoodPerPawn[m] + num4;
                             tmpWater[num2] = tmpWater[num2].WithCount(tmpWater[num2].Count - 1);
                             flag = true;
@@ -166,28 +165,27 @@ namespace MizuMod
                 }
             }
             while (flag);
-            float num6 = 1000f;
-            for (int n = 0; n < pawns.Count; n++)
+            var num6 = 1000f;
+            for (var n = 0; n < pawns.Count; n++)
             {
                 num6 = Mathf.Min(num6, tmpDaysWorthOfFoodPerPawn[n]);
             }
             return num6;
         }
 
-        private static List<Pawn> tmpPawns = new List<Pawn>();
-        private static List<ThingCount> tmpThingCounts = new List<ThingCount>();
-        private static List<ThingCount> tmpThingStackParts = new List<ThingCount>();
-        private static List<ThingDefCount> tmpThingDefCounts = new List<ThingDefCount>();
+        private static readonly List<Pawn> tmpPawns = new List<Pawn>();
+        private static readonly List<ThingCount> tmpThingCounts = new List<ThingCount>();
+        private static readonly List<ThingCount> tmpThingStackParts = new List<ThingCount>();
+        private static readonly List<ThingDefCount> tmpThingDefCounts = new List<ThingDefCount>();
 
         public static float ApproxDaysWorthOfWaterLeftAfterTradeableTransfer(List<Thing> allCurrentThings, List<Tradeable> tradeables, IgnorePawnsInventoryMode ignoreInventory)
         {
             TransferableUtility.SimulateTradeableTransfer(allCurrentThings, tradeables, tmpThingStackParts);
             tmpPawns.Clear();
             tmpThingDefCounts.Clear();
-            for (int i = tmpThingStackParts.Count - 1; i >= 0; i--)
+            for (var i = tmpThingStackParts.Count - 1; i >= 0; i--)
             {
-                Pawn pawn = tmpThingStackParts[i].Thing as Pawn;
-                if (pawn != null)
+                if (tmpThingStackParts[i].Thing is Pawn pawn)
                 {
                     tmpPawns.Add(pawn);
                 }
@@ -197,7 +195,7 @@ namespace MizuMod
                 }
             }
             tmpThingStackParts.Clear();
-            float result = ApproxDaysWorthOfWater(tmpPawns, tmpThingDefCounts, ignoreInventory);
+            var result = ApproxDaysWorthOfWater(tmpPawns, tmpThingDefCounts, ignoreInventory);
             tmpPawns.Clear();
             tmpThingDefCounts.Clear();
             return result;
@@ -205,16 +203,16 @@ namespace MizuMod
 
         private static int BestEverGetWaterIndexFor(Pawn pawn, List<ThingDefCount> water)
         {
-            int num = -1;
-            float num2 = 0f;
-            for (int i = 0; i < water.Count; i++)
+            var num = -1;
+            var num2 = 0f;
+            for (var i = 0; i < water.Count; i++)
             {
                 if (water[i].Count > 0)
                 {
                     ThingDef thingDef = water[i].ThingDef;
                     if (MizuCaravanUtility.CanEverGetWater(thingDef, pawn))
                     {
-                        float waterScore = MizuCaravanUtility.GetWaterScore(thingDef, pawn);
+                        var waterScore = MizuCaravanUtility.GetWaterScore(thingDef, pawn);
                         if (num < 0 || waterScore > num2)
                         {
                             num = i;

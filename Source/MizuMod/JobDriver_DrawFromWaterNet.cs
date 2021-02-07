@@ -11,30 +11,36 @@ namespace MizuMod
 {
     public class JobDriver_DrawFromWaterNet : JobDriver_DrawWater
     {
-        private Building_WaterNetWorkTable WorkTable
-        {
-            get
-            {
-                return this.job.GetTarget(BillGiverInd).Thing as Building_WaterNetWorkTable;
-            }
-        }
+        private Building_WaterNetWorkTable WorkTable => job.GetTarget(BillGiverInd).Thing as Building_WaterNetWorkTable;
         private WaterNet WaterNet
         {
             get
             {
-                if (this.WorkTable == null) return null;
+                if (WorkTable == null)
+                {
+                    return null;
+                }
 
-                return this.WorkTable.InputWaterNet;
+                return WorkTable.InputWaterNet;
             }
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            if (!base.TryMakePreToilReservations(errorOnFailed)) return false;
+            if (!base.TryMakePreToilReservations(errorOnFailed))
+            {
+                return false;
+            }
 
-            if (this.WorkTable == null) return false;
+            if (WorkTable == null)
+            {
+                return false;
+            }
 
-            if (this.WaterNet == null) return false;
+            if (WaterNet == null)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -47,43 +53,52 @@ namespace MizuMod
         {
             var targetWaterType = WaterType.NoWater;
 
-            if (this.Ext.canDrawFromFaucet)
+            if (Ext.canDrawFromFaucet)
             {
                 // 蛇口の場合
-                targetWaterType = this.WaterNet.StoredWaterTypeForFaucet;
+                targetWaterType = WaterNet.StoredWaterTypeForFaucet;
             }
             else
             {
                 // 自分自身の場合
-                targetWaterType = this.WorkTable.TankComp.StoredWaterType;
+                targetWaterType = WorkTable.TankComp.StoredWaterType;
             }
 
             // 水道網の水の種類から水アイテムの種類を決定
             var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);
-            if (waterThingDef == null) return null;
+            if (waterThingDef == null)
+            {
+                return null;
+            }
 
             // 水アイテムの水源情報を得る
             var compprop = waterThingDef.GetCompProperties<CompProperties_WaterSource>();
-            if (compprop == null) return null;
+            if (compprop == null)
+            {
+                return null;
+            }
 
             // 水道網から水を減らす
-            if (this.Ext.canDrawFromFaucet)
+            if (Ext.canDrawFromFaucet)
             {
                 // 蛇口の場合
-                this.WaterNet.DrawWaterVolumeForFaucet(compprop.waterVolume * this.Ext.getItemCount);
+                WaterNet.DrawWaterVolumeForFaucet(compprop.waterVolume * Ext.getItemCount);
             }
             else
             {
                 // 自分自身の場合
-                this.WorkTable.TankComp.DrawWaterVolume(compprop.waterVolume * this.Ext.getItemCount);
+                WorkTable.TankComp.DrawWaterVolume(compprop.waterVolume * Ext.getItemCount);
             }
 
             // 水を生成
             var createThing = ThingMaker.MakeThing(waterThingDef);
-            if (createThing == null) return null;
+            if (createThing == null)
+            {
+                return null;
+            }
 
             // 個数設定
-            createThing.stackCount = this.Ext.getItemCount;
+            createThing.stackCount = Ext.getItemCount;
             return createThing;
         }
     }

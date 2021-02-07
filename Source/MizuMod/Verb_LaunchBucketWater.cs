@@ -14,17 +14,23 @@ namespace MizuMod
         protected override bool TryCastShot()
         {
             // 水チェック
-            var comp = this.EquipmentSource.GetComp<CompWaterTool>();
-            if (comp.StoredWaterVolumePercent < NeedWaterPercentage) return false;
+            var comp = EquipmentSource.GetComp<CompWaterTool>();
+            if (comp.StoredWaterVolumePercent < NeedWaterPercentage)
+            {
+                return false;
+            }
 
             // 通常の投擲チェック
-            if (base.TryCastShot() == false) return false;
+            if (base.TryCastShot() == false)
+            {
+                return false;
+            }
 
             // 投擲できた場合は水を減らす
             comp.StoredWaterVolume = 0f;
 
             // グラフィック更新
-            this.EquipmentSource.Tick();
+            EquipmentSource.Tick();
 
             return true;
         }

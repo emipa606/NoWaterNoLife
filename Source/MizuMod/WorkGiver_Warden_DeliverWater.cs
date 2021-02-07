@@ -14,37 +14,64 @@ namespace MizuMod
         public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
             Pawn warden = pawn;
-            Pawn prisoner = t as Pawn;
+            var prisoner = t as Pawn;
 
             // 世話が必要でない
-            if (!base.ShouldTakeCareOfPrisoner(warden, prisoner)) return null;
+            if (!base.ShouldTakeCareOfPrisoner_NewTemp(warden, prisoner))
+            {
+                return null;
+            }
 
             // 囚人が食事を持って来てもらえる扱いではない
-            if (!prisoner.guest.CanBeBroughtFood) return null;
+            if (!prisoner.guest.CanBeBroughtFood)
+            {
+                return null;
+            }
 
             // 囚人は牢屋にいない
-            if (!prisoner.Position.IsInPrisonCell(prisoner.Map)) return null;
+            if (!prisoner.Position.IsInPrisonCell(prisoner.Map))
+            {
+                return null;
+            }
 
-            Need_Water need_water = prisoner.needs.water();
+            Need_Water need_water = prisoner.needs.Water();
 
             // 水分要求がない
-            if (need_water == null) return null;
+            if (need_water == null)
+            {
+                return null;
+            }
 
             // 喉が渇いていない
-            if (need_water.CurLevelPercentage >= need_water.PercentageThreshThirsty + 0.02f) return null;
+            if (need_water.CurLevelPercentage >= need_water.PercentageThreshThirsty + 0.02f)
+            {
+                return null;
+            }
 
             // (囚人が病人だから)食事を与えられるべき状態である(部屋に運ばれたものを自分で食べることができない)
-            if (WardenFeedUtility.ShouldBeFed(prisoner)) return null;
+            if (WardenFeedUtility.ShouldBeFed(prisoner))
+            {
+                return null;
+            }
 
             // 水が見つからない
             Thing thing = MizuUtility.TryFindBestWaterSourceFor(warden, prisoner, false, false);
-            if (thing == null) return null;
+            if (thing == null)
+            {
+                return null;
+            }
 
             // 見つかった水アイテムは既に囚人がいる部屋の中にある
-            if (thing.GetRoom(RegionType.Set_Passable) == prisoner.GetRoom(RegionType.Set_Passable)) return null;
+            if (thing.GetRoom(RegionType.Set_Passable) == prisoner.GetRoom(RegionType.Set_Passable))
+            {
+                return null;
+            }
 
             // 部屋の中に十分な量の水がある
-            if (WorkGiver_Warden_DeliverWater.WaterAvailableInRoomTo(prisoner)) return null;
+            if (WorkGiver_Warden_DeliverWater.WaterAvailableInRoomTo(prisoner))
+            {
+                return null;
+            }
 
             // 水を運んでくるジョブを発行
             return new Job(MizuDef.Job_DeliverWater, thing, prisoner)
@@ -62,11 +89,14 @@ namespace MizuMod
                 return true;
             }
 
-            float allPawnWantedWater = 0.0f;
-            float allThingWaterAmount = 0f;
+            var allPawnWantedWater = 0.0f;
+            var allThingWaterAmount = 0f;
 
             Room room = prisoner.GetRoom(RegionType.Set_Passable);
-            if (room == null) return false;
+            if (room == null)
+            {
+                return false;
+            }
 
             foreach (var region in room.Regions)
             {
@@ -82,20 +112,32 @@ namespace MizuMod
                 // 囚人の部屋のポーンの要求水分量の合計を計算
                 foreach (var thing in region.ListerThings.ThingsInGroup(ThingRequestGroup.Pawn))
                 {
-                    Pawn pawn = thing as Pawn;
-                    Need_Water need_water = pawn.needs.water();
+                    var pawn = thing as Pawn;
+                    Need_Water need_water = pawn.needs.Water();
 
                     // 水要求なし
-                    if (need_water == null) continue;
+                    if (need_water == null)
+                    {
+                        continue;
+                    }
 
                     // コロニーの囚人ではない
-                    if (!pawn.IsPrisonerOfColony) continue;
+                    if (!pawn.IsPrisonerOfColony)
+                    {
+                        continue;
+                    }
 
                     // 喉が渇いていない
-                    if (need_water.CurLevelPercentage >= need_water.PercentageThreshThirsty + 0.02f) continue;
+                    if (need_water.CurLevelPercentage >= need_water.PercentageThreshThirsty + 0.02f)
+                    {
+                        continue;
+                    }
 
                     // 物を運んでいる
-                    if (pawn.carryTracker.CarriedThing != null) continue;
+                    if (pawn.carryTracker.CarriedThing != null)
+                    {
+                        continue;
+                    }
 
                     allPawnWantedWater += need_water.WaterWanted;
                 }
@@ -108,7 +150,10 @@ namespace MizuMod
         private static float WaterAmountAvailableForFrom(Pawn p, Thing waterSource)
         {
             // その物は水分を得られるものではない
-            if (!waterSource.CanGetWater()) return 0.0f;
+            if (!waterSource.CanGetWater())
+            {
+                return 0.0f;
+            }
 
             return waterSource.GetWaterAmount() * (float)waterSource.stackCount;
         }

@@ -11,80 +11,38 @@ namespace MizuMod
 {
     public class CompLatentHeat : ThingComp
     {
-        public CompProperties_LatentHeat Props
-        {
-            get
-            {
-                return (CompProperties_LatentHeat)this.props;
-            }
-        }
+        public CompProperties_LatentHeat Props => (CompProperties_LatentHeat)props;
 
-        public ThingDef ChangedThingDef
-        {
-            get
-            {
-                return this.Props.changedThingDef;
-            }
-        }
+        public ThingDef ChangedThingDef => Props.changedThingDef;
 
-        public float TemperatureThreshold
-        {
-            get
-            {
-                return this.Props.temperatureThreshold;
-            }
-        }
+        public float TemperatureThreshold => Props.temperatureThreshold;
 
-        public CompProperties_LatentHeat.AddCondition AddLatentHeatCondition
-        {
-            get
-            {
-                return this.Props.addLatentHeatCondition;
-            }
-        }
+        public CompProperties_LatentHeat.AddCondition AddLatentHeatCondition => Props.addLatentHeatCondition;
 
-        public float LatentHeatThreshold
-        {
-            get
-            {
-                return this.Props.latentHeatThreshold;
-            }
-        }
+        public float LatentHeatThreshold => Props.latentHeatThreshold;
 
         // 潜熱値
         private float latentHeatAmount;
         public float LatentHeatAmount
         {
-            get
-            {
-                return this.latentHeatAmount;
-            }
-            set
-            {
-                this.latentHeatAmount = Mathf.Max(0f, value);
-            }
+            get => latentHeatAmount;
+            set => latentHeatAmount = Mathf.Max(0f, value);
         }
 
         // 隠し腐敗度
         private float hiddenRotProgress;
         public float HiddenRotProgress
         {
-            get
-            {
-                return this.hiddenRotProgress;
-            }
-            set
-            {
-                this.hiddenRotProgress = value;
-            }
+            get => hiddenRotProgress;
+            set => hiddenRotProgress = value;
         }
 
         public override void PostExposeData()
         {
             base.PostExposeData();
 
-            Scribe_Values.Look(ref this.latentHeatAmount, "latentHeatAmount");
-            Scribe_Values.Look(ref this.hiddenRotProgress, "hiddenRotProgress");
+            Scribe_Values.Look(ref latentHeatAmount, "latentHeatAmount");
+            Scribe_Values.Look(ref hiddenRotProgress, "hiddenRotProgress");
         }
 
         public override void CompTickRare()
@@ -92,11 +50,11 @@ namespace MizuMod
             base.CompTick();
 
             // 閾値より温度が高い場合はプラス
-            var deltaTemperature = this.parent.AmbientTemperature - this.TemperatureThreshold;
+            var deltaTemperature = parent.AmbientTemperature - TemperatureThreshold;
 
             // 溶ける・凍る判定
-            int direction = 0;
-            switch (this.AddLatentHeatCondition)
+            var direction = 0;
+            switch (AddLatentHeatCondition)
             {
                 case CompProperties_LatentHeat.AddCondition.Above:
                     // 温度が高いと潜熱プラス→溶ける
@@ -113,31 +71,31 @@ namespace MizuMod
 
             // 潜熱値変更
             // (最後はデバッグ用の係数を掛けている)
-            this.LatentHeatAmount += deltaTemperature * direction * MizuDef.GlobalSettings.forDebug.latentHeatRate;
+            LatentHeatAmount += deltaTemperature * direction * MizuDef.GlobalSettings.forDebug.latentHeatRate;
 
-            if (this.latentHeatAmount >= this.LatentHeatThreshold)
+            if (latentHeatAmount >= LatentHeatThreshold)
             {
                 // 潜熱値が閾値を超えた時の処理
-                var map = this.parent.Map;
-                var owner = this.parent.holdingOwner;
+                var map = parent.Map;
+                var owner = parent.holdingOwner;
 
-                if (this.ChangedThingDef == null)
+                if (ChangedThingDef == null)
                 {
                     // 変化後アイテムの設定が無い場合は消滅
-                    this.DestroyParent(map, owner);
+                    DestroyParent(map, owner);
                     return;
                 }
 
                 // 変化後のアイテムを生成
-                var changedThing = ThingMaker.MakeThing(this.ChangedThingDef);
-                changedThing.stackCount = this.parent.stackCount;
+                var changedThing = ThingMaker.MakeThing(ChangedThingDef);
+                changedThing.stackCount = parent.stackCount;
 
                 // 腐敗度の処理
-                this.SetRotProgress(changedThing, this.GetRotProgress());
+                SetRotProgress(changedThing, GetRotProgress());
 
                 // 消滅と生成
-                this.DestroyParent(map, owner);
-                this.CreateNewThing(changedThing, map, owner);
+                DestroyParent(map, owner);
+                CreateNewThing(changedThing, map, owner);
             }
         }
 
@@ -146,16 +104,19 @@ namespace MizuMod
             base.PreAbsorbStack(otherStack, count);
 
             // 全体に対するother側の割合
-            float otherRatio = (float)count / (float)(this.parent.stackCount + count);
+            var otherRatio = (float)count / (float)(parent.stackCount + count);
 
             var otherComp = otherStack.TryGetComp<CompLatentHeat>();
-            if (otherComp == null) return;
+            if (otherComp == null)
+            {
+                return;
+            }
 
             // 潜熱値の計算(加重平均)
-            this.LatentHeatAmount = Mathf.Lerp(this.LatentHeatAmount, otherComp.LatentHeatAmount, otherRatio);
+            LatentHeatAmount = Mathf.Lerp(LatentHeatAmount, otherComp.LatentHeatAmount, otherRatio);
 
             // 隠し腐敗度の計算(加重平均)
-            this.HiddenRotProgress = Mathf.Lerp(this.HiddenRotProgress, otherComp.HiddenRotProgress, otherRatio);
+            HiddenRotProgress = Mathf.Lerp(HiddenRotProgress, otherComp.HiddenRotProgress, otherRatio);
         }
 
         // 分離した時、潜熱値は特に変更しない
@@ -166,7 +127,7 @@ namespace MizuMod
 
         public override string CompInspectStringExtra()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append(base.CompInspectStringExtra());
 
             if (DebugSettings.godMode)
@@ -175,9 +136,9 @@ namespace MizuMod
                 {
                     stringBuilder.AppendLine();
                 }
-                stringBuilder.Append("LatentHeatAmount:" + this.latentHeatAmount.ToString("F2"));
+                stringBuilder.Append("LatentHeatAmount:" + latentHeatAmount.ToString("F2"));
                 stringBuilder.AppendLine();
-                stringBuilder.Append("HiddenRotProgress:" + this.hiddenRotProgress.ToString());
+                stringBuilder.Append("HiddenRotProgress:" + hiddenRotProgress.ToString());
             }
             //if (stringBuilder.ToString() != string.Empty)
             //{
@@ -199,7 +160,7 @@ namespace MizuMod
             if (map != null)
             {
                 // マップに落ちている場合
-                GenSpawn.Spawn(thing, this.parent.Position, map);
+                GenSpawn.Spawn(thing, parent.Position, map);
                 return;
             }
 
@@ -219,27 +180,27 @@ namespace MizuMod
             if (map != null)
             {
                 // マップに落ちている場合
-                this.parent.Destroy(DestroyMode.Vanish);
+                parent.Destroy(DestroyMode.Vanish);
                 return;
             }
 
             if (owner != null)
             {
                 // 何らかの物の中に入っている場合
-                owner.Remove(this.parent);
-                this.parent.Destroy(DestroyMode.Vanish);
+                owner.Remove(parent);
+                parent.Destroy(DestroyMode.Vanish);
                 return;
             }
         }
 
         private float GetRotProgress()
         {
-            var compRotThis = this.parent.TryGetComp<CompRottable>();
+            var compRotThis = parent.TryGetComp<CompRottable>();
 
             if (compRotThis == null)
             {
                 // 腐敗度がないなら隠し腐敗度を返す
-                return this.hiddenRotProgress;
+                return hiddenRotProgress;
             }
             else
             {

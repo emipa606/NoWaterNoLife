@@ -9,28 +9,16 @@ namespace MizuMod
 {
     public class CompDestroyByTime : ThingComp
     {
-        public CompProperties_DestroyByTime Props
-        {
-            get
-            {
-                return (CompProperties_DestroyByTime)this.props;
-            }
-        }
+        public CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime)props;
 
-        public int DestroyTicks
-        {
-            get
-            {
-                return this.Props.destroyTicks;
-            }
-        }
+        public int DestroyTicks => Props.destroyTicks;
 
         private int elapsedTicks = 0;
 
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look(ref this.elapsedTicks, "elapsedTicks");
+            Scribe_Values.Look(ref elapsedTicks, "elapsedTicks");
         }
 
         public override void CompTick()
@@ -49,7 +37,7 @@ namespace MizuMod
         {
             if (elapsedTicks >= DestroyTicks)
             {
-                var t = this.parent;
+                var t = parent;
 
                 if (t.holdingOwner != null)
                 {

@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- バニラの食事アイテムに水分を設定する -->
+  <!-- 簡単な食事 -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "MealSimple"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "MealSimple"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "MealSimple"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>NormalWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.1</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0</waterVolume>
+      </li>
+    </value>
+  </Operation>
+  <!-- 手の込んだ食事 -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "MealFine"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "MealFine"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "MealFine"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>NormalWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.1</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0</waterVolume>
+      </li>
+    </value>
+  </Operation>
+  <!--豪華な食事 -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "MealLavish"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "MealLavish"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "MealLavish"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>NormalWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.1</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0</waterVolume>
+      </li>
+    </value>
+  </Operation>
+  <!-- 非常食 -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "MealSurvivalPack"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "MealSurvivalPack"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "MealSurvivalPack"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>NormalWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.1</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0</waterVolume>
+      </li>
+    </value>
+  </Operation>
+  <!-- 牛乳 -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "Milk"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "Milk"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "Milk"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>RawWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.05</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0.5</waterVolume>
+      </li>
+    </value>
+  </Operation>
+  <!-- ビール -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "Beer"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "Beer"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "Beer"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>NormalWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.15</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0.5</waterVolume>
+      </li>
+    </value>
+  </Operation>
+  <!-- サイコイドペコー -->
+  <Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+      <li Class="PatchOperationTest">
+        <xpath>*/ThingDef[defName = "PsychiteTea"]/comps</xpath>
+        <success>Invert</success>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>*/ThingDef[defName = "PsychiteTea"]</xpath>
+        <value>
+          <comps />
+        </value>
+      </li>
+    </operations>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/ThingDef[defName = "PsychiteTea"]/comps</xpath>
+    <value>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Item</sourceType>
+        <getSound>Ingest_Beer</getSound>
+        <baseDrinkTicks>100</baseDrinkTicks>
+        <waterType>NormalWater</waterType>
+        <needManipulate>true</needManipulate>
+        <waterAmount>0.25</waterAmount>
+        <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+        <waterVolume>0.5</waterVolume>
+      </li>
+    </value>
+  </Operation>
+</Patch>

@@ -10,30 +10,18 @@ namespace MizuMod
 {
     public abstract class Designator_AreaSnowGet : Designator
     {
-        private DesignateMode mode;
+        private readonly DesignateMode mode;
 
-        public override int DraggableDimensions
-        {
-            get
-            {
-                return 2;
-            }
-        }
+        public override int DraggableDimensions => 2;
 
-        public override bool DragDrawMeasurements
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool DragDrawMeasurements => true;
 
         public Designator_AreaSnowGet(DesignateMode mode)
         {
             this.mode = mode;
-            this.soundDragSustain = SoundDefOf.Designate_DragStandard;
-            this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-            this.useMouseIcon = true;
+            soundDragSustain = SoundDefOf.Designate_DragStandard;
+            soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+            useMouseIcon = true;
             //this.hotKey = KeyBindingDefOf.Misc7;
             //this.tutorTag = "AreaSnowClear";
         }
@@ -44,8 +32,8 @@ namespace MizuMod
             {
                 return false;
             }
-            bool flag = base.Map.areaManager.SnowGet()[c];
-            if (this.mode == DesignateMode.Add)
+            var flag = base.Map.areaManager.SnowGet()[c];
+            if (mode == DesignateMode.Add)
             {
                 return !flag;
             }
@@ -54,7 +42,7 @@ namespace MizuMod
 
         public override void DesignateSingleCell(IntVec3 c)
         {
-            if (this.mode == DesignateMode.Add)
+            if (mode == DesignateMode.Add)
             {
                 base.Map.areaManager.SnowGet()[c] = true;
             }

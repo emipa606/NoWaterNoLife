@@ -11,122 +11,45 @@ namespace MizuMod
     public class Building_WaterNetWorkTable : Building_WorkTable, IBuilding_WaterNet
     {
         // コネクタがあるか
-        public virtual bool HasConnector
-        {
-            get
-            {
-                return this.HasInputConnector || this.HasOutputConnector;
-            }
-        }
+        public virtual bool HasConnector => HasInputConnector || HasOutputConnector;
 
         // 入力コネクタがあるか
-        public virtual bool HasInputConnector
-        {
-            get
-            {
-                return this.InputConnectors.Count > 0;
-            }
-        }
+        public virtual bool HasInputConnector => InputConnectors.Count > 0;
 
         // 出力コネクタがあるか
-        public virtual bool HasOutputConnector
-        {
-            get
-            {
-                return this.OutputConnectors.Count > 0;
-            }
-        }
+        public virtual bool HasOutputConnector => OutputConnectors.Count > 0;
 
         // 入力コネクタと出力コネクタは同じか
-        public virtual bool IsSameConnector
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public virtual bool IsSameConnector => true;
 
         // 電力供給が賄えているか
-        public bool PowerOn
-        {
-            get
-            {
-                return this.powerTraderComp == null || this.powerTraderComp.PowerOn;
-            }
-        }
+        public bool PowerOn => powerTraderComp == null || powerTraderComp.PowerOn;
 
         // スイッチはONか
-        public bool SwitchIsOn
-        {
-            get
-            {
-                return FlickUtility.WantsToBeOn(this);
-            }
-        }
+        public bool SwitchIsOn => FlickUtility.WantsToBeOn(this);
 
         // 機能しているか
-        public virtual bool IsActivated
-        {
-            get
-            {
+        public virtual bool IsActivated =>
                 // 壊れていない、電力供給ありor不要、(電力不要でも切り替えがある場合)ONになっている
-                return !this.IsBrokenDown() && this.PowerOn && this.SwitchIsOn;
-            }
-        }
+                !this.IsBrokenDown() && PowerOn && SwitchIsOn;
 
         // 水道網として機能しているか(水を通すのか)
         // 基本的に電気が通ってなくても、壊れていても水は通す
-        public virtual bool IsActivatedForWaterNet
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public virtual bool IsActivatedForWaterNet => true;
 
         // 水道網管理オブジェクト
-        public MapComponent_WaterNetManager WaterNetManager
-        {
-            get
-            {
-                return this.Map.GetComponent<MapComponent_WaterNetManager>();
-            }
-        }
+        public MapComponent_WaterNetManager WaterNetManager => Map.GetComponent<MapComponent_WaterNetManager>();
 
         // 出力する水の種類
-        public virtual WaterType OutputWaterType
-        {
-            get
-            {
-                return WaterType.NoWater;
-            }
-        }
+        public virtual WaterType OutputWaterType => WaterType.NoWater;
 
-        public virtual UndergroundWaterPool WaterPool
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public virtual UndergroundWaterPool WaterPool => null;
 
         // 水抜き機能があるか
-        public bool HasDrainCapability
-        {
-            get
-            {
-                return this.flickableComp != null && this.SourceComp != null && this.SourceComp.SourceType == CompProperties_WaterSource.SourceType.Building;
-            }
-        }
+        public bool HasDrainCapability => flickableComp != null && SourceComp != null && SourceComp.SourceType == CompProperties_WaterSource.SourceType.Building;
 
         // 水抜き中か
-        public bool IsDraining
-        {
-            get
-            {
-                return (this.flickableComp != null && !this.flickableComp.SwitchIsOn);
-            }
-        }
+        public bool IsDraining => flickableComp != null && !flickableComp.SwitchIsOn;
 
         public WaterNet InputWaterNet { get; set; }
         public WaterNet OutputWaterNet { get; set; }
@@ -142,8 +65,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.sourceComp == null) this.sourceComp = this.GetComp<CompWaterSource>();
-                return this.sourceComp;
+                if (sourceComp == null)
+                {
+                    sourceComp = GetComp<CompWaterSource>();
+                }
+
+                return sourceComp;
             }
         }
         private CompWaterNetInput inputComp;
@@ -151,8 +78,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.inputComp == null) this.inputComp = this.GetComp<CompWaterNetInput>();
-                return this.inputComp;
+                if (inputComp == null)
+                {
+                    inputComp = GetComp<CompWaterNetInput>();
+                }
+
+                return inputComp;
             }
         }
         private CompWaterNetOutput outputComp;
@@ -160,8 +91,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.outputComp == null) this.outputComp = this.GetComp<CompWaterNetOutput>();
-                return this.outputComp;
+                if (outputComp == null)
+                {
+                    outputComp = GetComp<CompWaterNetOutput>();
+                }
+
+                return outputComp;
             }
         }
         private CompWaterNetTank tankComp;
@@ -169,8 +104,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.tankComp == null) this.tankComp = this.GetComp<CompWaterNetTank>();
-                return this.tankComp;
+                if (tankComp == null)
+                {
+                    tankComp = GetComp<CompWaterNetTank>();
+                }
+
+                return tankComp;
             }
         }
 
@@ -178,19 +117,19 @@ namespace MizuMod
         {
             base.SpawnSetup(map, respawningAfterLoad);
 
-            this.powerTraderComp = this.GetComp<CompPowerTrader>();
-            this.flickableComp = this.GetComp<CompFlickable>();
+            powerTraderComp = GetComp<CompPowerTrader>();
+            flickableComp = GetComp<CompFlickable>();
 
-            this.InputConnectors = new List<IntVec3>();
-            this.OutputConnectors = new List<IntVec3>();
-            this.CreateConnectors();
+            InputConnectors = new List<IntVec3>();
+            OutputConnectors = new List<IntVec3>();
+            CreateConnectors();
 
-            this.WaterNetManager.AddThing(this);
+            WaterNetManager.AddThing(this);
         }
 
         public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
         {
-            this.WaterNetManager.RemoveThing(this);
+            WaterNetManager.RemoveThing(this);
 
             base.DeSpawn(mode);
         }
@@ -199,8 +138,8 @@ namespace MizuMod
         {
             get
             {
-                List<IntVec3> vecs = new List<IntVec3>();
-                CellRect rect = this.OccupiedRect().ExpandedBy(1);
+                var vecs = new List<IntVec3>();
+                CellRect rect = OccupiedRect().ExpandedBy(1);
 
                 foreach (var cell in rect.EdgeCells)
                 {
@@ -229,9 +168,9 @@ namespace MizuMod
 
         public virtual void CreateConnectors()
         {
-            this.InputConnectors.Clear();
-            this.OutputConnectors.Clear();
-            CellRect rect = this.OccupiedRect().ExpandedBy(1);
+            InputConnectors.Clear();
+            OutputConnectors.Clear();
+            CellRect rect = OccupiedRect().ExpandedBy(1);
 
             foreach (var cell in rect.EdgeCells)
             {
@@ -251,14 +190,14 @@ namespace MizuMod
                 {
                     continue;
                 }
-                this.InputConnectors.Add(cell);
-                this.OutputConnectors.Add(cell);
+                InputConnectors.Add(cell);
+                OutputConnectors.Add(cell);
             }
         }
 
         public virtual void PrintForGrid(SectionLayer sectionLayer)
         {
-            if (this.IsActivatedForWaterNet)
+            if (IsActivatedForWaterNet)
             {
                 MizuGraphics.LinkedWaterNetOverlay.Print(sectionLayer, this);
             }
@@ -271,15 +210,15 @@ namespace MizuMod
 
         public virtual bool IsAdjacentToCardinalOrInside(IBuilding_WaterNet other)
         {
-            return GenAdj.IsAdjacentToCardinalOrInside(this.OccupiedRect(), other.OccupiedRect());
+            return GenAdj.IsAdjacentToCardinalOrInside(OccupiedRect(), other.OccupiedRect());
         }
 
         public override string GetInspectString()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append(base.GetInspectString());
 
-            if (this.HasDrainCapability && this.IsDraining)
+            if (HasDrainCapability && IsDraining)
             {
                 stringBuilder.Append(string.Concat(new string[]
                 {
@@ -293,12 +232,12 @@ namespace MizuMod
                 {
                     stringBuilder.AppendLine();
                 }
-                if (this.InputWaterNet != null)
+                if (InputWaterNet != null)
                 {
                     stringBuilder.Append(string.Join(",", new string[] {
-                        string.Format("InNetID({0})", this.InputWaterNet.ID),
-                        string.Format("Stored({0},{1})", this.InputWaterNet.StoredWaterVolume.ToString("F2"), this.InputWaterNet.StoredWaterType.ToString()),
-                        string.Format("Flow({0})", this.InputWaterNet.WaterType),
+                        string.Format("InNetID({0})", InputWaterNet.ID),
+                        string.Format("Stored({0},{1})", InputWaterNet.StoredWaterVolume.ToString("F2"), InputWaterNet.StoredWaterType.ToString()),
+                        string.Format("Flow({0})", InputWaterNet.WaterType),
                     }));
                 }
                 else
@@ -306,12 +245,12 @@ namespace MizuMod
                     stringBuilder.Append("InNet(null)");
                 }
                 stringBuilder.AppendLine();
-                if (this.OutputWaterNet != null)
+                if (OutputWaterNet != null)
                 {
                     stringBuilder.Append(string.Join(",", new string[] {
-                        string.Format("OutNetID({0})", this.OutputWaterNet.ID),
-                        string.Format("Stored({0},{1})", this.OutputWaterNet.StoredWaterVolume.ToString("F2"), this.OutputWaterNet.StoredWaterType.ToString()),
-                        string.Format("Flow({0})", this.OutputWaterNet.WaterType),
+                        string.Format("OutNetID({0})", OutputWaterNet.ID),
+                        string.Format("Stored({0},{1})", OutputWaterNet.StoredWaterVolume.ToString("F2"), OutputWaterNet.StoredWaterType.ToString()),
+                        string.Format("Flow({0})", OutputWaterNet.WaterType),
                     }));
                 }
                 else
@@ -327,13 +266,13 @@ namespace MizuMod
         {
             get
             {
-                if (this.inputComp != null && this.inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+                if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
                 {
-                    return this.InputWaterNet.StoredWaterVolume;
+                    return InputWaterNet.StoredWaterVolume;
                 }
-                else if (this.tankComp != null)
+                else if (tankComp != null)
                 {
-                    return this.tankComp.StoredWaterVolume;
+                    return tankComp.StoredWaterVolume;
                 }
 
                 return 0.0f;
@@ -344,13 +283,13 @@ namespace MizuMod
         {
             get
             {
-                if (this.inputComp != null && this.inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+                if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
                 {
-                    return this.InputWaterNet.StoredWaterType;
+                    return InputWaterNet.StoredWaterType;
                 }
-                else if (this.tankComp != null)
+                else if (tankComp != null)
                 {
-                    return this.tankComp.StoredWaterType;
+                    return tankComp.StoredWaterType;
                 }
 
                 return WaterType.NoWater;
@@ -359,21 +298,21 @@ namespace MizuMod
 
         public void AddWaterVolume(float amount)
         {
-            if (this.tankComp != null)
+            if (tankComp != null)
             {
-                this.tankComp.AddWaterVolume(amount);
+                tankComp.AddWaterVolume(amount);
             }
         }
 
         public void DrawWaterVolume(float amount)
         {
-            if (this.inputComp != null && this.inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+            if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
             {
-                this.InputWaterNet.DrawWaterVolume(amount);
+                InputWaterNet.DrawWaterVolume(amount);
             }
-            else if (this.tankComp != null)
+            else if (tankComp != null)
             {
-                this.tankComp.DrawWaterVolume(amount);                
+                tankComp.DrawWaterVolume(amount);                
             }
         }
     }

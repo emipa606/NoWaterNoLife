@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_DrinkWater.reportString>TargetAを飲んでいる</Mizu_DrinkWater.reportString>
   <Mizu_DrinkWaterFromBuilding.reportString>TargetAから水を飲んでいる</Mizu_DrinkWaterFromBuilding.reportString>
   <Mizu_FeedWaterPatient.reportString>TargetBにTargetAを飲ませている</Mizu_FeedWaterPatient.reportString>
@@ -15,5 +14,4 @@
   <Mizu_SupplyWaterToTool.reportString>TargetBに水を補充している</Mizu_SupplyWaterToTool.reportString>
   <Mizu_Nurse.reportString>TargetAを看病している</Mizu_Nurse.reportString>
   <Mizu_WaterFarm.reportString>TargetAに水やりをしている</Mizu_WaterFarm.reportString>
-
 </LanguageData>

@@ -1,45 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_ClearWater.label>きれいな水</Mizu_ClearWater.label>
   <Mizu_ClearWater.description>飲用水です。きっとおいしい。</Mizu_ClearWater.description>
-
   <Mizu_NormalWater.label>水</Mizu_NormalWater.label>
   <Mizu_NormalWater.description>飲用水です。特別な効果はありません。</Mizu_NormalWater.description>
-
   <Mizu_RawWater.label>生水</Mizu_RawWater.label>
   <Mizu_RawWater.description>飲用水です。ちょっと変な味がします。</Mizu_RawWater.description>
-
   <Mizu_MudWater.label>泥水</Mizu_MudWater.label>
   <Mizu_MudWater.description>飲用水です。ひどい味がします。</Mizu_MudWater.description>
-
   <Mizu_SeaWater.label>海水</Mizu_SeaWater.label>
   <Mizu_SeaWater.description>飲用水です。味もひどい上にしょっぱいです。</Mizu_SeaWater.description>
-
   <Mizu_ClearIce.label>氷 (きれいな水)</Mizu_ClearIce.label>
   <Mizu_ClearIce.description>きれいな水が凍ったものです。舐めることで水分を取ることが出来ますが時間がかかります。</Mizu_ClearIce.description>
-  
   <Mizu_NormalIce.label>氷 (水)</Mizu_NormalIce.label>
   <Mizu_NormalIce.description>水が凍ったものです。舐めることで水分を取ることが出来ますが時間がかかります。</Mizu_NormalIce.description>
-  
   <Mizu_RawIce.label>氷 (生水)</Mizu_RawIce.label>
   <Mizu_RawIce.description>生水が凍ったものです。舐めることで水分を取ることが出来ますが時間がかかります。</Mizu_RawIce.description>
-  
   <Mizu_MudIce.label>氷 (泥水)</Mizu_MudIce.label>
   <Mizu_MudIce.description>泥水が凍ったものです。舐めることで水分を取ることが出来ますが時間がかかります。</Mizu_MudIce.description>
-  
   <Mizu_SeaIce.label>氷 (海水)</Mizu_SeaIce.label>
   <Mizu_SeaIce.description>海水が凍ったものです。舐めることで水分を取ることが出来ますが時間がかかります。</Mizu_SeaIce.description>
-  
   <Mizu_ShavedIce.label>かき氷</Mizu_ShavedIce.label>
   <Mizu_ShavedIce.description>氷塊を削って作られたデザートです。頭痛にご注意を。</Mizu_ShavedIce.description>
-  
   <Mizu_RawSnow.label>雪 (生水)</Mizu_RawSnow.label>
   <Mizu_RawSnow.description>雪を容器に詰めたものです。舐めることで水分を取ることが出来ますが時間がかかります。</Mizu_RawSnow.description>
-  
   <Mizu_Snowball.label>雪玉</Mizu_Snowball.label>
   <Mizu_Snowball.description>積もった雪から作られた雪玉です。舐めることで水分を取ることが出来ますが時間がかかります。またダメージの無い遠距離武器として使用することができます。</Mizu_Snowball.description>
-  
   <Mizu_Bullet_Snowball.label>雪玉</Mizu_Bullet_Snowball.label>
-  
 </LanguageData>

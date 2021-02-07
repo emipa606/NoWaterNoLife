@@ -15,12 +15,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.waterGrid == null)
+                if (waterGrid == null)
                 {
                     Map visibleMap = Find.CurrentMap;
-                    this.waterGrid = visibleMap.GetComponent<MapComponent_ShallowWaterGrid>();
+                    waterGrid = visibleMap.GetComponent<MapComponent_ShallowWaterGrid>();
                 }
-                return this.waterGrid;
+                return waterGrid;
             }
         }
 

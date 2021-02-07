@@ -11,16 +11,16 @@ namespace MizuMod
 {
     public class JobDriver_DrinkWaterFromBuilding : JobDriver
     {
-        private TargetIndex BuildingIndex = TargetIndex.A;
+        private readonly TargetIndex BuildingIndex = TargetIndex.A;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            return this.pawn.Reserve(this.job.GetTarget(BuildingIndex), this.job);
+            return pawn.Reserve(job.GetTarget(BuildingIndex), job);
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            var t = this.job.GetTarget(BuildingIndex).Thing;
+            var t = job.GetTarget(BuildingIndex).Thing;
 
             // 設備まで移動
             if (t.def.hasInteractionCell)

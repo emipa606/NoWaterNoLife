@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_NeedWater.stages.0.label>少し喉が渇いた</Mizu_NeedWater.stages.0.label>
   <Mizu_NeedWater.stages.0.description>少し喉が渇いた気がする。</Mizu_NeedWater.stages.0.description>
   <Mizu_NeedWater.stages.1.label>喉が渇いた</Mizu_NeedWater.stages.1.label>
@@ -17,20 +16,16 @@
   <Mizu_NeedWater.stages.6.description>私はなんとか、やっとの思いで飲み物以外の事を考えることができる。皮膚は骨に張り付いている。もう死ぬのかな？</Mizu_NeedWater.stages.6.description>
   <Mizu_NeedWater.stages.7.label>脱水症状(極限)</Mizu_NeedWater.stages.7.label>
   <Mizu_NeedWater.stages.7.description>水...みず... なんでも... ょうだい...</Mizu_NeedWater.stages.7.description>
-  
   <Mizu_DrankClearWater.stages.0.label>きれいな水を飲んだ</Mizu_DrankClearWater.stages.0.label>
   <Mizu_DrankClearWater.stages.0.description>きれいな水を飲んだ。おいしかった。</Mizu_DrankClearWater.stages.0.description>
   <Mizu_DrankMudWater.stages.0.label>泥水を飲んだ</Mizu_DrankMudWater.stages.0.label>
   <Mizu_DrankMudWater.stages.0.description>浄化していない泥水を飲んだ。まずい！</Mizu_DrankMudWater.stages.0.description>
   <Mizu_DrankSeaWater.stages.0.label>海水を飲んだ</Mizu_DrankSeaWater.stages.0.label>
   <Mizu_DrankSeaWater.stages.0.description>浄化していない海水を飲んだ。まずい上にしょっぱい！</Mizu_DrankSeaWater.stages.0.description>
-  
   <Mizu_DrankScoopedWater.stages.0.label>水をすくって飲んだ</Mizu_DrankScoopedWater.stages.0.label>
   <Mizu_DrankScoopedWater.stages.0.description>水を手ですくって飲んだ。コップが欲しい。</Mizu_DrankScoopedWater.stages.0.description>
   <Mizu_SippedWaterLikeBeast.stages.0.label>獣のように水を飲んだ</Mizu_SippedWaterLikeBeast.stages.0.label>
   <Mizu_SippedWaterLikeBeast.stages.0.description>獣のように水をすする以外に選択肢がなかった。</Mizu_SippedWaterLikeBeast.stages.0.description>
-  
   <Mizu_AteIcyFoodInHotSeason.stages.0.label>暑い季節に氷菓を食べた</Mizu_AteIcyFoodInHotSeason.stages.0.label>
   <Mizu_AteIcyFoodInHotSeason.stages.0.description>暑い季節に氷菓を食べた。ひんやりして最高！</Mizu_AteIcyFoodInHotSeason.stages.0.description>
-  
 </LanguageData>

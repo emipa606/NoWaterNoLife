@@ -20,13 +20,13 @@ namespace MizuMod
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref this.drinkingFromInventory, "drinkingFromInventory", false, false);
+            Scribe_Values.Look<bool>(ref drinkingFromInventory, "drinkingFromInventory", false, false);
         }
 
         public override void Notify_Starting()
         {
             base.Notify_Starting();
-            this.drinkingFromInventory = (this.pawn.inventory != null && this.pawn.inventory.Contains(this.TargetA.Thing));
+            drinkingFromInventory = pawn.inventory != null && pawn.inventory.Contains(TargetA.Thing);
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
@@ -39,20 +39,20 @@ namespace MizuMod
             // 水が使用不可能になったらFail
             ToilFailConditions.FailOnDestroyedNullOrForbidden<JobDriver_WaterDeliver>(this, WaterIndex);
 
-            if (!this.pawn.CanReserveAndReach(this.TargetA, PathEndMode.Touch, Danger.Deadly, 1, this.job.count))
+            if (!pawn.CanReserveAndReach(TargetA, PathEndMode.Touch, Danger.Deadly, 1, job.count))
             {
                 // 水を予約できなかったら終了
-                this.pawn.jobs.EndCurrentJob(JobCondition.Incompletable);
+                pawn.jobs.EndCurrentJob(JobCondition.Incompletable);
                 yield break;
             }
 
             // 予約する
-            if (!this.pawn.Map.reservationManager.ReservedBy(this.TargetA.Thing, pawn))
+            if (!pawn.Map.reservationManager.ReservedBy(TargetA.Thing, pawn))
             {
-                yield return Toils_Reserve.Reserve(WaterIndex, 1, this.job.count, null);
+                yield return Toils_Reserve.Reserve(WaterIndex, 1, job.count, null);
             }
 
-            if (this.drinkingFromInventory)
+            if (drinkingFromInventory)
             {
                 // 水を持ち物から取り出す
                 yield return Toils_Mizu.StartCarryFromInventory(WaterIndex);
@@ -63,11 +63,11 @@ namespace MizuMod
                 yield return Toils_Goto.Goto(WaterIndex, PathEndMode.OnCell);
 
                 // 水を拾う
-                yield return Toils_Ingest.PickupIngestible(WaterIndex, this.pawn);
+                yield return Toils_Ingest.PickupIngestible(WaterIndex, pawn);
             }
 
             // スポットまで移動する
-            yield return Toils_Goto.GotoCell(this.TargetC.Cell, PathEndMode.OnCell);
+            yield return Toils_Goto.GotoCell(TargetC.Cell, PathEndMode.OnCell);
 
             // 置いて囚人に予約させる
             yield return Toils_Mizu.DropCarriedThing(PrisonerIndex, DropSpotIndex);

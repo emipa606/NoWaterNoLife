@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <GenStepDef>
+    <defName>UndergroundShallowWater</defName>
+    <order>2000</order>
+    <genStep Class="MizuMod.GenStep_UndergroundShallowWater">
+      <basePoolNum>20</basePoolNum>
+      <baseRainFall>1000</baseRainFall>
+      <basePlantDensity>0.25</basePlantDensity>
+      <minWaterPoolNum>2</minWaterPoolNum>
+      <poolCellRange>
+        <min>30</min>
+        <max>100</max>
+      </poolCellRange>
+      <literPerCell>100</literPerCell>
+      <baseRegenRateRange>
+        <min>100</min>
+        <max>150</max>
+      </baseRegenRateRange>
+      <rainRegenRatePerCell>5</rainRegenRatePerCell>
+    </genStep>
+  </GenStepDef>
+  <GenStepDef>
+    <defName>UndergroundDeepWater</defName>
+    <order>2001</order>
+    <genStep Class="MizuMod.GenStep_UndergroundDeepWater">
+      <basePoolNum>40</basePoolNum>
+      <baseRainFall>1000</baseRainFall>
+      <basePlantDensity>0.25</basePlantDensity>
+      <minWaterPoolNum>10</minWaterPoolNum>
+      <poolCellRange>
+        <min>50</min>
+        <max>100</max>
+      </poolCellRange>
+      <literPerCell>400</literPerCell>
+      <baseRegenRateRange>
+        <min>400</min>
+        <max>600</max>
+      </baseRegenRateRange>
+      <rainRegenRatePerCell>20</rainRegenRatePerCell>
+    </genStep>
+  </GenStepDef>
+  <GenStepDef>
+    <defName>HiddenWaterSpot</defName>
+    <order>2002</order>
+    <genStep Class="MizuMod.GenStep_HiddenWaterSpot">
+      <blockSizeX>30</blockSizeX>
+      <blockSizeZ>30</blockSizeZ>
+      <allSpotNum>100</allSpotNum>
+    </genStep>
+  </GenStepDef>
+</Defs>

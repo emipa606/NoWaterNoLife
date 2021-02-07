@@ -17,25 +17,13 @@ namespace MizuMod
         private const int WorkingTicks = 60;
         public const float ConsumeWaterVolume = 1f;
 
-        private IntVec3 WateringPos
-        {
-            get
-            {
-                return this.job.GetTarget(WateringInd).Cell;
-            }
-        }
-        private ThingWithComps Tool
-        {
-            get
-            {
-                return (ThingWithComps)this.job.GetTarget(ToolInd).Thing;
-            }
-        }
+        private IntVec3 WateringPos => job.GetTarget(WateringInd).Cell;
+        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            this.pawn.ReserveAsManyAsPossible(this.job.GetTargetQueue(WateringInd), this.job);
-            this.pawn.Reserve(this.Tool, this.job);
+            pawn.ReserveAsManyAsPossible(job.GetTargetQueue(WateringInd), job);
+            pawn.Reserve(Tool, job);
             return true;
         }
 
@@ -50,8 +38,8 @@ namespace MizuMod
             // ターゲットが水やり対象として不適になっていたらリストから外す
             Toil initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(WateringInd, (lti) =>
             {
-                var mapComp = this.Map.GetComponent<MapComponent_Watering>();
-                return mapComp.Get(this.Map.cellIndices.CellToIndex(lti.Cell)) > 0;
+                var mapComp = Map.GetComponent<MapComponent_Watering>();
+                return mapComp.Get(Map.cellIndices.CellToIndex(lti.Cell)) > 0;
             });
             yield return initExtractTargetFromQueue;
 
@@ -64,39 +52,40 @@ namespace MizuMod
             yield return Toils_Goto.GotoCell(WateringInd, PathEndMode.Touch);
 
             // 作業中
-            Toil workToil = new Toil();
-            workToil.initAction = delegate
+            var workToil = new Toil
             {
+                initAction = delegate
+                {
                 // 必要工数の計算
-                this.ticksLeftThisToil = WorkingTicks;
+                ticksLeftThisToil = WorkingTicks;
+                },
+                // 細々とした設定
+                defaultCompleteMode = ToilCompleteMode.Delay
             };
-            // 細々とした設定
-            workToil.defaultCompleteMode = ToilCompleteMode.Delay;
-            workToil.WithProgressBar(WateringInd, () => 1f - (float)this.ticksLeftThisToil / WorkingTicks, true, -0.5f);
+            workToil.WithProgressBar(WateringInd, () => 1f - ((float)ticksLeftThisToil / WorkingTicks), true, -0.5f);
             workToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             yield return workToil;
 
             // 作業終了
-            var finishToil = new Toil();
-            finishToil.initAction = () =>
+            var finishToil = new Toil
             {
+                initAction = () =>
+                {
                 // 水やり更新
-                var mapComp = this.Map.GetComponent<MapComponent_Watering>();
-                mapComp.Set(this.Map.cellIndices.CellToIndex(WateringPos), MapComponent_Watering.MaxWateringValue);
-                this.Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlag.Terrain;
+                var mapComp = Map.GetComponent<MapComponent_Watering>();
+                    mapComp.Set(Map.cellIndices.CellToIndex(WateringPos), MapComponent_Watering.MaxWateringValue);
+                    Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlag.Terrain;
 
                 // ツールから水を減らす
                 var compTool = Tool.GetComp<CompWaterTool>();
-                compTool.StoredWaterVolume -= ConsumeWaterVolume;
+                    compTool.StoredWaterVolume -= ConsumeWaterVolume;
+                },
+                defaultCompleteMode = ToilCompleteMode.Instant
             };
-            finishToil.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finishToil;
 
             // 最初に戻る
-            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue, () =>
-            {
-                return this.pawn.jobs.curJob.GetTargetQueue(WateringInd).Count > 0;
-            });
+            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue, () => pawn.jobs.curJob.GetTargetQueue(WateringInd).Count > 0);
 
             // ツールを片付ける場所を決める
             yield return Toils_Mizu.TryFindStoreCell(ToolInd, ToolPlaceInd);

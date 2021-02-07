@@ -10,21 +10,20 @@ namespace MizuMod
 {
     public class RecipeWorkerCounter_DrawWater : RecipeWorkerCounter
     {
-        public GetWaterRecipeDef GetWaterRecipe
-        {
-            get
-            {
-                return (GetWaterRecipeDef)this.recipe;
-            }
-        }
+        public GetWaterRecipeDef GetWaterRecipe => (GetWaterRecipeDef)recipe;
 
         public override bool CanCountProducts(Bill_Production bill)
         {
             var ext = bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
-            if (ext == null) return false;
+            if (ext == null)
+            {
+                return false;
+            }
 
-            var building = bill.billStack.billGiver as IBuilding_DrinkWater;
-            if (building == null) return false;
+            if (!(bill.billStack.billGiver is IBuilding_DrinkWater building))
+            {
+                return false;
+            }
 
             return true;
         }
@@ -35,9 +34,12 @@ namespace MizuMod
             var building = bill.billStack.billGiver as IBuilding_DrinkWater;
 
             var waterDef = MizuUtility.GetWaterThingDefFromWaterType(building.WaterType);
-            if (waterDef == null) return 0;
+            if (waterDef == null)
+            {
+                return 0;
+            }
 
-            int numOfWater = bill.Map.resourceCounter.GetCount(waterDef);
+            var numOfWater = bill.Map.resourceCounter.GetCount(waterDef);
 
             return numOfWater;
         }

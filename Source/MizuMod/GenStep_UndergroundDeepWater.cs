@@ -12,24 +12,18 @@ namespace MizuMod
         public override void Generate(Map map, GenStepParams parms)
         {
             var waterGrid = map.GetComponent<MapComponent_DeepWaterGrid>();
-            this.GenerateUndergroundWaterGrid(
+            GenerateUndergroundWaterGrid(
                 map,
                 waterGrid,
-                this.basePoolNum,
-                this.minWaterPoolNum,
-                this.baseRainFall,
-                this.basePlantDensity,
-                this.literPerCell,
-                this.poolCellRange,
-                this.baseRegenRateRange,
-                this.rainRegenRatePerCell);
+                basePoolNum,
+                minWaterPoolNum,
+                baseRainFall,
+                basePlantDensity,
+                literPerCell,
+                poolCellRange,
+                baseRegenRateRange,
+                rainRegenRatePerCell);
         }
-        public override int SeedPart
-		{
-			get
-			{
-				return 51037366;
-			}
-		}
+        public override int SeedPart => 51037366;
     }
 }

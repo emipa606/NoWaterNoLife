@@ -10,30 +10,42 @@ namespace MizuMod
 {
     public class StatPart_Water : StatPart
     {
-        private float factorHealthy = 1f;
-        private float factorSlightlyThirsty = 1f;
-        private float factorThirsty = 1f;
-        private float factorUrgentThirsty = 1f;
-        private float factorDehydration = 1f;
+        private readonly float factorHealthy = 1f;
+        private readonly float factorSlightlyThirsty = 1f;
+        private readonly float factorThirsty = 1f;
+        private readonly float factorUrgentThirsty = 1f;
+        private readonly float factorDehydration = 1f;
 
         public override void TransformValue(StatRequest req, ref float val)
         {
             // 水分要求を持ったポーンであるかどうかチェック
-            if (!req.HasThing) return;
-            var pawn = req.Thing as Pawn;
-            if (pawn == null || pawn.needs.water() == null) return;
+            if (!req.HasThing)
+            {
+                return;
+            }
 
-            val *= this.WaterMultiplier(pawn.needs.water().CurCategory);
+            if (!(req.Thing is Pawn pawn) || pawn.needs.Water() == null)
+            {
+                return;
+            }
+
+            val *= WaterMultiplier(pawn.needs.Water().CurCategory);
         }
 
         public override string ExplanationPart(StatRequest req)
         {
             // 水分要求を持ったポーンであるかどうかチェック
-            if (!req.HasThing) return null;
-            var pawn = req.Thing as Pawn;
-            if (pawn == null || pawn.needs.water() == null) return null;
+            if (!req.HasThing)
+            {
+                return null;
+            }
 
-            return GetLabel(pawn.needs.water().CurCategory) + ": x" + this.WaterMultiplier(pawn.needs.water().CurCategory).ToStringPercent();
+            if (!(req.Thing is Pawn pawn) || pawn.needs.Water() == null)
+            {
+                return null;
+            }
+
+            return GetLabel(pawn.needs.Water().CurCategory) + ": x" + WaterMultiplier(pawn.needs.Water().CurCategory).ToStringPercent();
         }
 
         private float WaterMultiplier(ThirstCategory thirst)
@@ -41,15 +53,15 @@ namespace MizuMod
             switch (thirst)
             {
                 case ThirstCategory.Healthy:
-                    return this.factorHealthy;
+                    return factorHealthy;
                 case ThirstCategory.SlightlyThirsty:
-                    return this.factorSlightlyThirsty;
+                    return factorSlightlyThirsty;
                 case ThirstCategory.Thirsty:
-                    return this.factorThirsty;
+                    return factorThirsty;
                 case ThirstCategory.UrgentlyThirsty:
-                    return this.factorUrgentThirsty;
+                    return factorUrgentThirsty;
                 case ThirstCategory.Dehydration:
-                    return this.factorDehydration;
+                    return factorDehydration;
                 default:
                     throw new InvalidOperationException();
             }

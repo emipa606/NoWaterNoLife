@@ -17,25 +17,13 @@ namespace MizuMod
         private const int MoppingTicks = 60;
         public const float ConsumeWaterVolume = 0.05f;
 
-        private IntVec3 MoppingPos
-        {
-            get
-            {
-                return this.job.GetTarget(MoppingInd).Cell;
-            }
-        }
-        private ThingWithComps Mop
-        {
-            get
-            {
-                return (ThingWithComps)this.job.GetTarget(MopInd).Thing;
-            }
-        }
+        private IntVec3 MoppingPos => job.GetTarget(MoppingInd).Cell;
+        private ThingWithComps Mop => (ThingWithComps)job.GetTarget(MopInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            this.pawn.ReserveAsManyAsPossible(this.job.GetTargetQueue(MoppingInd), this.job);
-            this.pawn.Reserve(this.Mop, this.job);
+            pawn.ReserveAsManyAsPossible(job.GetTargetQueue(MoppingInd), job);
+            pawn.Reserve(Mop, job);
             return true;
         }
 
@@ -49,10 +37,7 @@ namespace MizuMod
 
             // ターゲットが掃除対象として不適になっていたらリストから外す
             //Thing系にしか使えない
-            Toil initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(MoppingInd, (lti) =>
-            {
-                return lti.Cell.GetFirstThing(this.pawn.Map, MizuDef.Thing_MoppedThing) != null;
-            });
+            Toil initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(MoppingInd, (lti) => lti.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null);
             yield return initExtractTargetFromQueue;
 
             yield return Toils_JobTransforms.SucceedOnNoTargetInQueue(MoppingInd);
@@ -64,55 +49,62 @@ namespace MizuMod
             yield return Toils_Goto.GotoCell(MoppingInd, PathEndMode.Touch)
                 .JumpIf(() =>
                 {
-                    var target = this.pawn.jobs.curJob.GetTarget(MoppingInd);
-                    if (target.HasThing) return true;
+                    var target = pawn.jobs.curJob.GetTarget(MoppingInd);
+                    if (target.HasThing)
+                    {
+                        return true;
+                    }
 
-                    return target.Cell.GetFirstThing(this.pawn.Map, MizuDef.Thing_MoppedThing) != null;
+                    return target.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null;
                 }, initExtractTargetFromQueue)
                 .JumpIfOutsideMopArea(MoppingInd, initExtractTargetFromQueue);
 
             // モップ掛け作業中
-            Toil mopToil = new Toil();
-            mopToil.initAction = delegate
+            var mopToil = new Toil
             {
+                initAction = delegate
+                {
                 // 必要工数の計算
-                this.ticksLeftThisToil = MoppingTicks;
+                ticksLeftThisToil = MoppingTicks;
+                },
+                // 細々とした設定
+                defaultCompleteMode = ToilCompleteMode.Delay
             };
-            // 細々とした設定
-            mopToil.defaultCompleteMode = ToilCompleteMode.Delay;
-            mopToil.WithProgressBar(MoppingInd, () => 1f - (float)this.ticksLeftThisToil / MoppingTicks, true, -0.5f);
+            mopToil.WithProgressBar(MoppingInd, () => 1f - ((float)ticksLeftThisToil / MoppingTicks), true, -0.5f);
             mopToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             // 掃除中に条件が変更されたら最初に戻る
             mopToil.JumpIf(() =>
             {
-                var target = this.pawn.jobs.curJob.GetTarget(MoppingInd);
-                if (target.HasThing) return true;
+                var target = pawn.jobs.curJob.GetTarget(MoppingInd);
+                if (target.HasThing)
+                {
+                    return true;
+                }
 
-                return target.Cell.GetFirstThing(this.pawn.Map, MizuDef.Thing_MoppedThing) != null;
+                return target.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null;
             }, initExtractTargetFromQueue);
             mopToil.JumpIfOutsideMopArea(MoppingInd, initExtractTargetFromQueue);
             yield return mopToil;
 
             // モップ掛け終了
-            var finishToil = new Toil();
-            finishToil.initAction = () =>
+            var finishToil = new Toil
             {
+                initAction = () =>
+                {
                 // モップオブジェクト生成
                 var moppedThing = ThingMaker.MakeThing(MizuDef.Thing_MoppedThing);
-                GenSpawn.Spawn(moppedThing, this.MoppingPos, mopToil.actor.Map);
+                    GenSpawn.Spawn(moppedThing, MoppingPos, mopToil.actor.Map);
 
                 // モップから水を減らす
                 var compTool = Mop.GetComp<CompWaterTool>();
-                compTool.StoredWaterVolume -= ConsumeWaterVolume;
+                    compTool.StoredWaterVolume -= ConsumeWaterVolume;
+                },
+                defaultCompleteMode = ToilCompleteMode.Instant
             };
-            finishToil.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finishToil;
 
             // 最初に戻る
-            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue, () =>
-            {
-                return this.pawn.jobs.curJob.GetTargetQueue(MoppingInd).Count > 0;
-            });
+            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue, () => pawn.jobs.curJob.GetTargetQueue(MoppingInd).Count > 0);
 
             // モップを片付ける場所を決める
             yield return Toils_Mizu.TryFindStoreCell(MopInd, MopPlaceInd);

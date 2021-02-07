@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Draw Water From Terrain -->
-
   <Mizu_DrawWater.label>Coletar água.</Mizu_DrawWater.label>
   <Mizu_DrawWater.description>Obter água potável. O tipo de água depende do local.</Mizu_DrawWater.description>
   <Mizu_DrawWater.jobString>Coletando água.</Mizu_DrawWater.jobString>
@@ -56,11 +54,7 @@
 
   <Mizu_PourWaterMulti.label>Despeje Água (x25)</Mizu_PourWaterMulti.label>
   <Mizu_PourWaterMulti.description>Despeje a água em um local de armazenamento.</Mizu_PourWaterMulti.description>
-  <Mizu_PourWaterMulti.jobString>Despejando água.</Mizu_PourWaterMulti.jobString>
-
-  <!-- others -->
-
-  <Mizu_PurifyWater.label>Filtrar água</Mizu_PurifyWater.label>
+  <Mizu_PourWaterMulti.jobString>Despejando água.</Mizu_PourWaterMulti.jobString><!-- others --><Mizu_PurifyWater.label>Filtrar água</Mizu_PurifyWater.label>
   <Mizu_PurifyWater.description>Uma água pura é filtrada com carvão.</Mizu_PurifyWater.description>
   <Mizu_PurifyWater.jobString>Filtrando a água.</Mizu_PurifyWater.jobString>
 
@@ -90,6 +84,4 @@
 
   <Mizu_DesalinateSeaWaterMulti.label>Dessalinizar água salgada (x5)</Mizu_DesalinateSeaWaterMulti.label>
   <Mizu_DesalinateSeaWaterMulti.description>Dessalinização da água salgada em água comum.</Mizu_DesalinateSeaWaterMulti.description>
-  <Mizu_DesalinateSeaWaterMulti.jobString>Dessalinizando a água salgada.</Mizu_DesalinateSeaWaterMulti.jobString>
-
-</LanguageData>
+  <Mizu_DesalinateSeaWaterMulti.jobString>Dessalinizando a água salgada.</Mizu_DesalinateSeaWaterMulti.jobString></LanguageData>

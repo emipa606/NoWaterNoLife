@@ -20,26 +20,14 @@ namespace MizuMod
 
         // 水やりしていない時の肥沃度係数
         private float fertilityFactorInNotWatering;
-        public float FertilityFactorInNotWatering
-        {
-            get
-            {
-                return this.fertilityFactorInNotWatering;
-            }
-        }
+        public float FertilityFactorInNotWatering => fertilityFactorInNotWatering;
         private string fertilityFactorInNotWateringBuffer;
 
         // 水やりした時の肥沃度係数
         private float fertilityFactorInWatering;
-        public float FertilityFactorInWatering
-        {
-            get
-            {
-                return this.fertilityFactorInWatering;
-            }
-        }
-        
-        	public Settings() {
+        public float FertilityFactorInWatering => fertilityFactorInWatering;
+
+        public Settings() {
         		fertilityFactorInNotWatering=DefaultFertilityFactorInNotWatering;
         		fertilityFactorInWatering=DefaultFertilityFactorInWatering;
         		
@@ -57,10 +45,10 @@ namespace MizuMod
             // デフォルトに戻す
             if (listing_standard.ButtonText(MizuStrings.OptionSetDefault.Translate()))
             {
-                this.fertilityFactorInNotWatering = DefaultFertilityFactorInNotWatering;
-                this.fertilityFactorInNotWateringBuffer = this.fertilityFactorInNotWatering.ToString("F2");
-                this.fertilityFactorInWatering = DefaultFertilityFactorInWatering;
-                this.fertilityFactorInWateringBuffer = this.fertilityFactorInWatering.ToString("F2");
+                fertilityFactorInNotWatering = DefaultFertilityFactorInNotWatering;
+                fertilityFactorInNotWateringBuffer = fertilityFactorInNotWatering.ToString("F2");
+                fertilityFactorInWatering = DefaultFertilityFactorInWatering;
+                fertilityFactorInWateringBuffer = fertilityFactorInWatering.ToString("F2");
             }
 
             // 水やりしていない時の肥沃度係数
@@ -73,8 +61,8 @@ namespace MizuMod
                 ")"
             }));
             listing_standard.TextFieldNumeric(
-                ref this.fertilityFactorInNotWatering,
-                ref this.fertilityFactorInNotWateringBuffer,
+                ref fertilityFactorInNotWatering,
+                ref fertilityFactorInNotWateringBuffer,
                 MinFertilityFactorInNotWatering,
                 MaxFertilityFactorInNotWatering);
 
@@ -88,8 +76,8 @@ namespace MizuMod
                 ")"
             }));	
             listing_standard.TextFieldNumeric(
-                ref this.fertilityFactorInWatering,
-                ref this.fertilityFactorInWateringBuffer,
+                ref fertilityFactorInWatering,
+                ref fertilityFactorInWateringBuffer,
                 MinFertilityFactorInWatering,
                 MaxFertilityFactorInWatering);
 
@@ -100,8 +88,8 @@ namespace MizuMod
         {
             base.ExposeData();
 
-            Scribe_Values.Look(ref this.fertilityFactorInNotWatering, "fertilityFactorInNotWatering", DefaultFertilityFactorInNotWatering);
-            Scribe_Values.Look(ref this.fertilityFactorInWatering, "fertilityFactorInWatering", DefaultFertilityFactorInWatering);
+            Scribe_Values.Look(ref fertilityFactorInNotWatering, "fertilityFactorInNotWatering", DefaultFertilityFactorInNotWatering);
+            Scribe_Values.Look(ref fertilityFactorInWatering, "fertilityFactorInWatering", DefaultFertilityFactorInWatering);
         }
     }
 }

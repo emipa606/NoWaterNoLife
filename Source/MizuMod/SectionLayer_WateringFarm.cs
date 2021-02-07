@@ -10,14 +10,14 @@ namespace MizuMod
 {
     public class SectionLayer_WateringFarm : SectionLayer
     {
-        private Material material = new Material(MatBases.Snow);
-        private Texture2D texture = ContentFinder<Texture2D>.Get("Things/Mizu_Watering", true);
+        private readonly Material material = new Material(MatBases.Snow);
+        private readonly Texture2D texture = ContentFinder<Texture2D>.Get("Things/Mizu_Watering", true);
 
         public SectionLayer_WateringFarm(Section section) : base(section)
         {
-            this.relevantChangeTypes = MapMeshFlag.Terrain;
-            this.material.mainTexture = this.texture;
-            this.material.color = new Color(1f, 1f, 1f, 0.1f);
+            relevantChangeTypes = MapMeshFlag.Terrain;
+            material.mainTexture = texture;
+            material.color = new Color(1f, 1f, 1f, 0.1f);
         }
 
         public override void Regenerate()
@@ -25,11 +25,11 @@ namespace MizuMod
             var wateringComp = base.Map.GetComponent<MapComponent_Watering>();
 
             base.ClearSubMeshes(MeshParts.All);
-            foreach (IntVec3 current in this.section.CellRect)
+            foreach (IntVec3 current in section.CellRect)
             {
                 if (wateringComp.Get(base.Map.cellIndices.CellToIndex(current)) > 0)
                 {
-                    Printer_Plane.PrintPlane(this, current.ToVector3Shifted(), Vector2.one, this.material);
+                    Printer_Plane.PrintPlane(this, current.ToVector3Shifted(), Vector2.one, material);
                 }
             }
             base.FinalizeMesh(MeshParts.All);
@@ -72,13 +72,13 @@ namespace MizuMod
         private static void MakeBaseGeometry(Section section, LayerSubMesh sm, AltitudeLayer altitudeLayer)
         {
             sm.Clear(MeshParts.Verts | MeshParts.Tris);
-            CellRect cellRect = new CellRect(section.botLeft.x, section.botLeft.z, 17, 17);
+            var cellRect = new CellRect(section.botLeft.x, section.botLeft.z, 17, 17);
             cellRect.ClipInsideMap(section.map);
-            float y = Altitudes.AltitudeFor(altitudeLayer);
+            var y = Altitudes.AltitudeFor(altitudeLayer);
             sm.verts.Capacity = cellRect.Area * 9;
-            for (int i = cellRect.minX; i <= cellRect.maxX; i++)
+            for (var i = cellRect.minX; i <= cellRect.maxX; i++)
             {
-                for (int j = cellRect.minZ; j <= cellRect.maxZ; j++)
+                for (var j = cellRect.minZ; j <= cellRect.maxZ; j++)
                 {
                     sm.verts.Add(new Vector3((float)i, y, (float)j));
                     sm.verts.Add(new Vector3((float)i, y, (float)j + 0.5f));
@@ -91,9 +91,9 @@ namespace MizuMod
                     sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)j + 0.5f));
                 }
             }
-            int num = cellRect.Area * 8 * 3;
+            var num = cellRect.Area * 8 * 3;
             sm.tris.Capacity = num;
-            int num2 = 0;
+            var num2 = 0;
             while (sm.tris.Count < num)
             {
                 sm.tris.Add(num2 + 7);

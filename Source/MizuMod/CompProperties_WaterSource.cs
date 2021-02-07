@@ -54,7 +54,7 @@ namespace MizuMod
 
         public CompProperties_WaterSource()
         {
-            this.compClass = typeof(CompWaterSource);
+            compClass = typeof(CompWaterSource);
         }
 
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
@@ -64,10 +64,10 @@ namespace MizuMod
                 yield return statDrawEntry;
             }
 
-            if (this.sourceType == SourceType.Item)
+            if (sourceType == SourceType.Item)
             {
                 // アイテム1個から得られる水分量
-                yield return new StatDrawEntry(MizuDef.StatCategory_Water, MizuStrings.CompWaterAmount.Translate(), waterAmount.ToString("0.##"), 11);
+                yield return new StatDrawEntry(MizuDef.StatCategory_Water, StatDef.Named(MizuStrings.CompWaterAmount.Translate()), waterAmount, req, ToStringNumberSense.Undefined, 11);
             }
         }
 

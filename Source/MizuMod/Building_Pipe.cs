@@ -13,13 +13,13 @@ namespace MizuMod
         {
             get
             {
-                if (this.Position.GetTerrain(base.Map).layerable)
+                if (Position.GetTerrain(base.Map).layerable)
                 {
                     return MizuGraphics.LinkedWaterPipeClear;
                 }
-                if (this.def.costStuffCount >= 0)
+                if (def.costStuffCount >= 0)
                 {
-                    return MizuGraphics.LinkedWaterPipe.GetColoredVersion(MizuGraphics.WaterPipe.Shader, this.DrawColor, this.DrawColorTwo);
+                    return MizuGraphics.LinkedWaterPipe.GetColoredVersion(MizuGraphics.WaterPipe.Shader, DrawColor, DrawColorTwo);
                 }
                 return MizuGraphics.LinkedWaterPipe;
             }

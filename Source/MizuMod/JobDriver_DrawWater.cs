@@ -16,21 +16,27 @@ namespace MizuMod
         {
             get
             {
-                if (this.extInt == null)
+                if (extInt == null)
                 {
-                    this.extInt = this.job.bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
+                    extInt = job.bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
                 }
-                return this.extInt;
+                return extInt;
             }
         }
 
-        private Action finishAction = () => { };
+        private readonly Action finishAction = () => { };
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            if (!this.pawn.Reserve(this.job.GetTarget(BillGiverInd), this.job)) return false;
+            if (!pawn.Reserve(job.GetTarget(BillGiverInd), job))
+            {
+                return false;
+            }
 
-            if (this.Ext == null) return false;
+            if (Ext == null)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -38,10 +44,10 @@ namespace MizuMod
         protected override IEnumerable<Toil> MakeNewToils()
         {
             // その他の失敗条件設定
-            this.SetFailCondition();
+            SetFailCondition();
 
             PathEndMode peMode;
-            if (this.job.GetTarget(BillGiverInd).Thing.def.hasInteractionCell)
+            if (job.GetTarget(BillGiverInd).Thing.def.hasInteractionCell)
             {
                 peMode = PathEndMode.InteractionCell;
             }
@@ -57,7 +63,7 @@ namespace MizuMod
             yield return Toils_Mizu.DoRecipeWorkDrawing(BillGiverInd);
 
             // レシピ終了処理
-            yield return Toils_Mizu.FinishRecipeAndStartStoringProduct(this.FinishAction);
+            yield return Toils_Mizu.FinishRecipeAndStartStoringProduct(FinishAction);
 
             // 最適な倉庫まで運ぶ場合はさらに処理をする
 

@@ -16,15 +16,9 @@ namespace MizuMod
 
         public override void Generate(Map map, GenStepParams parms)
         {
-            map.GetComponent<MapComponent_HiddenWaterSpot>().CreateWaterSpot(this.blockSizeX, this.blockSizeZ, this.allSpotNum * map.Area / (250 * 250));
+            map.GetComponent<MapComponent_HiddenWaterSpot>().CreateWaterSpot(blockSizeX, blockSizeZ, allSpotNum * map.Area / (250 * 250));
         }
-        
-        public override int SeedPart
-		{
-			get
-			{
-				return 38449900;
-			}
-		}
+
+        public override int SeedPart => 38449900;
     }
 }

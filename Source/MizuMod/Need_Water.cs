@@ -16,15 +16,15 @@ namespace MizuMod
         public const float MinWaterAmountPerOneDrink = 0.3f;
 
         private DefExtension_NeedWater extInt;
-        private DefExtension_NeedWater ext
+        private DefExtension_NeedWater Ext
         {
             get
             {
-                if (this.extInt == null)
+                if (extInt == null)
                 {
-                    this.extInt = this.def.GetModExtension<DefExtension_NeedWater>();
+                    extInt = def.GetModExtension<DefExtension_NeedWater>();
                 }
-                return this.extInt;
+                return extInt;
             }
         }
 
@@ -34,13 +34,13 @@ namespace MizuMod
         {
             get
             {
-                if (this.isSetRaceThirstRate == false)
+                if (isSetRaceThirstRate == false)
                 {
-                    this.isSetRaceThirstRate = true;
-                    var raceThirstExt = this.pawn.def.GetModExtension<DefExtension_RaceThirstRate>();
-                    this.raceThirstRate = (raceThirstExt == null) ? this.pawn.RaceProps.baseHungerRate : raceThirstExt.baseThirstRate;
+                    isSetRaceThirstRate = true;
+                    var raceThirstExt = pawn.def.GetModExtension<DefExtension_RaceThirstRate>();
+                    raceThirstRate = (raceThirstExt == null) ? pawn.RaceProps.baseHungerRate : raceThirstExt.baseThirstRate;
                 }
-                return this.raceThirstRate;
+                return raceThirstRate;
             }
         }
 
@@ -50,19 +50,19 @@ namespace MizuMod
         {
             get
             {
-                if (this.CurLevelPercentage <= 0f)
+                if (CurLevelPercentage <= 0f)
                 {
                     return ThirstCategory.Dehydration;
                 }
-                if (this.CurLevelPercentage < this.PercentageThreshUrgentlyThirsty)
+                if (CurLevelPercentage < PercentageThreshUrgentlyThirsty)
                 {
                     return ThirstCategory.UrgentlyThirsty;
                 }
-                if (this.CurLevelPercentage < this.PercentageThreshThirsty)
+                if (CurLevelPercentage < PercentageThreshThirsty)
                 {
                     return ThirstCategory.Thirsty;
                 }
-                if (this.CurLevelPercentage < this.PercentageThreshSlightlyThirsty)
+                if (CurLevelPercentage < PercentageThreshSlightlyThirsty)
                 {
                     return ThirstCategory.SlightlyThirsty;
                 }
@@ -70,98 +70,38 @@ namespace MizuMod
             }
         }
 
-        public bool Dehydrating
-        {
-            get
-            {
-                return this.CurCategory == ThirstCategory.Dehydration;
-            }
-        }
+        public bool Dehydrating => CurCategory == ThirstCategory.Dehydration;
 
-        public float PercentageThreshUrgentlyThirsty
-        {
-            get
-            {
-                return this.ext.urgentlyThirstyBorder;
-            }
-        }
+        public float PercentageThreshUrgentlyThirsty => Ext.urgentlyThirstyBorder;
 
-        public float PercentageThreshThirsty
-        {
-            get
-            {
-                return this.ext.thirstyBorder;
-            }
-        }
+        public float PercentageThreshThirsty => Ext.thirstyBorder;
 
-        public float PercentageThreshSlightlyThirsty
-        {
-            get
-            {
-                return this.ext.slightlyThirstyBorder;
-            }
-        }
+        public float PercentageThreshSlightlyThirsty => Ext.slightlyThirstyBorder;
 
-        public float WaterWanted
-        {
-            get
-            {
-                return this.MaxLevel - this.CurLevel;
-            }
-        }
+        public float WaterWanted => MaxLevel - CurLevel;
 
-        public float WaterFallPerTick
-        {
-            get
-            {
-                return this.WaterFallPerTickAssumingCategory(this.CurCategory);
-            }
-        }
+        public float WaterFallPerTick => WaterFallPerTickAssumingCategory(CurCategory);
 
-        public float WaterAmountBetweenThirstyAndHealthy
-        {
-            get
-            {
-                return (1f - this.PercentageThreshThirsty) * this.MaxLevel;
-            }
-        }
+        public float WaterAmountBetweenThirstyAndHealthy => (1f - PercentageThreshThirsty) * MaxLevel;
 
-        public int TicksUntilThirstyWhenHealthy
-        {
-            get
-            {
-                return Mathf.CeilToInt(this.WaterAmountBetweenThirstyAndHealthy / this.WaterFallPerTick);
-            }
-        }
+        public int TicksUntilThirstyWhenHealthy => Mathf.CeilToInt(WaterAmountBetweenThirstyAndHealthy / WaterFallPerTick);
 
-        public override int GUIChangeArrow
-        {
-            get
-            {
-                return -1;
-            }
-        }
+        public override int GUIChangeArrow => -1;
 
-        public override float MaxLevel
-        {
-            get
-            {
-                return this.pawn.BodySize * this.pawn.ageTracker.CurLifeStage.foodMaxFactor;
-            }
-        }
+        public override float MaxLevel => pawn.BodySize * pawn.ageTracker.CurLifeStage.foodMaxFactor;
 
         public Need_Water(Pawn pawn) : base(pawn)
         {
-            this.lastSearchWaterTick = Find.TickManager.TicksGame;
+            lastSearchWaterTick = Find.TickManager.TicksGame;
         }
 
         private float WaterFallPerTickAssumingCategory(ThirstCategory cat)
         {
             // 基本低下量(基本値＋温度補正)
-            float fallPerTickBase = this.ext.fallPerTickBase + this.ext.fallPerTickFromTempCurve.Evaluate(this.pawn.AmbientTemperature - this.pawn.ComfortableTemperatureRange().max);
+            var fallPerTickBase = Ext.fallPerTickBase + Ext.fallPerTickFromTempCurve.Evaluate(pawn.AmbientTemperature - pawn.ComfortableTemperatureRange().max);
 
             // 食事と同じ値を利用
-            fallPerTickBase *= this.pawn.ageTracker.CurLifeStage.hungerRateFactor * this.RaceThirstRate * this.pawn.health.hediffSet.GetThirstRateFactor();
+            fallPerTickBase *= pawn.ageTracker.CurLifeStage.hungerRateFactor * RaceThirstRate * pawn.health.hediffSet.GetThirstRateFactor();
 
             switch (cat)
             {
@@ -184,34 +124,34 @@ namespace MizuMod
         {
             base.ExposeData();
 
-            Scribe_Values.Look<int>(ref this.lastSearchWaterTick, "lastSearchWaterTick");
+            Scribe_Values.Look<int>(ref lastSearchWaterTick, "lastSearchWaterTick");
         }
 
         public override void SetInitialLevel()
         {
-            if (this.pawn.RaceProps.Humanlike)
+            if (pawn.RaceProps.Humanlike)
             {
-                this.CurLevelPercentage = 0.8f;
+                CurLevelPercentage = 0.8f;
             }
             else
             {
-                this.CurLevelPercentage = Rand.Range(0.5f, 0.8f);
+                CurLevelPercentage = Rand.Range(0.5f, 0.8f);
             }
             if (Current.ProgramState == ProgramState.Playing)
             {
-                this.lastSearchWaterTick = Find.TickManager.TicksGame;
+                lastSearchWaterTick = Find.TickManager.TicksGame;
             }
         }
 
         public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1F, bool drawArrows = true, bool doTooltip = true)
         {
-            if (this.threshPercents == null)
+            if (threshPercents == null)
             {
-                this.threshPercents = new List<float>()
+                threshPercents = new List<float>()
                 {
-                    this.PercentageThreshUrgentlyThirsty,
-                    this.PercentageThreshThirsty,
-                    this.PercentageThreshSlightlyThirsty,
+                    PercentageThreshUrgentlyThirsty,
+                    PercentageThreshThirsty,
+                    PercentageThreshSlightlyThirsty,
                 };
             }
 
@@ -220,14 +160,21 @@ namespace MizuMod
 
         public override void NeedInterval()
         {
-            if (this.pawn.RaceProps.IsMechanoid) return;
-            if (base.IsFrozen) return;
-            
-            // 水分要求低下
-            this.CurLevel -= WaterFallPerTick * 150f * MizuDef.GlobalSettings.forDebug.needWaterReduceRate;
+            if (pawn.RaceProps.IsMechanoid)
+            {
+                return;
+            }
 
-            int directionFactor = -1;
-            if (this.Dehydrating)
+            if (base.IsFrozen)
+            {
+                return;
+            }
+
+            // 水分要求低下
+            CurLevel -= WaterFallPerTick * 150f * MizuDef.GlobalSettings.forDebug.needWaterReduceRate;
+
+            var directionFactor = -1;
+            if (Dehydrating)
             {
                 // 脱水症状深刻化方向に変更
                 directionFactor = 1;
@@ -235,9 +182,9 @@ namespace MizuMod
 
             // 脱水症状進行度更新
             HealthUtility.AdjustSeverity(
-                this.pawn,
+                pawn,
                 MizuDef.Hediff_Dehydration,
-                directionFactor * this.ext.dehydrationSeverityPerDay / 150 * MizuDef.GlobalSettings.forDebug.needWaterReduceRate);
+                directionFactor * Ext.dehydrationSeverityPerDay / 150 * MizuDef.GlobalSettings.forDebug.needWaterReduceRate);
         }
 
         public override string GetTipString()
@@ -248,11 +195,11 @@ namespace MizuMod
                 ": ",
                 base.CurLevelPercentage.ToStringPercent(),
                 " (",
-                this.CurLevel.ToString("0.##"),
+                CurLevel.ToString("0.##"),
                 " / ",
-                this.MaxLevel.ToString("0.##"),
+                MaxLevel.ToString("0.##"),
                 ")\n",
-                this.def.description
+                def.description
             });
         }
     }

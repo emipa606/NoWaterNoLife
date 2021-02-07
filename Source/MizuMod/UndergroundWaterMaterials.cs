@@ -18,7 +18,7 @@ namespace MizuMod
         static UndergroundWaterMaterials()
         {
             materials = new Material[MaterialCount];
-            Color[] colorArr = new Color[]
+            var colorArr = new Color[]
             {
                 new Color(1.0f, 0.0f, 0.0f, 0.25f),
                 new Color(1.0f, 1.0f, 0.0f, 0.25f),
@@ -26,7 +26,7 @@ namespace MizuMod
                 new Color(0.0f, 1.0f, 1.0f, 0.25f),
             };
 
-            for (int i = 0; i < MaterialCount; i++)
+            for (var i = 0; i < MaterialCount; i++)
             {
                 materials[i] = MatsFromSpectrum.Get(colorArr, (float)i / (float)MaterialCount);
             }

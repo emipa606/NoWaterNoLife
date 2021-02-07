@@ -14,15 +14,24 @@ namespace MizuMod
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            if (!this.pawn.Reserve(this.job.GetTarget(BillGiverInd), this.job)) return false;
-
-            var ingList = this.job.GetTargetQueue(IngredientInd);
-            var ingCountList = this.job.countQueue;
-            if (ingList.Count != ingCountList.Count) return false;
-
-            for (int i = 0; i < ingList.Count; i++)
+            if (!pawn.Reserve(job.GetTarget(BillGiverInd), job))
             {
-                if (!this.pawn.Reserve(ingList[i], this.job, 1, ingCountList[i])) return false;
+                return false;
+            }
+
+            var ingList = job.GetTargetQueue(IngredientInd);
+            var ingCountList = job.countQueue;
+            if (ingList.Count != ingCountList.Count)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < ingList.Count; i++)
+            {
+                if (!pawn.Reserve(ingList[i], job, 1, ingCountList[i]))
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -31,14 +40,14 @@ namespace MizuMod
         protected override IEnumerable<Toil> MakeNewToils()
         {
             var consumeThingList = new List<Thing>();
-            var ingList = this.job.GetTargetQueue(IngredientInd);
-            var ingCountList = this.job.countQueue;
+            var ingList = job.GetTargetQueue(IngredientInd);
+            var ingCountList = job.countQueue;
             //this.job.SetTarget(IngredientPlaceCellInd, this.TargetA.Thing.InteractionCell);
 
             var startToil = Toils_General.Do(() =>
             {
-                this.job.SetTarget(IngredientInd, ingList[0].Thing);
-                this.job.count = ingCountList[0];
+                job.SetTarget(IngredientInd, ingList[0].Thing);
+                job.count = ingCountList[0];
                 ingList.RemoveAt(0);
                 ingCountList.RemoveAt(0);
             });
@@ -55,7 +64,7 @@ namespace MizuMod
             // 運ぶものリストの中に同種の材料があり、まだ物を持てる場合、設備へ持っていく前に取りに行く
             yield return Toils_General.Do(() =>
             {
-                Pawn actor = this.pawn;
+                Pawn actor = pawn;
                 Job curJob = actor.jobs.curJob;
                 List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(IngredientInd);
                 if (targetQueue.NullOrEmpty<LocalTargetInfo>())
@@ -75,7 +84,7 @@ namespace MizuMod
                 {
                     return;
                 }
-                for (int i = 0; i < targetQueue.Count; i++)
+                for (var i = 0; i < targetQueue.Count; i++)
                 {
                     if (!GenAI.CanUseItemForWork(actor, targetQueue[i].Thing))
                     {
@@ -107,9 +116,9 @@ namespace MizuMod
             // まだ材料があるならさらに運ぶ
             yield return Toils_General.Do(() =>
             {
-                if (this.job.GetTargetQueue(IngredientInd).Count > 0)
+                if (job.GetTargetQueue(IngredientInd).Count > 0)
                 {
-                    this.pawn.jobs.curDriver.JumpToToil(startToil);
+                    pawn.jobs.curDriver.JumpToToil(startToil);
                 }
             });
             

@@ -13,63 +13,48 @@ namespace MizuMod
     {
         private bool lastSwitchIsOn = true;
 
-        public override bool HasInputConnector
-        {
-            get
-            {
-                return base.HasInputConnector && this.SwitchIsOn;
-            }
-        }
+        public override bool HasInputConnector => base.HasInputConnector && SwitchIsOn;
 
-        public override bool HasOutputConnector
-        {
-            get
-            {
-                return base.HasOutputConnector && this.SwitchIsOn;
-            }
-        }
+        public override bool HasOutputConnector => base.HasOutputConnector && SwitchIsOn;
 
-        public override bool IsActivatedForWaterNet
-        {
-            get
-            {
-                return base.IsActivatedForWaterNet && this.SwitchIsOn;
-            }
-        }
+        public override bool IsActivatedForWaterNet => base.IsActivatedForWaterNet && SwitchIsOn;
 
         public override Graphic Graphic
         {
             get
             {
-                if (this.flickableComp == null) return base.Graphic;
+                if (flickableComp == null)
+                {
+                    return base.Graphic;
+                }
 
-                return this.flickableComp.CurrentGraphic;
+                return flickableComp.CurrentGraphic;
             }
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref this.lastSwitchIsOn, "lastSwitchIsOn");
+            Scribe_Values.Look<bool>(ref lastSwitchIsOn, "lastSwitchIsOn");
         }
 
         public override void Tick()
         {
             base.Tick();
 
-            if (lastSwitchIsOn != this.SwitchIsOn)
+            if (lastSwitchIsOn != SwitchIsOn)
             {
-                lastSwitchIsOn = this.SwitchIsOn;
-                this.WaterNetManager.UpdateWaterNets();
+                lastSwitchIsOn = SwitchIsOn;
+                WaterNetManager.UpdateWaterNets();
             }
         }
 
         public override string GetInspectString()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append(base.GetInspectString());
 
-            if (!this.SwitchIsOn)
+            if (!SwitchIsOn)
             {
                 if (stringBuilder.Length > 0)
                 {
@@ -82,14 +67,14 @@ namespace MizuMod
 
         public override void CreateConnectors()
         {
-            this.InputConnectors.Clear();
-            this.OutputConnectors.Clear();
+            InputConnectors.Clear();
+            OutputConnectors.Clear();
 
-            this.InputConnectors.Add(this.Position + this.Rotation.FacingCell);
-            this.InputConnectors.Add(this.Position + this.Rotation.FacingCell * (-1));
+            InputConnectors.Add(Position + Rotation.FacingCell);
+            InputConnectors.Add(Position + (Rotation.FacingCell * (-1)));
 
-            this.OutputConnectors.Add(this.Position + this.Rotation.FacingCell);
-            this.OutputConnectors.Add(this.Position + this.Rotation.FacingCell * (-1));
+            OutputConnectors.Add(Position + Rotation.FacingCell);
+            OutputConnectors.Add(Position + (Rotation.FacingCell * (-1)));
         }
     }
 }

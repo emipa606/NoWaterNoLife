@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_DrinkWater.reportString>Beber TargetA.</Mizu_DrinkWater.reportString>
   <Mizu_DrinkWaterFromBuilding.reportString>Beba da TargetA.</Mizu_DrinkWaterFromBuilding.reportString>
   <Mizu_FeedWaterPatient.reportString>Alimentar TargetA Beber TargetB.</Mizu_FeedWaterPatient.reportString>
@@ -9,6 +8,4 @@
   <Mizu_DrawFromWaterPool.reportString>está completando a lista TargetA.</Mizu_DrawFromWaterPool.reportString>
   <Mizu_DrawFromWaterNet.reportString>está completando a lista TargetA.</Mizu_DrawFromWaterNet.reportString>
   <Mizu_PourWater.reportString>está concluindo a lista TargetA.</Mizu_PourWater.reportString>
-  <Mizu_DrawWaterByPrisoner.reportString>está buscando água do TargetA.</Mizu_DrawWaterByPrisoner.reportString>
-
-</LanguageData>
+  <Mizu_DrawWaterByPrisoner.reportString>está buscando água do TargetA.</Mizu_DrawWaterByPrisoner.reportString></LanguageData>

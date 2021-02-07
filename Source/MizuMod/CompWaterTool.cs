@@ -11,49 +11,22 @@ namespace MizuMod
 {
     public class CompWaterTool : ThingComp
     {
-        public CompProperties_WaterTool Props
-        {
-            get
-            {
-                return (CompProperties_WaterTool)this.props;
-            }
-        }
+        public CompProperties_WaterTool Props => (CompProperties_WaterTool)props;
 
-        public List<CompProperties_WaterTool.UseWorkType> UseWorkType
-        {
-            get
-            {
-                return this.Props.useWorkType;
-            }
-        }
-        public List<WorkTypeDef> SupplyWorkType
-        {
-            get
-            {
-                return this.Props.supplyWorkType;
-            }
-        }
-        public float MaxWaterVolume
-        {
-            get
-            {
-                return this.Props.maxWaterVolume;
-            }
-        }
+        public List<CompProperties_WaterTool.UseWorkType> UseWorkType => Props.useWorkType;
+        public List<WorkTypeDef> SupplyWorkType => Props.supplyWorkType;
+        public float MaxWaterVolume => Props.maxWaterVolume;
 
         private float storedWaterVolume;
         public float StoredWaterVolume
         {
-            get
-            {
-                return this.storedWaterVolume;
-            }
+            get => storedWaterVolume;
             set
             {
-                this.storedWaterVolume = Mathf.Min(this.MaxWaterVolume, Mathf.Max(0f, value));
-                if (this.storedWaterVolume <= 0f)
+                storedWaterVolume = Mathf.Min(MaxWaterVolume, Mathf.Max(0f, value));
+                if (storedWaterVolume <= 0f)
                 {
-                    this.StoredWaterType = WaterType.NoWater;
+                    StoredWaterType = WaterType.NoWater;
                 }
             }
         }
@@ -61,35 +34,23 @@ namespace MizuMod
         private WaterType storedWaterType = WaterType.NoWater;
         public WaterType StoredWaterType
         {
-            get
-            {
-                return this.storedWaterType;
-            }
-            set
-            {
-                this.storedWaterType = value;
-            }
+            get => storedWaterType;
+            set => storedWaterType = value;
         }
 
-        public float StoredWaterVolumePercent
-        {
-            get
-            {
-                return this.StoredWaterVolume / this.MaxWaterVolume;
-            }
-        }
+        public float StoredWaterVolumePercent => StoredWaterVolume / MaxWaterVolume;
 
         public override void PostExposeData()
         {
             base.PostExposeData();
 
-            Scribe_Values.Look(ref this.storedWaterVolume, "storedWaterVolume");
-            Scribe_Values.Look(ref this.storedWaterType, "storedWaterType", WaterType.NoWater);
+            Scribe_Values.Look(ref storedWaterVolume, "storedWaterVolume");
+            Scribe_Values.Look(ref storedWaterType, "storedWaterType", WaterType.NoWater);
         }
 
         public override string CompInspectStringExtra()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append(base.CompInspectStringExtra());
 
             if (stringBuilder.ToString() != string.Empty)
@@ -119,7 +80,7 @@ namespace MizuMod
             stringBuilder.Append(string.Concat(new string[]
             {
                 "(",
-                MizuStrings.GetInspectWaterTypeString(this.StoredWaterType),
+                MizuStrings.GetInspectWaterTypeString(StoredWaterType),
                 ")",
             }));
 

@@ -13,13 +13,7 @@ namespace MizuMod
     {
         public const float ConsumeSnowPerOne = 0.5f;
 
-        public override PathEndMode PathEndMode
-        {
-            get
-            {
-                return PathEndMode.Touch;
-            }
-        }
+        public override PathEndMode PathEndMode => PathEndMode.Touch;
 
         public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
         {
@@ -33,11 +27,20 @@ namespace MizuMod
 
         public override bool HasJobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
         {
-            if (pawn.Map.snowGrid.GetDepth(c) < ConsumeSnowPerOne) return false;
+            if (pawn.Map.snowGrid.GetDepth(c) < ConsumeSnowPerOne)
+            {
+                return false;
+            }
 
-            if (c.IsForbidden(pawn)) return false;
+            if (c.IsForbidden(pawn))
+            {
+                return false;
+            }
 
-            if (!pawn.CanReserve(c)) return false;
+            if (!pawn.CanReserve(c))
+            {
+                return false;
+            }
 
             return true;
         }

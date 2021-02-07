@@ -11,29 +11,11 @@ namespace MizuMod
 {
     public class CompDestroyMessage : ThingComp
     {
-        public CompProperties_DestroyMessage Props
-        {
-            get
-            {
-                return (CompProperties_DestroyMessage)this.props;
-            }
-        }
+        public CompProperties_DestroyMessage Props => (CompProperties_DestroyMessage)props;
 
-        public string MessageKey
-        {
-            get
-            {
-                return this.Props.messageKey;
-            }
-        }
+        public string MessageKey => Props.messageKey;
 
-        public List<DestroyMode> DestroyModes
-        {
-            get
-            {
-                return this.Props.destroyModes;
-            }
-        }
+        public List<DestroyMode> DestroyModes => Props.destroyModes;
 
         public CompDestroyMessage() { }
 
@@ -41,11 +23,17 @@ namespace MizuMod
         {
             base.PostDestroy(mode, previousMap);
 
-            if (string.IsNullOrEmpty(this.MessageKey)) return;
+            if (string.IsNullOrEmpty(MessageKey))
+            {
+                return;
+            }
 
-            if (this.DestroyModes == null || !this.DestroyModes.Contains(mode)) return;
+            if (DestroyModes == null || !DestroyModes.Contains(mode))
+            {
+                return;
+            }
 
-            MoteMaker.ThrowText(this.parent.TrueCenter() + new Vector3(0.5f, 0f, 0.5f), previousMap, this.MessageKey.Translate(), Color.white);
+            MoteMaker.ThrowText(parent.TrueCenter() + new Vector3(0.5f, 0f, 0.5f), previousMap, MessageKey.Translate(), Color.white);
         }
     }
 }

@@ -1,88 +1,63 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <MizuWaterAmount>水分</MizuWaterAmount>
   <MizuConsumeWater>{0}を飲む</MizuConsumeWater>
   <MizuNoWater>水が無い</MizuNoWater>
   <MizuWaterUILabel>水</MizuWaterUILabel>
-  
   <MizuLowWater>水が少ない</MizuLowWater>
   <MizuLowWaterDesc>水の備蓄が危険水域まで低下しています。\n\n備蓄量:{0}\n入植者+囚人必要量:{1}\n日数 {2}\n\n汲むか、買うか、見つけるかして飲用水を得てください。</MizuLowWaterDesc>
   <MizuDehydration>飲み水がない</MizuDehydration>
   <MizuDehydrationDesc>次の入植者は 喉の渇きを うったえています：\n\n{0}\nいますぐ 水が 必要です。</MizuDehydrationDesc>
-
   <MizuMessageCaravanRunOutOfWater>{0}の飲用水が尽きました({1})。</MizuMessageCaravanRunOutOfWater>
-
   <MizuDaysWorthOfWaterInfo>飲用水 {0}日分</MizuDaysWorthOfWaterInfo>
   <MizuInfiniteDaysWorthOfWaterInfo>水不足にはならないでしょう。</MizuInfiniteDaysWorthOfWaterInfo>
   <MizuDaysWorthOfWaterTooltip>キャラバン隊の飲用水が尽きてしまう概算の日数を表します。</MizuDaysWorthOfWaterTooltip>
-
   <MizuCaravanOutOfWater>飲用水切れ</MizuCaravanOutOfWater>
   <MizuCaravanDaysOfWater>飲用水: {0} 日分</MizuCaravanDaysOfWater>
-
   <MizuDaysWorthOfWaterWarningDialog>キャラバン隊は {0}日分の飲用水しかないので、あっという間に水不足が始まります。\n\n本当に良いのですか？</MizuDaysWorthOfWaterWarningDialog>
   <MizuDaysWorthOfWaterWarningDialog_NoWater>キャラバン隊は 飲用水がないので、あっという間に水不足が始まります。\n\n本当に良いのですか？</MizuDaysWorthOfWaterWarningDialog_NoWater>
-
   <MizuWaterFlowOutput>出力水量</MizuWaterFlowOutput>
   <MizuWaterFlowInput>入力水量</MizuWaterFlowInput>
   <MizuWaterTankStored>貯水量</MizuWaterTankStored>
-  
   <MizuCommandDesignateOpenCloseValveLabel>開/閉を指示</MizuCommandDesignateOpenCloseValveLabel>
   <MizuCommandDesignateOpenCloseValveDesc>バルブの開閉を指示します。入植者は直ぐに作業に掛かります。</MizuCommandDesignateOpenCloseValveDesc>
-  
   <MizuValveClosed>閉</MizuValveClosed>
-  
   <MizuStoredWaterPool>地下水残量</MizuStoredWaterPool>
-  
   <MizuDraining>水抜き中</MizuDraining>
-  
   <MizuCommandDesignateDrainTankLabel>水抜き開始/終了</MizuCommandDesignateDrainTankLabel>
   <MizuCommandDesignateDrainTankDesc>水抜きの開始と終了を切り替えます。入植者は直ぐに作業に掛かります。</MizuCommandDesignateDrainTankDesc>
-  
   <MizuWaterTypeNo>なし</MizuWaterTypeNo>
   <MizuWaterTypeClear>きれいな水</MizuWaterTypeClear>
   <MizuWaterTypeNormal>水</MizuWaterTypeNormal>
   <MizuWaterTypeRaw>生水</MizuWaterTypeRaw>
   <MizuWaterTypeMud>泥水</MizuWaterTypeMud>
   <MizuWaterTypeSea>海水</MizuWaterTypeSea>
-  
   <MizuMissingWater>水がない</MizuMissingWater>
   <MizuFullWater>十分にある</MizuFullWater>
-  
   <MizuDesignatorDeconstructPipe>水道管解体</MizuDesignatorDeconstructPipe>
   <MizuDesignatorDeconstructPipeDesc>水道管を解体します。</MizuDesignatorDeconstructPipeDesc>
-  
   <MizuThirstLevel_Healthy>充分な水分</MizuThirstLevel_Healthy>
   <MizuThirstLevel_SlightlyThirsty>喉の渇き(小)</MizuThirstLevel_SlightlyThirsty>
   <MizuThirstLevel_Thirsty>喉の渇き</MizuThirstLevel_Thirsty>
   <MizuThirstLevel_UrgentThirsty>喉の酷い渇き</MizuThirstLevel_UrgentThirsty>
   <MizuThirstLevel_Dehydration>脱水症状</MizuThirstLevel_Dehydration>
-  
   <MizuCannotBuildMultiWaterworksBuilding>同じ場所に複数の水道設備を作ることはできません。</MizuCannotBuildMultiWaterworksBuilding>
-  
   <MizuDehydrationAnimals>動物用の水がない</MizuDehydrationAnimals>
   <MizuDehydrationAnimalsDesc>コロニーの家畜が喉の渇きを訴えています：\n\n{0}\n水を 用意してください。</MizuDehydrationAnimalsDesc>
-  
   <MizuCantBuildExceptOverWater>水上以外に建設することはできません。</MizuCantBuildExceptOverWater>
-  
   <MizuSnowGet>集雪済み</MizuSnowGet>
   <MizuDesignatorAreaSnowGetExpand>集雪ゾーン</MizuDesignatorAreaSnowGetExpand>
   <MizuDesignatorAreaSnowGetExpandDesc>入植者が雪を取得する場所を指定します。</MizuDesignatorAreaSnowGetExpandDesc>
   <MizuDesignatorAreaSnowGetClear>集雪ゾーン 取消</MizuDesignatorAreaSnowGetClear>
   <MizuDesignatorAreaSnowGetClearDesc>雪を取得する場所の指定を取り消します。もうそこから入植者は雪を集めようとしません。</MizuDesignatorAreaSnowGetClearDesc>
-  
   <MizuDeconstructSnowmanMessage>さよならなのだ</MizuDeconstructSnowmanMessage>
-  
   <MizuMop>モップエリア</MizuMop>
   <MizuDesignatorAreaMopExpand>モップゾーン</MizuDesignatorAreaMopExpand>
   <MizuDesignatorAreaMopExpandDesc>入植者がモップで清掃する場所を指定します。</MizuDesignatorAreaMopExpandDesc>
   <MizuDesignatorAreaMopClear>モップゾーン 取消</MizuDesignatorAreaMopClear>
   <MizuDesignatorAreaMopClearDesc>モップで清掃する場所の指定を取り消します。もうそこを入植者はモップで清掃しようとしません。</MizuDesignatorAreaMopClearDesc>
-  
   <MizuWaterToolStored>保有水量</MizuWaterToolStored>
-  
   <MizuSetDefault>初期値に戻す</MizuSetDefault>
   <MizuGrowthRateFactorInNotWatering>水やりしていない時の成長速度係数</MizuGrowthRateFactorInNotWatering>
   <MizuGrowthRateFactorInWatering>水やり状態の成長速度係数</MizuGrowthRateFactorInWatering>
-  
 </LanguageData>

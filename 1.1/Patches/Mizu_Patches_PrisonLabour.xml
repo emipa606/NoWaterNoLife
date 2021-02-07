@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Prison Labor</li>
+    </mods>
+    <match Class="PatchOperationInsert">
+      <xpath>*/ThinkTreeDef[defName = "PrisonLabor_WorkThinkTree"]//li[@Class = "PrisonLabor.JobGiver_BedTime"]</xpath>
+      <value>
+        <li Class="MizuMod.JobGiver_GetWater_PrisonLabour" />
+      </value>
+    </match>
+  </Operation>
+</Patch>

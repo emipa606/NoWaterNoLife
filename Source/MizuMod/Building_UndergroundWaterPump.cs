@@ -12,28 +12,16 @@ namespace MizuMod
         public abstract MapComponent_WaterGrid WaterGrid { get; }
         private UndergroundWaterPool pool = null;
 
-        public override WaterType OutputWaterType
-        {
-            get
-            {
-                return this.pool.WaterType;
-            }
-        }
+        public override WaterType OutputWaterType => pool.WaterType;
 
-        public override UndergroundWaterPool WaterPool
-        {
-            get
-            {
-                return this.pool;
-            }
-        }
+        public override UndergroundWaterPool WaterPool => pool;
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
 
-            this.pool = this.WaterGrid.GetPool(map.cellIndices.CellToIndex(this.Position));
-            if (this.pool == null)
+            pool = WaterGrid.GetPool(map.cellIndices.CellToIndex(Position));
+            if (pool == null)
             {
                 Log.Error("pool is null");
             }

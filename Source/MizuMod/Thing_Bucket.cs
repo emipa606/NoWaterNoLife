@@ -9,7 +9,7 @@ namespace MizuMod
 {
     public class Thing_Bucket : ThingWithComps
     {
-        private List<float> graphicThreshold = new List<float>()
+        private readonly List<float> graphicThreshold = new List<float>()
         {
             0.9f,
             100f,
@@ -18,13 +18,7 @@ namespace MizuMod
         private int graphicIndex = 0;
         private int prevGraphicIndex = 0;
 
-        public override Graphic Graphic
-        {
-            get
-            {
-                return MizuGraphics.Buckets[this.graphicIndex].GetColoredVersion(MizuGraphics.Buckets[this.graphicIndex].Shader, this.DrawColor, this.DrawColorTwo);
-            }
-        }
+        public override Graphic Graphic => MizuGraphics.Buckets[graphicIndex].GetColoredVersion(MizuGraphics.Buckets[graphicIndex].Shader, DrawColor, DrawColorTwo);
 
         private CompWaterTool compWaterTool;
 
@@ -32,40 +26,40 @@ namespace MizuMod
         {
             base.SpawnSetup(map, respawningAfterLoad);
 
-            this.compWaterTool = this.GetComp<CompWaterTool>();
+            compWaterTool = GetComp<CompWaterTool>();
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            Scribe_Values.Look<int>(ref this.graphicIndex, "graphicIndex");
-            this.prevGraphicIndex = this.graphicIndex;
+            Scribe_Values.Look<int>(ref graphicIndex, "graphicIndex");
+            prevGraphicIndex = graphicIndex;
         }
 
         public override void Tick()
         {
             base.Tick();
 
-            this.prevGraphicIndex = this.graphicIndex;
-            if (this.compWaterTool == null)
+            prevGraphicIndex = graphicIndex;
+            if (compWaterTool == null)
             {
-                this.graphicIndex = 0;
+                graphicIndex = 0;
                 return;
             }
 
-            for (int i = 0; i < this.graphicThreshold.Count; i++)
+            for (var i = 0; i < graphicThreshold.Count; i++)
             {
-                if (this.compWaterTool.StoredWaterVolumePercent < this.graphicThreshold[i])
+                if (compWaterTool.StoredWaterVolumePercent < graphicThreshold[i])
                 {
-                    this.graphicIndex = i;
+                    graphicIndex = i;
                     break;
                 }
             }
 
-            if (this.graphicIndex != this.prevGraphicIndex)
+            if (graphicIndex != prevGraphicIndex)
             {
-                this.DirtyMapMesh(this.Map);
+                DirtyMapMesh(Map);
             }
         }
     }

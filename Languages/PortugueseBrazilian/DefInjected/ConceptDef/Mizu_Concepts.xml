@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_DrawWater.label>NWNL: Tirar água</Mizu_DrawWater.label>
   <Mizu_DrawWater.helpText>Todos os seres vivos não podem viver sem água. Os colonos podem tirar água dos pontos de coleta e poços.</Mizu_DrawWater.helpText>
 
@@ -14,6 +13,4 @@
   <Mizu_UndergroundWater.helpText>Poços podem ser construídos sobre as águas subterrâneas. Se você escolher um dos edifícios de extração de água subterrânea, poderá ver as águas subterrâneas na tela. \n\nNo deserto tem quantidade muito pequena de As águas subterrâneas, e podem não ser encontradas em biomas extremamente frios.</Mizu_UndergroundWater.helpText>
 
   <Mizu_Waterworks.label>NWNL: Obras de água</Mizu_Waterworks.label>
-  <Mizu_Waterworks.helpText>Com as obras hidráulicas, você pode automatizar a maioria das tarefas de obter água. Com 1 bomba, 1 tanque e 1 torneira você constrói uma rede de água. Cada lado de um filtro deve estar em uma rede de água separada.</Mizu_Waterworks.helpText>
-
-</LanguageData>
+  <Mizu_Waterworks.helpText>Com as obras hidráulicas, você pode automatizar a maioria das tarefas de obter água. Com 1 bomba, 1 tanque e 1 torneira você constrói uma rede de água. Cada lado de um filtro deve estar em uma rede de água separada.</Mizu_Waterworks.helpText></LanguageData>

@@ -13,12 +13,12 @@ namespace MizuMod
     {
         public Designator_AreaSnowGetClear() : base(DesignateMode.Remove)
         {
-            this.defaultLabel = MizuStrings.DesignatorAreaSnowGetClear.Translate();
-            this.defaultDesc = MizuStrings.DesignatorAreaSnowGetClearDescription.Translate();
-            this.icon = ContentFinder<Texture2D>.Get("UI/Designators/SnowClearAreaOff", true);
-            this.soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
-            this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-            this.soundSucceeded = SoundDefOf.Designate_AreaDelete;
+            defaultLabel = MizuStrings.DesignatorAreaSnowGetClear.Translate();
+            defaultDesc = MizuStrings.DesignatorAreaSnowGetClearDescription.Translate();
+            icon = ContentFinder<Texture2D>.Get("UI/Designators/SnowClearAreaOff", true);
+            soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
+            soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+            soundSucceeded = SoundDefOf.Designate_ZoneDelete;
         }
     }
 }

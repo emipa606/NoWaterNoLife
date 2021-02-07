@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <Mizu_WaterDrank.label>Água potável</Mizu_WaterDrank.label>
   <Mizu_WaterDrank.description>Quantas vezes bebi água?</Mizu_WaterDrank.description>
 
@@ -8,6 +7,4 @@
   <Mizu_WaterDrew.description>Quantas vezes tomei a água?</Mizu_WaterDrew.description>
 
   <Mizu_TimeDrinkingWater.label>Como encontrar tempo para beber água</Mizu_TimeDrinkingWater.label>
-  <Mizu_TimeDrinkingWater.description>O tempo total para procurar água e beber água.</Mizu_TimeDrinkingWater.description>
-
-</LanguageData>
+  <Mizu_TimeDrinkingWater.description>O tempo total para procurar água e beber água.</Mizu_TimeDrinkingWater.description></LanguageData>

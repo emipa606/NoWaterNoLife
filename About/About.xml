@@ -1,13 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-  <name>No Water, No Life [1.0] </name>
+  <name>No Water, No Life (Continued)</name>
+  <packageId>Mlie.NoWaterNoLife</packageId>
   <author>himesama, schoos</author>
-  <targetVersion>1.0.2059</targetVersion>
-  <url>https://github.com/schoos76/MizuMod</url>
-  <description>
+  <url>https://github.com/emipa606/NoWaterNoLife</url>
+  <supportedVersions>
+    <li>1.0</li>
+    <li>1.1</li>
+    <li>1.2</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+      <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>brrainz.harmony</li>
+  </loadAfter>
+  <description>[img]https://i.imgur.com/WAEzk68.png[/img]
+Update of himesama, schooss mod
+https://steamcommunity.com/sharedfiles/filedetails/?id=2024595829
 
-for RimWorld 1.0
-mod version 1.7.2
+[img]https://i.imgur.com/7Gzt3Rg.png[/img]
+
+[table]
+    [tr]
+        [td][url=https://invite.gg/Mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
+        [td][url=https://github.com/emipa606/NoWaterNoLife][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
+    [/tr]
+[/table]
+	
+[img]https://i.imgur.com/NOW7jU1.png[/img]
+for RimWorld 1.1
+mod version 1.8.1
 
 Description
 
@@ -23,12 +51,7 @@ The downloaded zip file contains all the data as well as the source code.
 
 License
 
-This mod includes the following
-- Harmony (MIT License)
-
-This mod depends on ModCheck mod.
-
-The other files are licensed under the Unlicense. 
+Licensed under the Unlicense. 
 https://github.com/schoos76/MizuMod/blob/master/LICENSE_Unlicense
 
 Contributors
@@ -40,7 +63,34 @@ Firty (PortugueseBrazilian translation)
 Oblivionburn (Most of the B19 XML changes)
 Silt (some of the textures)
 crustymonkey (VGP Garden Drinks patch)
+schoos76 (1.0 updates)
+grapenuts (1.1 updates)
 
 
-  </description>
+Update: Mar 16
+This is an update for compatibility with Rimworld 1.1. The dependency on Modcheck was removed due to the delay in updating it for 1.1. Any pre-existing bugs with the mod likely still exist.
+
+Other changes: Sounds have been updated to use custom sounds instead of the built-in sounds.
+
+Known issues: 
+-The sound for drawing water is still using the built-in sound for cooking.
+-Not adding enough water to a caravan does not produce a warning.
+
+Please refer to the 1.0 mod for FAQs and other information:
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=1541840184
+
+This workshop post was intended to get a working 1.1 version of this mod. Eventually my goal will be to merge this back into schoos76's workshop post and github repository as I'm not a skilled game programmer.
+
+[img]https://i.imgur.com/Rs6T6cr.png[/img]
+[list]
+[*] See if the the error persists if you just have this mod and its requirements active.
+[*] If not, try adding your other mods until it happens again.
+[*] Post your error-log using [url=https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] and command Ctrl+F12
+[*] For best support, please use the Discord-channel for error-reporting.
+[*] Do not report errors by making a discussion-thread, I get no notification of that.
+[*] If you have the solution for a problem, please post it to the GitHub repository.
+[/list]
+</description>
 </ModMetaData>
+

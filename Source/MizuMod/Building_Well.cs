@@ -23,8 +23,8 @@ namespace MizuMod
                 Log.Error("waterGrid is null");
             }
 
-            this.pool = waterGrid.GetPool(map.cellIndices.CellToIndex(this.Position));
-            if (this.pool == null)
+            pool = waterGrid.GetPool(map.cellIndices.CellToIndex(Position));
+            if (pool == null)
             {
                 Log.Error("pool is null");
             }
@@ -48,21 +48,18 @@ namespace MizuMod
             return stringBuilder.ToString();
         }
 
-        public bool IsActivated
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsActivated => true;
 
         public WaterType WaterType
         {
             get
             {
-                if (this.pool == null) return WaterType.Undefined;
+                if (pool == null)
+                {
+                    return WaterType.Undefined;
+                }
 
-                return this.pool.WaterType;
+                return pool.WaterType;
             }
         }
 
@@ -70,8 +67,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.pool == null) return 0f;
-                return this.pool.CurrentWaterVolume;
+                if (pool == null)
+                {
+                    return 0f;
+                }
+
+                return pool.CurrentWaterVolume;
             }
         }
 
@@ -79,38 +80,68 @@ namespace MizuMod
         {
             get
             {
-                if (this.pool == null) return true;
-                if (this.pool.CurrentWaterVolume <= 0f) return true;
+                if (pool == null)
+                {
+                    return true;
+                }
+
+                if (pool.CurrentWaterVolume <= 0f)
+                {
+                    return true;
+                }
+
                 return false;
             }
         }
 
         public bool CanDrinkFor(Pawn p)
         {
-            if (p.needs == null || p.needs.water() == null) return false;
-            if (this.pool == null) return false;
-            if (this.pool.WaterType == WaterType.Undefined || this.pool.WaterType == WaterType.NoWater) return false;
+            if (p.needs == null || p.needs.Water() == null)
+            {
+                return false;
+            }
+
+            if (pool == null)
+            {
+                return false;
+            }
+
+            if (pool.WaterType == WaterType.Undefined || pool.WaterType == WaterType.NoWater)
+            {
+                return false;
+            }
 
             // 手が使用可能で、地下水の水量が十分にある
-            return p.CanManipulate() && this.pool.CurrentWaterVolume >= p.needs.water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
+            return p.CanManipulate() && pool.CurrentWaterVolume >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
         }
 
         public bool CanDrawFor(Pawn p)
         {
-            if (this.pool == null) return false;
-            if (this.pool.WaterType == WaterType.Undefined || this.pool.WaterType == WaterType.NoWater) return false;
+            if (pool == null)
+            {
+                return false;
+            }
 
-            var waterItemDef = MizuDef.List_WaterItem.First((def) => def.GetCompProperties<CompProperties_WaterSource>().waterType == this.pool.WaterType);
+            if (pool.WaterType == WaterType.Undefined || pool.WaterType == WaterType.NoWater)
+            {
+                return false;
+            }
+
+            var waterItemDef = MizuDef.List_WaterItem.First((def) => def.GetCompProperties<CompProperties_WaterSource>().waterType == pool.WaterType);
             var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
 
             // 汲める予定の水アイテムの水の量より多い
-            return p.CanManipulate() && this.pool.CurrentWaterVolume >= compprop.waterVolume;
+            return p.CanManipulate() && pool.CurrentWaterVolume >= compprop.waterVolume;
         }
 
         public void DrawWater(float amount)
         {
-            if (this.pool == null) return;
-            this.pool.CurrentWaterVolume = Mathf.Max(this.pool.CurrentWaterVolume - amount, 0);
+            if (pool == null)
+            {
+                return;
+            }
+
+            pool.CurrentWaterVolume = Mathf.Max(pool.CurrentWaterVolume - amount, 0);
         }
     }
 }

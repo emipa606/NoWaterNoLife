@@ -9,7 +9,7 @@ namespace MizuMod
 {
     public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_WaterNet, IBuilding_DrinkWater
     {
-        private List<float> graphicThreshold = new List<float>()
+        private readonly List<float> graphicThreshold = new List<float>()
         {
             0.05f,
             0.35f,
@@ -21,21 +21,18 @@ namespace MizuMod
         private int graphicIndex = 0;
         private int prevGraphicIndex = 0;
 
-        public override Graphic Graphic
-        {
-            get
-            {
-                return MizuGraphics.LinkedWaterBoxes[this.graphicIndex].GetColoredVersion(MizuGraphics.WaterBoxes[this.graphicIndex].Shader, this.DrawColor, this.DrawColorTwo);
-            }
-        }
+        public override Graphic Graphic => MizuGraphics.LinkedWaterBoxes[graphicIndex].GetColoredVersion(MizuGraphics.WaterBoxes[graphicIndex].Shader, DrawColor, DrawColorTwo);
 
         public WaterType WaterType
         {
             get
             {
-                if (this.TankComp == null) return WaterType.Undefined;
+                if (TankComp == null)
+                {
+                    return WaterType.Undefined;
+                }
 
-                return this.TankComp.StoredWaterType;
+                return TankComp.StoredWaterType;
             }
         }
 
@@ -43,8 +40,12 @@ namespace MizuMod
         {
             get
             {
-                if (this.TankComp == null) return 0f;
-                return this.TankComp.StoredWaterVolume;
+                if (TankComp == null)
+                {
+                    return 0f;
+                }
+
+                return TankComp.StoredWaterVolume;
             }
         }
 
@@ -52,71 +53,101 @@ namespace MizuMod
         {
             get
             {
-                if (this.TankComp == null) return true;
-                if (this.TankComp.StoredWaterVolume <= 0f) return true;
+                if (TankComp == null)
+                {
+                    return true;
+                }
+
+                if (TankComp.StoredWaterVolume <= 0f)
+                {
+                    return true;
+                }
+
                 return false;
             }
         }
 
         public bool CanDrinkFor(Pawn p)
         {
-            if (p.needs == null || p.needs.water() == null) return false;
-            if (this.TankComp == null) return false;
-            if (this.TankComp.StoredWaterType == WaterType.Undefined || this.TankComp.StoredWaterType == WaterType.NoWater) return false;
+            if (p.needs == null || p.needs.Water() == null)
+            {
+                return false;
+            }
+
+            if (TankComp == null)
+            {
+                return false;
+            }
+
+            if (TankComp.StoredWaterType == WaterType.Undefined || TankComp.StoredWaterType == WaterType.NoWater)
+            {
+                return false;
+            }
 
             // タンクの水量が十分にある
-            return this.TankComp.StoredWaterVolume >= p.needs.water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
+            return TankComp.StoredWaterVolume >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
         }
 
         public bool CanDrawFor(Pawn p)
         {
-            if (this.TankComp == null) return false;
-            if (this.TankComp.StoredWaterType == WaterType.Undefined || this.TankComp.StoredWaterType == WaterType.NoWater) return false;
+            if (TankComp == null)
+            {
+                return false;
+            }
 
-            var waterItemDef = MizuDef.List_WaterItem.First((def) => def.GetCompProperties<CompProperties_WaterSource>().waterType == this.TankComp.StoredWaterType);
+            if (TankComp.StoredWaterType == WaterType.Undefined || TankComp.StoredWaterType == WaterType.NoWater)
+            {
+                return false;
+            }
+
+            var waterItemDef = MizuDef.List_WaterItem.First((def) => def.GetCompProperties<CompProperties_WaterSource>().waterType == TankComp.StoredWaterType);
             var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
 
             // 汲める予定の水アイテムの水の量より多い
-            return p.CanManipulate() && this.TankComp.StoredWaterVolume >= compprop.waterVolume;
+            return p.CanManipulate() && TankComp.StoredWaterVolume >= compprop.waterVolume;
         }
 
         public void DrawWater(float amount)
         {
-            if (this.TankComp == null) return;
-            this.TankComp.DrawWaterVolume(amount);
+            if (TankComp == null)
+            {
+                return;
+            }
+
+            TankComp.DrawWaterVolume(amount);
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            Scribe_Values.Look<int>(ref this.graphicIndex, "graphicIndex");
-            this.prevGraphicIndex = this.graphicIndex;
+            Scribe_Values.Look<int>(ref graphicIndex, "graphicIndex");
+            prevGraphicIndex = graphicIndex;
         }
 
         public override void Tick()
         {
             base.Tick();
 
-            this.prevGraphicIndex = this.graphicIndex;
-            if (this.TankComp == null)
+            prevGraphicIndex = graphicIndex;
+            if (TankComp == null)
             {
-                this.graphicIndex = 0;
+                graphicIndex = 0;
                 return;
             }
 
-            for (int i = 0; i < this.graphicThreshold.Count; i++)
+            for (var i = 0; i < graphicThreshold.Count; i++)
             {
-                if (this.TankComp.StoredWaterVolumePercent < this.graphicThreshold[i])
+                if (TankComp.StoredWaterVolumePercent < graphicThreshold[i])
                 {
-                    this.graphicIndex = i;
+                    graphicIndex = i;
                     break;
                 }
             }
 
-            if (this.graphicIndex != this.prevGraphicIndex)
+            if (graphicIndex != prevGraphicIndex)
             {
-                this.DirtyMapMesh(this.Map);
+                DirtyMapMesh(Map);
             }
         }
     }

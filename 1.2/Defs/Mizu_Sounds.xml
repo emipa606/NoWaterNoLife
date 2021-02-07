@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <SoundDef>
+    <defName>Ingest_Water</defName>
+    <context>MapOnly</context>
+    <eventNames />
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Mizu_Gulp</clipPath>
+          </li>
+        </grains>
+        <volumeRange>
+          <min>70</min>
+          <max>70</max>
+        </volumeRange>
+        <pitchRange>
+          <min>1</min>
+          <max>1.015</max>
+        </pitchRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+  <SoundDef>
+    <defName>Pour_Water</defName>
+    <context>MapOnly</context>
+    <eventNames />
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>Mizu_Pour</clipPath>
+          </li>
+        </grains>
+        <volumeRange>
+          <min>70</min>
+          <max>70</max>
+        </volumeRange>
+        <pitchRange>
+          <min>1</min>
+          <max>1.015</max>
+        </pitchRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+</Defs>

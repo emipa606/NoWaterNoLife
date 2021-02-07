@@ -10,26 +10,20 @@ namespace MizuMod
 {
     public class Alert_DehydrationAnimals : Alert
     {
-        private IEnumerable<Pawn> DehydratingAnimals
-        {
-            get
-            {
-                return from p in PawnsFinder.AllMaps_SpawnedPawnsInFaction(Faction.OfPlayer)
-                       where p.HostFaction == null && !p.RaceProps.Humanlike
-                       where p.needs.water() != null && p.needs.water().Dehydrating
-                       select p;
-            }
-        }
+        private IEnumerable<Pawn> DehydratingAnimals => from p in PawnsFinder.AllMaps_SpawnedPawnsInFaction(Faction.OfPlayer)
+                                                        where p.HostFaction == null && !p.RaceProps.Humanlike
+                                                        where p.needs.Water() != null && p.needs.Water().Dehydrating
+                                                        select p;
 
         public Alert_DehydrationAnimals()
         {
-            this.defaultLabel = MizuStrings.AlertDehydrationAnimal.Translate();
+            defaultLabel = MizuStrings.AlertDehydrationAnimal.Translate();
         }
 
-        public override string GetExplanation()
+        public override TaggedString GetExplanation()
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (Pawn current in from a in this.DehydratingAnimals
+            var stringBuilder = new StringBuilder();
+            foreach (Pawn current in from a in DehydratingAnimals
                                      orderby a.def.label
                                      select a)
             {
@@ -45,7 +39,7 @@ namespace MizuMod
 
         public override AlertReport GetReport()
         {
-            return AlertReport.CulpritIs(this.DehydratingAnimals.FirstOrDefault<Pawn>());
+            return AlertReport.CulpritIs(DehydratingAnimals.FirstOrDefault<Pawn>());
         }
     }
 }

@@ -15,20 +15,20 @@ namespace MizuMod
 
         public Alert_LowWater()
         {
-            this.defaultLabel = MizuStrings.AlertLowWater.Translate();
-            this.defaultPriority = AlertPriority.High;
+            defaultLabel = MizuStrings.AlertLowWater.Translate();
+            defaultPriority = AlertPriority.High;
         }
 
-        public override string GetExplanation()
+        public override TaggedString GetExplanation()
         {
-            Map map = this.MapWithLowWater();
+            Map map = MapWithLowWater();
             if (map == null)
             {
                 return string.Empty;
             }
-            float totalWater = map.resourceCounter.TotalWater();
-            int num = map.mapPawns.FreeColonistsSpawnedCount + map.mapPawns.PrisonersOfColonyCount;
-            int num2 = Mathf.FloorToInt(totalWater / (float)num);
+            var totalWater = map.resourceCounter.TotalWater();
+            var num = map.mapPawns.FreeColonistsSpawnedCount + map.mapPawns.PrisonersOfColonyCount;
+            var num2 = Mathf.FloorToInt(totalWater / (float)num);
             return string.Format(MizuStrings.AlertLowWaterDesc.Translate(), totalWater.ToString("F0"), num.ToStringCached(), num2.ToStringCached());
         }
 
@@ -38,18 +38,18 @@ namespace MizuMod
             {
                 return false;
             }
-            return this.MapWithLowWater() != null;
+            return MapWithLowWater() != null;
         }
 
         private Map MapWithLowWater()
         {
             List<Map> maps = Find.Maps;
-            for (int i = 0; i < maps.Count; i++)
+            for (var i = 0; i < maps.Count; i++)
             {
                 Map map = maps[i];
                 if (map.IsPlayerHome)
                 {
-                    int freeColonistsSpawnedCount = map.mapPawns.FreeColonistsSpawnedCount;
+                    var freeColonistsSpawnedCount = map.mapPawns.FreeColonistsSpawnedCount;
                     if (map.resourceCounter.TotalWater() < WaterAmountThresholdPerColonist * (float)freeColonistsSpawnedCount)
                     {
                         return map;

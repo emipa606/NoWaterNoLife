@@ -11,26 +11,20 @@ namespace MizuMod
 {
     public class Alert_DehydrationColonists : Alert
     {
-        private IEnumerable<Pawn> DehydratingColonists
-        {
-            get
-            {
-                return from p in PawnsFinder.AllMaps_FreeColonistsSpawned
-                       where p.needs.water() != null && p.needs.water().Dehydrating
-                       select p;
-            }
-        }
+        private IEnumerable<Pawn> DehydratingColonists => from p in PawnsFinder.AllMaps_FreeColonistsSpawned
+                                                          where p.needs.Water() != null && p.needs.Water().Dehydrating
+                                                          select p;
 
         public Alert_DehydrationColonists()
         {
-            this.defaultLabel = MizuStrings.AlertDehydration.Translate();
-            this.defaultPriority = AlertPriority.High;
+            defaultLabel = MizuStrings.AlertDehydration.Translate();
+            defaultPriority = AlertPriority.High;
         }
 
-        public override string GetExplanation()
+        public override TaggedString GetExplanation()
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (Pawn current in this.DehydratingColonists)
+            var stringBuilder = new StringBuilder();
+            foreach (Pawn current in DehydratingColonists)
             {
                 stringBuilder.AppendLine("    " + current.Name.ToStringShort);
             }
@@ -39,7 +33,7 @@ namespace MizuMod
 
         public override AlertReport GetReport()
         {
-            return AlertReport.CulpritIs(this.DehydratingColonists.FirstOrDefault<Pawn>());
+            return AlertReport.CulpritIs(DehydratingColonists.FirstOrDefault<Pawn>());
         }
     }
 }
