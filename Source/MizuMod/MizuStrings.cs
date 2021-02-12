@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Verse;
+﻿using Verse;
 
 namespace MizuMod
 {
@@ -12,7 +7,7 @@ namespace MizuMod
         public static readonly string ModTitle = "No Water, No Life.";
 
         // 水アイテムやポーンのジョブ関連
-        public static readonly string CompWaterAmount = "MizuWaterAmount";
+        public static readonly string CompWaterAmount = "WaterAmount";
         public static readonly string FloatMenuGetWater = "MizuConsumeWater";
         public static readonly string JobFailReasonNoWater = "MizuNoWater";
         public static readonly string WaterUILabel = "MizuWaterUILabel";
@@ -33,7 +28,9 @@ namespace MizuMod
         public static readonly string InspectCaravanOutOfWater = "MizuCaravanOutOfWater";
         public static readonly string InspectCaravanDaysOfWater = "MizuCaravanDaysOfWater";
         public static readonly string LabelDaysWorthOfWaterWarningDialog = "MizuDaysWorthOfWaterWarningDialog";
-        public static readonly string LabelDaysWorthOfWaterWarningDialog_NoWater = "MizuDaysWorthOfWaterWarningDialog_NoWater";
+
+        public static readonly string LabelDaysWorthOfWaterWarningDialog_NoWater =
+            "MizuDaysWorthOfWaterWarningDialog_NoWater";
 
         // 水道網関連
         public static readonly string InspectWaterFlowOutput = "MizuWaterFlowOutput";
@@ -84,17 +81,17 @@ namespace MizuMod
             switch (waterType)
             {
                 case WaterType.NoWater:
-                    return MizuStrings.InspectWaterTypeNo.Translate();
+                    return InspectWaterTypeNo.Translate();
                 case WaterType.ClearWater:
-                    return MizuStrings.InspectWaterTypeClear.Translate();
+                    return InspectWaterTypeClear.Translate();
                 case WaterType.NormalWater:
-                    return MizuStrings.InspectWaterTypeNormal.Translate();
+                    return InspectWaterTypeNormal.Translate();
                 case WaterType.RawWater:
-                    return MizuStrings.InspectWaterTypeRaw.Translate();
+                    return InspectWaterTypeRaw.Translate();
                 case WaterType.MudWater:
-                    return MizuStrings.InspectWaterTypeMud.Translate();
+                    return InspectWaterTypeMud.Translate();
                 case WaterType.SeaWater:
-                    return MizuStrings.InspectWaterTypeSea.Translate();
+                    return InspectWaterTypeSea.Translate();
                 default:
                     Log.Error("unknown water type");
                     return "unknown";
