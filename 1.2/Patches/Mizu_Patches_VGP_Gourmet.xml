@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Patch made by user redbrick99
+	 https://github.com/schoos76/MizuMod/pull/48 -->
 <Patch>
   <Operation Class="PatchOperationFindMod">
     <mods>
