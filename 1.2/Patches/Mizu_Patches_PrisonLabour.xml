@@ -5,7 +5,7 @@
       <li>Prison Labor</li>
     </mods>
     <match Class="PatchOperationInsert">
-      <xpath>Defs/ThinkTreeDef[defName = "PrisonLabor_WorkThinkTree"]//li[@Class = "PrisonLabor.JobGiver_BedTime"]</xpath>
+      <xpath>Defs/ThinkTreeDef[defName = "PrisonLabor_WorkThinkTree"]//li[@Class = "PrisonLabor.Core.AI.JobGivers.JobGiver_BedTime"]</xpath>
       <value>
         <li Class="MizuMod.JobGiver_GetWater_PrisonLabour" />
       </value>
