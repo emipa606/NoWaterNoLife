@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -17,7 +12,7 @@ namespace MizuMod
 
         public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
-            Pawn taker = pawn;
+            var taker = pawn;
 
             // 与える相手が人でない、自分自身に与える→×
             if (!(t is Pawn giver) || giver == taker)
@@ -38,7 +33,8 @@ namespace MizuMod
             }
 
             // 与える相手が水分要求を持っているが、喉が渇いていると感じていない→×
-            if (giver.needs.Water() == null || giver.needs.Water().CurLevelPercentage > giver.needs.Water().PercentageThreshSlightlyThirsty + 0.02f)
+            if (giver.needs.Water() == null || giver.needs.Water().CurLevelPercentage >
+                giver.needs.Water().PercentageThreshSlightlyThirsty + 0.02f)
             {
                 return false;
             }
@@ -55,14 +51,14 @@ namespace MizuMod
                 return false;
             }
 
-            if (MizuUtility.TryFindBestWaterSourceFor(taker, giver, true, false) == null)
+            if (MizuUtility.TryFindBestWaterSourceFor(taker, giver, true) != null)
             {
-                // 与えられる水があるか探したが見つからなかった
-                JobFailReason.Is(MizuStrings.JobFailReasonNoWater.Translate());
-                return false;
+                return true;
             }
 
-            return true;
+            // 与えられる水があるか探したが見つからなかった
+            JobFailReason.Is(MizuStrings.JobFailReasonNoWater.Translate());
+            return false;
         }
 
         public override Job JobOnThing(Pawn getter, Thing target, bool forced = false)
@@ -70,7 +66,7 @@ namespace MizuMod
             var patient = target as Pawn;
 
             // 水を探す
-            Thing waterThing = MizuUtility.TryFindBestWaterSourceFor(getter, patient, true, false);
+            var waterThing = MizuUtility.TryFindBestWaterSourceFor(getter, patient, true);
             if (waterThing == null)
             {
                 return null;

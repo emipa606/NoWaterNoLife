@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -15,8 +10,11 @@ namespace MizuMod
         private const TargetIndex ToolInd = TargetIndex.B;
         private const TargetIndex StoreToolPosInd = TargetIndex.C;
 
-        private ThingWithComps SourceThing => (ThingWithComps)job.GetTarget(SourceInd).Thing;
-        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
+        private float maxTick;
+        private bool needManipulate;
+
+        private ThingWithComps SourceThing => (ThingWithComps) job.GetTarget(SourceInd).Thing;
+        private ThingWithComps Tool => (ThingWithComps) job.GetTarget(ToolInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -25,9 +23,6 @@ namespace MizuMod
             return true;
         }
 
-        private float maxTick;
-        private bool needManipulate;
-
         protected override IEnumerable<Toil> MakeNewToils()
         {
             // 水ツールを手に取る
@@ -35,11 +30,12 @@ namespace MizuMod
             yield return Toils_Haul.StartCarryThing(ToolInd);
 
             // 水汲み設備へ移動
-            PathEndMode peMode = PathEndMode.ClosestTouch;
+            var peMode = PathEndMode.ClosestTouch;
             if (SourceThing.def.hasInteractionCell)
             {
                 peMode = PathEndMode.InteractionCell;
             }
+
             yield return Toils_Goto.GotoThing(SourceInd, peMode);
 
             // 水汲み
@@ -50,18 +46,19 @@ namespace MizuMod
                     var compSource = SourceThing.GetComp<CompWaterSource>();
                     needManipulate = compSource.NeedManipulate;
 
-                // 水汲み速度関連はリファクタリングしたい
-                var ticksForFull = compSource.BaseDrinkTicks;
+                    // 水汲み速度関連はリファクタリングしたい
+                    var ticksForFull = compSource.BaseDrinkTicks;
 
                     var compTool = Tool.GetComp<CompWaterTool>();
-                    var totalTicks = (int)(ticksForFull * (1f - compTool.StoredWaterVolumePercent));
+                    var totalTicks = (int) (ticksForFull * (1f - compTool.StoredWaterVolumePercent));
                     if (!needManipulate)
                     {
-                    // 手が必要ない→水にドボンですぐに補給できる
-                    totalTicks /= 10;
+                        // 手が必要ない→水にドボンですぐに補給できる
+                        totalTicks /= 10;
                     }
-                // 小数の誤差を考慮して1Tick余分に多く実行する
-                totalTicks += 1;
+
+                    // 小数の誤差を考慮して1Tick余分に多く実行する
+                    totalTicks += 1;
 
                     maxTick = totalTicks;
                     ticksLeftThisToil = totalTicks;
@@ -77,7 +74,13 @@ namespace MizuMod
                     {
                         supplyWaterVolume *= 10;
                     }
+
                     compTool.StoredWaterVolume += supplyWaterVolume;
+                    if (building == null)
+                    {
+                        return;
+                    }
+
                     compTool.StoredWaterType = building.WaterType;
 
                     building.DrawWater(supplyWaterVolume);
@@ -89,7 +92,7 @@ namespace MizuMod
                 },
                 defaultCompleteMode = ToilCompleteMode.Delay
             };
-            supplyToil.WithProgressBar(SourceInd, () => 1f - ((float)ticksLeftThisToil / maxTick), true, -0.5f);
+            supplyToil.WithProgressBar(SourceInd, () => 1f - (ticksLeftThisToil / maxTick), true);
             supplyToil.EndOnDespawnedOrNull(SourceInd);
             yield return supplyToil;
 

@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using Verse;
-using RimWorld;
 
 namespace MizuMod
 {
     public abstract class Designator_AreaSnowGet : Designator
     {
         private readonly DesignateMode mode;
-
-        public override int DraggableDimensions => 2;
-
-        public override bool DragDrawMeasurements => true;
 
         public Designator_AreaSnowGet(DesignateMode mode)
         {
@@ -26,17 +17,23 @@ namespace MizuMod
             //this.tutorTag = "AreaSnowClear";
         }
 
+        public override int DraggableDimensions => 2;
+
+        public override bool DragDrawMeasurements => true;
+
         public override AcceptanceReport CanDesignateCell(IntVec3 c)
         {
-            if (!c.InBounds(base.Map))
+            if (!c.InBounds(Map))
             {
                 return false;
             }
-            var flag = base.Map.areaManager.SnowGet()[c];
+
+            var flag = Map.areaManager.SnowGet()[c];
             if (mode == DesignateMode.Add)
             {
                 return !flag;
             }
+
             return flag;
         }
 
@@ -44,18 +41,18 @@ namespace MizuMod
         {
             if (mode == DesignateMode.Add)
             {
-                base.Map.areaManager.SnowGet()[c] = true;
+                Map.areaManager.SnowGet()[c] = true;
             }
             else
             {
-                base.Map.areaManager.SnowGet()[c] = false;
+                Map.areaManager.SnowGet()[c] = false;
             }
         }
 
         public override void SelectedUpdate()
         {
             GenUI.RenderMouseoverBracket();
-            base.Map.areaManager.SnowGet().MarkForDraw();
+            Map.areaManager.SnowGet().MarkForDraw();
         }
     }
 }

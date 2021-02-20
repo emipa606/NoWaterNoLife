@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
+using RimWorld;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -18,7 +14,7 @@ namespace MizuMod
         public const float ConsumeWaterVolume = 0.05f;
 
         private IntVec3 MoppingPos => job.GetTarget(MoppingInd).Cell;
-        private ThingWithComps Mop => (ThingWithComps)job.GetTarget(MopInd).Thing;
+        private ThingWithComps Mop => (ThingWithComps) job.GetTarget(MopInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -37,13 +33,14 @@ namespace MizuMod
 
             // ターゲットが掃除対象として不適になっていたらリストから外す
             //Thing系にしか使えない
-            Toil initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(MoppingInd, (lti) => lti.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null);
+            var initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(MoppingInd,
+                lti => lti.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null);
             yield return initExtractTargetFromQueue;
 
             yield return Toils_JobTransforms.SucceedOnNoTargetInQueue(MoppingInd);
 
             // ターゲットキューから次のターゲットを取り出す
-            yield return Toils_JobTransforms.ExtractNextTargetFromQueue(MoppingInd, true);
+            yield return Toils_JobTransforms.ExtractNextTargetFromQueue(MoppingInd);
 
             // ターゲットの元へ移動
             yield return Toils_Goto.GotoCell(MoppingInd, PathEndMode.Touch)
@@ -64,13 +61,13 @@ namespace MizuMod
             {
                 initAction = delegate
                 {
-                // 必要工数の計算
-                ticksLeftThisToil = MoppingTicks;
+                    // 必要工数の計算
+                    ticksLeftThisToil = MoppingTicks;
                 },
                 // 細々とした設定
                 defaultCompleteMode = ToilCompleteMode.Delay
             };
-            mopToil.WithProgressBar(MoppingInd, () => 1f - ((float)ticksLeftThisToil / MoppingTicks), true, -0.5f);
+            mopToil.WithProgressBar(MoppingInd, () => 1f - ((float) ticksLeftThisToil / MoppingTicks), true);
             mopToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             // 掃除中に条件が変更されたら最初に戻る
             mopToil.JumpIf(() =>
@@ -91,12 +88,12 @@ namespace MizuMod
             {
                 initAction = () =>
                 {
-                // モップオブジェクト生成
-                var moppedThing = ThingMaker.MakeThing(MizuDef.Thing_MoppedThing);
+                    // モップオブジェクト生成
+                    var moppedThing = ThingMaker.MakeThing(MizuDef.Thing_MoppedThing);
                     GenSpawn.Spawn(moppedThing, MoppingPos, mopToil.actor.Map);
 
-                // モップから水を減らす
-                var compTool = Mop.GetComp<CompWaterTool>();
+                    // モップから水を減らす
+                    var compTool = Mop.GetComp<CompWaterTool>();
                     compTool.StoredWaterVolume -= ConsumeWaterVolume;
                 },
                 defaultCompleteMode = ToilCompleteMode.Instant
@@ -104,7 +101,8 @@ namespace MizuMod
             yield return finishToil;
 
             // 最初に戻る
-            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue, () => pawn.jobs.curJob.GetTargetQueue(MoppingInd).Count > 0);
+            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue,
+                () => pawn.jobs.curJob.GetTargetQueue(MoppingInd).Count > 0);
 
             // モップを片付ける場所を決める
             yield return Toils_Mizu.TryFindStoreCell(MopInd, MopPlaceInd);

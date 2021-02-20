@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-//using System.Text;
+﻿//using System.Text;
 
+using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -18,7 +16,11 @@ namespace MizuMod
 
         public override ThinkNode DeepCopy(bool resolve = true)
         {
-            var jobGiver_GetWater = base.DeepCopy(resolve) as JobGiver_GetWater;
+            if (!(base.DeepCopy(resolve) is JobGiver_GetWater jobGiver_GetWater))
+            {
+                return null;
+            }
+
             jobGiver_GetWater.minCategory = minCategory;
             return jobGiver_GetWater;
         }
@@ -26,7 +28,7 @@ namespace MizuMod
         public override float GetPriority(Pawn pawn)
         {
             var need_water = pawn.needs.Water();
-            
+
             if (need_water == null)
             {
                 return 0.0f;
@@ -48,20 +50,24 @@ namespace MizuMod
             // 人間＆(プレイヤー派閥or囚人)でない場合は、マップ内に敵がいるかどうかで条件を変更
             // →ポーンの所持品に水が無い場合は1段階先まで我慢させるか？
             // →段階的に対応してバグ対処したい。これは後回し。
-            if (pawn.RaceProps.Humanlike && !(pawn.Faction == Faction.OfPlayer || pawn.IsPrisoner == true))
+            if (!pawn.RaceProps.Humanlike || pawn.Faction == Faction.OfPlayer || pawn.IsPrisoner)
             {
-                foreach (var faction in Find.FactionManager.AllFactionsListForReading)
-                {
-                    var pawnList = pawn.Map.mapPawns.SpawnedPawnsInFaction(faction).Where((p) => !p.IsPrisoner);
+                return 9.4f;
+            }
 
-                    // 敵対派閥のポーンがマップ内に居る場合は脱水症状が出るまで我慢
-                    if (pawn.HostileTo(faction) && pawnList != null && pawnList.Count() > 0)
-                    {
-                        if (need_water.CurCategory <= ThirstCategory.UrgentlyThirsty)
-                        {
-                            return 0.0f;
-                        }
-                    }
+            foreach (var faction in Find.FactionManager.AllFactionsListForReading)
+            {
+                var pawnList = pawn.Map.mapPawns.SpawnedPawnsInFaction(faction).Where(p => !p.IsPrisoner);
+
+                // 敵対派閥のポーンがマップ内に居る場合は脱水症状が出るまで我慢
+                if (!pawn.HostileTo(faction) || !pawnList.Any())
+                {
+                    continue;
+                }
+
+                if (need_water.CurCategory <= ThirstCategory.UrgentlyThirsty)
+                {
+                    return 0.0f;
                 }
             }
 
@@ -70,7 +76,7 @@ namespace MizuMod
 
         protected override Job TryGiveJob(Pawn pawn)
         {
-            Need_Water need_water = pawn.needs.Water();
+            var need_water = pawn.needs.Water();
             if (need_water == null)
             {
                 return null;
@@ -85,7 +91,7 @@ namespace MizuMod
             need_water.lastSearchWaterTick = Find.TickManager.TicksGame;
 
             // 水の供給源を探す
-            Thing thing = MizuUtility.TryFindBestWaterSourceFor(pawn, pawn, false, true);
+            var thing = MizuUtility.TryFindBestWaterSourceFor(pawn, pawn, false);
             if (thing != null)
             {
                 if (thing.CanDrinkWater())
@@ -96,7 +102,8 @@ namespace MizuMod
                         count = MizuUtility.WillGetStackCountOf(pawn, thing)
                     };
                 }
-                else if (thing is IBuilding_DrinkWater)
+
+                if (thing is IBuilding_DrinkWater)
                 {
                     // 水を汲める設備が見つかった
                     return new Job(MizuDef.Job_DrinkWaterFromBuilding, thing);
@@ -105,7 +112,7 @@ namespace MizuMod
 
             // 何も見つからなかった場合は隠し水飲み場を探す
             // 人間、家畜、野生の動物全て
-            if (MizuUtility.TryFindHiddenWaterSpot(pawn, out IntVec3 hiddenWaterSpot))
+            if (MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot))
             {
                 return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot)
                 {

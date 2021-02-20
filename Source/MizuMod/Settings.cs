@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MizuMod
@@ -20,21 +15,22 @@ namespace MizuMod
 
         // 水やりしていない時の肥沃度係数
         private float fertilityFactorInNotWatering;
-        public float FertilityFactorInNotWatering => fertilityFactorInNotWatering;
         private string fertilityFactorInNotWateringBuffer;
 
         // 水やりした時の肥沃度係数
         private float fertilityFactorInWatering;
-        public float FertilityFactorInWatering => fertilityFactorInWatering;
 
-        public Settings() {
-        		fertilityFactorInNotWatering=DefaultFertilityFactorInNotWatering;
-        		fertilityFactorInWatering=DefaultFertilityFactorInWatering;
-        		
-		}
 
-        
         private string fertilityFactorInWateringBuffer;
+
+        public Settings()
+        {
+            fertilityFactorInNotWatering = DefaultFertilityFactorInNotWatering;
+            fertilityFactorInWatering = DefaultFertilityFactorInWatering;
+        }
+
+        public float FertilityFactorInNotWatering => fertilityFactorInNotWatering;
+        public float FertilityFactorInWatering => fertilityFactorInWatering;
 
         public void DoSettingsWindowContents(Rect inRect)
         {
@@ -52,14 +48,9 @@ namespace MizuMod
             }
 
             // 水やりしていない時の肥沃度係数
-            listing_standard.Label(string.Concat(new string[] {
-                MizuStrings.OptionGrowthRateFactorInNotWatering.Translate(),
-                " (",
-                MinFertilityFactorInNotWatering.ToString("F2"),
-                " - ",
-                MaxFertilityFactorInNotWatering.ToString("F2"),
-                ")"
-            }));
+            listing_standard.Label(string.Concat(MizuStrings.OptionGrowthRateFactorInNotWatering.Translate(), " (",
+                MinFertilityFactorInNotWatering.ToString("F2"), " - ", MaxFertilityFactorInNotWatering.ToString("F2"),
+                ")"));
             listing_standard.TextFieldNumeric(
                 ref fertilityFactorInNotWatering,
                 ref fertilityFactorInNotWateringBuffer,
@@ -67,14 +58,8 @@ namespace MizuMod
                 MaxFertilityFactorInNotWatering);
 
             // 水やりした時の肥沃度係数
-            listing_standard.Label(string.Concat(new string[] {
-                MizuStrings.OptionGrowthRateFactorInWatering.Translate(),
-                " (",
-                MinFertilityFactorInWatering.ToString("F2"),
-                " - ",
-                MaxFertilityFactorInWatering.ToString("F2"),
-                ")"
-            }));	
+            listing_standard.Label(string.Concat(MizuStrings.OptionGrowthRateFactorInWatering.Translate(), " (",
+                MinFertilityFactorInWatering.ToString("F2"), " - ", MaxFertilityFactorInWatering.ToString("F2"), ")"));
             listing_standard.TextFieldNumeric(
                 ref fertilityFactorInWatering,
                 ref fertilityFactorInWateringBuffer,
@@ -88,8 +73,10 @@ namespace MizuMod
         {
             base.ExposeData();
 
-            Scribe_Values.Look(ref fertilityFactorInNotWatering, "fertilityFactorInNotWatering", DefaultFertilityFactorInNotWatering);
-            Scribe_Values.Look(ref fertilityFactorInWatering, "fertilityFactorInWatering", DefaultFertilityFactorInWatering);
+            Scribe_Values.Look(ref fertilityFactorInNotWatering, "fertilityFactorInNotWatering",
+                DefaultFertilityFactorInNotWatering);
+            Scribe_Values.Look(ref fertilityFactorInWatering, "fertilityFactorInWatering",
+                DefaultFertilityFactorInWatering);
         }
     }
 }

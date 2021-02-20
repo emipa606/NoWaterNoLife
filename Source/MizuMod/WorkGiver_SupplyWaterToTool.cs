@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -13,7 +8,8 @@ namespace MizuMod
     {
         public override PathEndMode PathEndMode => PathEndMode.Touch;
 
-        public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial);
+        public override ThingRequest PotentialWorkThingRequest =>
+            ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial);
 
         public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
@@ -60,7 +56,8 @@ namespace MizuMod
             }
 
             // 水ツールチェック
-            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).FindAll((thing) => thing.TryGetComp<CompWaterTool>() != null);
+            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways)
+                .FindAll(thing => thing.TryGetComp<CompWaterTool>() != null);
 
             // 一番近いツールを使う
             Thing minTool = null;
@@ -86,7 +83,7 @@ namespace MizuMod
                 }
 
                 // 設備の水が足りない
-                if ((compTool.MaxWaterVolume - compTool.StoredWaterVolume) > sourceBuilding.WaterVolume)
+                if (compTool.MaxWaterVolume - compTool.StoredWaterVolume > sourceBuilding.WaterVolume)
                 {
                     continue;
                 }
@@ -105,11 +102,13 @@ namespace MizuMod
 
                 // 距離チェック
                 float dist = (tool.Position - pawn.Position).LengthHorizontalSquared;
-                if (minDist > dist)
+                if (!(minDist > dist))
                 {
-                    minDist = dist;
-                    minTool = tool;
+                    continue;
                 }
+
+                minDist = dist;
+                minTool = tool;
             }
 
             if (minTool == null)

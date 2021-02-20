@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
+using RimWorld;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -18,7 +14,7 @@ namespace MizuMod
         public const float ConsumeWaterVolume = 1f;
 
         private IntVec3 WateringPos => job.GetTarget(WateringInd).Cell;
-        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
+        private ThingWithComps Tool => (ThingWithComps) job.GetTarget(ToolInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -36,7 +32,7 @@ namespace MizuMod
             yield return Toils_Haul.StartCarryThing(ToolInd);
 
             // ターゲットが水やり対象として不適になっていたらリストから外す
-            Toil initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(WateringInd, (lti) =>
+            var initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(WateringInd, lti =>
             {
                 var mapComp = Map.GetComponent<MapComponent_Watering>();
                 return mapComp.Get(Map.cellIndices.CellToIndex(lti.Cell)) > 0;
@@ -46,7 +42,7 @@ namespace MizuMod
             yield return Toils_JobTransforms.SucceedOnNoTargetInQueue(WateringInd);
 
             // ターゲットキューから次のターゲットを取り出す
-            yield return Toils_JobTransforms.ExtractNextTargetFromQueue(WateringInd, true);
+            yield return Toils_JobTransforms.ExtractNextTargetFromQueue(WateringInd);
 
             // ターゲットの元へ移動
             yield return Toils_Goto.GotoCell(WateringInd, PathEndMode.Touch);
@@ -56,13 +52,13 @@ namespace MizuMod
             {
                 initAction = delegate
                 {
-                // 必要工数の計算
-                ticksLeftThisToil = WorkingTicks;
+                    // 必要工数の計算
+                    ticksLeftThisToil = WorkingTicks;
                 },
                 // 細々とした設定
                 defaultCompleteMode = ToilCompleteMode.Delay
             };
-            workToil.WithProgressBar(WateringInd, () => 1f - ((float)ticksLeftThisToil / WorkingTicks), true, -0.5f);
+            workToil.WithProgressBar(WateringInd, () => 1f - ((float) ticksLeftThisToil / WorkingTicks), true);
             workToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             yield return workToil;
 
@@ -71,13 +67,13 @@ namespace MizuMod
             {
                 initAction = () =>
                 {
-                // 水やり更新
-                var mapComp = Map.GetComponent<MapComponent_Watering>();
+                    // 水やり更新
+                    var mapComp = Map.GetComponent<MapComponent_Watering>();
                     mapComp.Set(Map.cellIndices.CellToIndex(WateringPos), MapComponent_Watering.MaxWateringValue);
                     Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlag.Terrain;
 
-                // ツールから水を減らす
-                var compTool = Tool.GetComp<CompWaterTool>();
+                    // ツールから水を減らす
+                    var compTool = Tool.GetComp<CompWaterTool>();
                     compTool.StoredWaterVolume -= ConsumeWaterVolume;
                 },
                 defaultCompleteMode = ToilCompleteMode.Instant
@@ -85,7 +81,8 @@ namespace MizuMod
             yield return finishToil;
 
             // 最初に戻る
-            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue, () => pawn.jobs.curJob.GetTargetQueue(WateringInd).Count > 0);
+            yield return Toils_Jump.JumpIf(initExtractTargetFromQueue,
+                () => pawn.jobs.curJob.GetTargetQueue(WateringInd).Count > 0);
 
             // ツールを片付ける場所を決める
             yield return Toils_Mizu.TryFindStoreCell(ToolInd, ToolPlaceInd);

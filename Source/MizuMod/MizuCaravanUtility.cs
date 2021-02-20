@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-
-using UnityEngine;
 using RimWorld;
 using RimWorld.Planet;
+using UnityEngine;
 using Verse;
 
 namespace MizuMod
@@ -21,9 +18,12 @@ namespace MizuMod
         // 水が無いかどうかの判断閾値(単位：日数)
         private const float DaysWorthOfNoWaterThreshold = 0.1f;
 
+        public static bool daysWorthOfWaterDirty = true;
+        private static float cachedDaysWorthOfWater;
+
         public static bool TryGetBestWater(Caravan caravan, Pawn forPawn, out Thing water, out Pawn owner)
         {
-            List<Thing> inventoryThings = CaravanInventoryUtility.AllInventoryItems(caravan);
+            var inventoryThings = CaravanInventoryUtility.AllInventoryItems(caravan);
             Thing foundThing = null;
             var bestScore = float.MinValue;
 
@@ -31,12 +31,12 @@ namespace MizuMod
             foreach (var thing in inventoryThings)
             {
                 // それが飲めるものかどうか
-                if (!MizuCaravanUtility.CanNowGetWater(thing, forPawn))
+                if (!CanNowGetWater(thing, forPawn))
                 {
                     continue;
                 }
 
-                var waterScore = MizuCaravanUtility.GetWaterScore(thing, forPawn);
+                var waterScore = GetWaterScore(thing);
 
                 // 今まで見つけたベストスコアを超えたか
                 if (bestScore >= waterScore)
@@ -62,78 +62,97 @@ namespace MizuMod
             return false;
         }
 
-        public static bool CanNowGetWater(Thing water, Pawn pawn)
+        private static bool CanNowGetWater(Thing water, Pawn pawn)
         {
-            return !water.IngestibleNow && water.CanDrinkWaterNow() && MizuCaravanUtility.CanEverGetWater(water, pawn) && (pawn.needs.Water().CurCategory >= ThirstCategory.Dehydration || water.GetWaterPreferability() > WaterPreferability.NeverDrink);
+            return !water.IngestibleNow && water.CanDrinkWaterNow() && CanEverGetWater(water) &&
+                   (pawn.needs.Water().CurCategory >= ThirstCategory.Dehydration ||
+                    water.GetWaterPreferability() > WaterPreferability.NeverDrink);
         }
 
-        public static bool CanEverGetWater(Thing water, Pawn pawn)
+        private static bool CanEverGetWater(Thing water)
         {
-            return water.CanGetWater() && (water.GetWaterPreferability() > WaterPreferability.NeverDrink);
+            return water.CanGetWater() && water.GetWaterPreferability() > WaterPreferability.NeverDrink;
         }
 
-        public static bool CanEverGetWater(ThingDef water, Pawn pawn)
+        public static bool CanEverGetWater(ThingDef water)
         {
             var compprop = water.GetCompProperties<CompProperties_WaterSource>();
 
-            return compprop != null && compprop.waterAmount > 0.0f && compprop.waterType >= WaterType.SeaWater && compprop.waterType <= WaterType.ClearWater;
+            return compprop != null && compprop.waterAmount > 0.0f && compprop.waterType >= WaterType.SeaWater &&
+                   compprop.waterType <= WaterType.ClearWater;
         }
 
-        public static float GetWaterScore(Thing water, Pawn pawn)
+        private static float GetWaterScore(Thing water)
         {
-            return (float)water.GetWaterPreferability();
+            return (float) water.GetWaterPreferability();
         }
 
-        public static float GetWaterScore(ThingDef water, Pawn pawn)
+        public static float GetWaterScore(ThingDef water)
         {
             var compprop = water.GetCompProperties<CompProperties_WaterSource>();
             if (compprop != null)
             {
-                return (float)compprop.waterType;
+                return (float) compprop.waterType;
             }
+
             return 0.0f;
         }
 
-        public static bool daysWorthOfWaterDirty = true;
-        private static float cachedDaysWorthOfWater;
-        
-        public  static float DaysWorthOfWater() {
-        	return cachedDaysWorthOfWater;
+        public static float DaysWorthOfWater()
+        {
+            return cachedDaysWorthOfWater;
         }
-        
+
         public static float DaysWorthOfWater_FormCaravan(Dialog_FormCaravan dialog)
         {
-            if (MizuCaravanUtility.daysWorthOfWaterDirty)
+            if (!daysWorthOfWaterDirty)
             {
-                MizuCaravanUtility.daysWorthOfWaterDirty = false;
-                MizuCaravanUtility.cachedDaysWorthOfWater = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(dialog.transferables, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload);
+                return cachedDaysWorthOfWater;
             }
-            return MizuCaravanUtility.cachedDaysWorthOfWater;
+
+            daysWorthOfWaterDirty = false;
+            cachedDaysWorthOfWater = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(dialog.transferables,
+                IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload);
+
+            return cachedDaysWorthOfWater;
         }
+
         public static float DaysWorthOfWater_LoadTransporters(List<TransferableOneWay> transferables)
         {
             //if (MizuCaravanUtility.daysWorthOfWaterDirty)
             //{
-                MizuCaravanUtility.daysWorthOfWaterDirty = false;
-                MizuCaravanUtility.cachedDaysWorthOfWater = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(transferables, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload);
+            daysWorthOfWaterDirty = false;
+            cachedDaysWorthOfWater = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(transferables,
+                IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload);
             //}
-            return MizuCaravanUtility.cachedDaysWorthOfWater;
-        }
-        public static float DaysWorthOfWater_Trade(List<Thing> playerCaravanAllPawnsAndItems, List<Tradeable> tradeables)
-        {
-            if (MizuCaravanUtility.daysWorthOfWaterDirty)
-            {
-                MizuCaravanUtility.daysWorthOfWaterDirty = false;
-                MizuCaravanUtility.cachedDaysWorthOfWater = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWaterLeftAfterTradeableTransfer(playerCaravanAllPawnsAndItems, tradeables, IgnorePawnsInventoryMode.Ignore);
-            }
-            return MizuCaravanUtility.cachedDaysWorthOfWater;
-        }
-        
-        public static void DrawDaysWorthOfWater(List<TransferableUIUtility.ExtraInfo> info) {
-        	info.Add(new TransferableUIUtility.ExtraInfo(MizuStrings.WaterUILabel.Translate(), cachedDaysWorthOfWater.ToString("0.#"), Color.white, MizuStrings.LabelDaysWorthOfWaterTooltip.Translate(), -9999f));
+            return cachedDaysWorthOfWater;
         }
 
-        public static void DrawDaysWorthOfWaterInfo(Rect rect, float daysWorthOfWater, bool alignRight = false, float truncToWidth = float.MaxValue)
+        public static float DaysWorthOfWater_Trade(List<Thing> playerCaravanAllPawnsAndItems,
+            List<Tradeable> tradeables)
+        {
+            if (!daysWorthOfWaterDirty)
+            {
+                return cachedDaysWorthOfWater;
+            }
+
+            daysWorthOfWaterDirty = false;
+            cachedDaysWorthOfWater =
+                DaysWorthOfWaterCalculator.ApproxDaysWorthOfWaterLeftAfterTradeableTransfer(
+                    playerCaravanAllPawnsAndItems, tradeables, IgnorePawnsInventoryMode.Ignore);
+
+            return cachedDaysWorthOfWater;
+        }
+
+        public static void DrawDaysWorthOfWater(List<TransferableUIUtility.ExtraInfo> info)
+        {
+            info.Add(new TransferableUIUtility.ExtraInfo(MizuStrings.WaterUILabel.Translate(),
+                cachedDaysWorthOfWater.ToString("0.#"), Color.white,
+                MizuStrings.LabelDaysWorthOfWaterTooltip.Translate()));
+        }
+
+        public static void DrawDaysWorthOfWaterInfo(Rect rect, float daysWorthOfWater, bool alignRight = false,
+            float truncToWidth = float.MaxValue)
         {
             GUI.color = Color.gray;
             string originalText;
@@ -146,7 +165,8 @@ namespace MizuMod
             else
             {
                 // 大量には無い
-                originalText = string.Format(MizuStrings.LabelDaysWorthOfWaterInfo.Translate(), daysWorthOfWater.ToString("0.#"));
+                originalText = string.Format(MizuStrings.LabelDaysWorthOfWaterInfo.Translate(),
+                    daysWorthOfWater.ToString("0.#"));
             }
 
             var truncText = originalText;
@@ -154,22 +174,15 @@ namespace MizuMod
             {
                 // 表示幅指定がある場合、幅をオーバーしていたら「...」で省略する
                 // オーバーしていなければオリジナルテキストが返ってくる？
-                truncText = originalText.Truncate(truncToWidth, null);
+                truncText = originalText.Truncate(truncToWidth);
             }
 
             // 省略テキストの描画サイズ
-            Vector2 truncTextSize = Text.CalcSize(truncText);
+            var truncTextSize = Text.CalcSize(truncText);
             Rect truncTextRect;
-            if (alignRight)
-            {
-                // 描画領域指定(右寄せ)
-                truncTextRect = new Rect(rect.xMax - truncTextSize.x, rect.y, truncTextSize.x, truncTextSize.y);
-            }
-            else
-            {
-                // 描画領域指定(左寄せ)
-                truncTextRect = new Rect(rect.x, rect.y, truncTextSize.x, truncTextSize.y);
-            }
+            truncTextRect = alignRight
+                ? new Rect(rect.xMax - truncTextSize.x, rect.y, truncTextSize.x, truncTextSize.y)
+                : new Rect(rect.x, rect.y, truncTextSize.x, truncTextSize.y);
 
             // ラベル生成
             Widgets.Label(truncTextRect, truncText);
@@ -199,31 +212,36 @@ namespace MizuMod
                 stringBuilder.AppendLine();
                 stringBuilder.Append(MizuStrings.InspectCaravanOutOfWater.Translate());
 
-                if (!worstDehydrationText.NullOrEmpty())
+                if (worstDehydrationText.NullOrEmpty())
                 {
-                    // 脱水症状のテキストがあるならそれも追加
-                    stringBuilder.Append(" ");
-                    stringBuilder.Append(worstDehydrationText);
-                    stringBuilder.Append(".");
+                    return;
                 }
+
+                // 脱水症状のテキストがあるならそれも追加
+                stringBuilder.Append(" ");
+                stringBuilder.Append(worstDehydrationText);
+                stringBuilder.Append(".");
             }
             else
             {
                 // 水不足のポーンがいないなら、総量をチェック
                 var daysWorthOfWater = DaysWorthOfWaterCalculator.ApproxDaysWorthOfWater(c);
-                if (daysWorthOfWater < InfiniteDaysWorthOfWaterThreshold)
+                if (!(daysWorthOfWater < InfiniteDaysWorthOfWaterThreshold))
                 {
-                    // 水は大量というわけでないなら、水残量を表示
-                    stringBuilder.AppendLine();
-                    stringBuilder.Append(string.Format(MizuStrings.InspectCaravanDaysOfWater.Translate(), daysWorthOfWater.ToString("0.#")));
+                    return;
                 }
+
+                // 水は大量というわけでないなら、水残量を表示
+                stringBuilder.AppendLine();
+                stringBuilder.Append(string.Format(MizuStrings.InspectCaravanDaysOfWater.Translate(),
+                    daysWorthOfWater.ToString("0.#")));
             }
         }
 
-        public static bool AnyPawnOutOfWater(Caravan c, out string worstDehydrationText)
+        private static bool AnyPawnOutOfWater(Caravan c, out string worstDehydrationText)
         {
             // キャラバンの全所持品の水アイテムリスト作成
-            List<Thing> tmpInvWater = CaravanInventoryUtility.AllInventoryItems(c).FindAll((t) => t.CanGetWater());
+            var tmpInvWater = CaravanInventoryUtility.AllInventoryItems(c).FindAll(t => t.CanGetWater());
 
             var allFoundWaterItem = true;
 
@@ -243,7 +261,7 @@ namespace MizuMod
                 }
 
                 // そのポーンが飲める水があるなら良し
-                if (tmpInvWater.Exists((t) => MizuCaravanUtility.CanEverGetWater(t.def, pawn)))
+                if (tmpInvWater.Exists(t => CanEverGetWater(t.def)))
                 {
                     continue;
                 }
@@ -268,18 +286,20 @@ namespace MizuMod
             foreach (var pawn in c.PawnsListForReading)
             {
                 // 脱水症状の健康状態を持っているか
-                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration, false);
+                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration);
                 if (hediff == null)
                 {
                     continue;
                 }
 
-                if (maxHediffText == null || maxHediffStageIndex < hediff.CurStageIndex)
+                if (maxHediffText != null && maxHediffStageIndex >= hediff.CurStageIndex)
                 {
-                    // 最悪状態なら更新
-                    maxHediffStageIndex = hediff.CurStageIndex;
-                    maxHediffText = hediff.LabelCap;
+                    continue;
                 }
+
+                // 最悪状態なら更新
+                maxHediffStageIndex = hediff.CurStageIndex;
+                maxHediffText = hediff.LabelCap;
             }
 
             // 最悪の脱水症状テキストを返す
@@ -291,20 +311,22 @@ namespace MizuMod
         {
             var daysWorthOfWater = DaysWorthOfWater_FormCaravan(dialog);
 
-            if (daysWorthOfWater < DaysWorthOfWaterWarningBeforeLeavingThreshold)
+            if (!(daysWorthOfWater < DaysWorthOfWaterWarningBeforeLeavingThreshold))
             {
-                // キャラバン出発前の警告ダイアログに表示が必要な状態である
+                return;
+            }
+            // キャラバン出発前の警告ダイアログに表示が必要な状態である
 
-                if (daysWorthOfWater >= DaysWorthOfNoWaterThreshold)
-                {
-                    // 少しはある
-                    strList.Add(string.Format(MizuStrings.LabelDaysWorthOfWaterWarningDialog.Translate(), daysWorthOfWater.ToString("0.#")));
-                }
-                else
-                {
-                    // 全く水を持っていない
-                    strList.Add(MizuStrings.LabelDaysWorthOfWaterWarningDialog_NoWater.Translate());
-                }
+            if (daysWorthOfWater >= DaysWorthOfNoWaterThreshold)
+            {
+                // 少しはある
+                strList.Add(string.Format(MizuStrings.LabelDaysWorthOfWaterWarningDialog.Translate(),
+                    daysWorthOfWater.ToString("0.#")));
+            }
+            else
+            {
+                // 全く水を持っていない
+                strList.Add(MizuStrings.LabelDaysWorthOfWaterWarningDialog_NoWater.Translate());
             }
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MizuMod
@@ -13,7 +9,7 @@ namespace MizuMod
 
         public MizuModBody(ModContentPack content) : base(content)
         {
-            MizuModBody.Settings = base.GetSettings<Settings>();
+            Settings = GetSettings<Settings>();
         }
 
         public override string SettingsCategory()
@@ -23,7 +19,7 @@ namespace MizuMod
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            MizuModBody.Settings.DoSettingsWindowContents(inRect);
+            Settings.DoSettingsWindowContents(inRect);
         }
     }
 }

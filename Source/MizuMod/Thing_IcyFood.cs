@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using RimWorld;
-using Verse;
+﻿using Verse;
 
 namespace MizuMod
 {
@@ -19,11 +13,8 @@ namespace MizuMod
             // 外気温が一定の温度以上→暑い季節
             if (ingester.Map.mapTemperature.OutdoorTemp > BorderTemperature)
             {
-                if (ingester.needs.mood != null)
-                {
-                    // 暑い季節に氷菓を食べた
-                    ingester.needs.mood.thoughts.memories.TryGainMemory(MizuDef.Thought_AteIcyFoodInHotSeason);
-                }
+                // 暑い季節に氷菓を食べた
+                ingester.needs.mood?.thoughts.memories.TryGainMemory(MizuDef.Thought_AteIcyFoodInHotSeason);
             }
         }
     }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -18,10 +14,11 @@ namespace MizuMod
 
         private ThingWithComps WaterThing => TargetA.Thing as ThingWithComps;
         private Pawn Patient => TargetB.Thing as Pawn;
+
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref getItemFromInventory, "getItemFromInventory");
+            Scribe_Values.Look(ref getItemFromInventory, "getItemFromInventory");
         }
 
         public override void Notify_Starting()
@@ -42,8 +39,8 @@ namespace MizuMod
             // ターゲットがThing=水アイテムを摂取する場合
 
             // 水(食事)が使用不可能になったらFail
-            ToilFailConditions.FailOnDestroyedNullOrForbidden(this, WaterIndex);
-            ToilFailConditions.FailOn(this, () =>
+            this.FailOnDestroyedNullOrForbidden(WaterIndex);
+            this.FailOn(() =>
             {
                 if (Patient == null)
                 {
@@ -66,7 +63,7 @@ namespace MizuMod
             });
 
             // 水が予約出来ない状態なら中断
-            if (!ReservationUtility.CanReserveAndReach(pawn, TargetA, PathEndMode.Touch, Danger.Deadly, 1, job.count, null, false))
+            if (!pawn.CanReserveAndReach(TargetA, PathEndMode.Touch, Danger.Deadly, 1, job.count))
             {
                 GetActor().jobs.EndCurrentJob(JobCondition.Incompletable);
                 yield break;
@@ -75,7 +72,7 @@ namespace MizuMod
             // 水を予約する
             if (!pawn.Map.reservationManager.ReservedBy(TargetA.Thing, pawn))
             {
-                yield return Toils_Reserve.Reserve(WaterIndex, 1, job.count, null);
+                yield return Toils_Reserve.Reserve(WaterIndex, 1, job.count);
             }
 
             if (getItemFromInventory)

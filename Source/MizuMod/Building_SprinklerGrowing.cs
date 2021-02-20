@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Verse;
 using RimWorld;
+using Verse;
 
 namespace MizuMod
 {
-    public class Building_SprinklerGrowing : Building_WaterNet, IBuilding_WaterNet
+    public class Building_SprinklerGrowing : Building_WaterNet
     {
-        private CompPowerTrader compPowerTrader;
-        private CompSchedule compSchedule;
-
         private const float UseWaterVolumePerOne = 0.1f;
         private const int ExtinguishPower = 50;
+        private CompPowerTrader compPowerTrader;
+        private CompSchedule compSchedule;
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
@@ -36,14 +32,15 @@ namespace MizuMod
                 if (InputWaterNet != null)
                 {
                     // 水やり範囲
-                    var cells = GenRadial.RadialCellsAround(base.Position, def.specialDisplayRadius, true);
+                    var cells = GenRadial.RadialCellsAround(Position, def.specialDisplayRadius, true);
 
                     // 設備の置かれた部屋
                     var room = Position.GetRoom(Map);
 
                     // 設備と同じ部屋に属するセル(肥沃度あり)
                     // 暫定で植木鉢は無効とする
-                    var sameRoomCells = cells.Where((c) => c.GetRoom(Map) == room && Map.terrainGrid.TerrainAt(c).fertility >= 0.01f);
+                    var sameRoomCells = cells.Where(c =>
+                        c.GetRoom(Map) == room && Map.terrainGrid.TerrainAt(c).fertility >= 0.01f);
 
                     var wateringComp = Map.GetComponent<MapComponent_Watering>();
 
@@ -67,15 +64,16 @@ namespace MizuMod
                             Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
 
                             // 水やりエフェクト(仮)
-                            var mote = (MoteThrown)ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
+                            var mote = (MoteThrown) ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
                             //mote.Scale = 1f;
                             //mote.rotationRate = (float)(Rand.Chance(0.5f) ? -30 : 30);
                             mote.exactPosition = c.ToVector3Shifted();
-                            GenSpawn.Spawn(mote, c, base.Map);
+                            GenSpawn.Spawn(mote, c, Map);
 
                             // 消火効果(仮)
                             // 複製しないとダメージを受けて消えた時点で元のリストから除外されてエラーになる
-                            var fireList = new List<Fire>(Map.thingGrid.ThingsListAt(c).Where((t) => t is Fire).Select((t) => t as Fire));
+                            var fireList = new List<Fire>(Map.thingGrid.ThingsListAt(c)
+                                .OfType<Fire>());
                             foreach (var fire in fireList)
                             {
                                 fire.TakeDamage(new DamageInfo(DamageDefOf.Extinguish, ExtinguishPower));
@@ -86,7 +84,6 @@ namespace MizuMod
             }
 
             ResetPowerOutput();
-
         }
 
         private void ResetPowerOutput()

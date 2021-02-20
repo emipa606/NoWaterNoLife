@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Text;
 using Verse;
 
 namespace MizuMod
 {
     public class CompWaterNetOutput : CompWaterNet
     {
-        public new CompProperties_WaterNetOutput Props => (CompProperties_WaterNetOutput)props;
+        public CompWaterNetOutput()
+        {
+            OutputWaterType = WaterType.NoWater;
+        }
+
+        public new CompProperties_WaterNetOutput Props => (CompProperties_WaterNetOutput) props;
 
         protected virtual float MaxOutputWaterFlow => Props.maxOutputWaterFlow;
         protected virtual WaterType ForceOutputWaterType => Props.forceOutputWaterType;
-        protected virtual CompProperties_WaterNetOutput.OutputWaterFlowType OutputWaterFlowType => Props.outputWaterFlowType;
+
+        protected virtual CompProperties_WaterNetOutput.OutputWaterFlowType OutputWaterFlowType =>
+            Props.outputWaterFlowType;
 
         public float OutputWaterFlow { get; set; }
         public WaterType OutputWaterType { get; set; }
@@ -24,11 +27,6 @@ namespace MizuMod
         public override bool IsActivated => base.IsActivated && (!HasTank || !TankIsEmpty);
 
         public bool FoundEffectiveInputter { get; private set; }
-
-        public CompWaterNetOutput() : base()
-        {
-            OutputWaterType = WaterType.NoWater;
-        }
 
         public override void CompTick()
         {
@@ -80,7 +78,8 @@ namespace MizuMod
                 }
 
                 // 入力機能が無効、または水道網から入力しないタイプは無効
-                if (t.InputComp == null || !t.InputComp.IsActivated || !t.InputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+                if (t.InputComp == null || !t.InputComp.IsActivated ||
+                    !t.InputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
                 {
                     continue;
                 }
@@ -122,20 +121,22 @@ namespace MizuMod
 
                 // 基本は入力されている水質をそのまま出力とする
                 // 出力の水質が強制されている場合はその水質にする
-                WaterType outWaterType = InputComp.InputWaterType;
+                var outWaterType = InputComp.InputWaterType;
                 if (ForceOutputWaterType != WaterType.Undefined)
                 {
                     outWaterType = ForceOutputWaterType;
                 }
 
-                if (OutputWaterFlowType == CompProperties_WaterNetOutput.OutputWaterFlowType.Constant && InputComp.InputWaterFlow >= MaxOutputWaterFlow)
+                if (OutputWaterFlowType == CompProperties_WaterNetOutput.OutputWaterFlowType.Constant &&
+                    InputComp.InputWaterFlow >= MaxOutputWaterFlow)
                 {
                     // 定量出力タイプで、入力が出力量を超えている場合、機能する
                     OutputWaterType = outWaterType;
                     OutputWaterFlow = MaxOutputWaterFlow;
                     return;
                 }
-                else if (OutputWaterFlowType == CompProperties_WaterNetOutput.OutputWaterFlowType.Any)
+
+                if (OutputWaterFlowType == CompProperties_WaterNetOutput.OutputWaterFlowType.Any)
                 {
                     // 任意出力タイプの場合、入力と同じ量だけ出力する
                     OutputWaterType = outWaterType;
@@ -165,12 +166,14 @@ namespace MizuMod
             {
                 stringBuilder.AppendLine();
             }
-            stringBuilder.Append(MizuStrings.InspectWaterFlowOutput.Translate() + ": " + OutputWaterFlow.ToString("F2") + " L/day");
-            stringBuilder.Append(string.Concat(new string[]
+
+            stringBuilder.Append(MizuStrings.InspectWaterFlowOutput.Translate() + ": " +
+                                 OutputWaterFlow.ToString("F2") + " L/day");
+            stringBuilder.Append(string.Concat(new[]
             {
                 "(",
                 MizuStrings.GetInspectWaterTypeString(OutputWaterType),
-                ")",
+                ")"
             }));
 
             return stringBuilder.ToString();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Verse;
+﻿using System.Collections.Generic;
 using Verse.AI;
 
 namespace MizuMod
@@ -21,7 +16,7 @@ namespace MizuMod
         protected override IEnumerable<Toil> MakeNewToils()
         {
             var drawer = job.targetA.Thing;
-            PathEndMode peMode = drawer.def.hasInteractionCell ? PathEndMode.InteractionCell : PathEndMode.ClosestTouch;
+            var peMode = drawer.def.hasInteractionCell ? PathEndMode.InteractionCell : PathEndMode.ClosestTouch;
 
             yield return Toils_Goto.GotoThing(DrawerIndex, peMode);
 

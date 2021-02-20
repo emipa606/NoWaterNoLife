@@ -1,37 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using System.Text;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MizuMod
 {
     public class CompLatentHeat : ThingComp
     {
-        public CompProperties_LatentHeat Props => (CompProperties_LatentHeat)props;
-
-        public ThingDef ChangedThingDef => Props.changedThingDef;
-
-        public float TemperatureThreshold => Props.temperatureThreshold;
-
-        public CompProperties_LatentHeat.AddCondition AddLatentHeatCondition => Props.addLatentHeatCondition;
-
-        public float LatentHeatThreshold => Props.latentHeatThreshold;
+        // 隠し腐敗度
+        private float hiddenRotProgress;
 
         // 潜熱値
         private float latentHeatAmount;
-        public float LatentHeatAmount
+        private CompProperties_LatentHeat Props => (CompProperties_LatentHeat) props;
+
+        private ThingDef ChangedThingDef => Props.changedThingDef;
+
+        private float TemperatureThreshold => Props.temperatureThreshold;
+
+        private CompProperties_LatentHeat.AddCondition AddLatentHeatCondition => Props.addLatentHeatCondition;
+
+        private float LatentHeatThreshold => Props.latentHeatThreshold;
+
+        private float LatentHeatAmount
         {
             get => latentHeatAmount;
             set => latentHeatAmount = Mathf.Max(0f, value);
         }
 
-        // 隠し腐敗度
-        private float hiddenRotProgress;
-        public float HiddenRotProgress
+        private float HiddenRotProgress
         {
             get => hiddenRotProgress;
             set => hiddenRotProgress = value;
@@ -73,30 +70,32 @@ namespace MizuMod
             // (最後はデバッグ用の係数を掛けている)
             LatentHeatAmount += deltaTemperature * direction * MizuDef.GlobalSettings.forDebug.latentHeatRate;
 
-            if (latentHeatAmount >= LatentHeatThreshold)
+            if (!(latentHeatAmount >= LatentHeatThreshold))
             {
-                // 潜熱値が閾値を超えた時の処理
-                var map = parent.Map;
-                var owner = parent.holdingOwner;
-
-                if (ChangedThingDef == null)
-                {
-                    // 変化後アイテムの設定が無い場合は消滅
-                    DestroyParent(map, owner);
-                    return;
-                }
-
-                // 変化後のアイテムを生成
-                var changedThing = ThingMaker.MakeThing(ChangedThingDef);
-                changedThing.stackCount = parent.stackCount;
-
-                // 腐敗度の処理
-                SetRotProgress(changedThing, GetRotProgress());
-
-                // 消滅と生成
-                DestroyParent(map, owner);
-                CreateNewThing(changedThing, map, owner);
+                return;
             }
+
+            // 潜熱値が閾値を超えた時の処理
+            var map = parent.Map;
+            var owner = parent.holdingOwner;
+
+            if (ChangedThingDef == null)
+            {
+                // 変化後アイテムの設定が無い場合は消滅
+                DestroyParent(map, owner);
+                return;
+            }
+
+            // 変化後のアイテムを生成
+            var changedThing = ThingMaker.MakeThing(ChangedThingDef);
+            changedThing.stackCount = parent.stackCount;
+
+            // 腐敗度の処理
+            SetRotProgress(changedThing, GetRotProgress());
+
+            // 消滅と生成
+            DestroyParent(map, owner);
+            CreateNewThing(changedThing, map, owner);
         }
 
         public override void PreAbsorbStack(Thing otherStack, int count)
@@ -104,7 +103,7 @@ namespace MizuMod
             base.PreAbsorbStack(otherStack, count);
 
             // 全体に対するother側の割合
-            var otherRatio = (float)count / (float)(parent.stackCount + count);
+            var otherRatio = count / (float) (parent.stackCount + count);
 
             var otherComp = otherStack.TryGetComp<CompLatentHeat>();
             if (otherComp == null)
@@ -130,16 +129,19 @@ namespace MizuMod
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(base.CompInspectStringExtra());
 
-            if (DebugSettings.godMode)
+            if (!DebugSettings.godMode)
             {
-                if (stringBuilder.ToString() != string.Empty)
-                {
-                    stringBuilder.AppendLine();
-                }
-                stringBuilder.Append("LatentHeatAmount:" + latentHeatAmount.ToString("F2"));
-                stringBuilder.AppendLine();
-                stringBuilder.Append("HiddenRotProgress:" + hiddenRotProgress.ToString());
+                return stringBuilder.ToString();
             }
+
+            if (stringBuilder.ToString() != string.Empty)
+            {
+                stringBuilder.AppendLine();
+            }
+
+            stringBuilder.Append("LatentHeatAmount:" + latentHeatAmount.ToString("F2"));
+            stringBuilder.AppendLine();
+            stringBuilder.Append("HiddenRotProgress:" + hiddenRotProgress);
             //if (stringBuilder.ToString() != string.Empty)
             //{
             //    stringBuilder.AppendLine();
@@ -164,14 +166,15 @@ namespace MizuMod
                 return;
             }
 
-            if (owner != null)
+            if (owner == null)
             {
-                // 何らかの物の中に入っている場合
-                if (owner.TryAdd(thing) == false)
-                {
-                    Log.Error("failed TryAdd");
-                }
                 return;
+            }
+
+            // 何らかの物の中に入っている場合
+            if (owner.TryAdd(thing) == false)
+            {
+                Log.Error("failed TryAdd");
             }
         }
 
@@ -180,17 +183,18 @@ namespace MizuMod
             if (map != null)
             {
                 // マップに落ちている場合
-                parent.Destroy(DestroyMode.Vanish);
+                parent.Destroy();
                 return;
             }
 
-            if (owner != null)
+            if (owner == null)
             {
-                // 何らかの物の中に入っている場合
-                owner.Remove(parent);
-                parent.Destroy(DestroyMode.Vanish);
                 return;
             }
+
+            // 何らかの物の中に入っている場合
+            owner.Remove(parent);
+            parent.Destroy();
         }
 
         private float GetRotProgress()
@@ -202,11 +206,9 @@ namespace MizuMod
                 // 腐敗度がないなら隠し腐敗度を返す
                 return hiddenRotProgress;
             }
-            else
-            {
-                // 腐敗度があるならその値を返す
-                return compRotThis.RotProgress;
-            }
+
+            // 腐敗度があるならその値を返す
+            return compRotThis.RotProgress;
         }
 
         private void SetRotProgress(Thing thing, float rotProgress)

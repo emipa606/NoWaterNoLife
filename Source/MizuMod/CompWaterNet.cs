@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace MizuMod
@@ -20,27 +15,22 @@ namespace MizuMod
 
         public virtual bool IsActivated => WaterNetBuilding.IsActivated;
 
-        public virtual bool IsActivatedForWaterNet => WaterNetBuilding.IsActivatedForWaterNet;
+        protected bool IsActivatedForWaterNet => WaterNetBuilding.IsActivatedForWaterNet;
 
-        public CompProperties_WaterNet Props => (CompProperties_WaterNet)props;
+        public CompProperties_WaterNet Props => (CompProperties_WaterNet) props;
 
-        public IBuilding_WaterNet WaterNetBuilding => parent as IBuilding_WaterNet;
+        protected IBuilding_WaterNet WaterNetBuilding => parent as IBuilding_WaterNet;
 
-        public MapComponent_WaterNetManager WaterNetManager => parent.Map.GetComponent<MapComponent_WaterNetManager>();
+        private MapComponent_WaterNetManager WaterNetManager => parent.Map.GetComponent<MapComponent_WaterNetManager>();
 
         protected CompWaterNetInput InputComp => WaterNetBuilding.InputComp;
         protected CompWaterNetOutput OutputComp => WaterNetBuilding.OutputComp;
         protected CompWaterNetTank TankComp => WaterNetBuilding.TankComp;
 
-        public CompWaterNet() : base()
-        {
-
-        }
-
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look<bool>(ref lastIsActivatedForWaterNet, "lastIsActivatedForWaterNet");
+            Scribe_Values.Look(ref lastIsActivatedForWaterNet, "lastIsActivatedForWaterNet");
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -54,16 +44,19 @@ namespace MizuMod
         {
             base.CompTick();
 
-            if (lastIsActivatedForWaterNet != IsActivatedForWaterNet)
+            if (lastIsActivatedForWaterNet == IsActivatedForWaterNet)
             {
-                lastIsActivatedForWaterNet = IsActivatedForWaterNet;
-                foreach (var vec in WaterNetBuilding.OccupiedRect().ExpandedBy(1))
-                {
-                    WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlag.Things);
-                    WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlag.Buildings);
-                }
-                WaterNetManager.RequestUpdateWaterNet();
+                return;
             }
+
+            lastIsActivatedForWaterNet = IsActivatedForWaterNet;
+            foreach (var vec in WaterNetBuilding.OccupiedRect().ExpandedBy(1))
+            {
+                WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlag.Things);
+                WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlag.Buildings);
+            }
+
+            WaterNetManager.RequestUpdateWaterNet();
         }
     }
 }

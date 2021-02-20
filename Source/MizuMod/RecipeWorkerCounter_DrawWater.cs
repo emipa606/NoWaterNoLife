@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace MizuMod
 {
     public class RecipeWorkerCounter_DrawWater : RecipeWorkerCounter
     {
-        public GetWaterRecipeDef GetWaterRecipe => (GetWaterRecipeDef)recipe;
+        public GetWaterRecipeDef GetWaterRecipe => (GetWaterRecipeDef) recipe;
 
         public override bool CanCountProducts(Bill_Production bill)
         {
@@ -20,7 +15,7 @@ namespace MizuMod
                 return false;
             }
 
-            if (!(bill.billStack.billGiver is IBuilding_DrinkWater building))
+            if (!(bill.billStack.billGiver is IBuilding_DrinkWater))
             {
                 return false;
             }
@@ -30,8 +25,12 @@ namespace MizuMod
 
         public override int CountProducts(Bill_Production bill)
         {
-            var ext = bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
-            var building = bill.billStack.billGiver as IBuilding_DrinkWater;
+            //var ext = bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
+
+            if (!(bill.billStack.billGiver is IBuilding_DrinkWater building))
+            {
+                return 0;
+            }
 
             var waterDef = MizuUtility.GetWaterThingDefFromWaterType(building.WaterType);
             if (waterDef == null)

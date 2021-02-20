@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MizuMod
 {
     public class Graphic_LinkedWaterNetOverlay : Graphic_Linked
     {
-        public Graphic_LinkedWaterNetOverlay() : base()
+        public Graphic_LinkedWaterNetOverlay()
         {
-            
         }
 
         public Graphic_LinkedWaterNetOverlay(Graphic subGraphic) : base(subGraphic)
         {
-
         }
 
         public override bool ShouldLinkWith(IntVec3 c, Thing parent)
@@ -27,10 +20,12 @@ namespace MizuMod
             {
                 return false;
             }
+
             if (parent.OccupiedRect().Contains(c))
             {
-                return GenGrid.InBounds(c, parent.Map);
+                return c.InBounds(parent.Map);
             }
+
             if (!thing.HasConnector)
             {
                 return false;
@@ -44,6 +39,7 @@ namespace MizuMod
                     {
                         continue;
                     }
+
                     if (!t.HasConnector)
                     {
                         continue;
@@ -54,21 +50,22 @@ namespace MizuMod
                         isFound = true;
                     }
                 }
+
                 if (isFound)
                 {
                     break;
                 }
             }
 
-            return GenGrid.InBounds(c, parent.Map) && isFound;
+            return c.InBounds(parent.Map) && isFound;
         }
 
         public override void Print(SectionLayer layer, Thing parent)
         {
             foreach (var current in parent.OccupiedRect())
             {
-                Vector3 vector = current.ToVector3ShiftedWithAltitude(AltitudeLayer.MapDataOverlay);
-                Printer_Plane.PrintPlane(layer, vector, Vector2.one, base.LinkedDrawMatFrom(parent, current), 0f, false, null, null, 0.01f);
+                var vector = current.ToVector3ShiftedWithAltitude(AltitudeLayer.MapDataOverlay);
+                Printer_Plane.PrintPlane(layer, vector, Vector2.one, LinkedDrawMatFrom(parent, current));
             }
         }
     }

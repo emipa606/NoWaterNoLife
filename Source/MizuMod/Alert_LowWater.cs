@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using UnityEngine;
-using RimWorld;
 using Verse;
 
 namespace MizuMod
@@ -21,15 +16,17 @@ namespace MizuMod
 
         public override TaggedString GetExplanation()
         {
-            Map map = MapWithLowWater();
+            var map = MapWithLowWater();
             if (map == null)
             {
                 return string.Empty;
             }
+
             var totalWater = map.resourceCounter.TotalWater();
             var num = map.mapPawns.FreeColonistsSpawnedCount + map.mapPawns.PrisonersOfColonyCount;
-            var num2 = Mathf.FloorToInt(totalWater / (float)num);
-            return string.Format(MizuStrings.AlertLowWaterDesc.Translate(), totalWater.ToString("F0"), num.ToStringCached(), num2.ToStringCached());
+            var num2 = Mathf.FloorToInt(totalWater / num);
+            return string.Format(MizuStrings.AlertLowWaterDesc.Translate(), totalWater.ToString("F0"),
+                num.ToStringCached(), num2.ToStringCached());
         }
 
         public override AlertReport GetReport()
@@ -38,24 +35,27 @@ namespace MizuMod
             {
                 return false;
             }
+
             return MapWithLowWater() != null;
         }
 
         private Map MapWithLowWater()
         {
-            List<Map> maps = Find.Maps;
-            for (var i = 0; i < maps.Count; i++)
+            var maps = Find.Maps;
+            foreach (var map in maps)
             {
-                Map map = maps[i];
-                if (map.IsPlayerHome)
+                if (!map.IsPlayerHome)
                 {
-                    var freeColonistsSpawnedCount = map.mapPawns.FreeColonistsSpawnedCount;
-                    if (map.resourceCounter.TotalWater() < WaterAmountThresholdPerColonist * (float)freeColonistsSpawnedCount)
-                    {
-                        return map;
-                    }
+                    continue;
+                }
+
+                var freeColonistsSpawnedCount = map.mapPawns.FreeColonistsSpawnedCount;
+                if (map.resourceCounter.TotalWater() < WaterAmountThresholdPerColonist * freeColonistsSpawnedCount)
+                {
+                    return map;
                 }
             }
+
             return null;
         }
     }

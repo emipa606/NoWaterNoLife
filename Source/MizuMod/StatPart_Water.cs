@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using RimWorld;
 using Verse;
 
@@ -10,11 +6,11 @@ namespace MizuMod
 {
     public class StatPart_Water : StatPart
     {
+        private readonly float factorDehydration = 1f;
         private readonly float factorHealthy = 1f;
         private readonly float factorSlightlyThirsty = 1f;
         private readonly float factorThirsty = 1f;
         private readonly float factorUrgentThirsty = 1f;
-        private readonly float factorDehydration = 1f;
 
         public override void TransformValue(StatRequest req, ref float val)
         {
@@ -45,7 +41,8 @@ namespace MizuMod
                 return null;
             }
 
-            return GetLabel(pawn.needs.Water().CurCategory) + ": x" + WaterMultiplier(pawn.needs.Water().CurCategory).ToStringPercent();
+            return GetLabel(pawn.needs.Water().CurCategory) + ": x" +
+                   WaterMultiplier(pawn.needs.Water().CurCategory).ToStringPercent();
         }
 
         private float WaterMultiplier(ThirstCategory thirst)
@@ -85,6 +82,5 @@ namespace MizuMod
                     throw new InvalidOperationException();
             }
         }
-
     }
 }

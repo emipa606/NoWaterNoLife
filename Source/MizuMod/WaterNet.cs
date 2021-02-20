@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using UnityEngine;
-using RimWorld;
 using Verse;
 
 namespace MizuMod
@@ -12,31 +8,20 @@ namespace MizuMod
     public class WaterNet
     {
         private static int nextID = 1;
-        public static void ClearNextID()
-        {
-            nextID = 1;
-        }
 
-        public int ID = 0;
-
-        public List<IBuilding_WaterNet> AllThings { get; } = new List<IBuilding_WaterNet>();
+        private readonly HashSet<IBuilding_WaterNet> allTanks = new HashSet<IBuilding_WaterNet>();
 
         private readonly HashSet<IBuilding_WaterNet> drainers = new HashSet<IBuilding_WaterNet>();
 
-        private readonly Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>> inputterTypeDic = new Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>>();
+        public readonly int ID;
+
+        private readonly Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>> inputterTypeDic
+            = new Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>>();
 
         private readonly HashSet<IBuilding_WaterNet> outputters = new HashSet<IBuilding_WaterNet>();
 
-        private readonly HashSet<IBuilding_WaterNet> allTanks = new HashSet<IBuilding_WaterNet>();
-        private readonly Dictionary<CompProperties_WaterNetTank.DrawType, HashSet<IBuilding_WaterNet>> tankTypeDic = new Dictionary<CompProperties_WaterNetTank.DrawType, HashSet<IBuilding_WaterNet>>();
-
-        public IEnumerable<HashSet<IBuilding_WaterNet>> FlatTankList { get; private set; }
-
-        public WaterType WaterType { get; private set; } = WaterType.NoWater;
-
-        public WaterType StoredWaterType { get; private set; } = WaterType.NoWater;
-
-        public MapComponent_WaterNetManager Manager { get; set; }
+        private readonly Dictionary<CompProperties_WaterNetTank.DrawType, HashSet<IBuilding_WaterNet>> tankTypeDic =
+            new Dictionary<CompProperties_WaterNetTank.DrawType, HashSet<IBuilding_WaterNet>>();
 
         public WaterNet()
         {
@@ -44,6 +29,7 @@ namespace MizuMod
             nextID++;
 
             WaterType = WaterType.NoWater;
+            StoredWaterType = WaterType.NoWater;
             StoredWaterType = WaterType.NoWater;
 
             inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterNet] = new HashSet<IBuilding_WaterNet>();
@@ -60,6 +46,64 @@ namespace MizuMod
             AddThing(thing);
         }
 
+        public List<IBuilding_WaterNet> AllThings { get; } = new List<IBuilding_WaterNet>();
+
+        public IEnumerable<HashSet<IBuilding_WaterNet>> FlatTankList { get; private set; }
+
+        public WaterType WaterType { get; private set; }
+
+        public WaterType StoredWaterType { get; private set; }
+
+        public MapComponent_WaterNetManager Manager { get; set; }
+
+        public float StoredWaterVolumeForFaucet
+        {
+            get
+            {
+                var sumStoredWaterVolume = 0.0f;
+                foreach (var tank in tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet])
+                {
+                    sumStoredWaterVolume += tank.TankComp.StoredWaterVolume;
+                }
+
+                return sumStoredWaterVolume;
+            }
+        }
+
+        public WaterType StoredWaterTypeForFaucet
+        {
+            get
+            {
+                var totalWaterType = WaterType.NoWater;
+                foreach (var tank in tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet])
+                {
+                    totalWaterType = totalWaterType.GetMinType(tank.TankComp.StoredWaterType);
+                }
+
+                return totalWaterType;
+            }
+        }
+
+        // 仮
+        public float StoredWaterVolume
+        {
+            get
+            {
+                var sumStoredWaterVolume = 0.0f;
+                foreach (var tank in allTanks)
+                {
+                    sumStoredWaterVolume += tank.GetComp<CompWaterNetTank>().StoredWaterVolume;
+                }
+
+                return sumStoredWaterVolume;
+            }
+        }
+
+        public static void ClearNextID()
+        {
+            nextID = 1;
+        }
+
         public void AddThing(IBuilding_WaterNet thing)
         {
             thing.InputWaterNet = this;
@@ -67,12 +111,14 @@ namespace MizuMod
 
             AddThingToList(thing);
         }
+
         public void AddInputThing(IBuilding_WaterNet thing)
         {
             thing.InputWaterNet = this;
 
             AddThingToList(thing);
         }
+
         public void AddOutputThing(IBuilding_WaterNet thing)
         {
             thing.OutputWaterNet = this;
@@ -178,6 +224,7 @@ namespace MizuMod
             {
                 item.Value.Clear();
             }
+
             outputters.Clear();
             allTanks.Clear();
             foreach (var item in tankTypeDic)
@@ -188,20 +235,6 @@ namespace MizuMod
             FlatTankList = null;
         }
 
-        public float StoredWaterVolumeForFaucet
-        {
-            get
-            {
-                var sumStoredWaterVolume = 0.0f;
-                foreach (var tank in tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet])
-                {
-                    sumStoredWaterVolume += tank.TankComp.StoredWaterVolume;
-                }
-
-                return sumStoredWaterVolume;
-            }
-        }
-
         // 仮
         public void DrawWaterVolumeForFaucet(float amount)
         {
@@ -210,47 +243,20 @@ namespace MizuMod
             while (totalAmount > 0.0f && (totalAmount > 0.1f || count < 5))
             {
                 count++;
-                var tanks = tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet].Where((t) => t.TankComp.StoredWaterVolume > 0.0f);
+                var tanks = tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet]
+                    .Where(t => t.TankComp.StoredWaterVolume > 0.0f);
 
-                if (tanks.Count() == 0)
+                var buildingWaterNets = tanks as IBuilding_WaterNet[] ?? tanks.ToArray();
+                if (buildingWaterNets.Length == 0)
                 {
                     break;
                 }
 
-                var averageAmount = totalAmount / tanks.Count();
-                foreach (var tank in tanks)
+                var averageAmount = totalAmount / buildingWaterNets.Length;
+                foreach (var tank in buildingWaterNets)
                 {
                     totalAmount -= tank.TankComp.DrawWaterVolume(averageAmount);
                 }
-            }
-        }
-
-        public WaterType StoredWaterTypeForFaucet
-        {
-            get
-            {
-                var totalWaterType = WaterType.NoWater;
-                foreach (var tank in tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet])
-                {
-                    totalWaterType = totalWaterType.GetMinType(tank.TankComp.StoredWaterType);
-                }
-
-                return totalWaterType;
-            }
-        }
-
-        // 仮
-        public float StoredWaterVolume
-        {
-            get
-            {
-                var sumStoredWaterVolume = 0.0f;
-                foreach (var tank in allTanks)
-                {
-                    sumStoredWaterVolume += tank.GetComp<CompWaterNetTank>().StoredWaterVolume;
-                }
-
-                return sumStoredWaterVolume;
             }
         }
 
@@ -261,15 +267,16 @@ namespace MizuMod
 
             while (totalAmount > 0.1f)
             {
-                var tanks = allTanks.Where((t) => t.TankComp.StoredWaterVolume > 0.0f);
+                var tanks = allTanks.Where(t => t.TankComp.StoredWaterVolume > 0.0f);
 
-                if (tanks.Count() == 0)
+                var buildingWaterNets = tanks as IBuilding_WaterNet[] ?? tanks.ToArray();
+                if (buildingWaterNets.Length == 0)
                 {
                     break;
                 }
 
-                var averageAmount = totalAmount / tanks.Count();
-                foreach (var tank in tanks)
+                var averageAmount = totalAmount / buildingWaterNets.Length;
+                foreach (var tank in buildingWaterNets)
                 {
                     totalAmount -= tank.TankComp.DrawWaterVolume(averageAmount);
                 }
@@ -282,7 +289,9 @@ namespace MizuMod
 
             while (totalAmount > 0.0f)
             {
-                List<IBuilding_WaterNet> tanks = AllThings.FindAll((t) => (t.TankComp != null) && (t.TankComp.AmountCanAccept > 0.0f) && (t.InputComp != null) && t.InputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet));
+                var tanks = AllThings.FindAll(t =>
+                    t.TankComp != null && t.TankComp.AmountCanAccept > 0.0f && t.InputComp != null &&
+                    t.InputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet));
 
                 if (tanks.Count == 0)
                 {
@@ -320,15 +329,24 @@ namespace MizuMod
 
                 // 屋根ボーナスの計算(屋根の枚数/設備の面積*屋根効率)
                 var building = t as Building;
-                var roofBonus = (float)t.GetRoofNumNearby(t.InputComp.RoofDistance) / building.def.size.Area * t.InputComp.RoofEfficiency;
+                if (building == null)
+                {
+                    continue;
+                }
 
-                var addRainWaterVolume = t.InputComp.BaseRainFlow * Manager.map.weatherManager.RainRate * t.GetUnroofedPercent() * (1 + roofBonus);
-                t.InputComp.InputWaterFlow = Mathf.Min(t.InputComp.InputWaterFlow + addRainWaterVolume, t.InputComp.MaxInputWaterFlow);
+                var roofBonus = (float) t.GetRoofNumNearby(t.InputComp.RoofDistance) / building.def.size.Area *
+                                t.InputComp.RoofEfficiency;
+
+                var addRainWaterVolume = t.InputComp.BaseRainFlow * Manager.map.weatherManager.RainRate *
+                                         t.GetUnroofedPercent() * (1 + roofBonus);
+                t.InputComp.InputWaterFlow = Mathf.Min(t.InputComp.InputWaterFlow + addRainWaterVolume,
+                    t.InputComp.MaxInputWaterFlow);
                 if (addRainWaterVolume > 0.0f)
                 {
                     t.InputComp.InputWaterType = t.InputComp.InputWaterType.GetMinType(WaterType.RawWater);
                 }
             }
+
             // 地下水入力タイプの入力量を決定
             foreach (var t in inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterPool])
             {
@@ -349,16 +367,19 @@ namespace MizuMod
                     continue;
                 }
 
-                if (t.WaterPool != null && t.WaterPool.CurrentWaterVolume > 0f)
+                if (t.WaterPool == null || !(t.WaterPool.CurrentWaterVolume > 0f))
                 {
-                    // 地下水があれば入力あり
-                    t.InputComp.InputWaterFlow = t.InputComp.MaxInputWaterFlow;
-                    t.InputComp.InputWaterType = t.InputComp.InputWaterType.GetMinType(t.WaterPool.WaterType);
-
-                    // 地下水の出力量(地下水を減らす)を設定
-                    t.WaterPool.OutputWaterFlow += t.InputComp.InputWaterFlow;
+                    continue;
                 }
+
+                // 地下水があれば入力あり
+                t.InputComp.InputWaterFlow = t.InputComp.MaxInputWaterFlow;
+                t.InputComp.InputWaterType = t.InputComp.InputWaterType.GetMinType(t.WaterPool.WaterType);
+
+                // 地下水の出力量(地下水を減らす)を設定
+                t.WaterPool.OutputWaterFlow += t.InputComp.InputWaterFlow;
             }
+
             // 地形入力タイプの入力量を決定
             foreach (var t in inputterTypeDic[CompProperties_WaterNetInput.InputType.Terrain])
             {
@@ -368,18 +389,25 @@ namespace MizuMod
                 }
 
                 var building = t as Building;
-                var terrainWaterType = Manager.map.terrainGrid.TerrainAt(building.Position).ToWaterType();
-                if (t.InputComp.AcceptWaterTypes.Contains(terrainWaterType))
+                if (building == null)
                 {
-                    // 入力可能水質と地形が合っていれば入力あり
-                    t.InputComp.InputWaterFlow = t.InputComp.MaxInputWaterFlow;
-                    t.InputComp.InputWaterType = t.InputComp.InputWaterType.GetMinType(terrainWaterType);
+                    continue;
                 }
+
+                var terrainWaterType = Manager.map.terrainGrid.TerrainAt(building.Position).ToWaterType();
+                if (!t.InputComp.AcceptWaterTypes.Contains(terrainWaterType))
+                {
+                    continue;
+                }
+
+                // 入力可能水質と地形が合っていれば入力あり
+                t.InputComp.InputWaterFlow = t.InputComp.MaxInputWaterFlow;
+                t.InputComp.InputWaterType = t.InputComp.InputWaterType.GetMinType(terrainWaterType);
             }
 
             // 水道網入力タイプの入力量を決定
             // 出力を各入力設備に割り振っていく
-            WaterType outputWaterType = WaterType.NoWater;
+            var outputWaterType = WaterType.NoWater;
             foreach (var outputter in outputters)
             {
                 // 出力量ゼロの場合スキップ
@@ -391,10 +419,11 @@ namespace MizuMod
                 // 水道網内の水質を更新
                 // 全ての出力水質のうち最低ランクの物にする
                 // ここでは水道網全体の水質を決めるだけ
-                outputWaterType = (WaterType)Mathf.Min((int)outputWaterType, (int)outputter.OutputComp.OutputWaterType);
+                outputWaterType =
+                    (WaterType) Mathf.Min((int) outputWaterType, (int) outputter.OutputComp.OutputWaterType);
 
                 // 出力設備が現在出力可能な相手のリスト
-                var effectiveInputters = inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterNet].Where((t) =>
+                var effectiveInputters = inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterNet].Where(t =>
                 {
                     // 自分自身は除外
                     if (t == outputter)
@@ -427,23 +456,27 @@ namespace MizuMod
                 var remainOutputWaterFlow = outputter.OutputComp.OutputWaterFlow;
 
                 // 出力可能な相手のうち、定量入力を必要とするタイプを先に割り振る
-                var constantInputters = effectiveInputters.Where((t) => t.InputComp.InputWaterFlowType == CompProperties_WaterNetInput.InputWaterFlowType.Constant);
+                var constantInputters = effectiveInputters.Where(t =>
+                    t.InputComp.InputWaterFlowType == CompProperties_WaterNetInput.InputWaterFlowType.Constant);
                 foreach (var inputter in constantInputters)
                 {
                     var actualInputWaterFlow = inputter.InputComp.MaxInputWaterFlow - inputter.InputComp.InputWaterFlow;
-                    if (remainOutputWaterFlow >= actualInputWaterFlow)
+                    if (!(remainOutputWaterFlow >= actualInputWaterFlow))
                     {
-                        // 残量がまだ足りているなら入力する
-                        inputter.InputComp.InputWaterFlow += actualInputWaterFlow;
-                        inputter.InputComp.InputWaterType = inputter.InputComp.InputWaterType.GetMinType(outputter.OutputComp.OutputWaterType);
-                        remainOutputWaterFlow -= actualInputWaterFlow;
+                        continue;
                     }
+
+                    // 残量がまだ足りているなら入力する
+                    inputter.InputComp.InputWaterFlow += actualInputWaterFlow;
+                    inputter.InputComp.InputWaterType =
+                        inputter.InputComp.InputWaterType.GetMinType(outputter.OutputComp.OutputWaterType);
+                    remainOutputWaterFlow -= actualInputWaterFlow;
                 }
 
                 // 処理高速化のため、残り出力を可能な限り無駄にせず割り振るループは削除
 
                 // 出力可能な相手のうち、任意入力で良い物
-                var anyInputters = effectiveInputters.Where((t) =>
+                var anyInputters = effectiveInputters.Where(t =>
                 {
                     // 入力が任意で良いもの以外は除外
                     if (t.InputComp.InputWaterFlowType != CompProperties_WaterNetInput.InputWaterFlowType.Any)
@@ -465,16 +498,23 @@ namespace MizuMod
 
                     return true;
                 });
-                if (anyInputters.Count() > 0)
+                var buildingWaterNets = anyInputters as IBuilding_WaterNet[] ?? anyInputters.ToArray();
+                if (buildingWaterNets.Length <= 0)
+                {
+                    continue;
+                }
+
                 {
                     // 均等割り
-                    var aveOutputWaterFlow = remainOutputWaterFlow / anyInputters.Count();
-                    foreach (var inputter in anyInputters)
+                    var aveOutputWaterFlow = remainOutputWaterFlow / buildingWaterNets.Length;
+                    foreach (var inputter in buildingWaterNets)
                     {
                         // 最大を超えない量を計算して入力量を増加
-                        var actualInputWaterFlow = Mathf.Min(aveOutputWaterFlow, inputter.InputComp.MaxInputWaterFlow - inputter.InputComp.InputWaterFlow);
+                        var actualInputWaterFlow = Mathf.Min(aveOutputWaterFlow,
+                            inputter.InputComp.MaxInputWaterFlow - inputter.InputComp.InputWaterFlow);
                         inputter.InputComp.InputWaterFlow += actualInputWaterFlow;
-                        inputter.InputComp.InputWaterType = inputter.InputComp.InputWaterType.GetMinType(outputter.OutputComp.OutputWaterType);
+                        inputter.InputComp.InputWaterType =
+                            inputter.InputComp.InputWaterType.GetMinType(outputter.OutputComp.OutputWaterType);
                         remainOutputWaterFlow -= actualInputWaterFlow;
                     }
                 }
@@ -541,7 +581,8 @@ namespace MizuMod
                 else
                 {
                     // 空っぽでなければ現在のタンク水質と入力水質の低い方を選ぶ
-                    tank.TankComp.StoredWaterType = (WaterType)Mathf.Min((int)tank.TankComp.StoredWaterType, (int)tank.InputComp.InputWaterType);
+                    tank.TankComp.StoredWaterType = (WaterType) Mathf.Min((int) tank.TankComp.StoredWaterType,
+                        (int) tank.InputComp.InputWaterType);
                 }
             }
 
@@ -549,45 +590,53 @@ namespace MizuMod
             StoredWaterType = WaterType.NoWater;
             foreach (var tank in allTanks)
             {
-                StoredWaterType = (WaterType)Mathf.Min((int)StoredWaterType, (int)tank.TankComp.StoredWaterType);
+                StoredWaterType = (WaterType) Mathf.Min((int) StoredWaterType, (int) tank.TankComp.StoredWaterType);
             }
 
             // 貯水量平坦化
-            if (FlatTankList != null)
+            if (FlatTankList == null)
             {
-                foreach (var list in FlatTankList)
+                return;
+            }
+
+            foreach (var list in FlatTankList)
+            {
+                // 平坦化対象になっている全タンクの貯水量と総容量、水質を求める
+                var allMax = 0.0f;
+                var allCur = 0.0f;
+                var allWaterType = WaterType.NoWater;
+                foreach (var t in list)
                 {
-                    // 平坦化対象になっている全タンクの貯水量と総容量、水質を求める
-                    var allMax = 0.0f;
-                    var allCur = 0.0f;
-                    WaterType allWaterType = WaterType.NoWater;
-                    foreach (var t in list)
-                    {
-                        allMax += t.TankComp.MaxWaterVolume;
-                        allCur += t.TankComp.StoredWaterVolume;
-                        allWaterType = (WaterType)Mathf.Min((int)allWaterType, (int)t.TankComp.StoredWaterType);
-                    }
+                    allMax += t.TankComp.MaxWaterVolume;
+                    allCur += t.TankComp.StoredWaterVolume;
+                    allWaterType = (WaterType) Mathf.Min((int) allWaterType, (int) t.TankComp.StoredWaterType);
+                }
 
-                    // 割合を求める
-                    var flatPercent = allCur / allMax;
+                // 割合を求める
+                var flatPercent = allCur / allMax;
 
-                    // 平坦化する
-                    foreach (var t in list)
-                    {
-                        t.TankComp.StoredWaterVolume = flatPercent * t.TankComp.MaxWaterVolume;
-                        t.TankComp.StoredWaterType = allWaterType;
-                    }
+                // 平坦化する
+                foreach (var t in list)
+                {
+                    t.TankComp.StoredWaterVolume = flatPercent * t.TankComp.MaxWaterVolume;
+                    t.TankComp.StoredWaterType = allWaterType;
                 }
             }
         }
 
-        public void RefreshFlatTankList()
+        private void RefreshFlatTankList()
         {
             var flatTankListTmp = new HashSet<HashSet<IBuilding_WaterNet>>();
 
             // IDが負でない⇒有効な平坦化IDを持っている
-            var flatTanks = allTanks.Where((t) => t.TankComp.FlatID >= 0);
-            if (flatTanks.Count() == 0)
+            var flatTanks = allTanks.Where(t => t.TankComp.FlatID >= 0);
+            var count = 0;
+            foreach (var unused in flatTanks)
+            {
+                count++;
+            }
+
+            if (count == 0)
             {
                 return;
             }
@@ -620,7 +669,7 @@ namespace MizuMod
                 if (foundLists.Count == 0)
                 {
                     // 新しい平坦化リストを作成
-                    flatTankListTmp.Add(new HashSet<IBuilding_WaterNet>() { t });
+                    flatTankListTmp.Add(new HashSet<IBuilding_WaterNet> {t});
                 }
                 else if (foundLists.Count == 1)
                 {
@@ -637,13 +686,14 @@ namespace MizuMod
                         {
                             firstList.Add(t2);
                         }
+
                         flatTankListTmp.Remove(foundLists[i]);
                     }
                 }
             }
 
             // 2個以上のタンクが含まれるリストのみ有効
-            FlatTankList = flatTankListTmp.Where((list) => list.Count() >= 2);
+            FlatTankList = flatTankListTmp.Where(list => list.Count >= 2);
         }
     }
 }

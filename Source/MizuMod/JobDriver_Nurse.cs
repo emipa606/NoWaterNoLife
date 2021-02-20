@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
+using RimWorld;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -17,8 +13,8 @@ namespace MizuMod
         private const int WorkTicks = 300;
         public const float ConsumeWaterVolume = 0.5f;
 
-        private Pawn Patient => (Pawn)job.GetTarget(PatientInd).Thing;
-        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
+        private Pawn Patient => (Pawn) job.GetTarget(PatientInd).Thing;
+        private ThingWithComps Tool => (ThingWithComps) job.GetTarget(ToolInd).Thing;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -46,7 +42,7 @@ namespace MizuMod
             });
             // 精神崩壊状態次第で失敗とする
             this.FailOnAggroMentalState(PatientInd);
-            base.AddEndCondition(delegate
+            AddEndCondition(delegate
             {
                 // 看病が必要な状況なら続ける
                 // 免疫を得る系の病気を持っている＆看病Hediffが無い
@@ -77,7 +73,7 @@ namespace MizuMod
                 // 細々とした設定
                 defaultCompleteMode = ToilCompleteMode.Delay
             };
-            workToil.WithProgressBar(PatientInd, () => 1f - ((float)ticksLeftThisToil / WorkTicks), true, -0.5f);
+            workToil.WithProgressBar(PatientInd, () => 1f - ((float) ticksLeftThisToil / WorkTicks), true);
             workToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             yield return workToil;
 
@@ -86,14 +82,14 @@ namespace MizuMod
             {
                 initAction = () =>
                 {
-                // 看病状態追加
-                if (Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null)
+                    // 看病状態追加
+                    if (Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null)
                     {
                         Patient.health.AddHediff(HediffMaker.MakeHediff(MizuDef.Hediff_Nursed, Patient));
                     }
 
-                // 水減少
-                var comp = Tool.GetComp<CompWaterTool>();
+                    // 水減少
+                    var comp = Tool.GetComp<CompWaterTool>();
                     comp.StoredWaterVolume -= ConsumeWaterVolume;
                 },
                 defaultCompleteMode = ToilCompleteMode.Instant

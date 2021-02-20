@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-//using System.Linq;
+﻿//using System.Linq;
 //using System.Text;
 
+using System.Collections.Generic;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -11,16 +10,15 @@ namespace MizuMod
 {
     public class JobDriver_DrinkWater : JobDriver
     {
-        private static readonly int BaseDrinkTicksFromTerrain = 2000;
-
         private const TargetIndex WaterIndex = TargetIndex.A;
+        private static readonly int BaseDrinkTicksFromTerrain = 2000;
 
         private bool drinkingFromInventory;
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref drinkingFromInventory, "drinkingFromInventory", false, false);
+            Scribe_Values.Look(ref drinkingFromInventory, "drinkingFromInventory");
         }
 
         public override void Notify_Starting()
@@ -35,6 +33,7 @@ namespace MizuMod
             {
                 return pawn.Reserve(job.targetA, job, 1, job.count);
             }
+
             return true;
         }
 
@@ -44,7 +43,7 @@ namespace MizuMod
             {
                 // ターゲットがThing=水アイテムを摂取する場合
                 // 水が使用不可能になったらFail
-                ToilFailConditions.FailOnDestroyedNullOrForbidden<JobDriver_DrinkWater>(this, WaterIndex);
+                this.FailOnDestroyedNullOrForbidden(WaterIndex);
 
                 // 水を取得
                 if (drinkingFromInventory)
@@ -81,7 +80,9 @@ namespace MizuMod
                 // ターゲットがThingではない=水アイテムを摂取しない場合=水地形を利用する場合
 
                 // 選んだ水地形が使用不可能or到達不可能になったらFail
-                ToilFailConditions.FailOn<JobDriver_DrinkWater>(this, () => job.targetA.Cell.IsForbidden(pawn) || !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
+                this.FailOn(() =>
+                    job.targetA.Cell.IsForbidden(pawn) ||
+                    !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
 
                 // 水地形まで移動
                 yield return Toils_Goto.GotoCell(WaterIndex, PathEndMode.OnCell);

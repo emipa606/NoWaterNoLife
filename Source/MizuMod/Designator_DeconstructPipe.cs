@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using UnityEngine;
-using RimWorld;
 using Verse;
 
 namespace MizuMod
@@ -15,7 +10,7 @@ namespace MizuMod
         {
             defaultLabel = MizuStrings.DesignatorDeconstructPipe.Translate();
             defaultDesc = MizuStrings.DesignatorDeconstructPipeDescription.Translate();
-            icon = ContentFinder<Texture2D>.Get("UI/Designators/Deconstruct", true);
+            icon = ContentFinder<Texture2D>.Get("UI/Designators/Deconstruct");
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
             useMouseIcon = true;
@@ -27,29 +22,32 @@ namespace MizuMod
         {
             if (t.def.Claimable && t.Faction != Faction.OfPlayer)
             {
-                t.SetFaction(Faction.OfPlayer, null);
+                t.SetFaction(Faction.OfPlayer);
             }
-            Thing innerIfMinified = t.GetInnerIfMinified();
-            if (DebugSettings.godMode || innerIfMinified.GetStatValue(StatDefOf.WorkToBuild, true) == 0f || t.def.IsFrame || t.def.IsBlueprint)
+
+            var innerIfMinified = t.GetInnerIfMinified();
+            if (DebugSettings.godMode || innerIfMinified.GetStatValue(StatDefOf.WorkToBuild) == 0f || t.def.IsFrame ||
+                t.def.IsBlueprint)
             {
                 t.Destroy(DestroyMode.Deconstruct);
             }
             else
             {
-                base.Map.designationManager.AddDesignation(new Designation(t, DesignationDefOf.Deconstruct));
+                Map.designationManager.AddDesignation(new Designation(t, DesignationDefOf.Deconstruct));
             }
         }
 
         public override AcceptanceReport CanDesignateThing(Thing t)
         {
             // 建設済みのパイプなら〇
-            if (base.CanDesignateThing(t).Accepted && (t is Building_Pipe))
+            if (base.CanDesignateThing(t).Accepted && t is Building_Pipe)
             {
                 return true;
             }
 
             // パイプの設計or施行なら〇
-            if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe || t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater))
+            if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe ||
+                                                         t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater))
             {
                 return true;
             }

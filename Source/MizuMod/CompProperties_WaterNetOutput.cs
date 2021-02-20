@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MizuMod
 {
@@ -11,14 +8,20 @@ namespace MizuMod
         {
             Undefined = 0,
             Constant,
-            Any,
+            Any
         }
 
-        public float maxOutputWaterFlow = 0.0f;
         public WaterType forceOutputWaterType = WaterType.Undefined;
+
+        public float maxOutputWaterFlow = 0.0f;
         public OutputWaterFlowType outputWaterFlowType = OutputWaterFlowType.Constant;
 
-        public CompProperties_WaterNetOutput() : base(typeof(CompWaterNetOutput)) { }
-        public CompProperties_WaterNetOutput(Type compClass) : base(compClass) { }
+        public CompProperties_WaterNetOutput() : base(typeof(CompWaterNetOutput))
+        {
+        }
+
+        public CompProperties_WaterNetOutput(Type compClass) : base(compClass)
+        {
+        }
     }
 }

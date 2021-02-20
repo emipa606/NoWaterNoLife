@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -12,8 +8,8 @@ namespace MizuMod
     {
         public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
         {
-            IntVec3 intVecNorth = center + IntVec3.North.RotatedBy(rot);
-            GenDraw.DrawFieldEdges(new List<IntVec3> { intVecNorth }, Color.blue);
+            var intVecNorth = center + IntVec3.North.RotatedBy(rot);
+            GenDraw.DrawFieldEdges(new List<IntVec3> {intVecNorth}, Color.blue);
         }
     }
 }

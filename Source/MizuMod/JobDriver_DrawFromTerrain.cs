@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Verse;
-using Verse.AI;
+﻿using Verse;
 
 namespace MizuMod
 {
@@ -17,7 +11,7 @@ namespace MizuMod
         protected override Thing FinishAction()
         {
             // 現在の地形から水の種類を決定
-            TerrainDef terrainDef = Map.terrainGrid.TerrainAt(job.GetTarget(BillGiverInd).Thing.Position);
+            var terrainDef = Map.terrainGrid.TerrainAt(job.GetTarget(BillGiverInd).Thing.Position);
             var waterTerrainType = terrainDef.GetWaterTerrainType();
             var waterThingDef = MizuUtility.GetWaterThingDefFromTerrainType(waterTerrainType);
             if (waterThingDef == null)

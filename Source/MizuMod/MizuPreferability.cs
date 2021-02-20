@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MizuMod
+﻿namespace MizuMod
 {
     public enum WaterPreferability : byte
     {
@@ -14,6 +9,6 @@ namespace MizuMod
         MudWater = 40,
         RawWater = 50,
         NormalWater = 60,
-        ClearWater = 70,
+        ClearWater = 70
     }
 }

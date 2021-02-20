@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -10,8 +7,8 @@ namespace MizuMod
     [StaticConstructorOnStartup]
     public class JobGiver_DrawWaterByPrisoner : ThinkNode_JobGiver
     {
-        private static readonly List<Thing> drawerList = new List<Thing>();
         private const int SearchDrawerIntervalTick = 180;
+        private static readonly List<Thing> drawerList = new List<Thing>();
 
         public override float GetPriority(Pawn pawn)
         {
@@ -22,7 +19,7 @@ namespace MizuMod
         {
             drawerList.Clear();
 
-            Need_Water need_water = pawn.needs.Water();
+            var need_water = pawn.needs.Water();
             if (need_water == null)
             {
                 return null;
@@ -75,13 +72,15 @@ namespace MizuMod
                         continue;
                     }
 
-                    if (ext.recipeType == DefExtension_WaterRecipe.RecipeType.DrawFromTerrain
-                        || ext.recipeType == DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet
-                        || ext.recipeType == DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool)
+                    if (ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromTerrain &&
+                        ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet &&
+                        ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool)
                     {
-                        isDrawer = true;
-                        break;
+                        continue;
                     }
+
+                    isDrawer = true;
+                    break;
                 }
 
                 if (isDrawer)
@@ -91,7 +90,7 @@ namespace MizuMod
             }
 
             Thing bestDrawer = null;
-            WaterType bestWaterType = WaterType.SeaWater;
+            var bestWaterType = WaterType.SeaWater;
 
             // 部屋の中の水汲み設備の中で最良の条件の物を探す
             foreach (var drawer in drawerList)
@@ -124,17 +123,20 @@ namespace MizuMod
                 }
 
                 // 水の種類が飲めないタイプの物はダメ
-                if (drinkWaterBuilding.WaterType == WaterType.Undefined || drinkWaterBuilding.WaterType == WaterType.NoWater)
+                if (drinkWaterBuilding.WaterType == WaterType.Undefined ||
+                    drinkWaterBuilding.WaterType == WaterType.NoWater)
                 {
                     continue;
                 }
 
-                if (bestWaterType <= drinkWaterBuilding.WaterType)
+                if (bestWaterType > drinkWaterBuilding.WaterType)
                 {
-                    // 水質が悪くなければ、更新
-                    bestDrawer = drawer;
-                    bestWaterType = drinkWaterBuilding.WaterType;
+                    continue;
                 }
+
+                // 水質が悪くなければ、更新
+                bestDrawer = drawer;
+                bestWaterType = drinkWaterBuilding.WaterType;
             }
 
             // 水汲み設備が見つからなかった

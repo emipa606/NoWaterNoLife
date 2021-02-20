@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace MizuMod
@@ -15,13 +11,14 @@ namespace MizuMod
             DrawFromTerrain,
             DrawFromWaterPool,
             DrawFromWaterNet,
-            PourWater,
+            PourWater
         }
 
-        public RecipeType recipeType = RecipeType.Undefined;
+        public bool canDrawFromFaucet = false;
+        public int getItemCount = 1;
         public List<WaterTerrainType> needWaterTerrainTypes = null;
         public List<WaterType> needWaterTypes = null;
-        public int getItemCount = 1;
-        public bool canDrawFromFaucet = false;
+
+        public RecipeType recipeType = RecipeType.Undefined;
     }
 }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
 using RimWorld;
 using RimWorld.Planet;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -30,6 +26,7 @@ namespace MizuMod
             {
                 return false;
             }
+
             var comp = t.TryGetComp<CompWaterSource>();
             return comp.WaterAmount > 0.0f;
         }
@@ -71,7 +68,8 @@ namespace MizuMod
             return needs.TryGetNeed<Need_Water>();
         }
 
-        public static void GetWaterCalculateAmounts(this Thing t, Pawn getter, float waterWanted, bool withIngested, out int numTaken, out float waterGot)
+        public static void GetWaterCalculateAmounts(this Thing t, float waterWanted, bool withIngested,
+            out int numTaken, out float waterGot)
         {
             var waterAmount = t.GetWaterAmount();
             if (waterAmount == 0.0f)
@@ -92,23 +90,20 @@ namespace MizuMod
                 return;
             }
 
-            numTaken = (int)Math.Ceiling(waterWanted / waterAmount);  // そのアイテムで必要な水分を満たすのに何個必要か
-            numTaken = Mathf.Min(new int[] { numTaken, t.stackCount, t.TryGetComp<CompWaterSource>().MaxNumToGetAtOnce });  // 必要数、スタック数、同時摂取可能数のうち最も低い数字
-            numTaken = Math.Max(numTaken, 1);  // 最低値は1
-            waterGot = (float)numTaken * waterAmount;  // 個数と1個当たりの水分の積→摂取水分量
+            numTaken = (int) Math.Ceiling(waterWanted / waterAmount); // そのアイテムで必要な水分を満たすのに何個必要か
+            numTaken = Mathf.Min(numTaken, t.stackCount,
+                t.TryGetComp<CompWaterSource>().MaxNumToGetAtOnce); // 必要数、スタック数、同時摂取可能数のうち最も低い数字
+            numTaken = Math.Max(numTaken, 1); // 最低値は1
+            waterGot = numTaken * waterAmount; // 個数と1個当たりの水分の積→摂取水分量
         }
 
         public static float TotalWater(this ResourceCounter rc)
         {
             var num = 0.0f;
-            foreach (KeyValuePair<ThingDef, int> current in rc.AllCountedAmounts)
+            foreach (var current in rc.AllCountedAmounts)
             {
-                if (current.Key.comps == null)
-                {
-                    continue;
-                }
-
-                var compprop = (CompProperties_WaterSource)current.Key.comps.Find((c) => c.compClass == typeof(CompWaterSource));
+                var compprop =
+                    (CompProperties_WaterSource) current.Key.comps?.Find(c => c.compClass == typeof(CompWaterSource));
                 if (compprop == null)
                 {
                     continue;
@@ -121,9 +116,10 @@ namespace MizuMod
 
                 if (compprop.waterAmount > 0.0f)
                 {
-                    num += compprop.waterAmount * (float)current.Value;
+                    num += compprop.waterAmount * current.Value;
                 }
             }
+
             return num;
         }
 
@@ -133,6 +129,7 @@ namespace MizuMod
             {
                 return false;
             }
+
             if (!ignoreActivate && !t2.HasInputConnector)
             {
                 return false;
@@ -143,12 +140,15 @@ namespace MizuMod
             {
                 foreach (var vec2 in t2.OccupiedRect())
                 {
-                    if (vec1 == vec2)
+                    if (vec1 != vec2)
                     {
-                        t1_out_t2_body = true;
-                        break;
+                        continue;
                     }
+
+                    t1_out_t2_body = true;
+                    break;
                 }
+
                 if (t1_out_t2_body)
                 {
                     break;
@@ -160,12 +160,15 @@ namespace MizuMod
             {
                 foreach (var vec2 in t2.InputConnectors)
                 {
-                    if (vec1 == vec2)
+                    if (vec1 != vec2)
                     {
-                        t1_body_t2_in = true;
-                        break;
+                        continue;
                     }
+
+                    t1_body_t2_in = true;
+                    break;
                 }
+
                 if (t1_body_t2_in)
                 {
                     break;
@@ -179,7 +182,9 @@ namespace MizuMod
         {
             return t1.IsOutputTo(t2, ignoreActivate) || t2.IsOutputTo(t1, ignoreActivate);
         }
-        public static bool IsConnectedAnd(this IBuilding_WaterNet t1, IBuilding_WaterNet t2, bool ignoreActivate = false)
+
+        public static bool IsConnectedAnd(this IBuilding_WaterNet t1, IBuilding_WaterNet t2,
+            bool ignoreActivate = false)
         {
             return t1.IsOutputTo(t2, ignoreActivate) && t2.IsOutputTo(t1, ignoreActivate);
         }
@@ -190,18 +195,22 @@ namespace MizuMod
             {
                 return WaterTerrainType.SeaWater;
             }
-            else if (def.IsRiver())
+
+            if (def.IsRiver())
             {
                 return WaterTerrainType.RawWater;
             }
-            else if (def.IsLakeOrPond())
+
+            if (def.IsLakeOrPond())
             {
                 return WaterTerrainType.RawWater;
             }
-            else if (def.IsMarsh())
+
+            if (def.IsMarsh())
             {
                 return WaterTerrainType.MudWater;
             }
+
             return WaterTerrainType.NoWater;
         }
 
@@ -225,7 +234,7 @@ namespace MizuMod
             return def.defName.Contains("Marsh");
         }
 
-        public static bool IsMud(this TerrainDef def)
+        private static bool IsMud(this TerrainDef def)
         {
             return def.defName.Contains("Mud");
         }
@@ -244,20 +253,24 @@ namespace MizuMod
         {
             return def.IsWater() && def.passability == Traversability.Standable;
         }
+
         public static WaterType ToWaterType(this TerrainDef def)
         {
             if (def.IsSea())
             {
                 return WaterType.SeaWater;
             }
-            else if (def.IsMarsh() || def.IsMud())
+
+            if (def.IsMarsh() || def.IsMud())
             {
                 return WaterType.MudWater;
             }
-            else if (def.IsRiver() || def.IsLakeOrPond())
+
+            if (def.IsRiver() || def.IsLakeOrPond())
             {
                 return WaterType.RawWater;
             }
+
             return WaterType.NoWater;
         }
 
@@ -274,12 +287,12 @@ namespace MizuMod
         public static bool CanDrinkFromTerrain(this Pawn pawn)
         {
             // 心情無し = 地面から水をすすることに抵抗なし
-            if (pawn.needs == null || pawn.needs.mood == null)
+            if (pawn.needs?.mood == null)
             {
                 return true;
             }
 
-            Need_Water need_water = pawn.needs.Water();
+            var need_water = pawn.needs.Water();
 
             // 水分要求なし = そもそも水を必要としていない
             if (need_water == null)
@@ -304,42 +317,43 @@ namespace MizuMod
                 return WaterTerrainType.NoWater;
             }
 
-            Tile tile = Find.WorldGrid[caravan.Tile];
+            var tile = Find.WorldGrid[caravan.Tile];
 
-            WaterTerrainType result = WaterTerrainType.NoWater;
+            var result = WaterTerrainType.NoWater;
 
             // バイオーム
             var biomeDefName = tile.biome.defName;
             if (biomeDefName.Contains("Desert"))
             {
                 // 砂漠Desert、極限の砂漠ExtremeDesertは水なし
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.NoWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.NoWater);
             }
             else if (biomeDefName.Contains("SeaIce"))
             {
                 // 海氷SeaIceは海水
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.SeaWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.SeaWater);
             }
             else if (biomeDefName.Contains("ColdBog") || biomeDefName.Contains("Swamp"))
             {
                 // 寒冷湿地ColdBog、温帯湿地TemperateSwamp、熱帯湿地TropicalSwampは泥水
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.MudWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.MudWater);
             }
             else
             {
                 // それ以外は真水
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.RawWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.RawWater);
             }
 
             if (tile.Rivers != null && tile.Rivers.Count > 0)
             {
                 // 川があれば真水が飲める(凍ってるか等はチェックしないことにする)
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.RawWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.RawWater);
             }
+
             if (Find.World.CoastDirectionAt(caravan.Tile).IsValid)
             {
                 // 海岸線があるなら海水が飲める
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.SeaWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.SeaWater);
             }
 
             return result;
@@ -391,7 +405,7 @@ namespace MizuMod
                 return 0f;
             }
 
-            return (float)unroofedCells / allCells;
+            return (float) unroofedCells / allCells;
         }
 
         public static int GetRoofNumNearby(this IBuilding_WaterNet t, int dist)
@@ -436,7 +450,7 @@ namespace MizuMod
 
         public static WaterType GetMinType(this WaterType me, WaterType other)
         {
-            return (WaterType)Mathf.Min((int)me, (int)other);
+            return (WaterType) Mathf.Min((int) me, (int) other);
         }
 
         public static bool IsIngestibleFor(this Thing thing, Pawn pawn)
@@ -451,7 +465,7 @@ namespace MizuMod
             {
                 var hediffStageIndex = hediff.CurStageIndex;
                 var ext = hediff.def.GetModExtension<DefExtension_ThirstRate>();
-                if (ext == null || ext.thirstRateFactors == null)
+                if (ext?.thirstRateFactors == null)
                 {
                     continue;
                 }
@@ -466,7 +480,7 @@ namespace MizuMod
             {
                 var hediffStageIndex = hediff.CurStageIndex;
                 var ext = hediff.def.GetModExtension<DefExtension_ThirstRate>();
-                if (ext == null || ext.thirstRateFactorOffsets == null)
+                if (ext?.thirstRateFactorOffsets == null)
                 {
                     continue;
                 }
@@ -476,6 +490,7 @@ namespace MizuMod
                     rate += ext.thirstRateFactorOffsets[hediffStageIndex];
                 }
             }
+
             return rate;
         }
 
@@ -510,19 +525,20 @@ namespace MizuMod
             return toil.JumpIf(delegate
             {
                 var target = toil.actor.jobs.curJob.GetTarget(ind);
-                IntVec3 pos = target.HasThing ? target.Thing.Position : target.Cell;
+                var pos = target.HasThing ? target.Thing.Position : target.Cell;
 
                 return !toil.actor.Map.areaManager.Mop()[pos];
             }, jumpToil);
         }
 
-        public static Toil ClearCondifionSatisfiedTargets(this Toil toil, TargetIndex ind, Predicate<LocalTargetInfo> cond)
+        public static Toil ClearCondifionSatisfiedTargets(this Toil toil, TargetIndex ind,
+            Predicate<LocalTargetInfo> cond)
         {
             toil.initAction = delegate
             {
-                Pawn actor = toil.actor;
-                Job curJob = actor.jobs.curJob;
-                List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(ind);
+                var actor = toil.actor;
+                var curJob = actor.jobs.curJob;
+                var targetQueue = curJob.GetTargetQueue(ind);
                 targetQueue.RemoveAll(cond);
             };
             return toil;

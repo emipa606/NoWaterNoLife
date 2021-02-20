@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -24,7 +21,7 @@ namespace MizuMod
             IEnumerable<IntVec3> potentialCells = null;
 
             // 農地チェック
-            var growingZoneList = pawn.Map.zoneManager.AllZones.Where((zone) =>
+            var growingZoneList = pawn.Map.zoneManager.AllZones.Where(zone =>
             {
                 // 種まきを許可された農地ゾーンのみ手動水やりOK
                 if (zone is Zone_Growing z && z.allowSow)
@@ -36,38 +33,28 @@ namespace MizuMod
             });
             foreach (var zone in growingZoneList)
             {
-                if (potentialCells == null)
-                {
-                    potentialCells = zone.Cells.AsEnumerable();
-                }
-                else
-                {
-                    potentialCells = potentialCells.Concat(zone.Cells);
-                }
+                potentialCells = potentialCells == null ? zone.Cells.AsEnumerable() : potentialCells.Concat(zone.Cells);
             }
 
             // 植木鉢チェック
-            foreach (var building in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial).Where((t) => t is Building_PlantGrower))
+            foreach (var building in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial)
+                .Where(t => t is Building_PlantGrower))
             {
-                if (building.def.building == null || building.def.building.sowTag == null || building.def.building.sowTag == "Hydroponic")
+                if (building.def.building?.sowTag == null || building.def.building.sowTag == "Hydroponic")
                 {
                     continue;
                 }
 
-                if (potentialCells == null)
-                {
-                    potentialCells = building.OccupiedRect().Cells;
-                }
-                else
-                {
-                    potentialCells = potentialCells.Concat(building.OccupiedRect().Cells);
-                }
+                potentialCells = potentialCells == null
+                    ? building.OccupiedRect().Cells
+                    : potentialCells.Concat(building.OccupiedRect().Cells);
             }
 
             if (potentialCells == null)
             {
                 potentialCells = new List<IntVec3>();
             }
+
             return potentialCells;
         }
 
@@ -105,32 +92,34 @@ namespace MizuMod
                     needWatering = true;
                     break;
                 }
-                else if (thing is Building_PlantGrower building)
+
+                if (!(thing is Building_PlantGrower building))
                 {
-                    // 植物を植えられる建造物
-
-                    // 建造物上の植物チェック
-                    foreach (var p in building.PlantsOnMe)
-                    {
-                        // 現在注目しているセルではない
-                        if (p.Position != c)
-                        {
-                            continue;
-                        }
-
-                        // 既に育ち切っている
-                        if (p.Growth >= 1.0f)
-                        {
-                            continue;
-                        }
-
-                        // そのセルには水やりが必要
-                        needWatering = true;
-                        break;
-                    }
+                    continue;
                 }
+                // 植物を植えられる建造物
 
+                // 建造物上の植物チェック
+                foreach (var p in building.PlantsOnMe)
+                {
+                    // 現在注目しているセルではない
+                    if (p.Position != c)
+                    {
+                        continue;
+                    }
+
+                    // 既に育ち切っている
+                    if (p.Growth >= 1.0f)
+                    {
+                        continue;
+                    }
+
+                    // そのセルには水やりが必要
+                    needWatering = true;
+                    break;
+                }
             }
+
             if (!needWatering)
             {
                 return false;
@@ -155,7 +144,7 @@ namespace MizuMod
             }
 
             // ツールチェック
-            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((t) =>
+            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
             {
                 // 使用禁止チェック
                 if (t.IsForbidden(pawn))
@@ -174,7 +163,7 @@ namespace MizuMod
                     return false;
                 }
 
-                var maxQueueLength = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+                var maxQueueLength = (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
                 if (maxQueueLength <= 0)
                 {
                     return false;
@@ -182,12 +171,12 @@ namespace MizuMod
 
                 return true;
             });
-            if (toolList.Count() == 0)
+            if (!toolList.Any())
             {
                 return false;
             }
 
-            if (toolList.Where((t) => pawn.CanReserve(t)).Count() == 0)
+            if (toolList.Count(t => pawn.CanReserve(t)) == 0)
             {
                 return false;
             }
@@ -204,7 +193,7 @@ namespace MizuMod
             // 一番近いツールを探す
             Thing candidateTool = null;
             var minDist = int.MaxValue;
-            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((t) =>
+            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
             {
                 // 使用禁止チェック
                 if (t.IsForbidden(pawn))
@@ -223,7 +212,8 @@ namespace MizuMod
                     return false;
                 }
 
-                var maxQueueLengthForCheck = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+                var maxQueueLengthForCheck =
+                    (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
                 if (maxQueueLengthForCheck <= 0)
                 {
                     return false;
@@ -241,11 +231,13 @@ namespace MizuMod
                 }
 
                 var toolDist = (tool.Position - pawn.Position).LengthHorizontalSquared;
-                if (minDist > toolDist)
+                if (minDist <= toolDist)
                 {
-                    minDist = toolDist;
-                    candidateTool = tool;
+                    continue;
                 }
+
+                minDist = toolDist;
+                candidateTool = tool;
             }
 
             if (candidateTool == null)
@@ -260,33 +252,35 @@ namespace MizuMod
 
             var compTool = candidateTool.TryGetComp<CompWaterTool>();
             var maxQueueLength = Mathf.RoundToInt(compTool.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-            Map map = pawn.Map;
-            Room room = cell.GetRoom(map);
+            var map = pawn.Map;
+            var room = cell.GetRoom(map);
             for (var i = 0; i < 100; i++)
             {
                 // 対象のセルの周囲100マスをサーチ
-                IntVec3 intVec = cell + GenRadial.RadialPattern[i];
-                if (intVec.InBounds(map) && intVec.GetRoom(map, RegionType.Set_Passable) == room)
+                var intVec = cell + GenRadial.RadialPattern[i];
+                if (!intVec.InBounds(map) || intVec.GetRoom(map) != room)
                 {
-                    // そこが同じ部屋の中
-                    if (HasJobOnCell(pawn, intVec) && intVec != cell)
-                    {
-                        // 同じジョブが作成可能であるならこのジョブの処理対象に追加
-                        job.AddQueuedTarget(TargetIndex.A, intVec);
-                    }
+                    continue;
+                }
 
-                    // 最大個数チェック
-                    if (job.GetTargetQueue(TargetIndex.A).Count >= maxQueueLength)
-                    {
-                        break;
-                    }
+                // そこが同じ部屋の中
+                if (HasJobOnCell(pawn, intVec) && intVec != cell)
+                {
+                    // 同じジョブが作成可能であるならこのジョブの処理対象に追加
+                    job.AddQueuedTarget(TargetIndex.A, intVec);
+                }
+
+                // 最大個数チェック
+                if (job.GetTargetQueue(TargetIndex.A).Count >= maxQueueLength)
+                {
+                    break;
                 }
             }
 
             if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
             {
                 // 対象が5個以上あるならポーンからの距離が近い順に仕事をさせる
-                job.targetQueueA.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+                job.targetQueueA.SortBy(targ => targ.Cell.DistanceToSquared(pawn.Position));
             }
 
             return job;

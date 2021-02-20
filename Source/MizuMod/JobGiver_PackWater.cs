@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using UnityEngine;
-using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -29,7 +24,7 @@ namespace MizuMod
             }
 
             // 水分要求がない
-            Need_Water need_water = pawn.needs.Water();
+            var need_water = pawn.needs.Water();
             if (need_water == null)
             {
                 return null;
@@ -61,7 +56,7 @@ namespace MizuMod
 
                 if (comp.WaterAmount * comp.MaxNumToGetAtOnce < Need_Water.MinWaterAmountPerOneDrink)
                 {
-                    return false;  // 最低水分量を満たしていないもの×
+                    return false; // 最低水分量を満たしていないもの×
                 }
 
                 if (MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability < MinWaterPreferability)
@@ -85,7 +80,8 @@ namespace MizuMod
 
             // マップ中の水アイテムの合計水分量が、最低限必要とされる水の量(×入植者の人数)以下しかなければ、
             // 個人の所持品には入れない
-            if (pawn.Map.resourceCounter.TotalWater() < (float)pawn.Map.mapPawns.ColonistsSpawnedCount * MinWaterPerColonistToDo)
+            if (pawn.Map.resourceCounter.TotalWater() <
+                pawn.Map.mapPawns.ColonistsSpawnedCount * MinWaterPerColonistToDo)
             {
                 return null;
             }
@@ -97,7 +93,8 @@ namespace MizuMod
                 PathEndMode.ClosestTouch,
                 TraverseParms.For(pawn),
                 20f,
-                (t) => {
+                t =>
+                {
                     if (!validator(t))
                     {
                         return false; // 所持品チェック時と同じ条件を満たしていない×
@@ -105,21 +102,21 @@ namespace MizuMod
 
                     if (t.IsForbidden(pawn))
                     {
-                        return false;  // 禁止されている×
+                        return false; // 禁止されている×
                     }
 
                     if (!pawn.CanReserve(t))
                     {
-                        return false;  // 予約不可能×
+                        return false; // 予約不可能×
                     }
 
                     if (!t.IsSociallyProper(pawn))
                     {
-                        return false;  // 囚人部屋の物×
+                        return false; // 囚人部屋の物×
                     }
 
                     return true;
-                }, (x) => MizuUtility.GetWaterItemScore(pawn, x, 0f, true)  // スコアの高いものが優先？
+                }, x => MizuUtility.GetWaterItemScore(pawn, x, 0f, true) // スコアの高いものが優先？
             );
 
             if (waterThing == null)
@@ -129,7 +126,8 @@ namespace MizuMod
 
             return new Job(JobDefOf.TakeInventory, waterThing)
             {
-                count = Mathf.Min(MizuUtility.StackCountForWater(waterThing, NeedTotalWaterAmount), waterThing.stackCount)
+                count = Mathf.Min(MizuUtility.StackCountForWater(waterThing, NeedTotalWaterAmount),
+                    waterThing.stackCount)
             };
         }
     }

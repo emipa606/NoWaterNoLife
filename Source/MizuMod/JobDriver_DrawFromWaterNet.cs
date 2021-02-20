@@ -1,29 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
-using Verse;
-using Verse.AI;
+﻿using Verse;
 
 namespace MizuMod
 {
     public class JobDriver_DrawFromWaterNet : JobDriver_DrawWater
     {
         private Building_WaterNetWorkTable WorkTable => job.GetTarget(BillGiverInd).Thing as Building_WaterNetWorkTable;
-        private WaterNet WaterNet
-        {
-            get
-            {
-                if (WorkTable == null)
-                {
-                    return null;
-                }
 
-                return WorkTable.InputWaterNet;
-            }
-        }
+        private WaterNet WaterNet => WorkTable?.InputWaterNet;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -51,28 +34,15 @@ namespace MizuMod
 
         protected override Thing FinishAction()
         {
-            var targetWaterType = WaterType.NoWater;
-
-            if (Ext.canDrawFromFaucet)
-            {
-                // 蛇口の場合
-                targetWaterType = WaterNet.StoredWaterTypeForFaucet;
-            }
-            else
-            {
-                // 自分自身の場合
-                targetWaterType = WorkTable.TankComp.StoredWaterType;
-            }
+            var targetWaterType = Ext.canDrawFromFaucet
+                ? WaterNet.StoredWaterTypeForFaucet
+                : WorkTable.TankComp.StoredWaterType;
 
             // 水道網の水の種類から水アイテムの種類を決定
             var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);
-            if (waterThingDef == null)
-            {
-                return null;
-            }
 
             // 水アイテムの水源情報を得る
-            var compprop = waterThingDef.GetCompProperties<CompProperties_WaterSource>();
+            var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
             if (compprop == null)
             {
                 return null;

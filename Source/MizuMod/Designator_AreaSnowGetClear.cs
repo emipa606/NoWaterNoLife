@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -15,7 +10,7 @@ namespace MizuMod
         {
             defaultLabel = MizuStrings.DesignatorAreaSnowGetClear.Translate();
             defaultDesc = MizuStrings.DesignatorAreaSnowGetClearDescription.Translate();
-            icon = ContentFinder<Texture2D>.Get("UI/Designators/SnowClearAreaOff", true);
+            icon = ContentFinder<Texture2D>.Get("UI/Designators/SnowClearAreaOff");
             soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
             soundSucceeded = SoundDefOf.Designate_ZoneDelete;

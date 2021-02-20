@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Verse;
+﻿using Verse;
 
 namespace MizuMod
 {
     public class GenStep_UndergroundDeepWater : GenStep_UndergroundWater
     {
+        public override int SeedPart => 51037366;
+
         public override void Generate(Map map, GenStepParams parms)
         {
             var waterGrid = map.GetComponent<MapComponent_DeepWaterGrid>();
@@ -24,6 +21,5 @@ namespace MizuMod
                 baseRegenRateRange,
                 rainRegenRatePerCell);
         }
-        public override int SeedPart => 51037366;
     }
 }

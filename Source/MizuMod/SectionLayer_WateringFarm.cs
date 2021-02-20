@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MizuMod
@@ -11,7 +6,7 @@ namespace MizuMod
     public class SectionLayer_WateringFarm : SectionLayer
     {
         private readonly Material material = new Material(MatBases.Snow);
-        private readonly Texture2D texture = ContentFinder<Texture2D>.Get("Things/Mizu_Watering", true);
+        private readonly Texture2D texture = ContentFinder<Texture2D>.Get("Things/Mizu_Watering");
 
         public SectionLayer_WateringFarm(Section section) : base(section)
         {
@@ -22,17 +17,18 @@ namespace MizuMod
 
         public override void Regenerate()
         {
-            var wateringComp = base.Map.GetComponent<MapComponent_Watering>();
+            var wateringComp = Map.GetComponent<MapComponent_Watering>();
 
-            base.ClearSubMeshes(MeshParts.All);
-            foreach (IntVec3 current in section.CellRect)
+            ClearSubMeshes(MeshParts.All);
+            foreach (var current in section.CellRect)
             {
-                if (wateringComp.Get(base.Map.cellIndices.CellToIndex(current)) > 0)
+                if (wateringComp.Get(Map.cellIndices.CellToIndex(current)) > 0)
                 {
                     Printer_Plane.PrintPlane(this, current.ToVector3Shifted(), Vector2.one, material);
                 }
             }
-            base.FinalizeMesh(MeshParts.All);
+
+            FinalizeMesh(MeshParts.All);
 
             //LayerSubMesh subMesh = base.GetSubMesh(this.material);
             //if (subMesh.mesh.vertexCount == 0)
@@ -74,23 +70,24 @@ namespace MizuMod
             sm.Clear(MeshParts.Verts | MeshParts.Tris);
             var cellRect = new CellRect(section.botLeft.x, section.botLeft.z, 17, 17);
             cellRect.ClipInsideMap(section.map);
-            var y = Altitudes.AltitudeFor(altitudeLayer);
+            var y = altitudeLayer.AltitudeFor();
             sm.verts.Capacity = cellRect.Area * 9;
             for (var i = cellRect.minX; i <= cellRect.maxX; i++)
             {
                 for (var j = cellRect.minZ; j <= cellRect.maxZ; j++)
                 {
-                    sm.verts.Add(new Vector3((float)i, y, (float)j));
-                    sm.verts.Add(new Vector3((float)i, y, (float)j + 0.5f));
-                    sm.verts.Add(new Vector3((float)i, y, (float)(j + 1)));
-                    sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)(j + 1)));
-                    sm.verts.Add(new Vector3((float)(i + 1), y, (float)(j + 1)));
-                    sm.verts.Add(new Vector3((float)(i + 1), y, (float)j + 0.5f));
-                    sm.verts.Add(new Vector3((float)(i + 1), y, (float)j));
-                    sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)j));
-                    sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)j + 0.5f));
+                    sm.verts.Add(new Vector3(i, y, j));
+                    sm.verts.Add(new Vector3(i, y, j + 0.5f));
+                    sm.verts.Add(new Vector3(i, y, j + 1));
+                    sm.verts.Add(new Vector3(i + 0.5f, y, j + 1));
+                    sm.verts.Add(new Vector3(i + 1, y, j + 1));
+                    sm.verts.Add(new Vector3(i + 1, y, j + 0.5f));
+                    sm.verts.Add(new Vector3(i + 1, y, j));
+                    sm.verts.Add(new Vector3(i + 0.5f, y, j));
+                    sm.verts.Add(new Vector3(i + 0.5f, y, j + 0.5f));
                 }
             }
+
             var num = cellRect.Area * 8 * 3;
             sm.tris.Capacity = num;
             var num2 = 0;
@@ -122,6 +119,7 @@ namespace MizuMod
                 sm.tris.Add(num2 + 8);
                 num2 += 9;
             }
+
             sm.FinalizeMesh(MeshParts.Verts | MeshParts.Tris);
         }
     }

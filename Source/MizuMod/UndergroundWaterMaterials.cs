@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MizuMod
@@ -18,17 +13,17 @@ namespace MizuMod
         static UndergroundWaterMaterials()
         {
             materials = new Material[MaterialCount];
-            var colorArr = new Color[]
+            var colorArr = new[]
             {
                 new Color(1.0f, 0.0f, 0.0f, 0.25f),
                 new Color(1.0f, 1.0f, 0.0f, 0.25f),
                 new Color(0.0f, 1.0f, 0.8f, 0.25f),
-                new Color(0.0f, 1.0f, 1.0f, 0.25f),
+                new Color(0.0f, 1.0f, 1.0f, 0.25f)
             };
 
             for (var i = 0; i < MaterialCount; i++)
             {
-                materials[i] = MatsFromSpectrum.Get(colorArr, (float)i / (float)MaterialCount);
+                materials[i] = MatsFromSpectrum.Get(colorArr, i / (float) MaterialCount);
             }
         }
 
@@ -38,10 +33,12 @@ namespace MizuMod
             {
                 index = MaterialCount - 1;
             }
+
             if (index < 0)
             {
                 index = 0;
             }
+
             return materials[index];
         }
     }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using UnityEngine;
-using RimWorld;
 using Verse;
 
 namespace MizuMod
@@ -12,17 +7,19 @@ namespace MizuMod
     public abstract class GenStep_UndergroundWater : GenStep
     {
         private const float BaseMapArea = 250f * 250f;
+        protected readonly float basePlantDensity = 0.25f;
 
-        public int basePoolNum = 30;
-        public float baseRainFall = 1000f;
-        public float basePlantDensity = 0.25f;
-        public int minWaterPoolNum = 3;
-        public IntRange poolCellRange = new IntRange(30, 100);
-        public float literPerCell = 10.0f;
-        public FloatRange baseRegenRateRange = new FloatRange(10.0f, 20.0f);
-        public float rainRegenRatePerCell = 5.0f;
+        protected readonly int basePoolNum = 30;
+        protected readonly float baseRainFall = 1000f;
+        protected readonly float literPerCell = 10.0f;
+        protected readonly int minWaterPoolNum = 3;
+        protected FloatRange baseRegenRateRange = new FloatRange(10.0f, 20.0f);
+        protected IntRange poolCellRange = new IntRange(30, 100);
+        protected float rainRegenRatePerCell = 5.0f;
 
-        public void GenerateUndergroundWaterGrid(Map map, MapComponent_WaterGrid waterGrid, int basePoolNum, int minWaterPoolNum, float baseRainFall, float basePlantDensity, float literPerCell, IntRange poolCellRange, FloatRange baseRegenRateRange, float rainRegenRatePerCell)
+        public void GenerateUndergroundWaterGrid(Map map, MapComponent_WaterGrid waterGrid, int basePoolNum,
+            int minWaterPoolNum, float baseRainFall, float basePlantDensity, float literPerCell, IntRange poolCellRange,
+            FloatRange baseRegenRateRange, float rainRegenRatePerCell)
         {
             var rainRate = map.TileInfo.rainfall / baseRainFall;
             var areaRate = map.Area / BaseMapArea;
@@ -38,16 +35,20 @@ namespace MizuMod
 
             for (var i = 0; i < waterPoolNum; i++)
             {
-                if (CellFinderLoose.TryFindRandomNotEdgeCellWith(5, (c) => !waterGrid.GetCellBool(map.cellIndices.CellToIndex(c)), map, out IntVec3 result))
+                if (!CellFinderLoose.TryFindRandomNotEdgeCellWith(5,
+                    c => !waterGrid.GetCellBool(map.cellIndices.CellToIndex(c)), map, out var result))
                 {
-                    var numCells = poolCellRange.RandomInRange;
-                    var baseRegenRate = baseRegenRateRange.RandomInRange;
-                    var pool = new UndergroundWaterPool(waterGrid, numCells * literPerCell, WaterType.RawWater, baseRegenRate, rainRegenRatePerCell)
-                    {
-                        ID = i + 1
-                    };
-                    waterGrid.AddWaterPool(pool, GridShapeMaker.IrregularLump(result, map, numCells));
+                    continue;
                 }
+
+                var numCells = poolCellRange.RandomInRange;
+                var baseRegenRate = baseRegenRateRange.RandomInRange;
+                var pool = new UndergroundWaterPool(waterGrid, numCells * literPerCell, WaterType.RawWater,
+                    baseRegenRate, rainRegenRatePerCell)
+                {
+                    ID = i + 1
+                };
+                waterGrid.AddWaterPool(pool, GridShapeMaker.IrregularLump(result, map, numCells));
             }
 
             waterGrid.ModifyPoolGrid();

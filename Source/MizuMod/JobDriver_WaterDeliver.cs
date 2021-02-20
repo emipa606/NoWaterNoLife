@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -20,7 +16,7 @@ namespace MizuMod
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref drinkingFromInventory, "drinkingFromInventory", false, false);
+            Scribe_Values.Look(ref drinkingFromInventory, "drinkingFromInventory");
         }
 
         public override void Notify_Starting()
@@ -37,7 +33,7 @@ namespace MizuMod
         protected override IEnumerable<Toil> MakeNewToils()
         {
             // 水が使用不可能になったらFail
-            ToilFailConditions.FailOnDestroyedNullOrForbidden<JobDriver_WaterDeliver>(this, WaterIndex);
+            this.FailOnDestroyedNullOrForbidden(WaterIndex);
 
             if (!pawn.CanReserveAndReach(TargetA, PathEndMode.Touch, Danger.Deadly, 1, job.count))
             {
@@ -49,7 +45,7 @@ namespace MizuMod
             // 予約する
             if (!pawn.Map.reservationManager.ReservedBy(TargetA.Thing, pawn))
             {
-                yield return Toils_Reserve.Reserve(WaterIndex, 1, job.count, null);
+                yield return Toils_Reserve.Reserve(WaterIndex, 1, job.count);
             }
 
             if (drinkingFromInventory)

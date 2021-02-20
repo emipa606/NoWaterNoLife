@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -11,7 +7,9 @@ namespace MizuMod
 {
     public abstract class JobDriver_DrawWater : JobDriver_DoBill
     {
+        private readonly Action finishAction = () => { };
         private DefExtension_WaterRecipe extInt;
+
         protected DefExtension_WaterRecipe Ext
         {
             get
@@ -20,11 +18,10 @@ namespace MizuMod
                 {
                     extInt = job.bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
                 }
+
                 return extInt;
             }
         }
-
-        private readonly Action finishAction = () => { };
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {

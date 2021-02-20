@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -39,22 +36,23 @@ namespace MizuMod
             //   自然地形の汚れが付く＝人工フロア
             //   カーペットの研究が必要なもの＝カーペット
             var terrain = c.GetTerrain(pawn.Map);
-            if (terrain.filthAcceptanceMask == FilthSourceFlags.None || (terrain.researchPrerequisites != null && terrain.researchPrerequisites.Contains(ResearchProjectDefOf.CarpetMaking)))
+            if (terrain.filthAcceptanceMask == FilthSourceFlags.None || terrain.researchPrerequisites != null &&
+                terrain.researchPrerequisites.Contains(ResearchProjectDefOf.CarpetMaking))
             {
                 return false;
             }
 
             // その場所に汚れがあったらやらない
             var thingList = c.GetThingList(pawn.Map);
-            var filthList = thingList.Where((t) => t is Filth);
-            if (filthList != null && filthList.Count() > 0)
+            var filthList = thingList.Where(t => t is Filth);
+            if (filthList.Any())
             {
                 return false;
             }
 
             // 既にモップ掛けされている場所にはやらない
-            var moppedThingList = thingList.Where((t) => t.def == MizuDef.Thing_MoppedThing);
-            if (moppedThingList != null && moppedThingList.Count() > 0)
+            var moppedThingList = thingList.Where(t => t.def == MizuDef.Thing_MoppedThing);
+            if (moppedThingList.Any())
             {
                 return false;
             }
@@ -66,7 +64,7 @@ namespace MizuMod
             }
 
             // モップアイテムのチェック
-            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((t) =>
+            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
             {
                 // 使用禁止チェック
                 if (t.IsForbidden(pawn))
@@ -85,7 +83,7 @@ namespace MizuMod
                     return false;
                 }
 
-                var maxQueueLength = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                var maxQueueLength = (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
                 if (maxQueueLength <= 0)
                 {
                     return false;
@@ -93,12 +91,12 @@ namespace MizuMod
 
                 return true;
             });
-            if (mopList.Count() == 0)
+            if (!mopList.Any())
             {
                 return false;
             }
 
-            if (mopList.Where((t) => pawn.CanReserve(t)).Count() == 0)
+            if (mopList.Count(t => pawn.CanReserve(t)) == 0)
             {
                 return false;
             }
@@ -115,7 +113,7 @@ namespace MizuMod
             // 一番近いモップを探す
             Thing candidateMop = null;
             var minDist = int.MaxValue;
-            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((t) =>
+            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
             {
                 // 使用禁止チェック
                 if (t.IsForbidden(pawn))
@@ -134,7 +132,8 @@ namespace MizuMod
                     return false;
                 }
 
-                var maxQueueLengthForCheck = (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                var maxQueueLengthForCheck =
+                    (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
                 if (maxQueueLengthForCheck <= 0)
                 {
                     return false;
@@ -152,11 +151,13 @@ namespace MizuMod
                 }
 
                 var mopDist = (mop.Position - pawn.Position).LengthHorizontalSquared;
-                if (minDist > mopDist)
+                if (minDist <= mopDist)
                 {
-                    minDist = mopDist;
-                    candidateMop = mop;
+                    continue;
                 }
+
+                minDist = mopDist;
+                candidateMop = mop;
             }
 
             if (candidateMop == null)
@@ -171,33 +172,35 @@ namespace MizuMod
 
             var compTool = candidateMop.TryGetComp<CompWaterTool>();
             var maxQueueLength = Mathf.RoundToInt(compTool.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-            Map map = pawn.Map;
-            Room room = cell.GetRoom(map);
+            var map = pawn.Map;
+            var room = cell.GetRoom(map);
             for (var i = 0; i < 100; i++)
             {
                 // 対象の汚れの周囲100マスをサーチ
-                IntVec3 intVec = cell + GenRadial.RadialPattern[i];
-                if (intVec.InBounds(map) && intVec.GetRoom(map, RegionType.Set_Passable) == room)
+                var intVec = cell + GenRadial.RadialPattern[i];
+                if (!intVec.InBounds(map) || intVec.GetRoom(map) != room)
                 {
-                    // そこが同じ部屋の中
-                    if (HasJobOnCell(pawn, intVec) && intVec != cell)
-                    {
-                        // 同じジョブが作成可能(汚れがある等)あるならこのジョブの処理対象に追加
-                        job.AddQueuedTarget(TargetIndex.A, intVec);
-                    }
+                    continue;
+                }
 
-                    // 掃除最大個数チェック
-                    if (job.GetTargetQueue(TargetIndex.A).Count >= maxQueueLength)
-                    {
-                        break;
-                    }
+                // そこが同じ部屋の中
+                if (HasJobOnCell(pawn, intVec) && intVec != cell)
+                {
+                    // 同じジョブが作成可能(汚れがある等)あるならこのジョブの処理対象に追加
+                    job.AddQueuedTarget(TargetIndex.A, intVec);
+                }
+
+                // 掃除最大個数チェック
+                if (job.GetTargetQueue(TargetIndex.A).Count >= maxQueueLength)
+                {
+                    break;
                 }
             }
 
             if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
             {
                 // 掃除対象が5個以上あるならポーンからの距離が近い順に掃除させる
-                job.targetQueueA.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+                job.targetQueueA.SortBy(targ => targ.Cell.DistanceToSquared(pawn.Position));
             }
 
             return job;
@@ -246,6 +249,5 @@ namespace MizuMod
 
         //    return job;
         //}
-
     }
 }

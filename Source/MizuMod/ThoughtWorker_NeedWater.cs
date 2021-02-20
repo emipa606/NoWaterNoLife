@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using RimWorld;
 using Verse;
 
@@ -16,6 +12,7 @@ namespace MizuMod
             {
                 return ThoughtState.Inactive;
             }
+
             switch (p.needs.Water().CurCategory)
             {
                 case ThirstCategory.Healthy:
@@ -27,12 +24,12 @@ namespace MizuMod
                 case ThirstCategory.UrgentlyThirsty:
                     return ThoughtState.ActiveAtStage(2);
                 case ThirstCategory.Dehydration:
-                    {
-                        Hediff firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration, false);
-                        var num = (firstHediffOfDef != null) ? firstHediffOfDef.CurStageIndex : 0;
-                        // 脱水症状の1段階目=喉の渇き心情の4段階目 => +3する
-                        return ThoughtState.ActiveAtStage(3 + num);
-                    }
+                {
+                    var firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration);
+                    var num = firstHediffOfDef != null ? firstHediffOfDef.CurStageIndex : 0;
+                    // 脱水症状の1段階目=喉の渇き心情の4段階目 => +3する
+                    return ThoughtState.ActiveAtStage(3 + num);
+                }
                 default:
                     throw new NotImplementedException();
             }

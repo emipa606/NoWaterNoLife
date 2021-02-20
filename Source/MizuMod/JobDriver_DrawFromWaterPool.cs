@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace MizuMod
 {
     public class JobDriver_DrawFromWaterPool : JobDriver_DrawWater
     {
+        private UndergroundWaterPool poolInt;
         private MapComponent_ShallowWaterGrid waterGridInt;
+
         private MapComponent_ShallowWaterGrid WaterGrid
         {
             get
@@ -20,19 +16,21 @@ namespace MizuMod
                 {
                     waterGridInt = TargetThingA.Map.GetComponent<MapComponent_ShallowWaterGrid>();
                 }
+
                 return waterGridInt;
             }
         }
 
-        private UndergroundWaterPool poolInt;
         private UndergroundWaterPool Pool
         {
             get
             {
                 if (poolInt == null)
                 {
-                    poolInt = WaterGrid.GetPool(TargetThingA.Map.cellIndices.CellToIndex(job.GetTarget(BillGiverInd).Thing.Position));
+                    poolInt = WaterGrid.GetPool(
+                        TargetThingA.Map.cellIndices.CellToIndex(job.GetTarget(BillGiverInd).Thing.Position));
                 }
+
                 return poolInt;
             }
         }
@@ -65,13 +63,9 @@ namespace MizuMod
         {
             // 地下水脈の水の種類から水アイテムの種類を決定
             var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(Pool.WaterType);
-            if (waterThingDef == null)
-            {
-                return null;
-            }
 
             // 水アイテムの水源情報を得る
-            var compprop = waterThingDef.GetCompProperties<CompProperties_WaterSource>();
+            var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
             if (compprop == null)
             {
                 return null;

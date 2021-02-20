@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using UnityEngine;
 using Verse;
-using UnityEngine;
 
 namespace MizuMod
 {
@@ -17,7 +12,8 @@ namespace MizuMod
             WaterGrid.MarkForDraw();
         }
 
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
+        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map,
+            Thing thingToIgnore = null, Thing thing = null)
         {
             if (!(checkingDef is ThingDef def))
             {
@@ -30,8 +26,8 @@ namespace MizuMod
             {
                 for (var z = 0; z < def.Size.z; z++)
                 {
-                    IntVec3 relVec = new IntVec3(x, 0, z).RotatedBy(rot);
-                    IntVec3 curVec = loc + relVec;
+                    var relVec = new IntVec3(x, 0, z).RotatedBy(rot);
+                    var curVec = loc + relVec;
 
                     var poolID = WaterGrid.GetID(map.cellIndices.CellToIndex(curVec));
                     if (poolID == 0)

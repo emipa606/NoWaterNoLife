@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Linq;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
-using RimWorld;
 
 namespace MizuMod
 {
@@ -33,20 +29,21 @@ namespace MizuMod
             }
 
             // 人間用WorkGiverで相手が人間、または動物用WorkGiverで相手が動物、の組み合わせでない
-            if (!((def.tendToHumanlikesOnly && giver.RaceProps.Humanlike) || (def.tendToAnimalsOnly && giver.RaceProps.Animal)))
+            if (!(def.tendToHumanlikesOnly && giver.RaceProps.Humanlike ||
+                  def.tendToAnimalsOnly && giver.RaceProps.Animal))
             {
                 return false;
             }
 
             // 治療可能な体勢になっていない
-            if (!WorkGiver_Tend.GoodLayingStatusForTend(giver, pawn))
+            if (!GoodLayingStatusForTend(giver, pawn))
             {
                 return false;
             }
 
             // 免疫を得て直すタイプの健康状態を持っていない
             // (治療状態は問わない)
-            if (!giver.health.hediffSet.hediffs.Any((hediff) => hediff.def.PossibleToDevelopImmunityNaturally()))
+            if (!giver.health.hediffSet.hediffs.Any(hediff => hediff.def.PossibleToDevelopImmunityNaturally()))
             {
                 return false;
             }
@@ -58,7 +55,7 @@ namespace MizuMod
             }
 
             // 看病アイテムのチェック
-            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((thing) =>
+            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(thing =>
             {
                 // 使用禁止チェック
                 if (thing.IsForbidden(pawn))
@@ -85,12 +82,12 @@ namespace MizuMod
 
                 return true;
             });
-            if (mopList.Count() == 0)
+            if (!mopList.Any())
             {
                 return false;
             }
 
-            if (mopList.Where((thing) => pawn.CanReserve(thing)).Count() == 0)
+            if (mopList.Count(thing => pawn.CanReserve(thing)) == 0)
             {
                 return false;
             }
@@ -107,7 +104,7 @@ namespace MizuMod
             // 一番近いツールを探す
             Thing candidateTool = null;
             var minDist = int.MaxValue;
-            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where((thing) =>
+            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(thing =>
             {
                 // 使用禁止チェック
                 if (thing.IsForbidden(pawn))
@@ -144,11 +141,13 @@ namespace MizuMod
                 }
 
                 var toolDist = (tool.Position - pawn.Position).LengthHorizontalSquared;
-                if (minDist > toolDist)
+                if (minDist <= toolDist)
                 {
-                    minDist = toolDist;
-                    candidateTool = tool;
+                    continue;
                 }
+
+                minDist = toolDist;
+                candidateTool = tool;
             }
 
             if (candidateTool == null)

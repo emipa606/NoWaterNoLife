@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RimWorld;
 using Verse;
-using RimWorld;
 
 namespace MizuMod
 {
     public abstract class Designator_AreaMop : Designator
     {
         private readonly DesignateMode mode;
-
-        public override int DraggableDimensions => 2;
-
-        public override bool DragDrawMeasurements => true;
 
         public Designator_AreaMop(DesignateMode mode)
         {
@@ -26,17 +17,23 @@ namespace MizuMod
             //this.tutorTag = "AreaSnowClear";
         }
 
+        public override int DraggableDimensions => 2;
+
+        public override bool DragDrawMeasurements => true;
+
         public override AcceptanceReport CanDesignateCell(IntVec3 c)
         {
-            if (!c.InBounds(base.Map))
+            if (!c.InBounds(Map))
             {
                 return false;
             }
-            var flag = base.Map.areaManager.Mop()[c];
+
+            var flag = Map.areaManager.Mop()[c];
             if (mode == DesignateMode.Add)
             {
                 return !flag;
             }
+
             return flag;
         }
 
@@ -44,18 +41,18 @@ namespace MizuMod
         {
             if (mode == DesignateMode.Add)
             {
-                base.Map.areaManager.Mop()[c] = true;
+                Map.areaManager.Mop()[c] = true;
             }
             else
             {
-                base.Map.areaManager.Mop()[c] = false;
+                Map.areaManager.Mop()[c] = false;
             }
         }
 
         public override void SelectedUpdate()
         {
             GenUI.RenderMouseoverBracket();
-            base.Map.areaManager.Mop().MarkForDraw();
+            Map.areaManager.Mop().MarkForDraw();
         }
     }
 }

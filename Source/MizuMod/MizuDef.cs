@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using System.Collections.Generic;
 using RimWorld;
 using Verse;
 
@@ -12,7 +7,7 @@ namespace MizuMod
     [StaticConstructorOnStartup]
     public static class MizuDef
     {
-        public static GlobalSettingDef GlobalSettings = DefDatabase<MizuMod.GlobalSettingDef>.GetNamed("Mizu_GlobalSettings");
+        public static GlobalSettingDef GlobalSettings = DefDatabase<GlobalSettingDef>.GetNamed("Mizu_GlobalSettings");
 
         public static NeedDef Need_Water = DefDatabase<NeedDef>.GetNamed("Mizu_Water");
 
@@ -46,8 +41,12 @@ namespace MizuMod
         public static ThoughtDef Thought_DrankMudWater = DefDatabase<ThoughtDef>.GetNamed("Mizu_DrankMudWater");
         public static ThoughtDef Thought_DrankSeaWater = DefDatabase<ThoughtDef>.GetNamed("Mizu_DrankSeaWater");
         public static ThoughtDef Thought_DrankScoopedWater = DefDatabase<ThoughtDef>.GetNamed("Mizu_DrankScoopedWater");
-        public static ThoughtDef Thought_SippedWaterLikeBeast = DefDatabase<ThoughtDef>.GetNamed("Mizu_SippedWaterLikeBeast");
-        public static ThoughtDef Thought_AteIcyFoodInHotSeason = DefDatabase<ThoughtDef>.GetNamed("Mizu_AteIcyFoodInHotSeason");
+
+        public static ThoughtDef Thought_SippedWaterLikeBeast =
+            DefDatabase<ThoughtDef>.GetNamed("Mizu_SippedWaterLikeBeast");
+
+        public static ThoughtDef Thought_AteIcyFoodInHotSeason =
+            DefDatabase<ThoughtDef>.GetNamed("Mizu_AteIcyFoodInHotSeason");
 
         public static ThingDef Thing_ClearWater = DefDatabase<ThingDef>.GetNamed("Mizu_ClearWater");
         public static ThingDef Thing_NormalWater = DefDatabase<ThingDef>.GetNamed("Mizu_NormalWater");
@@ -78,22 +77,22 @@ namespace MizuMod
 
         static MizuDef()
         {
-            List_WaterItem = new List<ThingDef>()
+            List_WaterItem = new List<ThingDef>
             {
                 Thing_ClearWater,
                 Thing_NormalWater,
                 Thing_RawWater,
                 Thing_MudWater,
-                Thing_SeaWater,
+                Thing_SeaWater
             };
 
-            Dic_WaterTypeDef = new Dictionary<WaterType, WaterTypeDef>()
+            Dic_WaterTypeDef = new Dictionary<WaterType, WaterTypeDef>
             {
-                { WaterType.ClearWater, WaterType_Clear },
-                { WaterType.NormalWater, WaterType_Normal },
-                { WaterType.RawWater, WaterType_Raw },
-                { WaterType.MudWater, WaterType_Mud },
-                { WaterType.SeaWater, WaterType_Sea },
+                {WaterType.ClearWater, WaterType_Clear},
+                {WaterType.NormalWater, WaterType_Normal},
+                {WaterType.RawWater, WaterType_Raw},
+                {WaterType.MudWater, WaterType_Mud},
+                {WaterType.SeaWater, WaterType_Sea}
             };
         }
     }

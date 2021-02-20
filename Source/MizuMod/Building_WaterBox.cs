@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using Verse;
 
 namespace MizuMod
 {
-    public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_WaterNet, IBuilding_DrinkWater
+    public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWater
     {
-        private readonly List<float> graphicThreshold = new List<float>()
+        private readonly List<float> graphicThreshold = new List<float>
         {
             0.05f,
             0.35f,
             0.65f,
             0.95f,
-            100f,
+            100f
         };
 
-        private int graphicIndex = 0;
-        private int prevGraphicIndex = 0;
+        private int graphicIndex;
+        private int prevGraphicIndex;
 
-        public override Graphic Graphic => MizuGraphics.LinkedWaterBoxes[graphicIndex].GetColoredVersion(MizuGraphics.WaterBoxes[graphicIndex].Shader, DrawColor, DrawColorTwo);
+        public override Graphic Graphic => MizuGraphics.LinkedWaterBoxes[graphicIndex]
+            .GetColoredVersion(MizuGraphics.WaterBoxes[graphicIndex].Shader, DrawColor, DrawColorTwo);
 
         public WaterType WaterType
         {
@@ -69,7 +67,7 @@ namespace MizuMod
 
         public bool CanDrinkFor(Pawn p)
         {
-            if (p.needs == null || p.needs.Water() == null)
+            if (p.needs?.Water() == null)
             {
                 return false;
             }
@@ -100,7 +98,8 @@ namespace MizuMod
                 return false;
             }
 
-            var waterItemDef = MizuDef.List_WaterItem.First((def) => def.GetCompProperties<CompProperties_WaterSource>().waterType == TankComp.StoredWaterType);
+            var waterItemDef = MizuDef.List_WaterItem.First(thingDef =>
+                thingDef.GetCompProperties<CompProperties_WaterSource>().waterType == TankComp.StoredWaterType);
             var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
 
             // 汲める予定の水アイテムの水の量より多い
@@ -109,19 +108,14 @@ namespace MizuMod
 
         public void DrawWater(float amount)
         {
-            if (TankComp == null)
-            {
-                return;
-            }
-
-            TankComp.DrawWaterVolume(amount);
+            TankComp?.DrawWaterVolume(amount);
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            Scribe_Values.Look<int>(ref graphicIndex, "graphicIndex");
+            Scribe_Values.Look(ref graphicIndex, "graphicIndex");
             prevGraphicIndex = graphicIndex;
         }
 
@@ -138,11 +132,13 @@ namespace MizuMod
 
             for (var i = 0; i < graphicThreshold.Count; i++)
             {
-                if (TankComp.StoredWaterVolumePercent < graphicThreshold[i])
+                if (!(TankComp.StoredWaterVolumePercent < graphicThreshold[i]))
                 {
-                    graphicIndex = i;
-                    break;
+                    continue;
                 }
+
+                graphicIndex = i;
+                break;
             }
 
             if (graphicIndex != prevGraphicIndex)

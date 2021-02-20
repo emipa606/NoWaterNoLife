@@ -1,37 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace MizuMod
 {
-    public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver, IExposable
+    public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
     {
         private readonly CellBoolDrawer drawer;
         private readonly ushort[] poolIDGrid;
         private List<UndergroundWaterPool> pools = new List<UndergroundWaterPool>();
 
-        public Color Color => Color.white;
-
-        public MapComponent_WaterGrid(Map map) : base(map)
+        protected MapComponent_WaterGrid(Map map) : base(map)
         {
             poolIDGrid = new ushort[map.cellIndices.NumGridCells];
             drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
+        }
+
+        public Color Color => Color.white;
+
+        public bool GetCellBool(int index)
+        {
+            return poolIDGrid[index] != 0;
+        }
+
+        public Color GetCellExtraColor(int index)
+        {
+            var pool = pools.Find(p => p.ID == poolIDGrid[index]);
+            return UndergroundWaterMaterials
+                .Mat(Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            MapExposeUtility.ExposeUshort(map, (c) => poolIDGrid[map.cellIndices.CellToIndex(c)], (c, id) => poolIDGrid[map.cellIndices.CellToIndex(c)] = id, "poolIDGrid");
+            MapExposeUtility.ExposeUshort(map, c => poolIDGrid[map.cellIndices.CellToIndex(c)],
+                (c, id) => poolIDGrid[map.cellIndices.CellToIndex(c)] = id, "poolIDGrid");
 
-            Scribe_Collections.Look<UndergroundWaterPool>(ref pools, "pools", LookMode.Deep, new object[]
-            {
-                this
-            });
+            Scribe_Collections.Look(ref pools, "pools", LookMode.Deep, this);
         }
 
         public void AddWaterPool(UndergroundWaterPool pool, IEnumerable<IntVec3> cells)
@@ -44,17 +50,20 @@ namespace MizuMod
             // 既存の水源と被るセルを調べる
             foreach (var c in cells)
             {
-                if (GetID(c) != 0)
+                if (GetID(c) == 0)
                 {
-                    var existPool = pools.Find((p) => p.ID == GetID(c));
-                    if (existPool == null)
-                    {
-                        Log.Error("existPool is null");
-                    }
-                    if (!mergePools.Contains(existPool))
-                    {
-                        mergePools.Add(existPool);
-                    }
+                    continue;
+                }
+
+                var existPool = pools.Find(p => p.ID == GetID(c));
+                if (existPool == null)
+                {
+                    Log.Error("existPool is null");
+                }
+
+                if (!mergePools.Contains(existPool))
+                {
+                    mergePools.Add(existPool);
                 }
             }
 
@@ -65,7 +74,11 @@ namespace MizuMod
                 SetID(c, pool.ID);
             }
 
-            if (mergePools.Count >= 2)
+            if (mergePools.Count < 2)
+            {
+                return;
+            }
+
             {
                 // 最小の水源IDのものに統合する
 
@@ -86,14 +99,19 @@ namespace MizuMod
                 foreach (var p in mergePools)
                 {
                     pools.Remove(p);
-                    minPool.MergeWaterVolume(p);
+                    minPool?.MergeWaterVolume(p);
                 }
 
                 // 全セルを調べ、消滅予定水源IDの場所を最小IDに変更
                 for (var i = 0; i < poolIDGrid.Length; i++)
                 {
                     //Log.Message("i=" + i.ToString());
-                    if (mergePools.Find((p) => p.ID == GetID(i)) != null)
+                    if (mergePools.Find(p => p.ID == GetID(i)) == null)
+                    {
+                        continue;
+                    }
+
+                    if (minPool != null)
                     {
                         SetID(i, minPool.ID);
                     }
@@ -115,22 +133,22 @@ namespace MizuMod
                     }
 
                     nearVecs.Clear();
-                    if ((x - 1) >= 0)
+                    if (x - 1 >= 0)
                     {
                         nearVecs.Add(new IntVec3(x - 1, 0, z));
                     }
 
-                    if ((x + 1) < map.Size.x)
+                    if (x + 1 < map.Size.x)
                     {
                         nearVecs.Add(new IntVec3(x + 1, 0, z));
                     }
 
-                    if ((z - 1) >= 0)
+                    if (z - 1 >= 0)
                     {
                         nearVecs.Add(new IntVec3(x, 0, z - 1));
                     }
 
-                    if ((z + 1) < map.Size.z)
+                    if (z + 1 < map.Size.z)
                     {
                         nearVecs.Add(new IntVec3(x, 0, z + 1));
                     }
@@ -143,23 +161,28 @@ namespace MizuMod
                             continue;
                         }
 
-                        if (GetID(curIndex) != GetID(nearIndex))
+                        if (GetID(curIndex) == GetID(nearIndex))
                         {
-                            var curPool = pools.Find((p) => p.ID == GetID(curIndex));
-                            if (curPool == null)
-                            {
-                                Log.Error("curPool is null");
-                            }
-                            var nearPool = pools.Find((p) => p.ID == GetID(nearIndex));
-                            if (nearPool == null)
-                            {
-                                Log.Error("nearPool is null");
-                            }
-                            curPool.MergePool(nearPool, poolIDGrid);
-                            pools.Remove(nearPool);
-
-                            break;
+                            continue;
                         }
+
+                        var curPool = pools.Find(p => p.ID == GetID(curIndex));
+                        if (curPool == null)
+                        {
+                            Log.Error("curPool is null");
+                        }
+
+                        var nearPool = pools.Find(p => p.ID == GetID(nearIndex));
+                        if (nearPool == null)
+                        {
+                            Log.Error("nearPool is null");
+                        }
+
+                        curPool?.MergePool(nearPool, poolIDGrid);
+
+                        pools.Remove(nearPool);
+
+                        break;
                     }
                 }
             }
@@ -167,33 +190,27 @@ namespace MizuMod
 
         public int GetID(int index)
         {
-            return (int)poolIDGrid[index];
+            return poolIDGrid[index];
         }
+
         public int GetID(IntVec3 c)
         {
             return GetID(map.cellIndices.CellToIndex(c));
         }
-        public void SetID(int index, int id)
+
+        private void SetID(int index, int id)
         {
-            poolIDGrid[index] = (ushort)id;
+            poolIDGrid[index] = (ushort) id;
         }
-        public void SetID(IntVec3 c, int id)
+
+        private void SetID(IntVec3 c, int id)
         {
             SetID(map.cellIndices.CellToIndex(c), id);
         }
+
         public UndergroundWaterPool GetPool(int index)
         {
-            return pools.Find((p) => p.ID == poolIDGrid[index]);
-        }
-        public bool GetCellBool(int index)
-        {
-            return poolIDGrid[index] != 0;
-        }
-
-        public Color GetCellExtraColor(int index)
-        {
-            var pool = pools.Find((p) => p.ID == poolIDGrid[index]);
-            return UndergroundWaterMaterials.Mat(Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
+            return pools.Find(p => p.ID == poolIDGrid[index]);
         }
 
         public void SetDirty()
@@ -202,8 +219,8 @@ namespace MizuMod
             {
                 drawer.SetDirty();
             }
-
         }
+
         public void MarkForDraw()
         {
             if (map == Find.CurrentMap)

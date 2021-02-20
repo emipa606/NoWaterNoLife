@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace MizuMod
 {
@@ -13,7 +7,12 @@ namespace MizuMod
     {
         public int destroyTicks = 1;
 
-        public CompProperties_DestroyByTime() : base(typeof(CompDestroyByTime)) { }
-        public CompProperties_DestroyByTime(Type compClass) : base(compClass) { }
+        public CompProperties_DestroyByTime() : base(typeof(CompDestroyByTime))
+        {
+        }
+
+        public CompProperties_DestroyByTime(Type compClass) : base(compClass)
+        {
+        }
     }
 }

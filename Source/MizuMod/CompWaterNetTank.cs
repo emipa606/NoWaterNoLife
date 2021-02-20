@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-
-using Verse;
-using Verse.Sound;
 using RimWorld;
 using UnityEngine;
+using Verse;
 
 namespace MizuMod
 {
@@ -14,10 +10,26 @@ namespace MizuMod
     public class CompWaterNetTank : CompWaterNet
     {
         private static readonly float BarThick = 0.15f;
-        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.1f, 0.8f, 0.8f), false);
-        private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f), false);
 
-        public new CompProperties_WaterNetTank Props => (CompProperties_WaterNetTank)props;
+        private static readonly Material BarFilledMat =
+            SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.1f, 0.8f, 0.8f));
+
+        private static readonly Material BarUnfilledMat =
+            SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f));
+
+        private CompFlickable compFlickable;
+
+        private WaterType storedWaterType;
+
+        private float storedWaterVolume;
+
+        public CompWaterNetTank()
+        {
+            storedWaterVolume = 0.0f;
+            storedWaterType = WaterType.NoWater;
+        }
+
+        private new CompProperties_WaterNetTank Props => (CompProperties_WaterNetTank) props;
 
         public float AmountCanAccept
         {
@@ -27,16 +39,16 @@ namespace MizuMod
                 {
                     return 0f;
                 }
+
                 return MaxWaterVolume - StoredWaterVolume;
             }
         }
 
         public float MaxWaterVolume => Props.maxWaterVolume;
-        public bool ShowBar => Props.showBar;
+        private bool ShowBar => Props.showBar;
         public int FlatID => Props.flatID;
         public List<CompProperties_WaterNetTank.DrawType> DrawTypes => Props.drawTypes;
 
-        private float storedWaterVolume = 0;
         public float StoredWaterVolume
         {
             get => storedWaterVolume;
@@ -70,26 +82,17 @@ namespace MizuMod
             }
         }
 
-        private WaterType storedWaterType = WaterType.NoWater;
         public WaterType StoredWaterType
         {
             get => storedWaterType;
             set => storedWaterType = value;
         }
 
-        private CompFlickable compFlickable = null;
-
-        public CompWaterNetTank() : base()
-        {
-            storedWaterVolume = 0.0f;
-            storedWaterType = WaterType.NoWater;
-        }
-
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look<float>(ref storedWaterVolume, "storedWaterVolume");
-            Scribe_Values.Look<WaterType>(ref storedWaterType, "storedWaterType", WaterType.NoWater);
+            Scribe_Values.Look(ref storedWaterVolume, "storedWaterVolume");
+            Scribe_Values.Look(ref storedWaterType, "storedWaterType", WaterType.NoWater);
 
             if (storedWaterVolume > MaxWaterVolume)
             {
@@ -123,6 +126,7 @@ namespace MizuMod
                 Log.Error("Cannot draw negative water volume " + amount);
                 return 0.0f;
             }
+
             var prevWaterVolume = StoredWaterVolume;
             StoredWaterVolume -= amount;
             return prevWaterVolume - StoredWaterVolume;
@@ -137,20 +141,13 @@ namespace MizuMod
                 stringBuilder.AppendLine();
             }
 
-            stringBuilder.Append(string.Concat(new string[]
-            {
-                MizuStrings.InspectWaterTankStored.Translate(),
-                ": ",
-                StoredWaterVolume.ToString("F2"),
-                " / ",
-                MaxWaterVolume.ToString("F2"),
-                " L"
-            }));
-            stringBuilder.Append(string.Concat(new string[]
+            stringBuilder.Append(string.Concat(MizuStrings.InspectWaterTankStored.Translate(), ": ",
+                StoredWaterVolume.ToString("F2"), " / ", MaxWaterVolume.ToString("F2"), " L"));
+            stringBuilder.Append(string.Concat(new[]
             {
                 "(",
                 MizuStrings.GetInspectWaterTypeString(StoredWaterType),
-                ")",
+                ")"
             }));
 
             return stringBuilder.ToString();
@@ -160,21 +157,23 @@ namespace MizuMod
         {
             base.PostDraw();
 
-            if (ShowBar)
+            if (!ShowBar)
             {
-                var r = new GenDraw.FillableBarRequest
-                {
-                    center = parent.DrawPos + (Vector3.up * 0.1f) + (Vector3.back * parent.def.size.z / 4.0f),
-                    size = new Vector2(parent.RotatedSize.x, BarThick),
-                    //r.center = new Vector3(this.parent.DrawPos.x, 0.1f, 1.0f - r.size.y / 2.0f);
-                    //Log.Message(this.parent.DrawPos.ToString());
-                    fillPercent = StoredWaterVolume / MaxWaterVolume,
-                    filledMat = BarFilledMat,
-                    unfilledMat = BarUnfilledMat,
-                    margin = 0.15f
-                };
-                GenDraw.DrawFillableBar(r);
+                return;
             }
+
+            var r = new GenDraw.FillableBarRequest
+            {
+                center = parent.DrawPos + (Vector3.up * 0.1f) + (Vector3.back * parent.def.size.z / 4.0f),
+                size = new Vector2(parent.RotatedSize.x, BarThick),
+                //r.center = new Vector3(this.parent.DrawPos.x, 0.1f, 1.0f - r.size.y / 2.0f);
+                //Log.Message(this.parent.DrawPos.ToString());
+                fillPercent = StoredWaterVolume / MaxWaterVolume,
+                filledMat = BarFilledMat,
+                unfilledMat = BarUnfilledMat,
+                margin = 0.15f
+            };
+            GenDraw.DrawFillableBar(r);
         }
     }
 }

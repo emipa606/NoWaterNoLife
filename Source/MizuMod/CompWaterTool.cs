@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-
 using UnityEngine;
 using Verse;
-using RimWorld;
 
 namespace MizuMod
 {
     public class CompWaterTool : ThingComp
     {
-        public CompProperties_WaterTool Props => (CompProperties_WaterTool)props;
+        private WaterType storedWaterType = WaterType.NoWater;
+
+        private float storedWaterVolume;
+        public CompProperties_WaterTool Props => (CompProperties_WaterTool) props;
 
         public List<CompProperties_WaterTool.UseWorkType> UseWorkType => Props.useWorkType;
         public List<WorkTypeDef> SupplyWorkType => Props.supplyWorkType;
         public float MaxWaterVolume => Props.maxWaterVolume;
 
-        private float storedWaterVolume;
         public float StoredWaterVolume
         {
             get => storedWaterVolume;
@@ -31,7 +29,6 @@ namespace MizuMod
             }
         }
 
-        private WaterType storedWaterType = WaterType.NoWater;
         public WaterType StoredWaterType
         {
             get => storedWaterType;
@@ -57,31 +54,26 @@ namespace MizuMod
             {
                 stringBuilder.AppendLine();
             }
-            stringBuilder.Append(string.Concat(new string[]
+
+            stringBuilder.Append(string.Concat(new[]
             {
-                MizuStrings.InspectWaterToolStored.Translate(),
+                MizuStrings.InspectWaterToolStored.Translate().RawText,
                 ":",
                 (StoredWaterVolumePercent * 100).ToString("F0"),
-                "%",
+                "%"
             }));
 
             if (DebugSettings.godMode)
             {
-                stringBuilder.Append(string.Concat(new string[]
-                {
-                    "(",
-                    StoredWaterVolume.ToString("F2"),
-                    "/",
-                    MaxWaterVolume.ToString("F2"),
-                    ")",
-                }));
+                stringBuilder.Append(string.Concat("(", StoredWaterVolume.ToString("F2"), "/",
+                    MaxWaterVolume.ToString("F2"), ")"));
             }
 
-            stringBuilder.Append(string.Concat(new string[]
+            stringBuilder.Append(string.Concat(new[]
             {
                 "(",
                 MizuStrings.GetInspectWaterTypeString(StoredWaterType),
-                ")",
+                ")"
             }));
 
             return stringBuilder.ToString();

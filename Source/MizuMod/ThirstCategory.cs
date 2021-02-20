@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MizuMod
+﻿namespace MizuMod
 {
     public enum ThirstCategory
     {
@@ -11,6 +6,6 @@ namespace MizuMod
         SlightlyThirsty,
         Thirsty,
         UrgentlyThirsty,
-        Dehydration,
+        Dehydration
     }
 }

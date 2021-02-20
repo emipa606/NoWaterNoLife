@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Verse;
+﻿using Verse;
 
 namespace MizuMod
 {
     public class CompDestroyByTime : ThingComp
     {
-        public CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime)props;
+        private int elapsedTicks;
+        private CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime) props;
 
-        public int DestroyTicks => Props.destroyTicks;
-
-        private int elapsedTicks = 0;
+        private int DestroyTicks => Props.destroyTicks;
 
         public override void PostExposeData()
         {
@@ -35,16 +29,16 @@ namespace MizuMod
 
         private void CheckTick()
         {
-            if (elapsedTicks >= DestroyTicks)
+            if (elapsedTicks < DestroyTicks)
             {
-                var t = parent;
-
-                if (t.holdingOwner != null)
-                {
-                    t.holdingOwner.Remove(t);
-                }
-                t.Destroy(DestroyMode.Vanish);
+                return;
             }
+
+            var t = parent;
+
+            t.holdingOwner?.Remove(t);
+
+            t.Destroy();
         }
     }
 }

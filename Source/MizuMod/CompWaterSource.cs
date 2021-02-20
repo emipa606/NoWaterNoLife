@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -11,7 +8,8 @@ namespace MizuMod
 {
     public class CompWaterSource : ThingComp
     {
-        public CompProperties_WaterSource Props => (CompProperties_WaterSource)props;
+        private CompFlickable compFlickable;
+        public CompProperties_WaterSource Props => (CompProperties_WaterSource) props;
 
         public CompProperties_WaterSource.SourceType SourceType => Props.sourceType;
         public EffecterDef GetEffect => Props.getEffect;
@@ -49,8 +47,6 @@ namespace MizuMod
 
         public float DrainWaterFlow => Props.drainWaterFlow;
 
-        private CompFlickable compFlickable = null;
-
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
@@ -79,49 +75,56 @@ namespace MizuMod
                 yield return floatMenuOption;
             }
 
-            if (SourceType == CompProperties_WaterSource.SourceType.Item && !parent.def.IsIngestible)
+            if (SourceType != CompProperties_WaterSource.SourceType.Item || parent.def.IsIngestible)
             {
-                // 水アイテムで、食べることが出来ないものは飲める
-
-                if (selPawn.IsColonistPlayerControlled)
-                {
-                    var stringBuilder = new StringBuilder();
-                    stringBuilder.Append(string.Format(MizuStrings.FloatMenuGetWater.Translate(), parent.LabelNoCount).CapitalizeFirst());
-
-                    if (!parent.IsSociallyProper(selPawn))
-                    {
-                        // 囚人部屋のものは表示を追加
-                        stringBuilder.Append(string.Concat(
-                            " (",
-                            "ReservedForPrisoners".Translate(),
-                            ")"
-                        ));
-                    }
-                    foreach (var p in parent.Map.mapPawns.AllPawns)
-                    {
-                        if (parent.Map.reservationManager.ReservedBy(parent, p))
-                        {
-                            // 予約されている物は表示を追加
-                            stringBuilder.AppendLine();
-                            stringBuilder.Append(string.Format(string.Concat(
-                                " (",
-                                "ReservedBy".Translate(p.LabelShort, p),
-                                ")")));
-
-                            break;
-                        }
-                    }
-
-                    yield return new FloatMenuOption(stringBuilder.ToString(), () =>
-                    {
-                        var job = new Job(MizuDef.Job_DrinkWater, parent)
-                        {
-                            count = MizuUtility.WillGetStackCountOf(selPawn, parent)
-                        };
-                        selPawn.jobs.TryTakeOrderedJob(job, JobTag.SatisfyingNeeds);
-                    });
-                }
+                yield break;
             }
+            // 水アイテムで、食べることが出来ないものは飲める
+
+            if (!selPawn.IsColonistPlayerControlled)
+            {
+                yield break;
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(string.Format(MizuStrings.FloatMenuGetWater.Translate(), parent.LabelNoCount)
+                .CapitalizeFirst());
+
+            if (!parent.IsSociallyProper(selPawn))
+            {
+                // 囚人部屋のものは表示を追加
+                stringBuilder.Append(string.Concat(
+                    " (",
+                    "ReservedForPrisoners".Translate(),
+                    ")"
+                ));
+            }
+
+            foreach (var p in parent.Map.mapPawns.AllPawns)
+            {
+                if (!parent.Map.reservationManager.ReservedBy(parent, p))
+                {
+                    continue;
+                }
+
+                // 予約されている物は表示を追加
+                stringBuilder.AppendLine();
+                stringBuilder.Append(string.Format(string.Concat(
+                    " (",
+                    "ReservedBy".Translate(p.LabelShort, p),
+                    ")")));
+
+                break;
+            }
+
+            yield return new FloatMenuOption(stringBuilder.ToString(), () =>
+            {
+                var job = new Job(MizuDef.Job_DrinkWater, parent)
+                {
+                    count = MizuUtility.WillGetStackCountOf(selPawn, parent)
+                };
+                selPawn.jobs.TryTakeOrderedJob(job, JobTag.SatisfyingNeeds);
+            });
         }
     }
 }

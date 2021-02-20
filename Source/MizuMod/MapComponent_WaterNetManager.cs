@@ -1,31 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace MizuMod
 {
     public class MapComponent_WaterNetManager : MapComponent
     {
-        private bool requestedUpdateWaterNet = false;
-
-        public List<WaterNet> Nets { get; } = new List<WaterNet>();
-
-        public List<IBuilding_WaterNet> UnNetThings { get; } = new List<IBuilding_WaterNet>();
+        private bool requestedUpdateWaterNet;
 
         public MapComponent_WaterNetManager(Map map) : base(map)
         {
         }
+
+        public List<WaterNet> Nets { get; } = new List<WaterNet>();
+
+        public List<IBuilding_WaterNet> UnNetThings { get; } = new List<IBuilding_WaterNet>();
 
         public void RequestUpdateWaterNet()
         {
             requestedUpdateWaterNet = true;
         }
 
-        public Queue<IBuilding_WaterNet> ClearWaterNets()
+        private Queue<IBuilding_WaterNet> ClearWaterNets()
         {
             var unNetQueue = new Queue<IBuilding_WaterNet>();
 
@@ -38,21 +33,26 @@ namespace MizuMod
                     unNetQueue.Enqueue(t);
                 }
             }
+
             UnNetThings.Clear();
 
             foreach (var net in Nets)
             {
                 foreach (var t in net.AllThings)
                 {
-                    if (!unNetQueue.Contains(t))
+                    if (unNetQueue.Contains(t))
                     {
-                        t.InputWaterNet = null;
-                        t.OutputWaterNet = null;
-                        unNetQueue.Enqueue(t);
+                        continue;
                     }
+
+                    t.InputWaterNet = null;
+                    t.OutputWaterNet = null;
+                    unNetQueue.Enqueue(t);
                 }
+
                 net.ClearThings();
             }
+
             ClearNets();
 
             WaterNet.ClearNextID();
@@ -62,12 +62,12 @@ namespace MizuMod
 
         public void UpdateWaterNets()
         {
-            Queue<IBuilding_WaterNet> unNetQueue = ClearWaterNets();
+            var unNetQueue = ClearWaterNets();
             var unNetDiffQueue = new Queue<IBuilding_WaterNet>();
 
             while (unNetQueue.Count > 0)
             {
-                IBuilding_WaterNet thing = unNetQueue.Dequeue();
+                var thing = unNetQueue.Dequeue();
                 var inputNets = new List<WaterNet>();
                 var outputNets = new List<WaterNet>();
 
@@ -82,6 +82,7 @@ namespace MizuMod
                     UnNetThings.Add(thing);
                     continue;
                 }
+
                 foreach (var net in Nets)
                 {
                     foreach (var t in net.AllThings)
@@ -90,6 +91,7 @@ namespace MizuMod
                         {
                             outputNets.Add(t.InputWaterNet);
                         }
+
                         if (t.IsOutputTo(thing) && !inputNets.Contains(net))
                         {
                             inputNets.Add(t.OutputWaterNet);
@@ -129,6 +131,7 @@ namespace MizuMod
                     {
                         connectNets[0].AddThing(thing);
                     }
+
                     for (var i = 1; i < connectNets.Count; i++)
                     {
                         // 消滅する水道網に所属している物を全て移し替える
@@ -148,7 +151,7 @@ namespace MizuMod
 
             while (unNetDiffQueue.Count > 0)
             {
-                IBuilding_WaterNet thing = unNetDiffQueue.Dequeue();
+                var thing = unNetDiffQueue.Dequeue();
                 var inputNets = new List<WaterNet>();
                 var outputNets = new List<WaterNet>();
 
@@ -157,6 +160,7 @@ namespace MizuMod
                     UnNetThings.Add(thing);
                     continue;
                 }
+
                 foreach (var net in Nets)
                 {
                     foreach (var t in net.AllThings)
@@ -165,6 +169,7 @@ namespace MizuMod
                         {
                             outputNets.Add(t.InputWaterNet);
                         }
+
                         if (t.IsOutputTo(thing) && !inputNets.Contains(net))
                         {
                             inputNets.Add(t.OutputWaterNet);
@@ -194,7 +199,8 @@ namespace MizuMod
                     {
                         inputNets[0].AddInputThing(thing);
                     }
-                    for (var i = 1; i<inputNets.Count; i++)
+
+                    for (var i = 1; i < inputNets.Count; i++)
                     {
                         // 消滅する水道網に所属している物を全て移し替える
                         foreach (var t in inputNets[i].AllThings)
@@ -232,7 +238,8 @@ namespace MizuMod
                     {
                         outputNets[0].AddOutputThing(thing);
                     }
-                    for (var i = 1; i<outputNets.Count; i++)
+
+                    for (var i = 1; i < outputNets.Count; i++)
                     {
                         // 消滅する水道網に所属している物を全て移し替える
                         foreach (var t in outputNets[i].AllThings)
@@ -247,7 +254,6 @@ namespace MizuMod
                         Nets.Remove(outputNets[i]);
                     }
                 }
-
             }
         }
 
@@ -260,14 +266,10 @@ namespace MizuMod
         public void RemoveThing(IBuilding_WaterNet thing)
         {
             // 対象の物を除去
-            if (thing.InputWaterNet != null)
-            {
-                thing.InputWaterNet.RemoveThing(thing);
-            }
-            if (thing.OutputWaterNet != null)
-            {
-                thing.OutputWaterNet.RemoveThing(thing);
-            }
+            thing.InputWaterNet?.RemoveThing(thing);
+
+            thing.OutputWaterNet?.RemoveThing(thing);
+
             if (UnNetThings.Contains(thing))
             {
                 UnNetThings.Remove(thing);
@@ -276,7 +278,7 @@ namespace MizuMod
             UpdateWaterNets();
         }
 
-        public void AddNet(WaterNet net)
+        private void AddNet(WaterNet net)
         {
             net.Manager = this;
             Nets.Add(net);
@@ -288,12 +290,13 @@ namespace MizuMod
             Nets.Remove(net);
         }
 
-        public void ClearNets()
+        private void ClearNets()
         {
             foreach (var net in Nets)
             {
                 net.Manager = null;
             }
+
             Nets.Clear();
         }
 
@@ -312,6 +315,7 @@ namespace MizuMod
             {
                 net.UpdateInputWaterFlow();
             }
+
             // タンクの水量とタンク内の水質を更新
             foreach (var net in Nets)
             {

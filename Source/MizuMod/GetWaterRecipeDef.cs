@@ -1,34 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace MizuMod
 {
     public class GetWaterRecipeDef : RecipeDef
     {
-        public List<WaterTerrainType> needWaterTerrainTypes = null;
-        public List<WaterType> needWaterTypes = null;
         //public float needWaterVolume = 1.0f;
         public int getItemCount = 1;
+        public List<WaterTerrainType> needWaterTerrainTypes = null;
+        public List<WaterType> needWaterTypes = null;
 
         public override void PostLoad()
         {
             base.PostLoad();
 
-            if (products == null)
+            if (products != null)
             {
-                var thingCountClass = new ThingDefCountClass();
-                DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingCountClass, "thingDef", "Mizu_NormalWater");
-                thingCountClass.count = 1;
-
-                products = new List<ThingDefCountClass>()
-                {
-                    thingCountClass,
-                };
+                return;
             }
+
+            var thingCountClass = new ThingDefCountClass();
+            DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingCountClass, "thingDef", "Mizu_NormalWater");
+            thingCountClass.count = 1;
+
+            products = new List<ThingDefCountClass>
+            {
+                thingCountClass
+            };
         }
     }
 }
