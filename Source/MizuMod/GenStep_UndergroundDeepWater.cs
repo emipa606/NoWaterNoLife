@@ -9,7 +9,7 @@ namespace MizuMod
         public override void Generate(Map map, GenStepParams parms)
         {
             var waterGrid = map.GetComponent<MapComponent_DeepWaterGrid>();
-            GenerateUndergroundWaterGrid(
+            MizuUtility.GenerateUndergroundWaterGrid(
                 map,
                 waterGrid,
                 basePoolNum,

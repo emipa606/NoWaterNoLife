@@ -25,7 +25,9 @@ namespace MizuMod
 
         private WaterType waterType;
 
-        private UndergroundWaterPool(MapComponent_WaterGrid waterGrid)
+        // ReSharper disable once MemberCanBePrivate.Global
+        // Needs to be public for the water-grid loading to work
+        public UndergroundWaterPool(MapComponent_WaterGrid waterGrid)
         {
             this.waterGrid = waterGrid;
             lastTick = Find.TickManager.TicksGame;
@@ -61,6 +63,7 @@ namespace MizuMod
                 waterGrid.SetDirty();
             }
         }
+
 
         public float BaseRegenRate => baseRegenRate;
         public float RainRegenRatePerCell => rainRegenRatePerCell;

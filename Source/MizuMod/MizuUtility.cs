@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -1099,6 +1100,57 @@ namespace MizuMod
             }
 
             return waterType;
+        }
+
+
+        public static void GenerateUndergroundWaterGrid(Map map, MapComponent_WaterGrid waterGrid, int basePoolNum = 30,
+            int minWaterPoolNum = 3, float baseRainFall = 1000f, float basePlantDensity = 0.25f,
+            float literPerCell = 10.0f, IntRange poolCellRange = default,
+            FloatRange baseRegenRateRange = default, float rainRegenRatePerCell = 5.0f)
+        {
+            if (poolCellRange == default)
+            {
+                poolCellRange = new IntRange(30, 100);
+            }
+
+            if (baseRegenRateRange == default)
+            {
+                baseRegenRateRange = new FloatRange(10.0f, 20.0f);
+            }
+
+            var BaseMapArea = 250f * 250f;
+
+            var rainRate = map.TileInfo.rainfall / baseRainFall;
+            var areaRate = map.Area / BaseMapArea;
+            var plantRate = map.Biome.plantDensity / basePlantDensity;
+
+            var waterPoolNum = Mathf.RoundToInt(basePoolNum * rainRate * areaRate * plantRate);
+
+            //Log.Message(string.Format("rain={0},area={1},plant={2},num={3}", rainRate.ToString("F3"), areaRate.ToString("F3"), plantRate.ToString("F3"), waterPoolNum));
+            if (plantRate > 0.0f)
+            {
+                waterPoolNum = Mathf.Max(waterPoolNum, minWaterPoolNum);
+            }
+
+            for (var i = 0; i < waterPoolNum; i++)
+            {
+                if (!CellFinderLoose.TryFindRandomNotEdgeCellWith(5,
+                    c => !waterGrid.GetCellBool(map.cellIndices.CellToIndex(c)), map, out var result))
+                {
+                    continue;
+                }
+
+                var numCells = poolCellRange.RandomInRange;
+                var baseRegenRate = baseRegenRateRange.RandomInRange;
+                var pool = new UndergroundWaterPool(waterGrid, numCells * literPerCell, WaterType.RawWater,
+                    baseRegenRate, rainRegenRatePerCell)
+                {
+                    ID = i + 1
+                };
+                waterGrid.AddWaterPool(pool, GridShapeMaker.IrregularLump(result, map, numCells));
+            }
+
+            waterGrid.ModifyPoolGrid();
         }
     }
 }

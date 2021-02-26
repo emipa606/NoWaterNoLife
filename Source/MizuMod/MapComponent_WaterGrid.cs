@@ -6,8 +6,8 @@ namespace MizuMod
 {
     public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
     {
-        private readonly CellBoolDrawer drawer;
-        private readonly ushort[] poolIDGrid;
+        private CellBoolDrawer drawer;
+        private ushort[] poolIDGrid;
         private List<UndergroundWaterPool> pools = new List<UndergroundWaterPool>();
 
         protected MapComponent_WaterGrid(Map map) : base(map)
@@ -234,11 +234,30 @@ namespace MizuMod
             base.MapComponentUpdate();
 
             drawer.CellBoolDrawerUpdate();
-
+            var anyPools = false;
             foreach (var pool in pools)
             {
+                if (pool == null)
+                {
+                    continue;
+                }
+
                 pool.Update();
+                anyPools = true;
             }
+
+            if (anyPools)
+            {
+                return;
+            }
+
+            Log.Message("No water no life: Water grid not found, regenerating");
+            poolIDGrid = new ushort[map.cellIndices.NumGridCells];
+            drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
+            pools = new List<UndergroundWaterPool>();
+            MizuUtility.GenerateUndergroundWaterGrid(
+                map,
+                this);
         }
     }
 }
