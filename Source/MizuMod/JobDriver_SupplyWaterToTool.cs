@@ -7,14 +7,26 @@ namespace MizuMod
     public class JobDriver_SupplyWaterToTool : JobDriver
     {
         private const TargetIndex SourceInd = TargetIndex.A;
-        private const TargetIndex ToolInd = TargetIndex.B;
+
         private const TargetIndex StoreToolPosInd = TargetIndex.C;
 
+        private const TargetIndex ToolInd = TargetIndex.B;
+
         private float maxTick;
+
         private bool needManipulate;
 
-        private ThingWithComps SourceThing => (ThingWithComps) job.GetTarget(SourceInd).Thing;
-        private ThingWithComps Tool => (ThingWithComps) job.GetTarget(ToolInd).Thing;
+        private ThingWithComps SourceThing => (ThingWithComps)job.GetTarget(SourceInd).Thing;
+
+        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+
+            Scribe_Values.Look(ref maxTick, "maxTick");
+            Scribe_Values.Look(ref needManipulate, "needManipulate");
+        }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -40,58 +52,60 @@ namespace MizuMod
 
             // 水汲み
             var supplyToil = new Toil
-            {
-                initAction = () =>
-                {
-                    var compSource = SourceThing.GetComp<CompWaterSource>();
-                    needManipulate = compSource.NeedManipulate;
+                                 {
+                                     initAction = () =>
+                                         {
+                                             var compSource = SourceThing.GetComp<CompWaterSource>();
+                                             needManipulate = compSource.NeedManipulate;
 
-                    // 水汲み速度関連はリファクタリングしたい
-                    var ticksForFull = compSource.BaseDrinkTicks;
+                                             // 水汲み速度関連はリファクタリングしたい
+                                             var ticksForFull = compSource.BaseDrinkTicks;
 
-                    var compTool = Tool.GetComp<CompWaterTool>();
-                    var totalTicks = (int) (ticksForFull * (1f - compTool.StoredWaterVolumePercent));
-                    if (!needManipulate)
-                    {
-                        // 手が必要ない→水にドボンですぐに補給できる
-                        totalTicks /= 10;
-                    }
+                                             var compTool = Tool.GetComp<CompWaterTool>();
+                                             var totalTicks =
+                                                 (int)(ticksForFull * (1f - compTool.StoredWaterVolumePercent));
+                                             if (!needManipulate)
+                                             {
+                                                 // 手が必要ない→水にドボンですぐに補給できる
+                                                 totalTicks /= 10;
+                                             }
 
-                    // 小数の誤差を考慮して1Tick余分に多く実行する
-                    totalTicks += 1;
+                                             // 小数の誤差を考慮して1Tick余分に多く実行する
+                                             totalTicks += 1;
 
-                    maxTick = totalTicks;
-                    ticksLeftThisToil = totalTicks;
-                },
-                tickAction = () =>
-                {
-                    var compSource = SourceThing.GetComp<CompWaterSource>();
-                    var compTool = Tool.GetComp<CompWaterTool>();
-                    var building = SourceThing as IBuilding_DrinkWater;
+                                             maxTick = totalTicks;
+                                             ticksLeftThisToil = totalTicks;
+                                         },
+                                     tickAction = () =>
+                                         {
+                                             var compSource = SourceThing.GetComp<CompWaterSource>();
+                                             var compTool = Tool.GetComp<CompWaterTool>();
+                                             var building = SourceThing as IBuilding_DrinkWater;
 
-                    var supplyWaterVolume = compTool.MaxWaterVolume / compSource.BaseDrinkTicks;
-                    if (!needManipulate)
-                    {
-                        supplyWaterVolume *= 10;
-                    }
+                                             var supplyWaterVolume =
+                                                 compTool.MaxWaterVolume / compSource.BaseDrinkTicks;
+                                             if (!needManipulate)
+                                             {
+                                                 supplyWaterVolume *= 10;
+                                             }
 
-                    compTool.StoredWaterVolume += supplyWaterVolume;
-                    if (building == null)
-                    {
-                        return;
-                    }
+                                             compTool.StoredWaterVolume += supplyWaterVolume;
+                                             if (building == null)
+                                             {
+                                                 return;
+                                             }
 
-                    compTool.StoredWaterType = building.WaterType;
+                                             compTool.StoredWaterType = building.WaterType;
 
-                    building.DrawWater(supplyWaterVolume);
+                                             building.DrawWater(supplyWaterVolume);
 
-                    if (building.IsEmpty)
-                    {
-                        ReadyForNextToil();
-                    }
-                },
-                defaultCompleteMode = ToilCompleteMode.Delay
-            };
+                                             if (building.IsEmpty)
+                                             {
+                                                 ReadyForNextToil();
+                                             }
+                                         },
+                                     defaultCompleteMode = ToilCompleteMode.Delay
+                                 };
             supplyToil.WithProgressBar(SourceInd, () => 1f - (ticksLeftThisToil / maxTick), true);
             supplyToil.EndOnDespawnedOrNull(SourceInd);
             yield return supplyToil;
@@ -100,14 +114,6 @@ namespace MizuMod
             yield return Toils_Mizu.TryFindStoreCell(ToolInd, StoreToolPosInd);
             yield return Toils_Goto.GotoCell(StoreToolPosInd, PathEndMode.OnCell);
             yield return Toils_Haul.PlaceHauledThingInCell(StoreToolPosInd, null, true);
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-
-            Scribe_Values.Look(ref maxTick, "maxTick");
-            Scribe_Values.Look(ref needManipulate, "needManipulate");
         }
     }
 }

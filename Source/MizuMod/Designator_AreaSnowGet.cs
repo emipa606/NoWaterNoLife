@@ -13,13 +13,14 @@ namespace MizuMod
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
             useMouseIcon = true;
-            //this.hotKey = KeyBindingDefOf.Misc7;
-            //this.tutorTag = "AreaSnowClear";
+
+            // this.hotKey = KeyBindingDefOf.Misc7;
+            // this.tutorTag = "AreaSnowClear";
         }
 
-        public override int DraggableDimensions => 2;
-
         public override bool DragDrawMeasurements => true;
+
+        public override int DraggableDimensions => 2;
 
         public override AcceptanceReport CanDesignateCell(IntVec3 c)
         {

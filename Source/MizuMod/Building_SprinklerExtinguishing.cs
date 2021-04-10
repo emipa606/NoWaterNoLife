@@ -6,8 +6,10 @@ namespace MizuMod
 {
     public class Building_SprinklerExtinguishing : Building_WaterNet
     {
-        private const float UseWaterVolumePerOne = 0.1f;
         private const int ExtinguishPower = 50;
+
+        private const float UseWaterVolumePerOne = 0.1f;
+
         private CompPowerTrader compPowerTrader;
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -49,7 +51,6 @@ namespace MizuMod
             {
                 return;
             }
-
             {
                 // 部屋内の水やり範囲
                 var roomCells = cells.Where(c => c.GetRoom(Map) == room);
@@ -65,7 +66,6 @@ namespace MizuMod
                 {
                     return;
                 }
-
                 {
                     var wateringComp = Map.GetComponent<MapComponent_Watering>();
 
@@ -80,9 +80,10 @@ namespace MizuMod
                     foreach (var c in wateringCells)
                     {
                         // 水やりエフェクト(仮)
-                        var mote = (MoteThrown) ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
-                        //mote.Scale = 1f;
-                        //mote.rotationRate = (float)(Rand.Chance(0.5f) ? -30 : 30);
+                        var mote = (MoteThrown)ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
+
+                        // mote.Scale = 1f;
+                        // mote.rotationRate = (float)(Rand.Chance(0.5f) ? -30 : 30);
                         mote.exactPosition = c.ToVector3Shifted();
                         GenSpawn.Spawn(mote, c, Map);
 

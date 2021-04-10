@@ -9,8 +9,18 @@ namespace MizuMod
         {
         }
 
-        public Graphic_LinkedWaterNetOverlay(Graphic subGraphic) : base(subGraphic)
+        public Graphic_LinkedWaterNetOverlay(Graphic subGraphic)
+            : base(subGraphic)
         {
+        }
+
+        public override void Print(SectionLayer layer, Thing parent)
+        {
+            foreach (var current in parent.OccupiedRect())
+            {
+                var vector = current.ToVector3ShiftedWithAltitude(AltitudeLayer.MapDataOverlay);
+                Printer_Plane.PrintPlane(layer, vector, Vector2.one, LinkedDrawMatFrom(parent, current));
+            }
         }
 
         public override bool ShouldLinkWith(IntVec3 c, Thing parent)
@@ -58,15 +68,6 @@ namespace MizuMod
             }
 
             return c.InBounds(parent.Map) && isFound;
-        }
-
-        public override void Print(SectionLayer layer, Thing parent)
-        {
-            foreach (var current in parent.OccupiedRect())
-            {
-                var vector = current.ToVector3ShiftedWithAltitude(AltitudeLayer.MapDataOverlay);
-                Printer_Plane.PrintPlane(layer, vector, Vector2.one, LinkedDrawMatFrom(parent, current));
-            }
         }
     }
 }

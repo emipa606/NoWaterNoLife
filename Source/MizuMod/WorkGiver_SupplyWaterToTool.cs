@@ -116,12 +116,7 @@ namespace MizuMod
                 return null;
             }
 
-            var job = new Job(MizuDef.Job_SupplyWaterToTool)
-            {
-                targetA = t,
-                targetB = minTool,
-                count = 1
-            };
+            var job = new Job(MizuDef.Job_SupplyWaterToTool) { targetA = t, targetB = minTool, count = 1 };
 
             return job;
         }

@@ -9,14 +9,9 @@ namespace MizuMod
 {
     public class WorkGiver_Mop : WorkGiver_Scanner
     {
-        public override PathEndMode PathEndMode => PathEndMode.Touch;
-
         public override int MaxRegionsToScanBeforeGlobalSearch => 4;
 
-        public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
-        {
-            return pawn.Map.areaManager.Mop().ActiveCells;
-        }
+        public override PathEndMode PathEndMode => PathEndMode.Touch;
 
         public override bool HasJobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
         {
@@ -33,11 +28,11 @@ namespace MizuMod
             }
 
             // 人工フロアかつカーペット以外の場所ならOK
-            //   自然地形の汚れが付く＝人工フロア
-            //   カーペットの研究が必要なもの＝カーペット
+            // 自然地形の汚れが付く＝人工フロア
+            // カーペットの研究が必要なもの＝カーペット
             var terrain = c.GetTerrain(pawn.Map);
-            if (terrain.filthAcceptanceMask == FilthSourceFlags.None || terrain.researchPrerequisites != null &&
-                terrain.researchPrerequisites.Contains(ResearchProjectDefOf.CarpetMaking))
+            if (terrain.filthAcceptanceMask == FilthSourceFlags.None || terrain.researchPrerequisites != null
+                && terrain.researchPrerequisites.Contains(ResearchProjectDefOf.CarpetMaking))
             {
                 return false;
             }
@@ -64,33 +59,35 @@ namespace MizuMod
             }
 
             // モップアイテムのチェック
-            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
-            {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
+                t =>
+                    {
+                        // 使用禁止チェック
+                        if (t.IsForbidden(pawn))
+                        {
+                            return false;
+                        }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+                        var comp = t.TryGetComp<CompWaterTool>();
+                        if (comp == null)
+                        {
+                            return false;
+                        }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
-                {
-                    return false;
-                }
+                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+                        {
+                            return false;
+                        }
 
-                var maxQueueLength = (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                if (maxQueueLength <= 0)
-                {
-                    return false;
-                }
+                        var maxQueueLength =
+                            (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                        if (maxQueueLength <= 0)
+                        {
+                            return false;
+                        }
 
-                return true;
-            });
+                        return true;
+                    });
             if (!mopList.Any())
             {
                 return false;
@@ -113,34 +110,35 @@ namespace MizuMod
             // 一番近いモップを探す
             Thing candidateMop = null;
             var minDist = int.MaxValue;
-            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
-            {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+            var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
+                t =>
+                    {
+                        // 使用禁止チェック
+                        if (t.IsForbidden(pawn))
+                        {
+                            return false;
+                        }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+                        var comp = t.TryGetComp<CompWaterTool>();
+                        if (comp == null)
+                        {
+                            return false;
+                        }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
-                {
-                    return false;
-                }
+                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+                        {
+                            return false;
+                        }
 
-                var maxQueueLengthForCheck =
-                    (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                if (maxQueueLengthForCheck <= 0)
-                {
-                    return false;
-                }
+                        var maxQueueLengthForCheck =
+                            (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                        if (maxQueueLengthForCheck <= 0)
+                        {
+                            return false;
+                        }
 
-                return true;
-            });
+                        return true;
+                    });
 
             foreach (var mop in mopList)
             {
@@ -206,48 +204,53 @@ namespace MizuMod
             return job;
         }
 
-        //public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
-        //{
-        //    // 掃除ジョブ作成
-        //    Job job = new Job(MizuDef.Job_Mop);
-        //    job.AddQueuedTarget(TargetIndex.A, t);
+        public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
+        {
+            return pawn.Map.areaManager.Mop().ActiveCells;
+        }
 
-        //    int num = 15;
-        //    Map map = t.Map;
-        //    Room room = t.GetRoom(RegionType.Set_Passable);
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        // 対象の汚れの周囲100マスをサーチ
-        //        IntVec3 intVec = t.Position + GenRadial.RadialPattern[i];
-        //        if (intVec.InBounds(map) && intVec.GetRoom(map, RegionType.Set_Passable) == room)
-        //        {
-        //            // そこが同じ部屋の中
-        //            List<Thing> thingList = intVec.GetThingList(map);
-        //            for (int j = 0; j < thingList.Count; j++)
-        //            {
-        //                // その場所にあるThingをチェック
-        //                Thing thing = thingList[j];
-        //                if (this.HasJobOnThing(pawn, thing, forced) && thing != t)
-        //                {
-        //                    // 同じジョブが作成可能(汚れがある等)あるならこののジョブの処理対象に追加
-        //                    job.AddQueuedTarget(TargetIndex.A, thing);
-        //                }
-        //            }
+        // public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
+        // {
+        // // 掃除ジョブ作成
+        // Job job = new Job(MizuDef.Job_Mop);
+        // job.AddQueuedTarget(TargetIndex.A, t);
 
-        //            // 掃除最大個数チェック(15個)
-        //            if (job.GetTargetQueue(TargetIndex.A).Count >= num)
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
-        //    {
-        //        // 掃除対象が5個以上あるならポーンからの距離が近い順に掃除させる
-        //        job.targetQueueA.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
-        //    }
+        // int num = 15;
+        // Map map = t.Map;
+        // Room room = t.GetRoom(RegionType.Set_Passable);
+        // for (int i = 0; i < 100; i++)
+        // {
+        // // 対象の汚れの周囲100マスをサーチ
+        // IntVec3 intVec = t.Position + GenRadial.RadialPattern[i];
+        // if (intVec.InBounds(map) && intVec.GetRoom(map, RegionType.Set_Passable) == room)
+        // {
+        // // そこが同じ部屋の中
+        // List<Thing> thingList = intVec.GetThingList(map);
+        // for (int j = 0; j < thingList.Count; j++)
+        // {
+        // // その場所にあるThingをチェック
+        // Thing thing = thingList[j];
+        // if (this.HasJobOnThing(pawn, thing, forced) && thing != t)
+        // {
+        // // 同じジョブが作成可能(汚れがある等)あるならこののジョブの処理対象に追加
+        // job.AddQueuedTarget(TargetIndex.A, thing);
+        // }
+        // }
 
-        //    return job;
-        //}
+        // // 掃除最大個数チェック(15個)
+        // if (job.GetTargetQueue(TargetIndex.A).Count >= num)
+        // {
+        // break;
+        // }
+        // }
+        // }
+        // if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
+        // {
+        // // 掃除対象が5個以上あるならポーンからの距離が近い順に掃除させる
+        // job.targetQueueA.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+        // }
+
+        // return job;
+        // }
     }
 }

@@ -15,26 +15,8 @@ namespace MizuMod
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
             useMouseIcon = true;
             soundSucceeded = SoundDefOf.Designate_Deconstruct;
-            //this.hotKey = KeyBindingDefOf.DesignatorDeconstruct;
-        }
 
-        public override void DesignateThing(Thing t)
-        {
-            if (t.def.Claimable && t.Faction != Faction.OfPlayer)
-            {
-                t.SetFaction(Faction.OfPlayer);
-            }
-
-            var innerIfMinified = t.GetInnerIfMinified();
-            if (DebugSettings.godMode || innerIfMinified.GetStatValue(StatDefOf.WorkToBuild) == 0f || t.def.IsFrame ||
-                t.def.IsBlueprint)
-            {
-                t.Destroy(DestroyMode.Deconstruct);
-            }
-            else
-            {
-                Map.designationManager.AddDesignation(new Designation(t, DesignationDefOf.Deconstruct));
-            }
+            // this.hotKey = KeyBindingDefOf.DesignatorDeconstruct;
         }
 
         public override AcceptanceReport CanDesignateThing(Thing t)
@@ -46,14 +28,33 @@ namespace MizuMod
             }
 
             // パイプの設計or施行なら〇
-            if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe ||
-                                                         t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater))
+            if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe
+                                                         || t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater))
             {
                 return true;
             }
 
             // それ以外は×
             return false;
+        }
+
+        public override void DesignateThing(Thing t)
+        {
+            if (t.def.Claimable && t.Faction != Faction.OfPlayer)
+            {
+                t.SetFaction(Faction.OfPlayer);
+            }
+
+            var innerIfMinified = t.GetInnerIfMinified();
+            if (DebugSettings.godMode || innerIfMinified.GetStatValue(StatDefOf.WorkToBuild) == 0f || t.def.IsFrame
+                || t.def.IsBlueprint)
+            {
+                t.Destroy(DestroyMode.Deconstruct);
+            }
+            else
+            {
+                Map.designationManager.AddDesignation(new Designation(t, DesignationDefOf.Deconstruct));
+            }
         }
     }
 }

@@ -6,9 +6,11 @@ namespace MizuMod
     public class SectionLayer_WateringFarm : SectionLayer
     {
         private readonly Material material = new Material(MatBases.Snow);
+
         private readonly Texture2D texture = ContentFinder<Texture2D>.Get("Things/Mizu_Watering");
 
-        public SectionLayer_WateringFarm(Section section) : base(section)
+        public SectionLayer_WateringFarm(Section section)
+            : base(section)
         {
             relevantChangeTypes = MapMeshFlag.Terrain;
             material.mainTexture = texture;
@@ -30,38 +32,38 @@ namespace MizuMod
 
             FinalizeMesh(MeshParts.All);
 
-            //LayerSubMesh subMesh = base.GetSubMesh(this.material);
-            //if (subMesh.mesh.vertexCount == 0)
-            //{
-            //    MakeBaseGeometry(this.section, subMesh, AltitudeLayer.Terrain);
-            //}
-            //subMesh.Clear(MeshParts.Colors);
-            //CellRect cellRect = this.section.CellRect;
-            //int num = base.Map.Size.z - 1;
-            //int num2 = base.Map.Size.x - 1;
-            //bool flag = false;
-            //CellIndices cellIndices = base.Map.cellIndices;
+            // LayerSubMesh subMesh = base.GetSubMesh(this.material);
+            // if (subMesh.mesh.vertexCount == 0)
+            // {
+            // MakeBaseGeometry(this.section, subMesh, AltitudeLayer.Terrain);
+            // }
+            // subMesh.Clear(MeshParts.Colors);
+            // CellRect cellRect = this.section.CellRect;
+            // int num = base.Map.Size.z - 1;
+            // int num2 = base.Map.Size.x - 1;
+            // bool flag = false;
+            // CellIndices cellIndices = base.Map.cellIndices;
 
-            //for (int x = cellRect.minX; x <= cellRect.maxX; x++)
-            //{
-            //    for (int z = cellRect.minZ; z <= cellRect.maxZ; z++)
-            //    {
-            //        if (grid[cellIndices.CellToIndex(x, z)] > 0)
-            //        {
-            //            subMesh.colors.Add(new Color32(255, 255, 255, 128));
-            //            flag = true;
-            //        }
-            //    }
-            //}
-            //if (flag)
-            //{
-            //    subMesh.disabled = false;
-            //    subMesh.FinalizeMesh(MeshParts.Colors);
-            //}
-            //else
-            //{
-            //    subMesh.disabled = true;
-            //}
+            // for (int x = cellRect.minX; x <= cellRect.maxX; x++)
+            // {
+            // for (int z = cellRect.minZ; z <= cellRect.maxZ; z++)
+            // {
+            // if (grid[cellIndices.CellToIndex(x, z)] > 0)
+            // {
+            // subMesh.colors.Add(new Color32(255, 255, 255, 128));
+            // flag = true;
+            // }
+            // }
+            // }
+            // if (flag)
+            // {
+            // subMesh.disabled = false;
+            // subMesh.FinalizeMesh(MeshParts.Colors);
+            // }
+            // else
+            // {
+            // subMesh.disabled = true;
+            // }
         }
 
         // 仮

@@ -22,9 +22,7 @@ namespace MizuMod
         public override TaggedString GetExplanation()
         {
             var stringBuilder = new StringBuilder();
-            foreach (var current in from a in DehydratingAnimals
-                orderby a.def.label
-                select a)
+            foreach (var current in from a in DehydratingAnimals orderby a.def.label select a)
             {
                 stringBuilder.Append("    " + current.Name.ToStringShort);
                 if (current.Name.IsValid && !current.Name.Numerical)

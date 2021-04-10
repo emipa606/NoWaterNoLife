@@ -6,20 +6,8 @@ namespace MizuMod
     public class JobDriver_DrawFromWaterPool : JobDriver_DrawWater
     {
         private UndergroundWaterPool poolInt;
+
         private MapComponent_ShallowWaterGrid waterGridInt;
-
-        private MapComponent_ShallowWaterGrid WaterGrid
-        {
-            get
-            {
-                if (waterGridInt == null)
-                {
-                    waterGridInt = TargetThingA.Map.GetComponent<MapComponent_ShallowWaterGrid>();
-                }
-
-                return waterGridInt;
-            }
-        }
 
         private UndergroundWaterPool Pool
         {
@@ -32,6 +20,19 @@ namespace MizuMod
                 }
 
                 return poolInt;
+            }
+        }
+
+        private MapComponent_ShallowWaterGrid WaterGrid
+        {
+            get
+            {
+                if (waterGridInt == null)
+                {
+                    waterGridInt = TargetThingA.Map.GetComponent<MapComponent_ShallowWaterGrid>();
+                }
+
+                return waterGridInt;
             }
         }
 
@@ -53,10 +54,6 @@ namespace MizuMod
             }
 
             return true;
-        }
-
-        protected override void SetFailCondition()
-        {
         }
 
         protected override Thing FinishAction()
@@ -86,9 +83,13 @@ namespace MizuMod
             return createThing;
         }
 
-        //public override string GetReport()
-        //{
-        //    return base.GetReport() + "!!!" + this.CurToilIndex.ToString();
-        //}
+        protected override void SetFailCondition()
+        {
+        }
+
+        // public override string GetReport()
+        // {
+        // return base.GetReport() + "!!!" + this.CurToilIndex.ToString();
+        // }
     }
 }

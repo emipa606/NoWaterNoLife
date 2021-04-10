@@ -5,19 +5,27 @@ namespace MizuMod
     public class MapComponent_Watering : MapComponent
     {
         public const ushort MaxWateringValue = 10;
+
         private const int IntervalTicks = 250;
 
         // 水やり効果がなくなるまでの残りTick
         private readonly ushort[] wateringGrid;
 
         private int elapsedTicks;
+
         private int randomIndex;
 
-        public MapComponent_Watering(Map map) : base(map)
+        public MapComponent_Watering(Map map)
+            : base(map)
         {
             elapsedTicks = 0;
             randomIndex = 0;
             wateringGrid = new ushort[map.cellIndices.NumGridCells];
+        }
+
+        public void Add(int index, ushort val)
+        {
+            Set(index, (ushort)(Get(index) + val));
         }
 
         public override void ExposeData()
@@ -26,23 +34,16 @@ namespace MizuMod
 
             Scribe_Values.Look(ref elapsedTicks, "elapsedTicks");
             Scribe_Values.Look(ref randomIndex, "randomIndex");
-            MapExposeUtility.ExposeUshort(map, c => wateringGrid[map.cellIndices.CellToIndex(c)],
-                (c, val) => wateringGrid[map.cellIndices.CellToIndex(c)] = val, "wateringGrid");
+            MapExposeUtility.ExposeUshort(
+                map,
+                c => wateringGrid[map.cellIndices.CellToIndex(c)],
+                (c, val) => wateringGrid[map.cellIndices.CellToIndex(c)] = val,
+                "wateringGrid");
         }
 
         public ushort Get(int index)
         {
             return wateringGrid[index];
-        }
-
-        public void Set(int index, ushort val)
-        {
-            wateringGrid[index] = val < MaxWateringValue ? val : MaxWateringValue;
-        }
-
-        public void Add(int index, ushort val)
-        {
-            Set(index, (ushort) (Get(index) + val));
         }
 
         public override void MapComponentTick()
@@ -85,6 +86,11 @@ namespace MizuMod
                     randomIndex = 0;
                 }
             }
+        }
+
+        public void Set(int index, ushort val)
+        {
+            wateringGrid[index] = val < MaxWateringValue ? val : MaxWateringValue;
         }
     }
 }

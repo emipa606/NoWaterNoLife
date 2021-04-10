@@ -6,13 +6,6 @@ namespace MizuMod
 {
     public class CompProperties_WaterSource : CompProperties
     {
-        public enum SourceType : byte
-        {
-            Undefined = 0,
-            Item,
-            Building
-        }
-
         // 飲むのにかかるTick
         // 水アイテムの場合、1個あたりのTick
         // 設備の場合、要求を1.0得るのにかかるTick
@@ -53,6 +46,15 @@ namespace MizuMod
             compClass = typeof(CompWaterSource);
         }
 
+        public enum SourceType : byte
+        {
+            Undefined = 0,
+
+            Item,
+
+            Building
+        }
+
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
         {
             foreach (var statDrawEntry in base.SpecialDisplayStats(req))
@@ -63,8 +65,13 @@ namespace MizuMod
             if (sourceType == SourceType.Item)
             {
                 // アイテム1個から得られる水分量
-                yield return new StatDrawEntry(MizuDef.StatCategory_Water, StatDef.Named("Mizu_DrawingSpeed"),
-                    waterAmount, req, ToStringNumberSense.Undefined, 11);
+                yield return new StatDrawEntry(
+                    MizuDef.StatCategory_Water,
+                    StatDef.Named("Mizu_DrawingSpeed"),
+                    waterAmount,
+                    req,
+                    ToStringNumberSense.Undefined,
+                    11);
             }
         }
     }

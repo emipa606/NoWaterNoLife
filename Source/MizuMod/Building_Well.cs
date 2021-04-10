@@ -12,6 +12,24 @@ namespace MizuMod
 
         public bool IsActivated => true;
 
+        public bool IsEmpty
+        {
+            get
+            {
+                if (pool == null)
+                {
+                    return true;
+                }
+
+                if (pool.CurrentWaterVolume <= 0f)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         public WaterType WaterType
         {
             get
@@ -38,22 +56,24 @@ namespace MizuMod
             }
         }
 
-        public bool IsEmpty
+        public bool CanDrawFor(Pawn p)
         {
-            get
+            if (pool == null)
             {
-                if (pool == null)
-                {
-                    return true;
-                }
-
-                if (pool.CurrentWaterVolume <= 0f)
-                {
-                    return true;
-                }
-
                 return false;
             }
+
+            if (pool.WaterType == WaterType.Undefined || pool.WaterType == WaterType.NoWater)
+            {
+                return false;
+            }
+
+            var waterItemDef = MizuDef.List_WaterItem.First(
+                thingDef => thingDef.GetCompProperties<CompProperties_WaterSource>().waterType == pool.WaterType);
+            var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
+
+            // 汲める予定の水アイテムの水の量より多い
+            return p.CanManipulate() && pool.CurrentWaterVolume >= compprop.waterVolume;
         }
 
         public bool CanDrinkFor(Pawn p)
@@ -74,28 +94,8 @@ namespace MizuMod
             }
 
             // 手が使用可能で、地下水の水量が十分にある
-            return p.CanManipulate() && pool.CurrentWaterVolume >=
-                p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
-        }
-
-        public bool CanDrawFor(Pawn p)
-        {
-            if (pool == null)
-            {
-                return false;
-            }
-
-            if (pool.WaterType == WaterType.Undefined || pool.WaterType == WaterType.NoWater)
-            {
-                return false;
-            }
-
-            var waterItemDef = MizuDef.List_WaterItem.First(thingDef =>
-                thingDef.GetCompProperties<CompProperties_WaterSource>().waterType == pool.WaterType);
-            var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
-
-            // 汲める予定の水アイテムの水の量より多い
-            return p.CanManipulate() && pool.CurrentWaterVolume >= compprop.waterVolume;
+            return p.CanManipulate() && pool.CurrentWaterVolume
+                   >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
         }
 
         public void DrawWater(float amount)
@@ -106,6 +106,28 @@ namespace MizuMod
             }
 
             pool.CurrentWaterVolume = Mathf.Max(pool.CurrentWaterVolume - amount, 0);
+        }
+
+        public override string GetInspectString()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(base.GetInspectString());
+
+            if (stringBuilder.ToString() != string.Empty)
+            {
+                stringBuilder.AppendLine();
+            }
+
+            stringBuilder.Append(
+                string.Format(
+                    MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
+                    (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
+            if (DebugSettings.godMode)
+            {
+                stringBuilder.Append($" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
+            }
+
+            return stringBuilder.ToString();
         }
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -127,27 +149,6 @@ namespace MizuMod
             {
                 Log.Error("pool is null");
             }
-        }
-
-        public override string GetInspectString()
-        {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append(base.GetInspectString());
-
-            if (stringBuilder.ToString() != string.Empty)
-            {
-                stringBuilder.AppendLine();
-            }
-
-            stringBuilder.Append(string.Format(MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
-                (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
-            if (DebugSettings.godMode)
-            {
-                stringBuilder.Append(
-                    $" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
-            }
-
-            return stringBuilder.ToString();
         }
     }
 }

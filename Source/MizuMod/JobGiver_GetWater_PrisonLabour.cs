@@ -17,7 +17,7 @@ namespace MizuMod
     /// </summary>
     public class JobGiver_GetWater_PrisonLabour : ThinkNode_JobGiver
     {
-        //private const int MaxDistanceOfSearchWaterTerrain = 300;
+        // private const int MaxDistanceOfSearchWaterTerrain = 300;
         private const int SearchWaterIntervalTick = 180;
 
         private ThirstCategory minCategory = ThirstCategory.SlightlyThirsty;
@@ -54,16 +54,15 @@ namespace MizuMod
 
             need_water.lastSearchWaterTick = Find.TickManager.TicksGame;
 
-
             var thing = MizuUtility.TryFindBestWaterSourceFor(pawn, pawn, false);
             if (thing != null)
             {
                 if (thing.CanDrinkWater())
                 {
                     return new Job(MizuDef.Job_DrinkWater, thing)
-                    {
-                        count = MizuUtility.WillGetStackCountOf(pawn, thing)
-                    };
+                               {
+                                   count = MizuUtility.WillGetStackCountOf(pawn, thing)
+                               };
                 }
 
                 if (thing is IBuilding_DrinkWater)
@@ -76,10 +75,7 @@ namespace MizuMod
             // 人間、家畜、野生の動物全て
             if (MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot))
             {
-                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot)
-                {
-                    count = 1
-                };
+                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 };
             }
 
             // 水を発見できず

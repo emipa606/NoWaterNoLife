@@ -7,19 +7,41 @@ namespace MizuMod
     public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWater
     {
         private readonly List<float> graphicThreshold = new List<float>
-        {
-            0.05f,
-            0.35f,
-            0.65f,
-            0.95f,
-            100f
-        };
+                                                            {
+                                                                0.05f,
+                                                                0.35f,
+                                                                0.65f,
+                                                                0.95f,
+                                                                100f
+                                                            };
 
         private int graphicIndex;
+
         private int prevGraphicIndex;
 
-        public override Graphic Graphic => MizuGraphics.LinkedWaterBoxes[graphicIndex]
-            .GetColoredVersion(MizuGraphics.WaterBoxes[graphicIndex].Shader, DrawColor, DrawColorTwo);
+        public override Graphic Graphic =>
+            MizuGraphics.LinkedWaterBoxes[graphicIndex].GetColoredVersion(
+                MizuGraphics.WaterBoxes[graphicIndex].Shader,
+                DrawColor,
+                DrawColorTwo);
+
+        public bool IsEmpty
+        {
+            get
+            {
+                if (TankComp == null)
+                {
+                    return true;
+                }
+
+                if (TankComp.StoredWaterVolume <= 0f)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
 
         public WaterType WaterType
         {
@@ -47,22 +69,25 @@ namespace MizuMod
             }
         }
 
-        public bool IsEmpty
+        public bool CanDrawFor(Pawn p)
         {
-            get
+            if (TankComp == null)
             {
-                if (TankComp == null)
-                {
-                    return true;
-                }
-
-                if (TankComp.StoredWaterVolume <= 0f)
-                {
-                    return true;
-                }
-
                 return false;
             }
+
+            if (TankComp.StoredWaterType == WaterType.Undefined || TankComp.StoredWaterType == WaterType.NoWater)
+            {
+                return false;
+            }
+
+            var waterItemDef = MizuDef.List_WaterItem.First(
+                thingDef => thingDef.GetCompProperties<CompProperties_WaterSource>().waterType
+                            == TankComp.StoredWaterType);
+            var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
+
+            // 汲める予定の水アイテムの水の量より多い
+            return p.CanManipulate() && TankComp.StoredWaterVolume >= compprop.waterVolume;
         }
 
         public bool CanDrinkFor(Pawn p)
@@ -84,26 +109,6 @@ namespace MizuMod
 
             // タンクの水量が十分にある
             return TankComp.StoredWaterVolume >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
-        }
-
-        public bool CanDrawFor(Pawn p)
-        {
-            if (TankComp == null)
-            {
-                return false;
-            }
-
-            if (TankComp.StoredWaterType == WaterType.Undefined || TankComp.StoredWaterType == WaterType.NoWater)
-            {
-                return false;
-            }
-
-            var waterItemDef = MizuDef.List_WaterItem.First(thingDef =>
-                thingDef.GetCompProperties<CompProperties_WaterSource>().waterType == TankComp.StoredWaterType);
-            var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
-
-            // 汲める予定の水アイテムの水の量より多い
-            return p.CanManipulate() && TankComp.StoredWaterVolume >= compprop.waterVolume;
         }
 
         public void DrawWater(float amount)

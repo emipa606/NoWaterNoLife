@@ -7,13 +7,15 @@ namespace MizuMod
 {
     internal class JobDriver_WaterFeedPatient : JobDriver
     {
-        private const TargetIndex WaterIndex = TargetIndex.A;
         private const TargetIndex PatientIndex = TargetIndex.B;
+
+        private const TargetIndex WaterIndex = TargetIndex.A;
 
         private bool getItemFromInventory;
 
-        private ThingWithComps WaterThing => TargetA.Thing as ThingWithComps;
         private Pawn Patient => TargetB.Thing as Pawn;
+
+        private ThingWithComps WaterThing => TargetA.Thing as ThingWithComps;
 
         public override void ExposeData()
         {
@@ -40,27 +42,28 @@ namespace MizuMod
 
             // 水(食事)が使用不可能になったらFail
             this.FailOnDestroyedNullOrForbidden(WaterIndex);
-            this.FailOn(() =>
-            {
-                if (Patient == null)
-                {
-                    return true;
-                }
+            this.FailOn(
+                () =>
+                    {
+                        if (Patient == null)
+                        {
+                            return true;
+                        }
 
-                // 患者がベッドに入ってなかったらFail
-                if (!Patient.InBed())
-                {
-                    return true;
-                }
+                        // 患者がベッドに入ってなかったらFail
+                        if (!Patient.InBed())
+                        {
+                            return true;
+                        }
 
-                // 到達不能になっていたらFail
-                if (!pawn.CanReach(Patient, PathEndMode.ClosestTouch, Danger.Deadly))
-                {
-                    return true;
-                }
+                        // 到達不能になっていたらFail
+                        if (!pawn.CanReach(Patient, PathEndMode.ClosestTouch, Danger.Deadly))
+                        {
+                            return true;
+                        }
 
-                return false;
-            });
+                        return false;
+                    });
 
             // 水が予約出来ない状態なら中断
             if (!pawn.CanReserveAndReach(TargetA, PathEndMode.Touch, Danger.Deadly, 1, job.count))

@@ -1,7 +1,4 @@
-﻿//using System.Linq;
-//using System.Text;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -11,6 +8,7 @@ namespace MizuMod
     public class JobDriver_DrinkWater : JobDriver
     {
         private const TargetIndex WaterIndex = TargetIndex.A;
+
         private static readonly int BaseDrinkTicksFromTerrain = 2000;
 
         private bool drinkingFromInventory;
@@ -80,9 +78,7 @@ namespace MizuMod
                 // ターゲットがThingではない=水アイテムを摂取しない場合=水地形を利用する場合
 
                 // 選んだ水地形が使用不可能or到達不可能になったらFail
-                this.FailOn(() =>
-                    job.targetA.Cell.IsForbidden(pawn) ||
-                    !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
+                this.FailOn(() => job.targetA.Cell.IsForbidden(pawn) || !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
 
                 // 水地形まで移動
                 yield return Toils_Goto.GotoCell(WaterIndex, PathEndMode.OnCell);
@@ -91,7 +87,7 @@ namespace MizuMod
                 yield return Toils_Mizu.DrinkTerrain(WaterIndex, BaseDrinkTicksFromTerrain);
 
                 // 終了
-                //yield return Toils_Mizu.FinishDrinkTerrain(WaterIndex);
+                // yield return Toils_Mizu.FinishDrinkTerrain(WaterIndex);
             }
         }
     }

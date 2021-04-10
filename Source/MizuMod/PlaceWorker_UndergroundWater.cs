@@ -7,13 +7,13 @@ namespace MizuMod
     {
         public abstract MapComponent_WaterGrid WaterGrid { get; }
 
-        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
-        {
-            WaterGrid.MarkForDraw();
-        }
-
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map,
-            Thing thingToIgnore = null, Thing thing = null)
+        public override AcceptanceReport AllowsPlacing(
+            BuildableDef checkingDef,
+            IntVec3 loc,
+            Rot4 rot,
+            Map map,
+            Thing thingToIgnore = null,
+            Thing thing = null)
         {
             if (!(checkingDef is ThingDef def))
             {
@@ -47,6 +47,11 @@ namespace MizuMod
             }
 
             return true;
+        }
+
+        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
+        {
+            WaterGrid.MarkForDraw();
         }
     }
 }

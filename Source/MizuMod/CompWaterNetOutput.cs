@@ -10,23 +10,44 @@ namespace MizuMod
             OutputWaterType = WaterType.NoWater;
         }
 
-        public new CompProperties_WaterNetOutput Props => (CompProperties_WaterNetOutput) props;
+        public bool FoundEffectiveInputter { get; private set; }
+
+        public override bool IsActivated => base.IsActivated && (!HasTank || !TankIsEmpty);
+
+        public float OutputWaterFlow { get; set; }
+
+        public WaterType OutputWaterType { get; set; }
+
+        public new CompProperties_WaterNetOutput Props => (CompProperties_WaterNetOutput)props;
+
+        protected virtual WaterType ForceOutputWaterType => Props.forceOutputWaterType;
 
         protected virtual float MaxOutputWaterFlow => Props.maxOutputWaterFlow;
-        protected virtual WaterType ForceOutputWaterType => Props.forceOutputWaterType;
 
         protected virtual CompProperties_WaterNetOutput.OutputWaterFlowType OutputWaterFlowType =>
             Props.outputWaterFlowType;
 
-        public float OutputWaterFlow { get; set; }
-        public WaterType OutputWaterType { get; set; }
-
         private bool HasTank => TankComp != null;
+
         private bool TankIsEmpty => !HasTank || TankComp.StoredWaterVolume <= 0.0f;
 
-        public override bool IsActivated => base.IsActivated && (!HasTank || !TankIsEmpty);
+        public override string CompInspectStringExtra()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(base.CompInspectStringExtra());
 
-        public bool FoundEffectiveInputter { get; private set; }
+            if (stringBuilder.ToString() != string.Empty)
+            {
+                stringBuilder.AppendLine();
+            }
+
+            stringBuilder.Append(
+                MizuStrings.InspectWaterFlowOutput.Translate() + ": " + OutputWaterFlow.ToString("F2") + " L/day");
+            stringBuilder.Append(
+                string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(OutputWaterType), ")" }));
+
+            return stringBuilder.ToString();
+        }
 
         public override void CompTick()
         {
@@ -78,8 +99,9 @@ namespace MizuMod
                 }
 
                 // 入力機能が無効、または水道網から入力しないタイプは無効
-                if (t.InputComp == null || !t.InputComp.IsActivated ||
-                    !t.InputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+                if (t.InputComp == null || !t.InputComp.IsActivated
+                                        || !t.InputComp.InputTypes.Contains(
+                                            CompProperties_WaterNetInput.InputType.WaterNet))
                 {
                     continue;
                 }
@@ -108,7 +130,7 @@ namespace MizuMod
                 if (!TankIsEmpty)
                 {
                     // タンクがあり、タンクの中身がある
-                    //   ⇒タンクが水源
+                    // ⇒タンクが水源
                     OutputWaterType = TankComp.StoredWaterType;
                     OutputWaterFlow = MaxOutputWaterFlow;
                     return;
@@ -117,7 +139,7 @@ namespace MizuMod
             else
             {
                 // タンクがない
-                //   ⇒水源は現在の入力
+                // ⇒水源は現在の入力
 
                 // 基本は入力されている水質をそのまま出力とする
                 // 出力の水質が強制されている場合はその水質にする
@@ -127,8 +149,8 @@ namespace MizuMod
                     outWaterType = ForceOutputWaterType;
                 }
 
-                if (OutputWaterFlowType == CompProperties_WaterNetOutput.OutputWaterFlowType.Constant &&
-                    InputComp.InputWaterFlow >= MaxOutputWaterFlow)
+                if (OutputWaterFlowType == CompProperties_WaterNetOutput.OutputWaterFlowType.Constant
+                    && InputComp.InputWaterFlow >= MaxOutputWaterFlow)
                 {
                     // 定量出力タイプで、入力が出力量を超えている場合、機能する
                     OutputWaterType = outWaterType;
@@ -155,28 +177,6 @@ namespace MizuMod
             // 有効な水源無し
             OutputWaterType = WaterType.NoWater;
             OutputWaterFlow = 0;
-        }
-
-        public override string CompInspectStringExtra()
-        {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append(base.CompInspectStringExtra());
-
-            if (stringBuilder.ToString() != string.Empty)
-            {
-                stringBuilder.AppendLine();
-            }
-
-            stringBuilder.Append(MizuStrings.InspectWaterFlowOutput.Translate() + ": " +
-                                 OutputWaterFlow.ToString("F2") + " L/day");
-            stringBuilder.Append(string.Concat(new[]
-            {
-                "(",
-                MizuStrings.GetInspectWaterTypeString(OutputWaterType),
-                ")"
-            }));
-
-            return stringBuilder.ToString();
         }
     }
 }

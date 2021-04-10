@@ -6,9 +6,9 @@ namespace MizuMod
 {
     public class WorkGiver_FeedWaterPatient : WorkGiver_Scanner
     {
-        public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.Pawn);
-
         public override PathEndMode PathEndMode => PathEndMode.Touch;
+
+        public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.Pawn);
 
         public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
@@ -33,8 +33,8 @@ namespace MizuMod
             }
 
             // 与える相手が水分要求を持っているが、喉が渇いていると感じていない→×
-            if (giver.needs.Water() == null || giver.needs.Water().CurLevelPercentage >
-                giver.needs.Water().PercentageThreshSlightlyThirsty + 0.02f)
+            if (giver.needs.Water() == null || giver.needs.Water().CurLevelPercentage
+                > giver.needs.Water().PercentageThreshSlightlyThirsty + 0.02f)
             {
                 return false;
             }
@@ -74,11 +74,11 @@ namespace MizuMod
 
             // 水を与えるジョブを発行
             return new Job(MizuDef.Job_FeedWaterPatient)
-            {
-                targetA = waterThing,
-                targetB = patient,
-                count = MizuUtility.WillGetStackCountOf(patient, waterThing)
-            };
+                       {
+                           targetA = waterThing,
+                           targetB = patient,
+                           count = MizuUtility.WillGetStackCountOf(patient, waterThing)
+                       };
         }
     }
 }

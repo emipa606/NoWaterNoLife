@@ -11,53 +11,6 @@ namespace MizuMod
     {
         public override PathEndMode PathEndMode => PathEndMode.Touch;
 
-        //public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
-        //{
-        //    return pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial).Where((t) => t is IPlantToGrowSettable);
-        //}
-
-        public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
-        {
-            IEnumerable<IntVec3> potentialCells = null;
-
-            // 農地チェック
-            var growingZoneList = pawn.Map.zoneManager.AllZones.Where(zone =>
-            {
-                // 種まきを許可された農地ゾーンのみ手動水やりOK
-                if (zone is Zone_Growing z && z.allowSow)
-                {
-                    return true;
-                }
-
-                return false;
-            });
-            foreach (var zone in growingZoneList)
-            {
-                potentialCells = potentialCells == null ? zone.Cells.AsEnumerable() : potentialCells.Concat(zone.Cells);
-            }
-
-            // 植木鉢チェック
-            foreach (var building in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial)
-                .Where(t => t is Building_PlantGrower))
-            {
-                if (building.def.building?.sowTag == null || building.def.building.sowTag == "Hydroponic")
-                {
-                    continue;
-                }
-
-                potentialCells = potentialCells == null
-                    ? building.OccupiedRect().Cells
-                    : potentialCells.Concat(building.OccupiedRect().Cells);
-            }
-
-            if (potentialCells == null)
-            {
-                potentialCells = new List<IntVec3>();
-            }
-
-            return potentialCells;
-        }
-
         public override bool HasJobOnCell(Pawn pawn, IntVec3 c, bool forced = false)
         {
             // プレイヤー派閥でないなら何もしない
@@ -97,6 +50,7 @@ namespace MizuMod
                 {
                     continue;
                 }
+
                 // 植物を植えられる建造物
 
                 // 建造物上の植物チェック
@@ -144,33 +98,35 @@ namespace MizuMod
             }
 
             // ツールチェック
-            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
-            {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
+                t =>
+                    {
+                        // 使用禁止チェック
+                        if (t.IsForbidden(pawn))
+                        {
+                            return false;
+                        }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+                        var comp = t.TryGetComp<CompWaterTool>();
+                        if (comp == null)
+                        {
+                            return false;
+                        }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
-                {
-                    return false;
-                }
+                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
+                        {
+                            return false;
+                        }
 
-                var maxQueueLength = (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                if (maxQueueLength <= 0)
-                {
-                    return false;
-                }
+                        var maxQueueLength = (int)Mathf.Floor(
+                            comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+                        if (maxQueueLength <= 0)
+                        {
+                            return false;
+                        }
 
-                return true;
-            });
+                        return true;
+                    });
             if (!toolList.Any())
             {
                 return false;
@@ -193,34 +149,35 @@ namespace MizuMod
             // 一番近いツールを探す
             Thing candidateTool = null;
             var minDist = int.MaxValue;
-            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
-            {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+            var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
+                t =>
+                    {
+                        // 使用禁止チェック
+                        if (t.IsForbidden(pawn))
+                        {
+                            return false;
+                        }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+                        var comp = t.TryGetComp<CompWaterTool>();
+                        if (comp == null)
+                        {
+                            return false;
+                        }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
-                {
-                    return false;
-                }
+                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
+                        {
+                            return false;
+                        }
 
-                var maxQueueLengthForCheck =
-                    (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                if (maxQueueLengthForCheck <= 0)
-                {
-                    return false;
-                }
+                        var maxQueueLengthForCheck = (int)Mathf.Floor(
+                            comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+                        if (maxQueueLengthForCheck <= 0)
+                        {
+                            return false;
+                        }
 
-                return true;
-            });
+                        return true;
+                    });
 
             foreach (var tool in toolList)
             {
@@ -284,6 +241,53 @@ namespace MizuMod
             }
 
             return job;
+        }
+
+        // public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
+        // {
+        // return pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial).Where((t) => t is IPlantToGrowSettable);
+        // }
+        public override IEnumerable<IntVec3> PotentialWorkCellsGlobal(Pawn pawn)
+        {
+            IEnumerable<IntVec3> potentialCells = null;
+
+            // 農地チェック
+            var growingZoneList = pawn.Map.zoneManager.AllZones.Where(
+                zone =>
+                    {
+                        // 種まきを許可された農地ゾーンのみ手動水やりOK
+                        if (zone is Zone_Growing z && z.allowSow)
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    });
+            foreach (var zone in growingZoneList)
+            {
+                potentialCells = potentialCells == null ? zone.Cells.AsEnumerable() : potentialCells.Concat(zone.Cells);
+            }
+
+            // 植木鉢チェック
+            foreach (var building in pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial)
+                .Where(t => t is Building_PlantGrower))
+            {
+                if (building.def.building?.sowTag == null || building.def.building.sowTag == "Hydroponic")
+                {
+                    continue;
+                }
+
+                potentialCells = potentialCells == null
+                                     ? building.OccupiedRect().Cells
+                                     : potentialCells.Concat(building.OccupiedRect().Cells);
+            }
+
+            if (potentialCells == null)
+            {
+                potentialCells = new List<IntVec3>();
+            }
+
+            return potentialCells;
         }
     }
 }

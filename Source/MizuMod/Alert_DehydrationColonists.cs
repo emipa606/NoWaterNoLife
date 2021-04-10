@@ -14,7 +14,8 @@ namespace MizuMod
             defaultPriority = AlertPriority.High;
         }
 
-        private IEnumerable<Pawn> DehydratingColonists => from p in PawnsFinder.AllMaps_FreeColonistsSpawned
+        private IEnumerable<Pawn> DehydratingColonists =>
+            from p in PawnsFinder.AllMaps_FreeColonistsSpawned
             where p.needs.Water() != null && p.needs.Water().Dehydrating
             select p;
 

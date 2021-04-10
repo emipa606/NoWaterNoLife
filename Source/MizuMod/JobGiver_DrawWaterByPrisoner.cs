@@ -8,6 +8,7 @@ namespace MizuMod
     public class JobGiver_DrawWaterByPrisoner : ThinkNode_JobGiver
     {
         private const int SearchDrawerIntervalTick = 180;
+
         private static readonly List<Thing> drawerList = new List<Thing>();
 
         public override float GetPriority(Pawn pawn)
@@ -72,9 +73,9 @@ namespace MizuMod
                         continue;
                     }
 
-                    if (ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromTerrain &&
-                        ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet &&
-                        ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool)
+                    if (ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromTerrain
+                        && ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet
+                        && ext.recipeType != DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool)
                     {
                         continue;
                     }
@@ -123,8 +124,8 @@ namespace MizuMod
                 }
 
                 // 水の種類が飲めないタイプの物はダメ
-                if (drinkWaterBuilding.WaterType == WaterType.Undefined ||
-                    drinkWaterBuilding.WaterType == WaterType.NoWater)
+                if (drinkWaterBuilding.WaterType == WaterType.Undefined
+                    || drinkWaterBuilding.WaterType == WaterType.NoWater)
                 {
                     continue;
                 }

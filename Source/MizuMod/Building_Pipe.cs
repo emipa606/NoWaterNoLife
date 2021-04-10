@@ -15,7 +15,9 @@ namespace MizuMod
 
                 if (def.costStuffCount >= 0)
                 {
-                    return MizuGraphics.LinkedWaterPipe.GetColoredVersion(MizuGraphics.WaterPipe.Shader, DrawColor,
+                    return MizuGraphics.LinkedWaterPipe.GetColoredVersion(
+                        MizuGraphics.WaterPipe.Shader,
+                        DrawColor,
                         DrawColorTwo);
                 }
 

@@ -5,7 +5,7 @@ namespace MizuMod
 {
     public class RecipeWorkerCounter_DrawWater : RecipeWorkerCounter
     {
-        public GetWaterRecipeDef GetWaterRecipe => (GetWaterRecipeDef) recipe;
+        public GetWaterRecipeDef GetWaterRecipe => (GetWaterRecipeDef)recipe;
 
         public override bool CanCountProducts(Bill_Production bill)
         {
@@ -25,8 +25,7 @@ namespace MizuMod
 
         public override int CountProducts(Bill_Production bill)
         {
-            //var ext = bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
-
+            // var ext = bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
             if (!(bill.billStack.billGiver is IBuilding_DrinkWater building))
             {
                 return 0;

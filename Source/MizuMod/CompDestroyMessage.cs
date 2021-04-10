@@ -7,11 +7,11 @@ namespace MizuMod
 {
     public class CompDestroyMessage : ThingComp
     {
-        public CompProperties_DestroyMessage Props => (CompProperties_DestroyMessage) props;
+        public List<DestroyMode> DestroyModes => Props.destroyModes;
 
         public string MessageKey => Props.messageKey;
 
-        public List<DestroyMode> DestroyModes => Props.destroyModes;
+        public CompProperties_DestroyMessage Props => (CompProperties_DestroyMessage)props;
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
@@ -27,7 +27,10 @@ namespace MizuMod
                 return;
             }
 
-            MoteMaker.ThrowText(parent.TrueCenter() + new Vector3(0.5f, 0f, 0.5f), previousMap, MessageKey.Translate(),
+            MoteMaker.ThrowText(
+                parent.TrueCenter() + new Vector3(0.5f, 0f, 0.5f),
+                previousMap,
+                MessageKey.Translate(),
                 Color.white);
         }
     }

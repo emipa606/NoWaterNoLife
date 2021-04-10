@@ -73,17 +73,28 @@ namespace MizuMod
 
             // 水を運んでくるジョブを発行
             return new Job(MizuDef.Job_DeliverWater, thing, prisoner)
+                       {
+                           count = MizuUtility.WillGetStackCountOf(prisoner, thing),
+                           targetC = RCellFinder.SpotToChewStandingNear(prisoner, thing)
+                       };
+        }
+
+        private static float WaterAmountAvailableForFrom(Thing waterSource)
+        {
+            // その物は水分を得られるものではない
+            if (!waterSource.CanGetWater())
             {
-                count = MizuUtility.WillGetStackCountOf(prisoner, thing),
-                targetC = RCellFinder.SpotToChewStandingNear(prisoner, thing)
-            };
+                return 0.0f;
+            }
+
+            return waterSource.GetWaterAmount() * waterSource.stackCount;
         }
 
         private static bool WaterAvailableInRoomTo(Pawn prisoner)
         {
             // 囚人が何か物を運んでいる＆その物から得られる水分量は正の値
-            if (prisoner.carryTracker.CarriedThing != null &&
-                WaterAmountAvailableForFrom(prisoner.carryTracker.CarriedThing) > 0f)
+            if (prisoner.carryTracker.CarriedThing != null
+                && WaterAmountAvailableForFrom(prisoner.carryTracker.CarriedThing) > 0f)
             {
                 return true;
             }
@@ -102,9 +113,8 @@ namespace MizuMod
                 // 囚人の部屋の中の全水アイテムの水分量を計算
                 foreach (var thing in region.ListerThings.ThingsInGroup(ThingRequestGroup.HaulableEver))
                 {
-                    if (!thing.IsIngestibleFor(prisoner) && (!thing.CanDrinkWater() ||
-                                                             thing.GetWaterPreferability() >
-                                                             WaterPreferability.NeverDrink))
+                    if (!thing.IsIngestibleFor(prisoner)
+                        && (!thing.CanDrinkWater() || thing.GetWaterPreferability() > WaterPreferability.NeverDrink))
                     {
                         allThingWaterAmount += WaterAmountAvailableForFrom(thing);
                     }
@@ -150,17 +160,6 @@ namespace MizuMod
 
             // その部屋に十分な水の量があればtrue
             return allThingWaterAmount + 0.5f >= allPawnWantedWater;
-        }
-
-        private static float WaterAmountAvailableForFrom(Thing waterSource)
-        {
-            // その物は水分を得られるものではない
-            if (!waterSource.CanGetWater())
-            {
-                return 0.0f;
-            }
-
-            return waterSource.GetWaterAmount() * waterSource.stackCount;
         }
     }
 }

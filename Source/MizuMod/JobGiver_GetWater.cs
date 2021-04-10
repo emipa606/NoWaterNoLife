@@ -1,4 +1,4 @@
-﻿//using System.Text;
+﻿// using System.Text;
 
 using System.Linq;
 using RimWorld;
@@ -9,7 +9,7 @@ namespace MizuMod
 {
     public class JobGiver_GetWater : ThinkNode_JobGiver
     {
-        //private const int MaxDistanceOfSearchWaterTerrain = 300;
+        // private const int MaxDistanceOfSearchWaterTerrain = 300;
         private const int SearchWaterIntervalTick = 180;
 
         private ThirstCategory minCategory = ThirstCategory.SlightlyThirsty;
@@ -97,10 +97,7 @@ namespace MizuMod
                 if (thing.CanDrinkWater())
                 {
                     // 水アイテムが見つかった
-                    return new Job(MizuDef.Job_DrinkWater, thing)
-                    {
-                        count = MizuUtility.WillGetStackCountOf(pawn, thing)
-                    };
+                    return new Job(MizuDef.Job_DrinkWater, thing) { count = MizuUtility.WillGetStackCountOf(pawn, thing) };
                 }
 
                 if (thing is IBuilding_DrinkWater)
@@ -114,10 +111,7 @@ namespace MizuMod
             // 人間、家畜、野生の動物全て
             if (MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot))
             {
-                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot)
-                {
-                    count = 1
-                };
+                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 };
             }
 
             // 水を発見できず

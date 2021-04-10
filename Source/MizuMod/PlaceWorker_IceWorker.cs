@@ -4,8 +4,13 @@ namespace MizuMod
 {
     public class PlaceWorker_IceWorker : PlaceWorker
     {
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map,
-            Thing thingToIgnore = null, Thing thing = null)
+        public override AcceptanceReport AllowsPlacing(
+            BuildableDef checkingDef,
+            IntVec3 loc,
+            Rot4 rot,
+            Map map,
+            Thing thingToIgnore = null,
+            Thing thing = null)
         {
             if (!(checkingDef is ThingDef def))
             {
@@ -25,8 +30,7 @@ namespace MizuMod
                 return cond_building;
             }
 
-            var terrainInteraction =
-                map.terrainGrid.TerrainAt(ThingUtility.InteractionCellWhenAt(def, loc, rot, map));
+            var terrainInteraction = map.terrainGrid.TerrainAt(ThingUtility.InteractionCellWhenAt(def, loc, rot, map));
             if (terrainInteraction.passability != Traversability.Standable)
             {
                 cond_interaction = false;

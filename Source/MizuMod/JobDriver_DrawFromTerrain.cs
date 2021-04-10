@@ -4,10 +4,6 @@ namespace MizuMod
 {
     public class JobDriver_DrawFromTerrain : JobDriver_DrawWater
     {
-        protected override void SetFailCondition()
-        {
-        }
-
         protected override Thing FinishAction()
         {
             // 現在の地形から水の種類を決定
@@ -29,6 +25,10 @@ namespace MizuMod
             // 個数設定
             createThing.stackCount = Ext.getItemCount;
             return createThing;
+        }
+
+        protected override void SetFailCondition()
+        {
         }
     }
 }

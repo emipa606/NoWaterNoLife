@@ -6,22 +6,12 @@ namespace MizuMod
     public abstract class Building_UndergroundWaterPump : Building_WaterNet
     {
         private UndergroundWaterPool pool;
-        protected abstract MapComponent_WaterGrid WaterGrid { get; }
 
         public override WaterType OutputWaterType => pool.WaterType;
 
         public override UndergroundWaterPool WaterPool => pool;
 
-        public override void SpawnSetup(Map map, bool respawningAfterLoad)
-        {
-            base.SpawnSetup(map, respawningAfterLoad);
-
-            pool = WaterGrid.GetPool(map.cellIndices.CellToIndex(Position));
-            if (pool == null)
-            {
-                Log.Error("pool is null");
-            }
-        }
+        protected abstract MapComponent_WaterGrid WaterGrid { get; }
 
         public override string GetInspectString()
         {
@@ -33,15 +23,27 @@ namespace MizuMod
                 stringBuilder.AppendLine();
             }
 
-            stringBuilder.Append(string.Format(MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
-                (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
+            stringBuilder.Append(
+                string.Format(
+                    MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
+                    (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
             if (DebugSettings.godMode)
             {
-                stringBuilder.Append(
-                    $" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
+                stringBuilder.Append($" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
             }
 
             return stringBuilder.ToString();
+        }
+
+        public override void SpawnSetup(Map map, bool respawningAfterLoad)
+        {
+            base.SpawnSetup(map, respawningAfterLoad);
+
+            pool = WaterGrid.GetPool(map.cellIndices.CellToIndex(Position));
+            if (pool == null)
+            {
+                Log.Error("pool is null");
+            }
         }
     }
 }

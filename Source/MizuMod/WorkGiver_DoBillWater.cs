@@ -9,16 +9,25 @@ namespace MizuMod
 {
     public class WorkGiver_DoBillWater : WorkGiver_DoBill
     {
-        private static readonly IntRange ReCheckFailedBillTicksRange = new IntRange(500, 600);
-        private static readonly string MissingSkillTranslated = "MissingSkill".Translate();
-        private static readonly string MissingMaterialsTranslated = "MissingMaterials".Translate();
-        private static readonly string MissingWaterTranslated = "MizuMissingWater".Translate();
-        private static readonly string FullWaterTranslated = "MizuFullWater".Translate();
-        private static readonly List<Thing> newRelevantThings = new List<Thing>();
-        private static readonly List<IngredientCount> ingredientsOrdered = new List<IngredientCount>();
-        private static readonly List<Thing> relevantThings = new List<Thing>();
-        private static readonly HashSet<Thing> processedThings = new HashSet<Thing>();
         private static readonly DefCountList availableCounts = new DefCountList();
+
+        private static readonly string FullWaterTranslated = "MizuFullWater".Translate();
+
+        private static readonly List<IngredientCount> ingredientsOrdered = new List<IngredientCount>();
+
+        private static readonly string MissingMaterialsTranslated = "MissingMaterials".Translate();
+
+        private static readonly string MissingSkillTranslated = "MissingSkill".Translate();
+
+        private static readonly string MissingWaterTranslated = "MizuMissingWater".Translate();
+
+        private static readonly List<Thing> newRelevantThings = new List<Thing>();
+
+        private static readonly HashSet<Thing> processedThings = new HashSet<Thing>();
+
+        private static readonly IntRange ReCheckFailedBillTicksRange = new IntRange(500, 600);
+
+        private static readonly List<Thing> relevantThings = new List<Thing>();
 
         private readonly List<ThingCount> chosenIngThings = new List<ThingCount>();
 
@@ -59,219 +68,27 @@ namespace MizuMod
             return StartBillJob(pawn, billGiver);
         }
 
-        private Job StartBillJob(Pawn pawn, IBillGiver giver)
+        private static Job CreateNewJob(DefExtension_WaterRecipe ext)
         {
-            foreach (var bill in giver.BillStack)
+            if (ext == null)
             {
-                // レシピが要求する仕事の種類と、WorkGiver側の仕事の種類があっているかチェック
-                if (bill.recipe.requiredGiverWorkType != null && bill.recipe.requiredGiverWorkType != def.workType)
-                {
-                    continue;
-                }
-
-                // 再チェック時間を過ぎていないかチェック(右クリックメニューからの場合は例外)
-                if (Find.TickManager.TicksGame <
-                    bill.lastIngredientSearchFailTicks + ReCheckFailedBillTicksRange.RandomInRange &&
-                    FloatMenuMakerMap.makingFor != pawn)
-                {
-                    continue;
-                }
-
-                // チェック時間更新
-                bill.lastIngredientSearchFailTicks = 0;
-
-                // 今それをする必要があるか
-                if (!bill.ShouldDoNow())
-                {
-                    continue;
-                }
-
-                // そのポーンが新規に仕事をできるか
-                if (!bill.PawnAllowedToStartAnew(pawn))
-                {
-                    continue;
-                }
-
-                // レシピに必要なスキルを持っているか
-                if (!bill.recipe.PawnSatisfiesSkillRequirements(pawn))
-                {
-                    JobFailReason.Is(MissingSkillTranslated);
-                    continue;
-                }
-
-                // 材料はあるか
-                var isFoundIngredients = TryFindBestBillIngredients(bill, pawn, (Thing) giver, chosenIngThings);
-
-                // 消費する水はあるか
-                var isFoundWater = IsFoundWater(giver, bill.recipe.GetModExtension<DefExtension_WaterRecipe>());
-
-                // 水を入れる余地が残っているか
-                var isNotFullWater = IsNotFullWater(giver, bill.recipe.GetModExtension<DefExtension_WaterRecipe>(),
-                    chosenIngThings);
-
-                if (isFoundIngredients && isFoundWater && isNotFullWater)
-                {
-                    return TryStartNewDoBillJob(pawn, bill, giver);
-                }
-
-                if (FloatMenuMakerMap.makingFor != pawn)
-                {
-                    // 右クリックメニューからでなく、ジョブを開始できなかったらチェック時間を更新
-                    bill.lastIngredientSearchFailTicks = Find.TickManager.TicksGame;
-                }
-                else
-                {
-                    // 右クリックメニューからの場合、できなかった理由を表示（素材不足）
-                    if (!isFoundIngredients)
-                    {
-                        JobFailReason.Is(MissingMaterialsTranslated);
-                    }
-
-                    if (!isFoundWater)
-                    {
-                        JobFailReason.Is(MissingWaterTranslated);
-                    }
-
-                    if (!isNotFullWater)
-                    {
-                        JobFailReason.Is(FullWaterTranslated);
-                    }
-                }
+                return new Job(JobDefOf.DoBill);
             }
 
-            return null;
-        }
-
-        private static bool TryFindBestBillIngredients(Bill bill, Pawn pawn, Thing billGiver, List<ThingCount> chosen)
-        {
-            // 最終結果クリア
-            chosen.Clear();
-
-            // 中間結果クリア
-            newRelevantThings.Clear();
-
-            // そもそも材料不要
-            if (bill.recipe.ingredients.Count == 0)
+            switch (ext.recipeType)
             {
-                return true;
+                case DefExtension_WaterRecipe.RecipeType.DrawFromTerrain:
+                    return new Job(MizuDef.Job_DrawFromTerrain);
+                case DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool:
+                    return new Job(MizuDef.Job_DrawFromWaterPool);
+                case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
+                    return new Job(MizuDef.Job_DrawFromWaterNet);
+                case DefExtension_WaterRecipe.RecipeType.PourWater:
+                    return new Job(MizuDef.Job_PourWater);
+                default:
+                    Log.Error("recipeType is Undefined");
+                    return null;
             }
-
-            // 作業位置
-            var rootCell = GetBillGiverRootCell(billGiver);
-
-            // リージョン取得
-            var rootReg = rootCell.GetRegion(pawn.Map);
-            if (rootReg == null)
-            {
-                return false;
-            }
-
-            // 素材を順番に並べて取得(任意材料、固定材料、その他)
-            MakeIngredientsListInProcessingOrder(ingredientsOrdered, bill);
-
-            // 中間結果クリア
-            relevantThings.Clear();
-            processedThings.Clear();
-            var foundAll = false;
-
-            // 材料の基本探索条件
-            bool baseValidator(Thing t)
-            {
-                return t.Spawned // スポーン済み
-                       && !t.IsForbidden(pawn) // 禁止されていない
-                       && (t.Position - billGiver.Position).LengthHorizontalSquared <
-                       bill.ingredientSearchRadius * bill.ingredientSearchRadius // billごとの材料探索範囲以内
-                       && bill.IsFixedOrAllowedIngredient(t) // billとして許可された材料である
-                       && bill.recipe.ingredients.Any(ingNeed => ingNeed.filter.Allows(t)) // レシピとして許可された材料である
-                       && pawn.CanReserve(t); // 予約可能
-            }
-
-            var traverseParams = TraverseParms.For(pawn);
-
-            bool entryCondition(Region from, Region r)
-            {
-                return r.Allows(traverseParams, false);
-            }
-
-            var adjacentRegionsAvailable = rootReg.Neighbors.Count(region => entryCondition(rootReg, region));
-            var regionsProcessed = 0;
-
-            // ???
-            processedThings.AddRange(relevantThings);
-
-            bool regionProcessor(Region r)
-            {
-                // 運搬可能な物ループ
-                foreach (var thing in r.ListerThings.ThingsMatching(
-                    ThingRequest.ForGroup(ThingRequestGroup.HaulableEver)))
-                {
-                    // 既に含まれている物は無視
-                    if (processedThings.Contains(thing))
-                    {
-                        continue;
-                    }
-
-                    // そのリージョンからその物にタッチしに行けるか
-                    if (!ReachabilityWithinRegion.ThingFromRegionListerReachable(thing, r, PathEndMode.ClosestTouch,
-                        pawn))
-                    {
-                        continue;
-                    }
-
-                    // 基本条件を満足しない場合はダメ
-                    if (!baseValidator(thing))
-                    {
-                        continue;
-                    }
-
-                    // リストに加える
-                    newRelevantThings.Add(thing);
-                    processedThings.Add(thing);
-                }
-
-                regionsProcessed++;
-
-                if (newRelevantThings.Count <= 0 || regionsProcessed <= adjacentRegionsAvailable)
-                {
-                    return false;
-                }
-
-                // 二つの物の距離を比べる
-                int comparison(Thing t1, Thing t2)
-                {
-                    var t1dist = (float) (t1.Position - rootCell).LengthHorizontalSquared;
-                    var t2dist = (float) (t2.Position - rootCell).LengthHorizontalSquared;
-                    return t1dist.CompareTo(t2dist);
-                }
-
-                // 距離の昇順?にソート
-                newRelevantThings.Sort(comparison);
-
-                // 探索した素材を追加
-                relevantThings.AddRange(newRelevantThings);
-
-                // 新しく探索した素材リストをクリア
-                newRelevantThings.Clear();
-
-                // 素材リストの中から最適な素材を見つける
-                if (!TryFindBestBillIngredientsInSet(relevantThings, bill, chosen))
-                {
-                    return false;
-                }
-
-                // 全部見つかった
-                foundAll = true;
-                return true;
-
-                // 全部は見つからなかった
-            }
-
-            RegionTraverser.BreadthFirstTraverse(rootReg, entryCondition, regionProcessor);
-
-            relevantThings.Clear();
-            newRelevantThings.Clear();
-
-            return foundAll;
         }
 
         private static IntVec3 GetBillGiverRootCell(Thing billGiver)
@@ -291,20 +108,21 @@ namespace MizuMod
             // 建造物だけど作業場所が無い場合
 
             // 周囲8方向で立つことが出来るセルを探す
-            var standableAdjacentCells = building.OccupiedRect().ExpandedBy(1).EdgeCells.Where(c =>
-            {
-                foreach (var t in building.Map.thingGrid.ThingsListAt(c))
-                {
-                    // そのセルに、「立つことが出来る」以外の物がある⇒立てないセルはfalse
-                    if (t.def.passability != Traversability.Standable)
+            var standableAdjacentCells = building.OccupiedRect().ExpandedBy(1).EdgeCells.Where(
+                c =>
                     {
-                        return false;
-                    }
-                }
+                        foreach (var t in building.Map.thingGrid.ThingsListAt(c))
+                        {
+                            // そのセルに、「立つことが出来る」以外の物がある⇒立てないセルはfalse
+                            if (t.def.passability != Traversability.Standable)
+                            {
+                                return false;
+                            }
+                        }
 
-                // 立てるセルの場合true
-                return true;
-            });
+                        // 立てるセルの場合true
+                        return true;
+                    });
 
             var adjacentCells = standableAdjacentCells as IntVec3[] ?? standableAdjacentCells.ToArray();
             if (!adjacentCells.Any())
@@ -315,6 +133,35 @@ namespace MizuMod
 
             // 候補がある場合→1マスをランダムで選ぶ
             return adjacentCells.RandomElement();
+        }
+
+        private static float GetTotalAmountCanAccept(Building_WaterNetWorkTable workTable)
+        {
+            if (workTable.TankComp == null)
+            {
+                return 0f;
+            }
+
+            var totalAmountCanAccept = workTable.TankComp.AmountCanAccept;
+            if (workTable.InputWaterNet?.FlatTankList == null || !workTable.InputWaterNet.FlatTankList.Any())
+            {
+                return totalAmountCanAccept;
+            }
+
+            var flatTanks =
+                workTable.InputWaterNet.FlatTankList.First(flatTankElement => flatTankElement.Contains(workTable));
+            if (flatTanks == null)
+            {
+                return totalAmountCanAccept;
+            }
+
+            totalAmountCanAccept = 0f;
+            foreach (var tank in flatTanks)
+            {
+                totalAmountCanAccept += tank.TankComp.AmountCanAccept;
+            }
+
+            return totalAmountCanAccept;
         }
 
         private static void MakeIngredientsListInProcessingOrder(List<IngredientCount> ingredientsOrdered, Bill bill)
@@ -355,13 +202,152 @@ namespace MizuMod
             }
         }
 
-        private static bool TryFindBestBillIngredientsInSet(List<Thing> availableThings, Bill bill,
+        private static bool TryFindBestBillIngredients(Bill bill, Pawn pawn, Thing billGiver, List<ThingCount> chosen)
+        {
+            // 最終結果クリア
+            chosen.Clear();
+
+            // 中間結果クリア
+            newRelevantThings.Clear();
+
+            // そもそも材料不要
+            if (bill.recipe.ingredients.Count == 0)
+            {
+                return true;
+            }
+
+            // 作業位置
+            var rootCell = GetBillGiverRootCell(billGiver);
+
+            // リージョン取得
+            var rootReg = rootCell.GetRegion(pawn.Map);
+            if (rootReg == null)
+            {
+                return false;
+            }
+
+            // 素材を順番に並べて取得(任意材料、固定材料、その他)
+            MakeIngredientsListInProcessingOrder(ingredientsOrdered, bill);
+
+            // 中間結果クリア
+            relevantThings.Clear();
+            processedThings.Clear();
+            var foundAll = false;
+
+            // 材料の基本探索条件
+            bool baseValidator(Thing t)
+            {
+                return t.Spawned // スポーン済み
+                       && !t.IsForbidden(pawn) // 禁止されていない
+                       && (t.Position - billGiver.Position).LengthHorizontalSquared
+                       < bill.ingredientSearchRadius * bill.ingredientSearchRadius // billごとの材料探索範囲以内
+                       && bill.IsFixedOrAllowedIngredient(t) // billとして許可された材料である
+                       && bill.recipe.ingredients.Any(ingNeed => ingNeed.filter.Allows(t)) // レシピとして許可された材料である
+                       && pawn.CanReserve(t); // 予約可能
+            }
+
+            var traverseParams = TraverseParms.For(pawn);
+
+            bool entryCondition(Region from, Region r)
+            {
+                return r.Allows(traverseParams, false);
+            }
+
+            var adjacentRegionsAvailable = rootReg.Neighbors.Count(region => entryCondition(rootReg, region));
+            var regionsProcessed = 0;
+
+            // ???
+            processedThings.AddRange(relevantThings);
+
+            bool regionProcessor(Region r)
+            {
+                // 運搬可能な物ループ
+                foreach (var thing in r.ListerThings.ThingsMatching(
+                    ThingRequest.ForGroup(ThingRequestGroup.HaulableEver)))
+                {
+                    // 既に含まれている物は無視
+                    if (processedThings.Contains(thing))
+                    {
+                        continue;
+                    }
+
+                    // そのリージョンからその物にタッチしに行けるか
+                    if (!ReachabilityWithinRegion.ThingFromRegionListerReachable(
+                            thing,
+                            r,
+                            PathEndMode.ClosestTouch,
+                            pawn))
+                    {
+                        continue;
+                    }
+
+                    // 基本条件を満足しない場合はダメ
+                    if (!baseValidator(thing))
+                    {
+                        continue;
+                    }
+
+                    // リストに加える
+                    newRelevantThings.Add(thing);
+                    processedThings.Add(thing);
+                }
+
+                regionsProcessed++;
+
+                if (newRelevantThings.Count <= 0 || regionsProcessed <= adjacentRegionsAvailable)
+                {
+                    return false;
+                }
+
+                // 二つの物の距離を比べる
+                int comparison(Thing t1, Thing t2)
+                {
+                    var t1dist = (float)(t1.Position - rootCell).LengthHorizontalSquared;
+                    var t2dist = (float)(t2.Position - rootCell).LengthHorizontalSquared;
+                    return t1dist.CompareTo(t2dist);
+                }
+
+                // 距離の昇順?にソート
+                newRelevantThings.Sort(comparison);
+
+                // 探索した素材を追加
+                relevantThings.AddRange(newRelevantThings);
+
+                // 新しく探索した素材リストをクリア
+                newRelevantThings.Clear();
+
+                // 素材リストの中から最適な素材を見つける
+                if (!TryFindBestBillIngredientsInSet(relevantThings, bill, chosen))
+                {
+                    return false;
+                }
+
+                // 全部見つかった
+                foundAll = true;
+                return true;
+
+                // 全部は見つからなかった
+            }
+
+            RegionTraverser.BreadthFirstTraverse(rootReg, entryCondition, regionProcessor);
+
+            relevantThings.Clear();
+            newRelevantThings.Clear();
+
+            return foundAll;
+        }
+
+        private static bool TryFindBestBillIngredientsInSet(
+            List<Thing> availableThings,
+            Bill bill,
             List<ThingCount> chosen)
         {
             return TryFindBestBillIngredientsInSet_NoMix(availableThings, bill, chosen);
         }
 
-        private static bool TryFindBestBillIngredientsInSet_NoMix(List<Thing> availableThings, Bill bill,
+        private static bool TryFindBestBillIngredientsInSet_NoMix(
+            List<Thing> availableThings,
+            Bill bill,
             List<ThingCount> chosen)
         {
             var recipe = bill.recipe;
@@ -384,7 +370,7 @@ namespace MizuMod
                     var curCount = availableCounts.GetCount(j);
 
                     // レシピ完遂のためにそれが何個必要なのか
-                    var requiredCount = (float) ingredientCount.CountRequiredOfFor(curDef, bill.recipe);
+                    var requiredCount = (float)ingredientCount.CountRequiredOfFor(curDef, bill.recipe);
                     var remainRequiredCount = requiredCount;
 
                     // 利用可能な個数は必要数より少ない
@@ -439,7 +425,7 @@ namespace MizuMod
                         }
 
                         // その材料は全部見つかった
-                        //   ⇒残りの利用可能数を減らす
+                        // ⇒残りの利用可能数を減らす
                         isIngredientFound = true;
                         availableCounts.SetCount(j, curCount - requiredCount);
                         break;
@@ -463,37 +449,6 @@ namespace MizuMod
             return true;
         }
 
-        private Job TryStartNewDoBillJob(Pawn pawn, Bill bill, IBillGiver giver)
-        {
-            // 材料の運搬先に物があった場合(邪魔なものがある場合)、それをどかす処理
-            var job = WorkGiverUtility.HaulStuffOffBillGiverJob(pawn, giver, null);
-            if (job != null)
-            {
-                return job;
-            }
-
-            // レシピ実行(本命)
-            var job2 = CreateNewJob(bill.recipe.GetModExtension<DefExtension_WaterRecipe>());
-            if (job2 == null)
-            {
-                return null;
-            }
-
-            job2.targetA = giver as Thing;
-            job2.targetQueueB = new List<LocalTargetInfo>(chosenIngThings.Count);
-            job2.countQueue = new List<int>(chosenIngThings.Count);
-            foreach (var thingCount in chosenIngThings)
-            {
-                job2.targetQueueB.Add(thingCount.Thing);
-                job2.countQueue.Add(thingCount.Count);
-            }
-
-            job2.targetC = GetBillGiverRootCell(giver as Thing);
-            job2.haulMode = HaulMode.ToCellNonStorage;
-            job2.bill = bill;
-            return job2;
-        }
-
         private bool IsFoundWater(IBillGiver giver, DefExtension_WaterRecipe ext)
         {
             if (ext == null)
@@ -514,88 +469,90 @@ namespace MizuMod
             switch (ext.recipeType)
             {
                 case DefExtension_WaterRecipe.RecipeType.DrawFromTerrain:
-                {
-                    // 水質チェック
-                    return ext.needWaterTerrainTypes != null &&
-                           ext.needWaterTerrainTypes.Contains(thing.Map.terrainGrid.TerrainAt(thing.Position)
-                               .GetWaterTerrainType());
-                }
+                    {
+                        // 水質チェック
+                        return ext.needWaterTerrainTypes != null && ext.needWaterTerrainTypes.Contains(
+                                   thing.Map.terrainGrid.TerrainAt(thing.Position).GetWaterTerrainType());
+                    }
+
                 case DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool:
-                {
-                    var waterGrid = thing.Map.GetComponent<MapComponent_ShallowWaterGrid>();
-                    var pool = waterGrid.GetPool(thing.Map.cellIndices.CellToIndex(thing.Position));
-
-                    // 水質条件チェック
-                    if (!ext.needWaterTypes.Contains(pool.WaterType))
                     {
-                        return false;
+                        var waterGrid = thing.Map.GetComponent<MapComponent_ShallowWaterGrid>();
+                        var pool = waterGrid.GetPool(thing.Map.cellIndices.CellToIndex(thing.Position));
+
+                        // 水質条件チェック
+                        if (!ext.needWaterTypes.Contains(pool.WaterType))
+                        {
+                            return false;
+                        }
+
+                        // 入力水道網の水の種類から水アイテムの種類を決定
+                        var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(pool.WaterType);
+
+                        // 水アイテムの水源情報を得る
+                        var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
+                        if (compprop == null)
+                        {
+                            return false;
+                        }
+
+                        // 水量チェック
+                        if (pool.CurrentWaterVolume < compprop.waterVolume * ext.getItemCount)
+                        {
+                            return false;
+                        }
+
+                        return true;
                     }
 
-                    // 入力水道網の水の種類から水アイテムの種類を決定
-                    var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(pool.WaterType);
-
-                    // 水アイテムの水源情報を得る
-                    var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
-                    if (compprop == null)
-                    {
-                        return false;
-                    }
-
-                    // 水量チェック
-                    if (pool.CurrentWaterVolume < compprop.waterVolume * ext.getItemCount)
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
                 case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
-                {
-                    if (!(giver is Building_WaterNetWorkTable workTable) || workTable.InputWaterNet == null)
                     {
-                        return false;
+                        if (!(giver is Building_WaterNetWorkTable workTable) || workTable.InputWaterNet == null)
+                        {
+                            return false;
+                        }
+
+                        WaterType targetWaterType;
+                        float targetWaterVolume;
+
+                        if (ext.canDrawFromFaucet)
+                        {
+                            // 蛇口から汲むレシピ
+                            targetWaterType = workTable.InputWaterNet.StoredWaterTypeForFaucet;
+                            targetWaterVolume = workTable.InputWaterNet.StoredWaterVolumeForFaucet;
+                        }
+                        else
+                        {
+                            // 自身から汲むレシピ(水箱など)
+                            targetWaterType = workTable.TankComp.StoredWaterType;
+                            targetWaterVolume = workTable.TankComp.StoredWaterVolume;
+                        }
+
+                        // 水質チェック
+                        if (!ext.needWaterTypes.Contains(targetWaterType))
+                        {
+                            return false;
+                        }
+
+                        // 入力水道網の水の種類から水アイテムの種類を決定
+                        var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);
+
+                        // 水アイテムの水源情報を得る
+                        var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
+                        if (compprop == null)
+                        {
+                            return false;
+                        }
+
+                        // 水量チェック
+                        if (targetWaterVolume < compprop.waterVolume * ext.getItemCount)
+                        {
+                            return false;
+                        }
+
+                        return true;
                     }
 
-                    WaterType targetWaterType;
-                    float targetWaterVolume;
-
-                    if (ext.canDrawFromFaucet)
-                    {
-                        // 蛇口から汲むレシピ
-                        targetWaterType = workTable.InputWaterNet.StoredWaterTypeForFaucet;
-                        targetWaterVolume = workTable.InputWaterNet.StoredWaterVolumeForFaucet;
-                    }
-                    else
-                    {
-                        // 自身から汲むレシピ(水箱など)
-                        targetWaterType = workTable.TankComp.StoredWaterType;
-                        targetWaterVolume = workTable.TankComp.StoredWaterVolume;
-                    }
-
-                    // 水質チェック
-                    if (!ext.needWaterTypes.Contains(targetWaterType))
-                    {
-                        return false;
-                    }
-
-                    // 入力水道網の水の種類から水アイテムの種類を決定
-                    var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);
-
-                    // 水アイテムの水源情報を得る
-                    var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
-                    if (compprop == null)
-                    {
-                        return false;
-                    }
-
-                    // 水量チェック
-                    if (targetWaterVolume < compprop.waterVolume * ext.getItemCount)
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
                 case DefExtension_WaterRecipe.RecipeType.PourWater:
                     return true;
                 default:
@@ -630,90 +587,156 @@ namespace MizuMod
                 case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
                     return true;
                 case DefExtension_WaterRecipe.RecipeType.PourWater:
-                {
-                    if (!(thing is Building_WaterNetWorkTable building))
                     {
-                        return false;
-                    }
-
-                    var totalWaterVolume = 0f;
-                    foreach (var ta in chosen)
-                    {
-                        var sourceComp = ta.Thing.TryGetComp<CompWaterSource>();
-                        if (sourceComp != null)
+                        if (!(thing is Building_WaterNetWorkTable building))
                         {
-                            totalWaterVolume += sourceComp.WaterVolume * ta.Count;
+                            return false;
                         }
+
+                        var totalWaterVolume = 0f;
+                        foreach (var ta in chosen)
+                        {
+                            var sourceComp = ta.Thing.TryGetComp<CompWaterSource>();
+                            if (sourceComp != null)
+                            {
+                                totalWaterVolume += sourceComp.WaterVolume * ta.Count;
+                            }
+                        }
+
+                        if (GetTotalAmountCanAccept(building) < totalWaterVolume)
+                        {
+                            return false;
+                        }
+
+                        return true;
                     }
 
-                    if (GetTotalAmountCanAccept(building) < totalWaterVolume)
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
                 default:
                     Log.Error("recipeType is Undefined");
                     return false;
             }
         }
 
-        private static float GetTotalAmountCanAccept(Building_WaterNetWorkTable workTable)
+        private Job StartBillJob(Pawn pawn, IBillGiver giver)
         {
-            if (workTable.TankComp == null)
+            foreach (var bill in giver.BillStack)
             {
-                return 0f;
+                // レシピが要求する仕事の種類と、WorkGiver側の仕事の種類があっているかチェック
+                if (bill.recipe.requiredGiverWorkType != null && bill.recipe.requiredGiverWorkType != def.workType)
+                {
+                    continue;
+                }
+
+                // 再チェック時間を過ぎていないかチェック(右クリックメニューからの場合は例外)
+                if (Find.TickManager.TicksGame
+                    < bill.lastIngredientSearchFailTicks + ReCheckFailedBillTicksRange.RandomInRange
+                    && FloatMenuMakerMap.makingFor != pawn)
+                {
+                    continue;
+                }
+
+                // チェック時間更新
+                bill.lastIngredientSearchFailTicks = 0;
+
+                // 今それをする必要があるか
+                if (!bill.ShouldDoNow())
+                {
+                    continue;
+                }
+
+                // そのポーンが新規に仕事をできるか
+                if (!bill.PawnAllowedToStartAnew(pawn))
+                {
+                    continue;
+                }
+
+                // レシピに必要なスキルを持っているか
+                if (!bill.recipe.PawnSatisfiesSkillRequirements(pawn))
+                {
+                    JobFailReason.Is(MissingSkillTranslated);
+                    continue;
+                }
+
+                // 材料はあるか
+                var isFoundIngredients = TryFindBestBillIngredients(bill, pawn, (Thing)giver, chosenIngThings);
+
+                // 消費する水はあるか
+                var isFoundWater = IsFoundWater(giver, bill.recipe.GetModExtension<DefExtension_WaterRecipe>());
+
+                // 水を入れる余地が残っているか
+                var isNotFullWater = IsNotFullWater(
+                    giver,
+                    bill.recipe.GetModExtension<DefExtension_WaterRecipe>(),
+                    chosenIngThings);
+
+                if (isFoundIngredients && isFoundWater && isNotFullWater)
+                {
+                    return TryStartNewDoBillJob(pawn, bill, giver);
+                }
+
+                if (FloatMenuMakerMap.makingFor != pawn)
+                {
+                    // 右クリックメニューからでなく、ジョブを開始できなかったらチェック時間を更新
+                    bill.lastIngredientSearchFailTicks = Find.TickManager.TicksGame;
+                }
+                else
+                {
+                    // 右クリックメニューからの場合、できなかった理由を表示（素材不足）
+                    if (!isFoundIngredients)
+                    {
+                        JobFailReason.Is(MissingMaterialsTranslated);
+                    }
+
+                    if (!isFoundWater)
+                    {
+                        JobFailReason.Is(MissingWaterTranslated);
+                    }
+
+                    if (!isNotFullWater)
+                    {
+                        JobFailReason.Is(FullWaterTranslated);
+                    }
+                }
             }
 
-            var totalAmountCanAccept = workTable.TankComp.AmountCanAccept;
-            if (workTable.InputWaterNet?.FlatTankList == null || !workTable.InputWaterNet.FlatTankList.Any())
-            {
-                return totalAmountCanAccept;
-            }
-
-            var flatTanks =
-                workTable.InputWaterNet.FlatTankList.First(flatTankElement => flatTankElement.Contains(workTable));
-            if (flatTanks == null)
-            {
-                return totalAmountCanAccept;
-            }
-
-            totalAmountCanAccept = 0f;
-            foreach (var tank in flatTanks)
-            {
-                totalAmountCanAccept += tank.TankComp.AmountCanAccept;
-            }
-
-            return totalAmountCanAccept;
+            return null;
         }
 
-        private static Job CreateNewJob(DefExtension_WaterRecipe ext)
+        private Job TryStartNewDoBillJob(Pawn pawn, Bill bill, IBillGiver giver)
         {
-            if (ext == null)
+            // 材料の運搬先に物があった場合(邪魔なものがある場合)、それをどかす処理
+            var job = WorkGiverUtility.HaulStuffOffBillGiverJob(pawn, giver, null);
+            if (job != null)
             {
-                return new Job(JobDefOf.DoBill);
+                return job;
             }
 
-            switch (ext.recipeType)
+            // レシピ実行(本命)
+            var job2 = CreateNewJob(bill.recipe.GetModExtension<DefExtension_WaterRecipe>());
+            if (job2 == null)
             {
-                case DefExtension_WaterRecipe.RecipeType.DrawFromTerrain:
-                    return new Job(MizuDef.Job_DrawFromTerrain);
-                case DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool:
-                    return new Job(MizuDef.Job_DrawFromWaterPool);
-                case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
-                    return new Job(MizuDef.Job_DrawFromWaterNet);
-                case DefExtension_WaterRecipe.RecipeType.PourWater:
-                    return new Job(MizuDef.Job_PourWater);
-                default:
-                    Log.Error("recipeType is Undefined");
-                    return null;
+                return null;
             }
+
+            job2.targetA = giver as Thing;
+            job2.targetQueueB = new List<LocalTargetInfo>(chosenIngThings.Count);
+            job2.countQueue = new List<int>(chosenIngThings.Count);
+            foreach (var thingCount in chosenIngThings)
+            {
+                job2.targetQueueB.Add(thingCount.Thing);
+                job2.countQueue.Add(thingCount.Count);
+            }
+
+            job2.targetC = GetBillGiverRootCell(giver as Thing);
+            job2.haulMode = HaulMode.ToCellNonStorage;
+            job2.bill = bill;
+            return job2;
         }
 
         private class DefCountList
         {
             private readonly List<float> counts = new List<float>();
+
             private readonly List<ThingDef> defs = new List<ThingDef>();
 
             public int Count => defs.Count;
@@ -730,6 +753,7 @@ namespace MizuMod
 
                     return counts[num];
                 }
+
                 set
                 {
                     var num = defs.IndexOf(def);
@@ -748,33 +772,6 @@ namespace MizuMod
                 }
             }
 
-            public float GetCount(int index)
-            {
-                return counts[index];
-            }
-
-            public void SetCount(int index, float val)
-            {
-                counts[index] = val;
-                CheckRemove(index);
-            }
-
-            public ThingDef GetDef(int index)
-            {
-                return defs[index];
-            }
-
-            private void CheckRemove(int index)
-            {
-                if (counts[index] != 0f)
-                {
-                    return;
-                }
-
-                counts.RemoveAt(index);
-                defs.RemoveAt(index);
-            }
-
             public void Clear()
             {
                 defs.Clear();
@@ -788,6 +785,33 @@ namespace MizuMod
                 {
                     this[t.def] = this[t.def] + t.stackCount;
                 }
+            }
+
+            public float GetCount(int index)
+            {
+                return counts[index];
+            }
+
+            public ThingDef GetDef(int index)
+            {
+                return defs[index];
+            }
+
+            public void SetCount(int index, float val)
+            {
+                counts[index] = val;
+                CheckRemove(index);
+            }
+
+            private void CheckRemove(int index)
+            {
+                if (counts[index] != 0f)
+                {
+                    return;
+                }
+
+                counts.RemoveAt(index);
+                defs.RemoveAt(index);
             }
         }
     }

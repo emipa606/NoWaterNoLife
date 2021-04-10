@@ -7,38 +7,27 @@ namespace MizuMod
     {
         private bool lastIsActivatedForWaterNet;
 
-        protected bool IsBrokenDown => parent.IsBrokenDown();
-
-        protected bool SwitchIsOn => WaterNetBuilding.SwitchIsOn;
-
-        protected bool PowerOn => WaterNetBuilding.PowerOn;
-
         public virtual bool IsActivated => WaterNetBuilding.IsActivated;
+
+        public CompProperties_WaterNet Props => (CompProperties_WaterNet)props;
+
+        protected CompWaterNetInput InputComp => WaterNetBuilding.InputComp;
 
         protected bool IsActivatedForWaterNet => WaterNetBuilding.IsActivatedForWaterNet;
 
-        public CompProperties_WaterNet Props => (CompProperties_WaterNet) props;
+        protected bool IsBrokenDown => parent.IsBrokenDown();
+
+        protected CompWaterNetOutput OutputComp => WaterNetBuilding.OutputComp;
+
+        protected bool PowerOn => WaterNetBuilding.PowerOn;
+
+        protected bool SwitchIsOn => WaterNetBuilding.SwitchIsOn;
+
+        protected CompWaterNetTank TankComp => WaterNetBuilding.TankComp;
 
         protected IBuilding_WaterNet WaterNetBuilding => parent as IBuilding_WaterNet;
 
         private MapComponent_WaterNetManager WaterNetManager => parent.Map.GetComponent<MapComponent_WaterNetManager>();
-
-        protected CompWaterNetInput InputComp => WaterNetBuilding.InputComp;
-        protected CompWaterNetOutput OutputComp => WaterNetBuilding.OutputComp;
-        protected CompWaterNetTank TankComp => WaterNetBuilding.TankComp;
-
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
-            Scribe_Values.Look(ref lastIsActivatedForWaterNet, "lastIsActivatedForWaterNet");
-        }
-
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            base.PostSpawnSetup(respawningAfterLoad);
-
-            lastIsActivatedForWaterNet = IsActivatedForWaterNet;
-        }
 
         public override void CompTick()
         {
@@ -57,6 +46,19 @@ namespace MizuMod
             }
 
             WaterNetManager.RequestUpdateWaterNet();
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref lastIsActivatedForWaterNet, "lastIsActivatedForWaterNet");
+        }
+
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+
+            lastIsActivatedForWaterNet = IsActivatedForWaterNet;
         }
     }
 }

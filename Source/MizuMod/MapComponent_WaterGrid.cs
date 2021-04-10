@@ -7,10 +7,15 @@ namespace MizuMod
     public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
     {
         private CellBoolDrawer drawer;
+
+        private int gridUpdates;
+
         private ushort[] poolIDGrid;
+
         private List<UndergroundWaterPool> pools = new List<UndergroundWaterPool>();
 
-        protected MapComponent_WaterGrid(Map map) : base(map)
+        protected MapComponent_WaterGrid(Map map)
+            : base(map)
         {
             poolIDGrid = new ushort[map.cellIndices.NumGridCells];
             drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
@@ -18,34 +23,9 @@ namespace MizuMod
 
         public Color Color => Color.white;
 
-        public bool GetCellBool(int index)
-        {
-            return poolIDGrid[index] != 0;
-        }
-
-        public Color GetCellExtraColor(int index)
-        {
-            var pool = pools.Find(p => p.ID == poolIDGrid[index]);
-            return UndergroundWaterMaterials
-                .Mat(Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-
-            MapExposeUtility.ExposeUshort(map, c => poolIDGrid[map.cellIndices.CellToIndex(c)],
-                (c, id) => poolIDGrid[map.cellIndices.CellToIndex(c)] = id, "poolIDGrid");
-
-            Scribe_Collections.Look(ref pools, "pools", LookMode.Deep, this);
-        }
-
         public void AddWaterPool(UndergroundWaterPool pool, IEnumerable<IntVec3> cells)
         {
-            var mergePools = new List<UndergroundWaterPool>
-            {
-                pool
-            };
+            var mergePools = new List<UndergroundWaterPool> { pool };
 
             // 既存の水源と被るセルを調べる
             foreach (var c in cells)
@@ -78,7 +58,6 @@ namespace MizuMod
             {
                 return;
             }
-
             {
                 // 最小の水源IDのものに統合する
 
@@ -105,7 +84,7 @@ namespace MizuMod
                 // 全セルを調べ、消滅予定水源IDの場所を最小IDに変更
                 for (var i = 0; i < poolIDGrid.Length; i++)
                 {
-                    //Log.Message("i=" + i.ToString());
+                    // Log.Message("i=" + i.ToString());
                     if (mergePools.Find(p => p.ID == GetID(i)) == null)
                     {
                         continue;
@@ -116,6 +95,95 @@ namespace MizuMod
                         SetID(i, minPool.ID);
                     }
                 }
+            }
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+
+            MapExposeUtility.ExposeUshort(
+                map,
+                c => poolIDGrid[map.cellIndices.CellToIndex(c)],
+                (c, id) => poolIDGrid[map.cellIndices.CellToIndex(c)] = id,
+                "poolIDGrid");
+
+            Scribe_Collections.Look(ref pools, "pools", LookMode.Deep, this);
+        }
+
+        public bool GetCellBool(int index)
+        {
+            return poolIDGrid[index] != 0;
+        }
+
+        public Color GetCellExtraColor(int index)
+        {
+            var pool = pools.Find(p => p.ID == poolIDGrid[index]);
+            return UndergroundWaterMaterials.Mat(
+                Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
+        }
+
+        public int GetID(int index)
+        {
+            return poolIDGrid[index];
+        }
+
+        public int GetID(IntVec3 c)
+        {
+            return GetID(map.cellIndices.CellToIndex(c));
+        }
+
+        public UndergroundWaterPool GetPool(int index)
+        {
+            return pools.Find(p => p.ID == poolIDGrid[index]);
+        }
+
+        public override void MapComponentUpdate()
+        {
+            base.MapComponentUpdate();
+
+            drawer.CellBoolDrawerUpdate();
+            var anyPools = false;
+            foreach (var pool in pools)
+            {
+                if (pool == null)
+                {
+                    continue;
+                }
+
+                pool.Update();
+                anyPools = true;
+            }
+
+            if (anyPools)
+            {
+                return;
+            }
+
+            if (gridUpdates > 20)
+            {
+                if (gridUpdates >= 50)
+                {
+                    return;
+                }
+
+                Log.Message("No water no life: Water grid not found, and failed to regenerate after 20 tries");
+                gridUpdates = 55;
+                return;
+            }
+
+            gridUpdates++;
+            poolIDGrid = new ushort[map.cellIndices.NumGridCells];
+            drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
+            pools = new List<UndergroundWaterPool>();
+            MizuUtility.GenerateUndergroundWaterGrid(map, this);
+        }
+
+        public void MarkForDraw()
+        {
+            if (map == Find.CurrentMap)
+            {
+                drawer.MarkForDraw();
             }
         }
 
@@ -188,31 +256,6 @@ namespace MizuMod
             }
         }
 
-        public int GetID(int index)
-        {
-            return poolIDGrid[index];
-        }
-
-        public int GetID(IntVec3 c)
-        {
-            return GetID(map.cellIndices.CellToIndex(c));
-        }
-
-        private void SetID(int index, int id)
-        {
-            poolIDGrid[index] = (ushort) id;
-        }
-
-        private void SetID(IntVec3 c, int id)
-        {
-            SetID(map.cellIndices.CellToIndex(c), id);
-        }
-
-        public UndergroundWaterPool GetPool(int index)
-        {
-            return pools.Find(p => p.ID == poolIDGrid[index]);
-        }
-
         public void SetDirty()
         {
             if (map == Find.CurrentMap)
@@ -221,43 +264,14 @@ namespace MizuMod
             }
         }
 
-        public void MarkForDraw()
+        private void SetID(int index, int id)
         {
-            if (map == Find.CurrentMap)
-            {
-                drawer.MarkForDraw();
-            }
+            poolIDGrid[index] = (ushort)id;
         }
 
-        public override void MapComponentUpdate()
+        private void SetID(IntVec3 c, int id)
         {
-            base.MapComponentUpdate();
-
-            drawer.CellBoolDrawerUpdate();
-            var anyPools = false;
-            foreach (var pool in pools)
-            {
-                if (pool == null)
-                {
-                    continue;
-                }
-
-                pool.Update();
-                anyPools = true;
-            }
-
-            if (anyPools)
-            {
-                return;
-            }
-
-            Log.Message("No water no life: Water grid not found, regenerating");
-            poolIDGrid = new ushort[map.cellIndices.NumGridCells];
-            drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
-            pools = new List<UndergroundWaterPool>();
-            MizuUtility.GenerateUndergroundWaterGrid(
-                map,
-                this);
+            SetID(map.cellIndices.CellToIndex(c), id);
         }
     }
 }

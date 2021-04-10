@@ -6,22 +6,9 @@ namespace MizuMod
     public class PlaceWorker_WaterWorker : PlaceWorker
     {
         // デバッグ用
-        private MapComponent_HiddenWaterSpot HiddenWaterSpot =>
-            Find.CurrentMap.GetComponent<MapComponent_HiddenWaterSpot>();
+        private MapComponent_HiddenWaterSpot HiddenWaterSpot => Find.CurrentMap.GetComponent<MapComponent_HiddenWaterSpot>();
 
-        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
-        {
-            base.DrawGhost(def, center, rot, ghostCol);
-
-            if (DebugSettings.godMode)
-            {
-                // デバッグ用
-                HiddenWaterSpot.MarkForDraw();
-            }
-        }
-
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map,
-            Thing thingToIgnore = null, Thing thing = null)
+        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
         {
             if (!(checkingDef is ThingDef))
             {
@@ -37,6 +24,17 @@ namespace MizuMod
             }
 
             return true;
+        }
+
+        public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
+        {
+            base.DrawGhost(def, center, rot, ghostCol, thing);
+
+            if (DebugSettings.godMode)
+            {
+                // デバッグ用
+                HiddenWaterSpot.MarkForDraw();
+            }
         }
     }
 }

@@ -10,8 +10,26 @@ namespace MizuMod
         {
         }
 
-        public Graphic_LinkedWaterNet(Graphic subGraphic) : base(subGraphic)
+        public Graphic_LinkedWaterNet(Graphic subGraphic)
+            : base(subGraphic)
         {
+        }
+
+        public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
+        {
+            return new Graphic_LinkedWaterNet(subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
+                       {
+                           data = data
+                       };
+        }
+
+        public override void Print(SectionLayer layer, Thing parent)
+        {
+            Printer_Plane.PrintPlane(
+                layer,
+                parent.TrueCenter(),
+                Vector2.one,
+                LinkedDrawMatFrom(parent, parent.Position));
         }
 
         public override bool ShouldLinkWith(IntVec3 c, Thing parent)
@@ -52,7 +70,6 @@ namespace MizuMod
             {
                 return c.InBounds(parent.Map);
             }
-
             {
                 foreach (var t in thing.WaterNetManager.UnNetThings)
                 {
@@ -72,20 +89,6 @@ namespace MizuMod
             }
 
             return c.InBounds(parent.Map) && foundWaterNetBase;
-        }
-
-        public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
-        {
-            return new Graphic_LinkedWaterNet(subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
-            {
-                data = data
-            };
-        }
-
-        public override void Print(SectionLayer layer, Thing parent)
-        {
-            Printer_Plane.PrintPlane(layer, parent.TrueCenter(), Vector2.one,
-                LinkedDrawMatFrom(parent, parent.Position));
         }
     }
 }

@@ -12,21 +12,10 @@ namespace MizuMod
 
         // 潜熱値
         private float latentHeatAmount;
-        private CompProperties_LatentHeat Props => (CompProperties_LatentHeat) props;
-
-        private ThingDef ChangedThingDef => Props.changedThingDef;
-
-        private float TemperatureThreshold => Props.temperatureThreshold;
 
         private CompProperties_LatentHeat.AddCondition AddLatentHeatCondition => Props.addLatentHeatCondition;
 
-        private float LatentHeatThreshold => Props.latentHeatThreshold;
-
-        private float LatentHeatAmount
-        {
-            get => latentHeatAmount;
-            set => latentHeatAmount = Mathf.Max(0f, value);
-        }
+        private ThingDef ChangedThingDef => Props.changedThingDef;
 
         private float HiddenRotProgress
         {
@@ -34,17 +23,59 @@ namespace MizuMod
             set => hiddenRotProgress = value;
         }
 
-        public override void PostExposeData()
+        private float LatentHeatAmount
         {
-            base.PostExposeData();
+            get => latentHeatAmount;
+            set => latentHeatAmount = Mathf.Max(0f, value);
+        }
 
-            Scribe_Values.Look(ref latentHeatAmount, "latentHeatAmount");
-            Scribe_Values.Look(ref hiddenRotProgress, "hiddenRotProgress");
+        private float LatentHeatThreshold => Props.latentHeatThreshold;
+
+        private CompProperties_LatentHeat Props => (CompProperties_LatentHeat)props;
+
+        private float TemperatureThreshold => Props.temperatureThreshold;
+
+        // 分離した時、潜熱値は特に変更しない
+        // public override void PostSplitOff(Thing piece)
+        // {
+        // base.PostSplitOff(piece);
+        // }
+        public override string CompInspectStringExtra()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(base.CompInspectStringExtra());
+
+            if (!DebugSettings.godMode)
+            {
+                return stringBuilder.ToString();
+            }
+
+            if (stringBuilder.ToString() != string.Empty)
+            {
+                stringBuilder.AppendLine();
+            }
+
+            stringBuilder.Append("LatentHeatAmount:" + latentHeatAmount.ToString("F2"));
+            stringBuilder.AppendLine();
+            stringBuilder.Append("HiddenRotProgress:" + hiddenRotProgress);
+
+            // if (stringBuilder.ToString() != string.Empty)
+            // {
+            // stringBuilder.AppendLine();
+            // }
+            // stringBuilder.Append(MizuStrings.InspectWaterFlowInput + ": " + this.InputWaterFlow.ToString("F2") + " L/day");
+            // stringBuilder.Append(string.Concat(new string[]
+            // {
+            // "(",
+            // MizuStrings.GetInspectWaterTypeString(this.InputWaterType),
+            // ")",
+            // }));
+            return stringBuilder.ToString();
         }
 
         public override void CompTickRare()
         {
-            base.CompTick();
+            CompTick();
 
             // 閾値より温度が高い場合はプラス
             var deltaTemperature = parent.AmbientTemperature - TemperatureThreshold;
@@ -98,12 +129,20 @@ namespace MizuMod
             CreateNewThing(changedThing, map, owner);
         }
 
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+
+            Scribe_Values.Look(ref latentHeatAmount, "latentHeatAmount");
+            Scribe_Values.Look(ref hiddenRotProgress, "hiddenRotProgress");
+        }
+
         public override void PreAbsorbStack(Thing otherStack, int count)
         {
             base.PreAbsorbStack(otherStack, count);
 
             // 全体に対するother側の割合
-            var otherRatio = count / (float) (parent.stackCount + count);
+            var otherRatio = count / (float)(parent.stackCount + count);
 
             var otherComp = otherStack.TryGetComp<CompLatentHeat>();
             if (otherComp == null)
@@ -116,45 +155,6 @@ namespace MizuMod
 
             // 隠し腐敗度の計算(加重平均)
             HiddenRotProgress = Mathf.Lerp(HiddenRotProgress, otherComp.HiddenRotProgress, otherRatio);
-        }
-
-        // 分離した時、潜熱値は特に変更しない
-        //public override void PostSplitOff(Thing piece)
-        //{
-        //    base.PostSplitOff(piece);
-        //}
-
-        public override string CompInspectStringExtra()
-        {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append(base.CompInspectStringExtra());
-
-            if (!DebugSettings.godMode)
-            {
-                return stringBuilder.ToString();
-            }
-
-            if (stringBuilder.ToString() != string.Empty)
-            {
-                stringBuilder.AppendLine();
-            }
-
-            stringBuilder.Append("LatentHeatAmount:" + latentHeatAmount.ToString("F2"));
-            stringBuilder.AppendLine();
-            stringBuilder.Append("HiddenRotProgress:" + hiddenRotProgress);
-            //if (stringBuilder.ToString() != string.Empty)
-            //{
-            //    stringBuilder.AppendLine();
-            //}
-            //stringBuilder.Append(MizuStrings.InspectWaterFlowInput + ": " + this.InputWaterFlow.ToString("F2") + " L/day");
-            //stringBuilder.Append(string.Concat(new string[]
-            //{
-            //    "(",
-            //    MizuStrings.GetInspectWaterTypeString(this.InputWaterType),
-            //    ")",
-            //}));
-
-            return stringBuilder.ToString();
         }
 
         private void CreateNewThing(Thing thing, Map map, ThingOwner owner)
@@ -217,18 +217,18 @@ namespace MizuMod
             if (compRotChanged != null)
             {
                 // 腐敗度を持つ
-                //   →腐敗度をそこに設定(氷→水の変化時はここに入るはず)
+                // →腐敗度をそこに設定(氷→水の変化時はここに入るはず)
                 compRotChanged.RotProgress = rotProgress;
             }
             else
             {
                 // 腐敗度を持たない
-                //   →潜熱を持つかチェック
+                // →潜熱を持つかチェック
                 var compLatentHeatChanged = thing.TryGetComp<CompLatentHeat>();
                 if (compLatentHeatChanged != null)
                 {
                     // 潜熱を持っている
-                    //   →腐敗度を隠し腐敗度として設定(水→氷の変化時はここに入るはず)
+                    // →腐敗度を隠し腐敗度として設定(水→氷の変化時はここに入るはず)
                     compLatentHeatChanged.HiddenRotProgress = rotProgress;
                 }
             }

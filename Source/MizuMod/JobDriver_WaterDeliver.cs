@@ -7,9 +7,11 @@ namespace MizuMod
 {
     public class JobDriver_WaterDeliver : JobDriver
     {
-        private const TargetIndex WaterIndex = TargetIndex.A;
-        private const TargetIndex PrisonerIndex = TargetIndex.B;
         private const TargetIndex DropSpotIndex = TargetIndex.C;
+
+        private const TargetIndex PrisonerIndex = TargetIndex.B;
+
+        private const TargetIndex WaterIndex = TargetIndex.A;
 
         private bool drinkingFromInventory;
 

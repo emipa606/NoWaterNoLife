@@ -5,8 +5,9 @@ namespace MizuMod
 {
     public class JobDriver_DrawWaterByPrisoner : JobDriver
     {
-        private const int DrawTicks = 500;
         private const TargetIndex DrawerIndex = TargetIndex.A;
+
+        private const int DrawTicks = 500;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {

@@ -7,7 +7,8 @@ namespace MizuMod
     {
         private bool requestedUpdateWaterNet;
 
-        public MapComponent_WaterNetManager(Map map) : base(map)
+        public MapComponent_WaterNetManager(Map map)
+            : base(map)
         {
         }
 
@@ -15,49 +16,59 @@ namespace MizuMod
 
         public List<IBuilding_WaterNet> UnNetThings { get; } = new List<IBuilding_WaterNet>();
 
+        public void AddThing(IBuilding_WaterNet thing)
+        {
+            UnNetThings.Add(thing);
+            UpdateWaterNets();
+        }
+
+        public override void MapComponentTick()
+        {
+            base.MapComponentTick();
+
+            if (requestedUpdateWaterNet)
+            {
+                requestedUpdateWaterNet = false;
+                UpdateWaterNets();
+            }
+
+            // 入力量と入力水質、水道網全体の水質を更新
+            foreach (var net in Nets)
+            {
+                net.UpdateInputWaterFlow();
+            }
+
+            // タンクの水量とタンク内の水質を更新
+            foreach (var net in Nets)
+            {
+                net.UpdateWaterTank();
+            }
+        }
+
+        public void RemoveNet(WaterNet net)
+        {
+            net.Manager = null;
+            Nets.Remove(net);
+        }
+
+        public void RemoveThing(IBuilding_WaterNet thing)
+        {
+            // 対象の物を除去
+            thing.InputWaterNet?.RemoveThing(thing);
+
+            thing.OutputWaterNet?.RemoveThing(thing);
+
+            if (UnNetThings.Contains(thing))
+            {
+                UnNetThings.Remove(thing);
+            }
+
+            UpdateWaterNets();
+        }
+
         public void RequestUpdateWaterNet()
         {
             requestedUpdateWaterNet = true;
-        }
-
-        private Queue<IBuilding_WaterNet> ClearWaterNets()
-        {
-            var unNetQueue = new Queue<IBuilding_WaterNet>();
-
-            foreach (var t in UnNetThings)
-            {
-                t.InputWaterNet = null;
-                t.OutputWaterNet = null;
-                if (!unNetQueue.Contains(t))
-                {
-                    unNetQueue.Enqueue(t);
-                }
-            }
-
-            UnNetThings.Clear();
-
-            foreach (var net in Nets)
-            {
-                foreach (var t in net.AllThings)
-                {
-                    if (unNetQueue.Contains(t))
-                    {
-                        continue;
-                    }
-
-                    t.InputWaterNet = null;
-                    t.OutputWaterNet = null;
-                    unNetQueue.Enqueue(t);
-                }
-
-                net.ClearThings();
-            }
-
-            ClearNets();
-
-            WaterNet.ClearNextID();
-
-            return unNetQueue;
         }
 
         public void UpdateWaterNets()
@@ -257,37 +268,10 @@ namespace MizuMod
             }
         }
 
-        public void AddThing(IBuilding_WaterNet thing)
-        {
-            UnNetThings.Add(thing);
-            UpdateWaterNets();
-        }
-
-        public void RemoveThing(IBuilding_WaterNet thing)
-        {
-            // 対象の物を除去
-            thing.InputWaterNet?.RemoveThing(thing);
-
-            thing.OutputWaterNet?.RemoveThing(thing);
-
-            if (UnNetThings.Contains(thing))
-            {
-                UnNetThings.Remove(thing);
-            }
-
-            UpdateWaterNets();
-        }
-
         private void AddNet(WaterNet net)
         {
             net.Manager = this;
             Nets.Add(net);
-        }
-
-        public void RemoveNet(WaterNet net)
-        {
-            net.Manager = null;
-            Nets.Remove(net);
         }
 
         private void ClearNets()
@@ -300,27 +284,44 @@ namespace MizuMod
             Nets.Clear();
         }
 
-        public override void MapComponentTick()
+        private Queue<IBuilding_WaterNet> ClearWaterNets()
         {
-            base.MapComponentTick();
+            var unNetQueue = new Queue<IBuilding_WaterNet>();
 
-            if (requestedUpdateWaterNet)
+            foreach (var t in UnNetThings)
             {
-                requestedUpdateWaterNet = false;
-                UpdateWaterNets();
+                t.InputWaterNet = null;
+                t.OutputWaterNet = null;
+                if (!unNetQueue.Contains(t))
+                {
+                    unNetQueue.Enqueue(t);
+                }
             }
 
-            // 入力量と入力水質、水道網全体の水質を更新
+            UnNetThings.Clear();
+
             foreach (var net in Nets)
             {
-                net.UpdateInputWaterFlow();
+                foreach (var t in net.AllThings)
+                {
+                    if (unNetQueue.Contains(t))
+                    {
+                        continue;
+                    }
+
+                    t.InputWaterNet = null;
+                    t.OutputWaterNet = null;
+                    unNetQueue.Enqueue(t);
+                }
+
+                net.ClearThings();
             }
 
-            // タンクの水量とタンク内の水質を更新
-            foreach (var net in Nets)
-            {
-                net.UpdateWaterTank();
-            }
+            ClearNets();
+
+            WaterNet.ClearNextID();
+
+            return unNetQueue;
         }
     }
 }

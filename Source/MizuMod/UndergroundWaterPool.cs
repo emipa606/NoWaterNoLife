@@ -7,20 +7,26 @@ namespace MizuMod
 {
     public class UndergroundWaterPool : IExposable
     {
-        private readonly MapComponent_WaterGrid waterGrid;
-        private float baseRegenRate;
-        private float currentWaterVolume;
-        private bool debugFlag = true;
-
         public int ID;
 
+        private readonly MapComponent_WaterGrid waterGrid;
+
+        private float baseRegenRate;
+
+        private float currentWaterVolume;
+
+        private bool debugFlag = true;
+
         private int lastMaterialIndex = UndergroundWaterMaterials.MaterialCount;
+
         private int lastTick;
 
         private float maxWaterVolume;
+
         private float outputWaterFlow;
 
         private List<IntVec3> poolCells;
+
         private float rainRegenRatePerCell;
 
         private WaterType waterType;
@@ -33,8 +39,13 @@ namespace MizuMod
             lastTick = Find.TickManager.TicksGame;
         }
 
-        public UndergroundWaterPool(MapComponent_WaterGrid waterGrid, float maxWaterVolume, WaterType waterType,
-            float baseRegenRate, float rainRegenRatePerCell) : this(waterGrid)
+        public UndergroundWaterPool(
+            MapComponent_WaterGrid waterGrid,
+            float maxWaterVolume,
+            WaterType waterType,
+            float baseRegenRate,
+            float rainRegenRatePerCell)
+            : this(waterGrid)
         {
             this.maxWaterVolume = maxWaterVolume;
             currentWaterVolume = maxWaterVolume;
@@ -43,8 +54,7 @@ namespace MizuMod
             this.rainRegenRatePerCell = rainRegenRatePerCell;
         }
 
-        public WaterType WaterType => waterType;
-        public float MaxWaterVolume => maxWaterVolume;
+        public float BaseRegenRate => baseRegenRate;
 
         public float CurrentWaterVolume
         {
@@ -64,9 +74,9 @@ namespace MizuMod
             }
         }
 
+        public float CurrentWaterVolumePercent => CurrentWaterVolume / maxWaterVolume;
 
-        public float BaseRegenRate => baseRegenRate;
-        public float RainRegenRatePerCell => rainRegenRatePerCell;
+        public float MaxWaterVolume => maxWaterVolume;
 
         public float OutputWaterFlow
         {
@@ -74,7 +84,9 @@ namespace MizuMod
             set => outputWaterFlow = Mathf.Max(value, 0f);
         }
 
-        public float CurrentWaterVolumePercent => CurrentWaterVolume / maxWaterVolume;
+        public float RainRegenRatePerCell => rainRegenRatePerCell;
+
+        public WaterType WaterType => waterType;
 
         public void ExposeData()
         {
@@ -124,12 +136,6 @@ namespace MizuMod
             rainRegenRatePerCell = MizuDef.GlobalSettings.forDebug.resetRainRegenRatePerCellForDeep;
         }
 
-        public void MergeWaterVolume(UndergroundWaterPool p)
-        {
-            maxWaterVolume += p.maxWaterVolume;
-            CurrentWaterVolume += p.CurrentWaterVolume;
-        }
-
         public void MergePool(UndergroundWaterPool p, ushort[] idGrid)
         {
             MergeWaterVolume(p);
@@ -137,9 +143,15 @@ namespace MizuMod
             {
                 if (idGrid[i] == p.ID)
                 {
-                    idGrid[i] = (ushort) ID;
+                    idGrid[i] = (ushort)ID;
                 }
             }
+        }
+
+        public void MergeWaterVolume(UndergroundWaterPool p)
+        {
+            maxWaterVolume += p.maxWaterVolume;
+            CurrentWaterVolume += p.CurrentWaterVolume;
         }
 
         public void Update()
@@ -165,8 +177,8 @@ namespace MizuMod
             }
 
             // 雨による回復量
-            var addWaterVolumeRain = rainRegenRatePerCell * unroofedCells / 60000.0f *
-                                     waterGrid.map.weatherManager.RainRate * (curTick - lastTick);
+            var addWaterVolumeRain = rainRegenRatePerCell * unroofedCells / 60000.0f
+                                     * waterGrid.map.weatherManager.RainRate * (curTick - lastTick);
 
             // 合計回復量
             var addWaterVolumeTotal = addWaterVolumeBase + addWaterVolumeRain;

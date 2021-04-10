@@ -10,11 +10,16 @@ namespace MizuMod
         private WaterType storedWaterType = WaterType.NoWater;
 
         private float storedWaterVolume;
-        public CompProperties_WaterTool Props => (CompProperties_WaterTool) props;
 
-        public List<CompProperties_WaterTool.UseWorkType> UseWorkType => Props.useWorkType;
-        public List<WorkTypeDef> SupplyWorkType => Props.supplyWorkType;
         public float MaxWaterVolume => Props.maxWaterVolume;
+
+        public CompProperties_WaterTool Props => (CompProperties_WaterTool)props;
+
+        public WaterType StoredWaterType
+        {
+            get => storedWaterType;
+            set => storedWaterType = value;
+        }
 
         public float StoredWaterVolume
         {
@@ -29,21 +34,11 @@ namespace MizuMod
             }
         }
 
-        public WaterType StoredWaterType
-        {
-            get => storedWaterType;
-            set => storedWaterType = value;
-        }
-
         public float StoredWaterVolumePercent => StoredWaterVolume / MaxWaterVolume;
 
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
+        public List<WorkTypeDef> SupplyWorkType => Props.supplyWorkType;
 
-            Scribe_Values.Look(ref storedWaterVolume, "storedWaterVolume");
-            Scribe_Values.Look(ref storedWaterType, "storedWaterType", WaterType.NoWater);
-        }
+        public List<CompProperties_WaterTool.UseWorkType> UseWorkType => Props.useWorkType;
 
         public override string CompInspectStringExtra()
         {
@@ -55,28 +50,32 @@ namespace MizuMod
                 stringBuilder.AppendLine();
             }
 
-            stringBuilder.Append(string.Concat(new[]
-            {
-                MizuStrings.InspectWaterToolStored.Translate().RawText,
-                ":",
-                (StoredWaterVolumePercent * 100).ToString("F0"),
-                "%"
-            }));
+            stringBuilder.Append(
+                string.Concat(
+                    new[]
+                        {
+                            MizuStrings.InspectWaterToolStored.Translate().RawText, ":",
+                            (StoredWaterVolumePercent * 100).ToString("F0"), "%"
+                        }));
 
             if (DebugSettings.godMode)
             {
-                stringBuilder.Append(string.Concat("(", StoredWaterVolume.ToString("F2"), "/",
-                    MaxWaterVolume.ToString("F2"), ")"));
+                stringBuilder.Append(
+                    string.Concat("(", StoredWaterVolume.ToString("F2"), "/", MaxWaterVolume.ToString("F2"), ")"));
             }
 
-            stringBuilder.Append(string.Concat(new[]
-            {
-                "(",
-                MizuStrings.GetInspectWaterTypeString(StoredWaterType),
-                ")"
-            }));
+            stringBuilder.Append(
+                string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")" }));
 
             return stringBuilder.ToString();
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+
+            Scribe_Values.Look(ref storedWaterVolume, "storedWaterVolume");
+            Scribe_Values.Look(ref storedWaterType, "storedWaterType", WaterType.NoWater);
         }
     }
 }

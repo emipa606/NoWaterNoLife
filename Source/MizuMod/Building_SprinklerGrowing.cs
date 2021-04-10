@@ -7,9 +7,12 @@ namespace MizuMod
 {
     public class Building_SprinklerGrowing : Building_WaterNet
     {
-        private const float UseWaterVolumePerOne = 0.1f;
         private const int ExtinguishPower = 50;
+
+        private const float UseWaterVolumePerOne = 0.1f;
+
         private CompPowerTrader compPowerTrader;
+
         private CompSchedule compSchedule;
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -39,8 +42,8 @@ namespace MizuMod
 
                     // 設備と同じ部屋に属するセル(肥沃度あり)
                     // 暫定で植木鉢は無効とする
-                    var sameRoomCells = cells.Where(c =>
-                        c.GetRoom(Map) == room && Map.terrainGrid.TerrainAt(c).fertility >= 0.01f);
+                    var sameRoomCells = cells.Where(
+                        c => c.GetRoom(Map) == room && Map.terrainGrid.TerrainAt(c).fertility >= 0.01f);
 
                     var wateringComp = Map.GetComponent<MapComponent_Watering>();
 
@@ -64,16 +67,16 @@ namespace MizuMod
                             Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
 
                             // 水やりエフェクト(仮)
-                            var mote = (MoteThrown) ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
-                            //mote.Scale = 1f;
-                            //mote.rotationRate = (float)(Rand.Chance(0.5f) ? -30 : 30);
+                            var mote = (MoteThrown)ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
+
+                            // mote.Scale = 1f;
+                            // mote.rotationRate = (float)(Rand.Chance(0.5f) ? -30 : 30);
                             mote.exactPosition = c.ToVector3Shifted();
                             GenSpawn.Spawn(mote, c, Map);
 
                             // 消火効果(仮)
                             // 複製しないとダメージを受けて消えた時点で元のリストから除外されてエラーになる
-                            var fireList = new List<Fire>(Map.thingGrid.ThingsListAt(c)
-                                .OfType<Fire>());
+                            var fireList = new List<Fire>(Map.thingGrid.ThingsListAt(c).OfType<Fire>());
                             foreach (var fire in fireList)
                             {
                                 fire.TakeDamage(new DamageInfo(DamageDefOf.Extinguish, ExtinguishPower));

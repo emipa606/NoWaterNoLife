@@ -25,8 +25,11 @@ namespace MizuMod
             var totalWater = map.resourceCounter.TotalWater();
             var num = map.mapPawns.FreeColonistsSpawnedCount + map.mapPawns.PrisonersOfColonyCount;
             var num2 = Mathf.FloorToInt(totalWater / num);
-            return string.Format(MizuStrings.AlertLowWaterDesc.Translate(), totalWater.ToString("F0"),
-                num.ToStringCached(), num2.ToStringCached());
+            return string.Format(
+                MizuStrings.AlertLowWaterDesc.Translate(),
+                totalWater.ToString("F0"),
+                num.ToStringCached(),
+                num2.ToStringCached());
         }
 
         public override AlertReport GetReport()
