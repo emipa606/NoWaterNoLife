@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_WaterDrank.label>Wypito wody</Mizu_WaterDrank.label>
+  <Mizu_WaterDrank.description>Ilość wypitej wody</Mizu_WaterDrank.description>
+  <Mizu_WaterDrew.label>Pobrana woda</Mizu_WaterDrew.label>
+  <Mizu_WaterDrew.description>Ilość pobranej wody</Mizu_WaterDrew.description>
+  <Mizu_TimeDrinkingWater.label>Czas na szukanie wody i picie</Mizu_TimeDrinkingWater.label>
+  <Mizu_TimeDrinkingWater.description>Całkowity czas spędzony na szukaniu i piciu wody.</Mizu_TimeDrinkingWater.description>
+</LanguageData>

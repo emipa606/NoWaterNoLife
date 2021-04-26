@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_DrinkWater.reportString>pije: TargetA.</Mizu_DrinkWater.reportString>
+  <Mizu_DrinkWaterFromBuilding.reportString>pije z: TargetA.</Mizu_DrinkWaterFromBuilding.reportString>
+  <Mizu_FeedWaterPatient.reportString>napaja: TargetA dla TargetB.</Mizu_FeedWaterPatient.reportString>
+  <Mizu_DeliverWater.reportString>napaja: TargetA dla TargetB.</Mizu_DeliverWater.reportString>
+  <Mizu_DrawFromTerrain.reportString>Pobiera wodę w TargetA.</Mizu_DrawFromTerrain.reportString>
+  <Mizu_DrawFromWaterPool.reportString>Pobiera wodę w TargetA.</Mizu_DrawFromWaterPool.reportString>
+  <Mizu_DrawFromWaterNet.reportString>Pobiera wodę w TargetA.</Mizu_DrawFromWaterNet.reportString>
+  <Mizu_PourWater.reportString>Pobiera wodę w TargetA.</Mizu_PourWater.reportString>
+  <Mizu_DrawWaterByPrisoner.reportString>Pobiera wodę w TargetA.</Mizu_DrawWaterByPrisoner.reportString>
+  <Mizu_GetSnow.reportString>Pobiera śnieg.</Mizu_GetSnow.reportString>
+  <Mizu_Mop.reportString>Sprząta TargetA.</Mizu_Mop.reportString>
+  <Mizu_SupplyWaterToTool.reportString>Dostarcza wodę do TargetB.</Mizu_SupplyWaterToTool.reportString>
+  <Mizu_Nurse.reportString>Opiekuje się: TargetA.</Mizu_Nurse.reportString>
+  <Mizu_WaterFarm.reportString>Podlewa TargetA</Mizu_WaterFarm.reportString>
+</LanguageData>

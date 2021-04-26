@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_ClearWater.label>Woda oczyszczona</Mizu_ClearWater.label>
+  <Mizu_ClearWater.description>Woda gotowa do spożycia. Będzie dobrze smakowała.</Mizu_ClearWater.description>
+  <Mizu_NormalWater.label>Woda zwykła</Mizu_NormalWater.label>
+  <Mizu_NormalWater.description>Woda do picia. Nie wywołuje żadnych efektów.</Mizu_NormalWater.description>
+  <Mizu_RawWater.label>Woda surowa</Mizu_RawWater.label>
+  <Mizu_RawWater.description>Woda do picia. Nie smakuje najlepiej.</Mizu_RawWater.description>
+  <Mizu_MudWater.label>Woda mętna</Mizu_MudWater.label>
+  <Mizu_MudWater.description>Woda do picia. Będzie okropnie smakowała.</Mizu_MudWater.description>
+  <Mizu_SeaWater.label>Woda słona</Mizu_SeaWater.label>
+  <Mizu_SeaWater.description>Woda do picia. Będzie okropnie smakować. Ten słony smak...</Mizu_SeaWater.description>
+  <Mizu_ClearIce.label>Lód (woda oczyszczona)</Mizu_ClearIce.label>
+  <Mizu_ClearIce.description>Czysta woda jest zamarznięta. Możesz napoić się wodą, liżąc lód, ale zajmie to trochę czasu.</Mizu_ClearIce.description>
+  <Mizu_NormalIce.label>Lód (woda zwykła)</Mizu_NormalIce.label>
+  <Mizu_NormalIce.description>Zwykła woda jest zamarznięta. Możesz napoić się wodą, liżąc lód, ale zajmie to trochę czasu.</Mizu_NormalIce.description>
+  <Mizu_RawIce.label>Lód (woda surowa)</Mizu_RawIce.label>
+  <Mizu_RawIce.description>Woda surowa jest zamarznięta. Możesz napoić się wodą, liżąc lód, ale zajmie to trochę czasu.</Mizu_RawIce.description>
+  <Mizu_MudIce.label>Lód (woda mętna)</Mizu_MudIce.label>
+  <Mizu_MudIce.description>Woda mętna jest zamarznięta. Możesz napoić się wodą, liżąc lód, ale zajmie to trochę czasu.</Mizu_MudIce.description>
+  <Mizu_SeaIce.label>Lód (woda słona)</Mizu_SeaIce.label>
+  <Mizu_SeaIce.description>Woda słona jest zamarznięta. Możesz napoić się wodą, liżąc lód, ale zajmie to trochę czasu.</Mizu_SeaIce.description>
+  <Mizu_ShavedIce.label>Pokruszony lód</Mizu_ShavedIce.label>
+  <Mizu_ShavedIce.description>Deser zrobiony z pokruszonego lodu. Uważaj na bóle głowy.</Mizu_ShavedIce.description>
+  <Mizu_RawSnow.label>Śnieg (woda surowa)</Mizu_RawSnow.label>
+  <Mizu_RawSnow.description>Śnieg składa się z wody, którą możesz zdobyć liżąc śnieg, ale zajmie to trochę czasu.</Mizu_RawSnow.description>
+  <Mizu_Snowball.label>Śnieżna kula</Mizu_Snowball.label>
+  <Mizu_Snowball.description>Ta śnieżka powstała na skutek nagromadzenego śniegu. Możesz zdobyć wodę, liżąc śnieg, ale zajmie to trochę czasu. Może być użyta również jako broń dystansowa</Mizu_Snowball.description>
+  <Mizu_Bullet_Snowball.label>Śnieżna kula</Mizu_Bullet_Snowball.label>
+</LanguageData>

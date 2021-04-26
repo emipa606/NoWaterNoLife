@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_Dehydration.label>odwodnienie</Mizu_Dehydration.label>
+  <rep>
+    <path>Mizu_Dehydration.stages[0].label</path>
+    <trans>początkowe</trans>
+  </rep>
+  <rep>
+    <path>Mizu_Dehydration.stages[1].label</path>
+    <trans>lekkie</trans>
+  </rep>
+  <rep>
+    <path>Mizu_Dehydration.stages[2].label</path>
+    <trans>średnie</trans>
+  </rep>
+  <rep>
+    <path>Mizu_Dehydration.stages[3].label</path>
+    <trans>silne</trans>
+  </rep>
+  <rep>
+    <path>Mizu_Dehydration.stages[4].label</path>
+    <trans>ekstremalne</trans>
+  </rep>
+  <Mizu_DrankSeaWater.label>pił wodę słoną</Mizu_DrankSeaWater.label>
+  <Mizu_IcecreamHeadache.label>Ból głowy związany z lodami</Mizu_IcecreamHeadache.label>
+  <Mizu_Nursed.label>leczony</Mizu_Nursed.label>
+</LanguageData>

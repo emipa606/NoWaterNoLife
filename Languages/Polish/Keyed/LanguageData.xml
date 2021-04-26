@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MizuWaterAmount>Ilość wody</MizuWaterAmount>
+  <MizuConsumeWater>Wypij: {0}</MizuConsumeWater>
+  <MizuNoWater>brak wody</MizuNoWater>
+  <MizuWaterUILabel>Woda</MizuWaterUILabel>
+  <MizuLowWater>Mało wody</MizuLowWater>
+  <MizuLowWaterDesc>Jesteś w posiadaniu niebezpiecznie małej ilości wody.\n\n    Pełne butelki wody w magazynie: {0}\n    Koloniści i więźniowie pobierają wodę: {1}\n    Przechowywanej wody wystarczy na dni: {2}\n\nZaczerpnij, kup lub znajdź trochę wody.</MizuLowWaterDesc>
+  <MizuDehydration>Odwodnienie</MizuDehydration>
+  <MizuDehydrationDesc>Ci koloniści cierpią na odwodnienie:\n\n{0}\nDaj im trochę wody.</MizuDehydrationDesc>
+  <MizuMessageCaravanRunOutOfWater>{0} zabrakło wody ({1})。</MizuMessageCaravanRunOutOfWater>
+  <MizuDaysWorthOfWaterInfo>Na {0} dni wystarczy wody</MizuDaysWorthOfWaterInfo>
+  <MizuInfiniteDaysWorthOfWaterInfo>Nigdy nie zabraknie wody</MizuInfiniteDaysWorthOfWaterInfo>
+  <MizuDaysWorthOfWaterTooltip>Przybliżona liczba dni do wyczerpania wody w karawanie.</MizuDaysWorthOfWaterTooltip>
+  <MizuCaravanOutOfWater>Bez wody.</MizuCaravanOutOfWater>
+  <MizuCaravanDaysOfWater>Wody wystarczy na dni: {0}</MizuCaravanDaysOfWater>
+  <MizuDaysWorthOfWaterWarningDialog>Twoja karawana ma wodę tylko na {0} dni i na własnej skórze bardzo szybko poczuje pragnienie.\n\nCzy na pewno chcesz stworzyć tę karawanę?</MizuDaysWorthOfWaterWarningDialog>
+  <MizuDaysWorthOfWaterWarningDialog_NoWater>Twoja karawana nie ma wody i na własnej skórze bardzo szybko poczuje czym jest pragnienie.\n\nCzy na pewno chcesz stworzyć tę karawanę?</MizuDaysWorthOfWaterWarningDialog_NoWater>
+  <MizuWaterFlowOutput>Wydajność przepływu wody</MizuWaterFlowOutput>
+  <MizuWaterFlowInput>Licznik przepływu wody</MizuWaterFlowInput>
+  <MizuWaterTankStored>Zmagazywanowa ilość wody</MizuWaterTankStored>
+  <MizuCommandDesignateOpenCloseValveLabel>Oznacz otwarte/zamknięte</MizuCommandDesignateOpenCloseValveLabel>
+  <MizuCommandDesignateOpenCloseValveDesc>Oznacz ten zawór jako otwarty lub zamknięty. Wkrótce pojawi się kolonista, który wykona zadanie.</MizuCommandDesignateOpenCloseValveDesc>
+  <MizuValveClosed>Zamknięte</MizuValveClosed>
+  <MizuStoredWaterPool>Pozostało wody gruntowej</MizuStoredWaterPool>
+  <MizuDraining>Odprowadzanie</MizuDraining>
+  <MizuCommandDesignateDrainTankLabel>Uruchom/Zatrzymaj odprowadzanie wody</MizuCommandDesignateDrainTankLabel>
+  <MizuCommandDesignateDrainTankDesc>Przełączaj między początkowym a końcowym odprowadzaniem wody. Wkrótce pojawi się kolonista, który wykona zadanie.</MizuCommandDesignateDrainTankDesc>
+  <MizuWaterTypeNo>Brak</MizuWaterTypeNo>
+  <MizuWaterTypeClear>Woda oczyszczona</MizuWaterTypeClear>
+  <MizuWaterTypeNormal>Woda zwykła</MizuWaterTypeNormal>
+  <MizuWaterTypeRaw>Woda Surowa</MizuWaterTypeRaw>
+  <MizuWaterTypeMud>Woda mętna</MizuWaterTypeMud>
+  <MizuWaterTypeSea>Woda słona</MizuWaterTypeSea>
+  <MizuMissingWater>potrzeba wody</MizuMissingWater>
+  <MizuFullWater>dostatecznie</MizuFullWater>
+  <MizuDesignatorDeconstructPipe>Rozbierz rury wodne</MizuDesignatorDeconstructPipe>
+  <MizuDesignatorDeconstructPipeDesc>Rozbierz rury wodne.</MizuDesignatorDeconstructPipeDesc>
+  <MizuThirstLevel_Healthy>Napojony(stan zadowalający)</MizuThirstLevel_Healthy>
+  <MizuThirstLevel_SlightlyThirsty>Nieco spragniony</MizuThirstLevel_SlightlyThirsty>
+  <MizuThirstLevel_Thirsty>Spragnieny</MizuThirstLevel_Thirsty>
+  <MizuThirstLevel_UrgentThirsty>Silnie spragniony</MizuThirstLevel_UrgentThirsty>
+  <MizuThirstLevel_Dehydration>Odwodniony</MizuThirstLevel_Dehydration>
+  <MizuCannotBuildMultiWaterworksBuilding>Nie możesz zbudować więcej niż jeden rodzaj budowli wodociągowych w tej samej komórce.</MizuCannotBuildMultiWaterworksBuilding>
+  <MizuDehydrationAnimals>Odwodnione zwierzę</MizuDehydrationAnimals>
+  <MizuDehydrationAnimalsDesc>Te zwierzęta w kolonii są odwodnione:\n\n{0}\nDaj im trochę wody.</MizuDehydrationAnimalsDesc>
+  <MizuCantBuildExceptOverWater>Nie możesz budować, chyba że nad wodą</MizuCantBuildExceptOverWater>
+  <MizuSnowGet>Zbierz śnieg</MizuSnowGet>
+  <MizuDesignatorAreaSnowGetExpand>Wyznacz obszar do pozyskiwania śniegu</MizuDesignatorAreaSnowGetExpand>
+  <MizuDesignatorAreaSnowGetExpandDesc>Stwórz obszar, z którego koloniści będą pozyskiwali śnieg.</MizuDesignatorAreaSnowGetExpandDesc>
+  <MizuDesignatorAreaSnowGetClear>Usuń obszar do pozyskiwania śniegu</MizuDesignatorAreaSnowGetClear>
+  <MizuDesignatorAreaSnowGetClearDesc>Usuwa obszar pozyskiwania śniegu. Koloniści nie będą już zbierać śniegu na tym obszarze.</MizuDesignatorAreaSnowGetClearDesc>
+  <MizuDeconstructSnowmanMessage>do widzenia...</MizuDeconstructSnowmanMessage>
+  <MizuMop>モップエリア</MizuMop>
+  <MizuDesignatorAreaMopExpand>Wyznacz obszar do czyszczenia mopem</MizuDesignatorAreaMopExpand>
+  <MizuDesignatorAreaMopExpandDesc>Stwórz obszar, który koloniści oczyszczą mopem.</MizuDesignatorAreaMopExpandDesc>
+  <MizuDesignatorAreaMopClear>Usuń obszar do czyszczenia mopem</MizuDesignatorAreaMopClear>
+  <MizuDesignatorAreaMopClearDesc>Usuwa obszar do czyszczenia mopem. Koloniści nie będą sprzątać miotłą w tym miejscu.</MizuDesignatorAreaMopClearDesc>
+  <MizuWaterToolStored>Ilość zmagazynowanej wody</MizuWaterToolStored>
+  <MizuSetDefault>Ustaw domyślne</MizuSetDefault>
+  <MizuGrowthRateFactorInNotWatering>Współczynnik tempa wzrostu przy niepodlewaniu</MizuGrowthRateFactorInNotWatering>
+  <MizuGrowthRateFactorInWatering>Współczynnik wzrostu przy podlewaniu</MizuGrowthRateFactorInWatering>
+  <MizuPoisonedByDirtyWater>Zatrułem się brudną wodą</MizuPoisonedByDirtyWater>
+</LanguageData>

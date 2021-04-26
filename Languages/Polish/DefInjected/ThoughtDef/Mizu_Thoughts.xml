@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_NeedWater.stages.0.label>Lekkie pragnienie</Mizu_NeedWater.stages.0.label>
+  <Mizu_NeedWater.stages.0.description>Czuję lekkie pragnienie.</Mizu_NeedWater.stages.0.description>
+  <Mizu_NeedWater.stages.1.label>Pragnionie</Mizu_NeedWater.stages.1.label>
+  <Mizu_NeedWater.stages.1.description>Czuję pragnienie.</Mizu_NeedWater.stages.1.description>
+  <Mizu_NeedWater.stages.2.label>Silne pragnienie</Mizu_NeedWater.stages.2.label>
+  <Mizu_NeedWater.stages.2.description>Czuję silne pragnienie.</Mizu_NeedWater.stages.2.description>
+  <Mizu_NeedWater.stages.3.label>Odwodnienie (początkowe)</Mizu_NeedWater.stages.3.label>
+  <Mizu_NeedWater.stages.3.description>Dawno nie piłem wody.</Mizu_NeedWater.stages.3.description>
+  <Mizu_NeedWater.stages.4.label>Odwodnienie (słabe)</Mizu_NeedWater.stages.4.label>
+  <Mizu_NeedWater.stages.4.description>Czuję, że moje ciało słabnie.</Mizu_NeedWater.stages.4.description>
+  <Mizu_NeedWater.stages.5.label>Odwodnienie (średnie)</Mizu_NeedWater.stages.5.label>
+  <Mizu_NeedWater.stages.5.description>Myślę tylko o wodzie.</Mizu_NeedWater.stages.5.description>
+  <Mizu_NeedWater.stages.6.label>Odwodnienie (silne)</Mizu_NeedWater.stages.6.label>
+  <Mizu_NeedWater.stages.6.description>Ledwo się mogę poruszyć. Nie myślę o niczym innym, jak tylko o wodzie.</Mizu_NeedWater.stages.6.description>
+  <Mizu_NeedWater.stages.7.label>Odwodnienie (ekstremalne)</Mizu_NeedWater.stages.7.label>
+  <Mizu_NeedWater.stages.7.description>Wody... Wody... Proszę o łyk wody... Eh... Proszę...</Mizu_NeedWater.stages.7.description>
+  <Mizu_DrankClearWater.stages.0.label>Pił oczyszczoną wodę</Mizu_DrankClearWater.stages.0.label>
+  <Mizu_DrankClearWater.stages.0.description>Piłem oczyszczoną wodę. Była smaczna.</Mizu_DrankClearWater.stages.0.description>
+  <Mizu_DrankMudWater.stages.0.label>Pił mętną wodę</Mizu_DrankMudWater.stages.0.label>
+  <Mizu_DrankMudWater.stages.0.description>Piłem mętną wodę. Nie smakowała mi.</Mizu_DrankMudWater.stages.0.description>
+  <Mizu_DrankSeaWater.stages.0.label>Pił słoną wodę</Mizu_DrankSeaWater.stages.0.label>
+  <Mizu_DrankSeaWater.stages.0.description>Piłem wodę morską. Ale okropny słony smak.</Mizu_DrankSeaWater.stages.0.description>
+  <Mizu_DrankScoopedWater.stages.0.label>Pił wodę pobraną własnymi dłońmi</Mizu_DrankScoopedWater.stages.0.label>
+  <Mizu_DrankScoopedWater.stages.0.description>Piłem wodę z własnych dłoni. Chciałbym kubek.</Mizu_DrankScoopedWater.stages.0.description>
+  <Mizu_SippedWaterLikeBeast.stages.0.label>Pił wodę jak zwierzę</Mizu_SippedWaterLikeBeast.stages.0.label>
+  <Mizu_SippedWaterLikeBeast.stages.0.description>Nie mam wyboru. Muszę pić jak zwierzę.</Mizu_SippedWaterLikeBeast.stages.0.description>
+  <Mizu_AteIcyFoodInHotSeason.stages.0.label>Zjadł mrożone jedzenie podczas letniej pory</Mizu_AteIcyFoodInHotSeason.stages.0.label>
+  <Mizu_AteIcyFoodInHotSeason.stages.0.description>Jadłem mrożone jedzenie podczas letniej pory. Dobre...</Mizu_AteIcyFoodInHotSeason.stages.0.description>
+</LanguageData>

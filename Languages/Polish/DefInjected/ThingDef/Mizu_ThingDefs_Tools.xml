@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_Mop.label>Mop</Mizu_Mop.label>
+  <Mizu_Mop.description>Narzędzie do czyszczenia pozwala na dokładniejsze wyczyszczenie podłogi.</Mizu_Mop.description>
+  <Mizu_Towel.label>Ręcznik</Mizu_Towel.label>
+  <Mizu_Towel.description>Narzędzie do pielęgnacji. Pozwala opiekunowi zadbać o pacjentów, pomagając im wyjść z choroby.</Mizu_Towel.description>
+  <Mizu_WateringPot.label>Konefka do podlewania</Mizu_WateringPot.label>
+  <Mizu_WateringPot.description>Przydatne narzędzie do upraw. Pozwala podlać rośliny przyczyniając się do poprawy ich wzrostu.</Mizu_WateringPot.description>
+  <Mizu_Bucket.label>Wiadro</Mizu_Bucket.label>
+  <Mizu_Bucket.description>Narzędzie do gaszenia pożarów. Dzięki temu można skuteczniej ugasić pożar.</Mizu_Bucket.description>
+</LanguageData>

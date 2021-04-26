@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_UndergroundWater.label>Wody gruntowe</Mizu_UndergroundWater.label>
+  <Mizu_UndergroundWater.description>Stwórz studnię, prostą konstrukcję służącą do pobierania wody z płytkiej warstwy.</Mizu_UndergroundWater.description>
+  <Mizu_Waterworks.label>Wodociąg</Mizu_Waterworks.label>
+  <Mizu_Waterworks.description>Pozwala zbudować rurę, zawór, kran, zbiornik i niektóre typy pomp.</Mizu_Waterworks.description>
+  <Mizu_CleanWater.label>Oczyszczanie wody</Mizu_CleanWater.label>
+  <Mizu_CleanWater.description>Pozwala zbudować oczyszczacz wody.</Mizu_CleanWater.description>
+  <Mizu_DeepUndergroundWater.label>Głębokie wody gruntowe</Mizu_DeepUndergroundWater.label>
+  <Mizu_DeepUndergroundWater.description>Pozwala zbudować pompę do czerpania wody gruntowej z głębokich warstw.</Mizu_DeepUndergroundWater.description>
+  <Mizu_WaterFilter.label>Filtr do wody</Mizu_WaterFilter.label>
+  <Mizu_WaterFilter.description>Pozwala korzystać wodociągom z filtrów do wody.</Mizu_WaterFilter.description>
+  <Mizu_WaterFacility.label>Urządzenie wodne</Mizu_WaterFacility.label>
+  <Mizu_WaterFacility.description>Pozwala stworzyć różne urządzenia, które wykorzystują wodę.</Mizu_WaterFacility.description>
+</LanguageData>

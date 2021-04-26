@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_DrawingWaterSpot.label>Miejsce pozyskiwania wody</Mizu_DrawingWaterSpot.label>
+  <Mizu_DrawingWaterSpot.description>Wyznacz miejsce, z którego będzie pobierana woda. Można umieścić na wodzie lub na bagnach.</Mizu_DrawingWaterSpot.description>
+
+  <Mizu_Well.label>Studnia</Mizu_Well.label>
+  <Mizu_Well.description>Pokazuje lokalizację wód gruntowych, które można pozyskać.</Mizu_Well.description>
+
+  <Mizu_FueledWaterCleaner.label>Oczyszczacz wody (na paliwo)</Mizu_FueledWaterCleaner.label>
+  <Mizu_FueledWaterCleaner.description>Oczyszczacz wody opalany drewnem.</Mizu_FueledWaterCleaner.description>
+
+  <Mizu_ElectricWaterCleaner.label>Oczyszczacz wody (na prąd)</Mizu_ElectricWaterCleaner.label>
+  <Mizu_ElectricWaterCleaner.description>Elektryczny oczyszczacz wody.</Mizu_ElectricWaterCleaner.description>
+
+  <Mizu_WaterPipe.label>Wodociąg</Mizu_WaterPipe.label>
+  <Mizu_WaterPipe.description>Służy do podłączenia do sieci wodociągowej (pompa, zbiornik, kran ...)</Mizu_WaterPipe.description>
+
+  <Mizu_WaterPipeInWater.label>Rura wodna (w wodzie)</Mizu_WaterPipeInWater.label>
+  <Mizu_WaterPipeInWater.description>Służy do podłączenia do sieci wodociągowej (pompa, zbiornik, kran ...)</Mizu_WaterPipeInWater.description>
+
+  <Mizu_WaterValve.label>Zawór wody</Mizu_WaterValve.label>
+  <Mizu_WaterValve.description>Służy do kontroli przepływu wody.</Mizu_WaterValve.description>
+
+  <Mizu_GroundWaterPump.label>Pompa wodna</Mizu_GroundWaterPump.label>
+  <Mizu_GroundWaterPump.description>Służy do pompowania wody z rzek, jezior, oceanów i bagien. Potrzebuje prądu.</Mizu_GroundWaterPump.description><Mizu_UndergroundWaterPumpShallow.label>Podziemna pompa wodna (płytka)</Mizu_UndergroundWaterPumpShallow.label>
+  <Mizu_UndergroundWaterPumpShallow.description>Pozyskuje wodę, która nie jest zbyt głęboko. Potrzebuje prądu.</Mizu_UndergroundWaterPumpShallow.description>
+
+  <Mizu_UndergroundWaterPumpDeep.label>Podziemna pompa wodna (głęboka)</Mizu_UndergroundWaterPumpDeep.label>
+  <Mizu_UndergroundWaterPumpDeep.description>Pozyskuje wodę, która jest głęboko pod ziemią. Potrzeba prądu.</Mizu_UndergroundWaterPumpDeep.description>
+
+  <Mizu_WaterTank.label>Zbiornik wodny</Mizu_WaterTank.label>
+  <Mizu_WaterTank.description>Służy do przechowywania wody.</Mizu_WaterTank.description>
+
+  <Mizu_WaterBox.label>Pojemnik na wodę</Mizu_WaterBox.label>
+  <Mizu_WaterBox.description>Pojemnik, który służy do przechowywania niewielkiej ilości wody. Umożliwia zwierzętom picie wody.</Mizu_WaterBox.description>
+
+  <Mizu_WaterFaucet.label>Kran wodny</Mizu_WaterFaucet.label>
+  <Mizu_WaterFaucet.description>Wystarczy jedno dotknięcie, aby móc czerpać wodę z pojemnika.</Mizu_WaterFaucet.description>
+
+  <Mizu_DirtyWaterFilter.label>Filtr do brudnej wody</Mizu_DirtyWaterFilter.label>
+  <Mizu_DirtyWaterFilter.description>Czyni zanieczyszczoną wodę, błotnistą czy wodę morską w normalną wodę. Potrzeba prądu.</Mizu_DirtyWaterFilter.description>
+
+  <Mizu_ClearWaterFilter.label>Filtr do zwykłej wody</Mizu_ClearWaterFilter.label>
+  <Mizu_ClearWaterFilter.description>Filtruje zwykłą wodę, aby otrzymać wodę oczyszczoną. Potrzeba prądu.</Mizu_ClearWaterFilter.description></LanguageData>

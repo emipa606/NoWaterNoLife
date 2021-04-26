@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
   <name>No Water, No Life (Continued)</name>
   <packageId>Mlie.NoWaterNoLife</packageId>
@@ -29,6 +29,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2024595829
 - Fixed the infocard now showing for drinks
 - Updated VGP-patches via old Github RP from redbrick
 - Added a patch for Alpha Animals for non-drinking animals
+- Added polish translation, thanks BLyy!
 
 [img]https://i.imgur.com/7Gzt3Rg.png[/img]
 

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_DrawWater.label>NWNL: Pobierz wodę</Mizu_DrawWater.label>
+  <Mizu_DrawWater.helpText>Żaden człowiek nie może żyć bez wody. Koloniści mogą czerpać wodę z miejsca poboru wody i studni.</Mizu_DrawWater.helpText>
+  <Mizu_DrinkWater.label>NWNL: Pij wodę</Mizu_DrinkWater.label>
+  <Mizu_DrinkWater.helpText>Koloniści mogą pić wodę w butelkach, ale zwierzęta nie mogą pić w ten sposób. Zwierzęta mogą ugasić pragnienie w skrzynkach na wodę lub miejsca poboru z wody, ale nawet jeśli nic nie robisz dla zwierząt, spontanicznie zaczną pić wodę z rzek i jezior.</Mizu_DrinkWater.helpText>
+  <Mizu_PurifyWater.label>NWNL: Oczyść wodę</Mizu_PurifyWater.label>
+  <Mizu_PurifyWater.helpText>Jakość wody w butelkach można poprawić poprzez oczyszczacz wody. Filtr do wody może z kolei poprawić jakość wody w wodociągach. Filtr wody ma złącze wejściowe i wyjściowe, więc nie będzie odpowiednio działać.</Mizu_PurifyWater.helpText>
+  <Mizu_UndergroundWater.label>NWNL: Woda gruntowa</Mizu_UndergroundWater.label>
+  <Mizu_UndergroundWater.helpText>Studnia czy podziemne pompy wodne mogą być budowane w miejscach, gdzie znajdują się wody gruntowe. Jeśli wybierzesz te konstrukcje w zakładce Architekt, na ekranie zostaną wyświetlone miejsca wód gruntowych. \n\nNawet na pustyni można znaleźć bardzo małe ilości wód gruntowych, ale mogą one nie występować w ekstremalnie zimnych biomach.</Mizu_UndergroundWater.helpText>
+  <Mizu_Waterworks.label>NWNL: Wodociąg</Mizu_Waterworks.label>
+  <Mizu_Waterworks.helpText>Dzięki wodociągom możesz zautomatyzować wiele zadań, aby pozyskać dobrą wodę. Sieć wodociągowa wymaga co najmniej 1 pompy, 1 zbiornik i 1 kran. Stwórz je. Dwie sieci wodne podłączone do filtra wody są traktowane jako oddzielne sieci wodne.</Mizu_Waterworks.helpText>
+</LanguageData>

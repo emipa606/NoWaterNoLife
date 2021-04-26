@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_DoBillWater.label>Pobieraj wodę</Mizu_DoBillWater.label>
+  <Mizu_DoBillWater.verb>Pobiera wodę</Mizu_DoBillWater.verb>
+  <Mizu_DoBillWater.gerund>Pobiera wodę</Mizu_DoBillWater.gerund>
+  <Mizu_DoBillIce.label>Zbieraj lód</Mizu_DoBillIce.label>
+  <Mizu_DoBillIce.verb>Zbiera lód</Mizu_DoBillIce.verb>
+  <Mizu_DoBillIce.gerund>Zbiera lód</Mizu_DoBillIce.gerund>
+  <Mizu_DoctorFeedWaterHumanlikes.label>Podawaj wodę pacjentowi</Mizu_DoctorFeedWaterHumanlikes.label>
+  <Mizu_DoctorFeedWaterHumanlikes.verb>Podaje wodę pacjentowi</Mizu_DoctorFeedWaterHumanlikes.verb>
+  <Mizu_DoctorFeedWaterHumanlikes.gerund>Pojenie wodą pacjenta</Mizu_DoctorFeedWaterHumanlikes.gerund>
+  <Mizu_DoctorFeedWaterAnimals.label>Podawaj wodę zwierzęciu</Mizu_DoctorFeedWaterAnimals.label>
+  <Mizu_DoctorFeedWaterAnimals.verb>Podaje wodę zwierzęciu</Mizu_DoctorFeedWaterAnimals.verb>
+  <Mizu_DoctorFeedWaterAnimals.gerund>Pojenie wodą zwierzęcia</Mizu_DoctorFeedWaterAnimals.gerund>
+  <Mizu_DeliverWaterToPrisoner.label>Podaje wodę więźniowi</Mizu_DeliverWaterToPrisoner.label>
+  <Mizu_DeliverWaterToPrisoner.verb>Podaje wodę więźniowi</Mizu_DeliverWaterToPrisoner.verb>
+  <Mizu_DeliverWaterToPrisoner.gerund>Pojenie wodą więźnia</Mizu_DeliverWaterToPrisoner.gerund>
+  <Mizu_CleanWater.label>Pobieraj oczyszczoną wodę</Mizu_CleanWater.label>
+  <Mizu_CleanWater.verb>Pobiera oczyszczoną wodę</Mizu_CleanWater.verb>
+  <Mizu_CleanWater.gerund>Pobiera oczyszczoną wodę</Mizu_CleanWater.gerund>
+  <Mizu_GetSnow.label>Zbieraj śnieg</Mizu_GetSnow.label>
+  <Mizu_GetSnow.verb>Zbiera śnieg</Mizu_GetSnow.verb>
+  <Mizu_GetSnow.gerund>Zbiera śnieg</Mizu_GetSnow.gerund>
+  <Mizu_Mop.label>Wycieraj mopem</Mizu_Mop.label>
+  <Mizu_Mop.verb>Wyciera mopem</Mizu_Mop.verb>
+  <Mizu_Mop.gerund>Wyciera mopem</Mizu_Mop.gerund>
+  <Mizu_SupplyWaterToToolDrawing.label>Zaopatruj w wodę</Mizu_SupplyWaterToToolDrawing.label>
+  <Mizu_SupplyWaterToToolDrawing.verb>Zaopatruje w wodę</Mizu_SupplyWaterToToolDrawing.verb>
+  <Mizu_SupplyWaterToToolDrawing.gerund>Zaopatruje w wodę</Mizu_SupplyWaterToToolDrawing.gerund>
+  <Mizu_SupplyWaterToToolCleaning.label>Zaopatruj w wodę</Mizu_SupplyWaterToToolCleaning.label>
+  <Mizu_SupplyWaterToToolCleaning.verb>Zaopatruje w wodę</Mizu_SupplyWaterToToolCleaning.verb>
+  <Mizu_SupplyWaterToToolCleaning.gerund>Zaopatruje w wodę</Mizu_SupplyWaterToToolCleaning.gerund>
+  <Mizu_NurseToHumanlikes.label>Opiekuj się pacjentem</Mizu_NurseToHumanlikes.label>
+  <Mizu_NurseToHumanlikes.verb>Opiekuje się pacjentem</Mizu_NurseToHumanlikes.verb>
+  <Mizu_NurseToHumanlikes.gerund>Opiekuje się pacjentem</Mizu_NurseToHumanlikes.gerund>
+  <Mizu_WaterFarm.label>Podlewaj uprawy</Mizu_WaterFarm.label>
+  <Mizu_WaterFarm.verb>Podlewa</Mizu_WaterFarm.verb>
+  <Mizu_WaterFarm.gerund>Podlewa</Mizu_WaterFarm.gerund>
+  <Mizu_SupplyWaterToToolDoctor.label>Zaopatruj w wodę</Mizu_SupplyWaterToToolDoctor.label>
+  <Mizu_SupplyWaterToToolDoctor.verb>Zaopatruje w wodę</Mizu_SupplyWaterToToolDoctor.verb>
+  <Mizu_SupplyWaterToToolDoctor.gerund>Zaopatruje w wodę</Mizu_SupplyWaterToToolDoctor.gerund>
+</LanguageData>

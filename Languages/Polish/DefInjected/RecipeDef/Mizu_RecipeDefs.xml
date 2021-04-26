@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Draw Water From Terrain -->
+  <Mizu_DrawWater.label>Pobierz wodę z tego miejsca</Mizu_DrawWater.label>
+  <Mizu_DrawWater.description>Pobiera wodę pitną. Rodzaj wody zależy od lokalizacji.</Mizu_DrawWater.description>
+  <Mizu_DrawWater.jobString>Pobiera wodę</Mizu_DrawWater.jobString>
+  <Mizu_DrawWaterMulti.label>Pobierz wodę z tego miejsca x5</Mizu_DrawWaterMulti.label>
+  <Mizu_DrawWaterMulti.description>Pobiera wodę pitną x5. Rodzaj wody zależy od lokalizacji.</Mizu_DrawWaterMulti.description>
+  <Mizu_DrawWaterMulti.jobString>Pobiera wodę.</Mizu_DrawWaterMulti.jobString>
+  <!-- Draw Water From Water Pool -->
+  <Mizu_DrawWaterFromWaterPool.label>Pobierz surową wodę z ziemi</Mizu_DrawWaterFromWaterPool.label>
+  <Mizu_DrawWaterFromWaterPool.description>Pobiera wodę z ziemi do picia.</Mizu_DrawWaterFromWaterPool.description>
+  <Mizu_DrawWaterFromWaterPool.jobString>Pobiera wodę z ziemi</Mizu_DrawWaterFromWaterPool.jobString>
+  <Mizu_DrawWaterFromWaterPoolMulti.label>Pobierz surową wodę z ziemi x5</Mizu_DrawWaterFromWaterPoolMulti.label>
+  <Mizu_DrawWaterFromWaterPoolMulti.description>Pobiera wodę z ziemi do picia x5.</Mizu_DrawWaterFromWaterPoolMulti.description>
+  <Mizu_DrawWaterFromWaterPoolMulti.jobString>Pobiera wodę z ziemi.</Mizu_DrawWaterFromWaterPoolMulti.jobString>
+  <!-- Draw Water From Water Net -->
+  <Mizu_DrawWaterFromWaterNet.label>Pobierz wodę z wodociągów</Mizu_DrawWaterFromWaterNet.label>
+  <Mizu_DrawWaterFromWaterNet.description>Pobiera wodę do picia z wodociągów.</Mizu_DrawWaterFromWaterNet.description>
+  <Mizu_DrawWaterFromWaterNet.jobString>Pobiera wodę z wodociągów.</Mizu_DrawWaterFromWaterNet.jobString>
+  <Mizu_DrawWaterFromWaterNetMulti.label>Pobierz wodę z wodociągów x5</Mizu_DrawWaterFromWaterNetMulti.label>
+  <Mizu_DrawWaterFromWaterNetMulti.description>Pobiera wodę do picia z wodociągów x5.</Mizu_DrawWaterFromWaterNetMulti.description>
+  <Mizu_DrawWaterFromWaterNetMulti.jobString>Pobiera wodę z wodociągów.</Mizu_DrawWaterFromWaterNetMulti.jobString>
+  <!-- Draw Water From WaterBox -->
+  <Mizu_DrawWaterFromWaterBox.label>Pobierz wodę ze zbiornika na wodę</Mizu_DrawWaterFromWaterBox.label>
+  <Mizu_DrawWaterFromWaterBox.description>Pobiera wodę do picia ze zbiornika na wodę.</Mizu_DrawWaterFromWaterBox.description>
+  <Mizu_DrawWaterFromWaterBox.jobString>Pobiera wodę ze zbiornika na wodę.</Mizu_DrawWaterFromWaterBox.jobString>
+  <Mizu_DrawWaterFromWaterBoxMulti.label>Pobierz wodę ze zbiornika na wodę x5</Mizu_DrawWaterFromWaterBoxMulti.label>
+  <Mizu_DrawWaterFromWaterBoxMulti.description>Pobiera wodę do picia ze zbiornika na wodę x5.</Mizu_DrawWaterFromWaterBoxMulti.description>
+  <Mizu_DrawWaterFromWaterBoxMulti.jobString>Pobiera wodę ze zbiornika na wodę.</Mizu_DrawWaterFromWaterBoxMulti.jobString>
+  <!-- Pour Water -->
+  <Mizu_PourWater.label>Nalej wody x5</Mizu_PourWater.label>
+  <Mizu_PourWater.description>Nalej wody x5 do konstrukcji magazunującej wodę</Mizu_PourWater.description>
+  <Mizu_PourWater.jobString>Nalewa wodę.</Mizu_PourWater.jobString>
+  <Mizu_PourWaterMulti.label>Nalej wody x25</Mizu_PourWaterMulti.label>
+  <Mizu_PourWaterMulti.description>Nalej wody x25 do konstrukcji magazunującej wodę</Mizu_PourWaterMulti.description>
+  <Mizu_PourWaterMulti.jobString>Nalewa wodę.</Mizu_PourWaterMulti.jobString>
+  <!-- Harvest Ice -->
+  <Mizu_HarvestIce.label>Pobierz lód z tego miejsca</Mizu_HarvestIce.label>
+  <Mizu_HarvestIce.description>Pobiera lód.</Mizu_HarvestIce.description>
+  <Mizu_HarvestIce.jobString>Pobiera lód.</Mizu_HarvestIce.jobString>
+  <Mizu_HarvestIceMulti.label>Pobierz lód z tego miejsca x5</Mizu_HarvestIceMulti.label>
+  <Mizu_HarvestIceMulti.description>Pobiera lód x5.</Mizu_HarvestIceMulti.description>
+  <Mizu_HarvestIceMulti.jobString>Pobiera lód.</Mizu_HarvestIceMulti.jobString>
+  <!-- others -->
+  <Mizu_PurifyWater.label>Przefiltruj wodę</Mizu_PurifyWater.label>
+  <Mizu_PurifyWater.description>Przefiltruj wodę za pomocą węgla drzewnego, aby uzyskać wodę oczyszczoną.</Mizu_PurifyWater.description>
+  <Mizu_PurifyWater.jobString>Filtruje wodę</Mizu_PurifyWater.jobString>
+  <Mizu_BoilRawWater.label>Gotuj surową wodę</Mizu_BoilRawWater.label>
+  <Mizu_BoilRawWater.description>Gotuj surową wodę, aby uzyskać odpowiedniej jakości wodę.</Mizu_BoilRawWater.description>
+  <Mizu_BoilRawWater.jobString>Gotuje wodę.</Mizu_BoilRawWater.jobString>
+  <Mizu_PercolateMudWater.label>Przesącz mętną wodę</Mizu_PercolateMudWater.label>
+  <Mizu_PercolateMudWater.description>Przesądz i zagotuj mętną wodę, aby uzyskać zwykłą wodę.</Mizu_PercolateMudWater.description>
+  <Mizu_PercolateMudWater.jobString>Przesącza mętną wodę.</Mizu_PercolateMudWater.jobString>
+  <Mizu_DesalinateSeaWater.label>Odsól słoną wodę</Mizu_DesalinateSeaWater.label>
+  <Mizu_DesalinateSeaWater.description>Odsól słoną wodę, aby uzyskać odpowiedniej jakości wodę.</Mizu_DesalinateSeaWater.description>
+  <Mizu_DesalinateSeaWater.jobString>Odsala wodę.</Mizu_DesalinateSeaWater.jobString>
+  <Mizu_BottleSnow.label>Butelkuj śnieg</Mizu_BottleSnow.label>
+  <Mizu_BottleSnow.description>Butelkuj śnieg i przechowuj.</Mizu_BottleSnow.description>
+  <Mizu_BottleSnow.jobString>Butelkuje śnieg</Mizu_BottleSnow.jobString>
+  <Mizu_PurifyWaterMulti.label>Przefiltruj wodę x5</Mizu_PurifyWaterMulti.label>
+  <Mizu_PurifyWaterMulti.description>Przefiltruj wodę x5 za pomocą węgla drzewnego, aby uzyskać wodę oczyszczoną.</Mizu_PurifyWaterMulti.description>
+  <Mizu_PurifyWaterMulti.jobString>Filtruje wodę</Mizu_PurifyWaterMulti.jobString>
+  <Mizu_BoilRawWaterMulti.label>Gotuj surową wodę x5</Mizu_BoilRawWaterMulti.label>
+  <Mizu_BoilRawWaterMulti.description>Gotuj surową wodę x5, aby uzyskać odpowiedniej jakości wodę.</Mizu_BoilRawWaterMulti.description>
+  <Mizu_BoilRawWaterMulti.jobString>Gotuje wodę.</Mizu_BoilRawWaterMulti.jobString>
+  <Mizu_PercolateMudWaterMulti.label>Przesącz mętną wodę x5</Mizu_PercolateMudWaterMulti.label>
+  <Mizu_PercolateMudWaterMulti.description>Przesądz i zagotuj mętną wodę x5, aby uzyskać zwykłą wodę.</Mizu_PercolateMudWaterMulti.description>
+  <Mizu_PercolateMudWaterMulti.jobString>Przesącza mętną wodę.</Mizu_PercolateMudWaterMulti.jobString>
+  <Mizu_DesalinateSeaWaterMulti.label>Odsól słoną wodę x5</Mizu_DesalinateSeaWaterMulti.label>
+  <Mizu_DesalinateSeaWaterMulti.description>Odsól słoną wodę x5, aby uzyskać odpowiedniej jakości wodę.</Mizu_DesalinateSeaWaterMulti.description>
+  <Mizu_DesalinateSeaWaterMulti.jobString>Odsala wodę.</Mizu_DesalinateSeaWaterMulti.jobString>
+  <Mizu_BottleSnowMulti.label>Butelkuj śnieg</Mizu_BottleSnowMulti.label>
+  <Mizu_BottleSnowMulti.description>Butelkuj śnieg i przechowuj.</Mizu_BottleSnowMulti.description>
+  <Mizu_BottleSnowMulti.jobString>Butelkuje śnieg.</Mizu_BottleSnowMulti.jobString>
+  <!-- 通常のアイテム作成 -->
+  <Mizu_MakeShavedIce.label>Krusz lód</Mizu_MakeShavedIce.label>
+  <Mizu_MakeShavedIce.description>Zacznij kruszyć lód.</Mizu_MakeShavedIce.description>
+  <Mizu_MakeShavedIce.jobString>Kruszy lód.</Mizu_MakeShavedIce.jobString>
+</LanguageData>

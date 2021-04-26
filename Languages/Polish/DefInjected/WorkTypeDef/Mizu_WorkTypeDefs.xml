@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Mizu_Drawing.labelShort>Nosiwoda</Mizu_Drawing.labelShort>
+  <Mizu_Drawing.pawnLabel>Woda</Mizu_Drawing.pawnLabel>
+  <Mizu_Drawing.gerundLabel>Nosi wodę</Mizu_Drawing.gerundLabel>
+  <Mizu_Drawing.description>Nosi wodę do picia</Mizu_Drawing.description>
+  <Mizu_Drawing.verb>Noszę wodę</Mizu_Drawing.verb>
+  <Mizu_Cleaning.labelShort>Czyściciel</Mizu_Cleaning.labelShort>
+  <Mizu_Cleaning.pawnLabel>Czyścicielstwo</Mizu_Cleaning.pawnLabel>
+  <Mizu_Cleaning.gerundLabel>Czyści wodą</Mizu_Cleaning.gerundLabel>
+  <Mizu_Cleaning.description>Czyści podłogę za pomocą przedmiotu</Mizu_Cleaning.description>
+  <Mizu_Cleaning.verb>Czyszczę wodą</Mizu_Cleaning.verb>
+</LanguageData>

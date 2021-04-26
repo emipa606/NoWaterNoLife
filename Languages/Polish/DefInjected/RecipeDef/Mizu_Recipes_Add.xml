@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Make_Mizu_Mop.label>Stwórz mop</Make_Mizu_Mop.label>
+  <Make_Mizu_Mop.description>Stwórz mop.</Make_Mizu_Mop.description>
+  <Make_Mizu_Mop.jobString>Tworzy mop</Make_Mizu_Mop.jobString>
+  <Make_Mizu_Towel.label>Stwórz ręcznik</Make_Mizu_Towel.label>
+  <Make_Mizu_Towel.description>Stwórz ręcznik</Make_Mizu_Towel.description>
+  <Make_Mizu_Towel.jobString>Tworzy ręcznik</Make_Mizu_Towel.jobString>
+  <Make_Mizu_WateringPot.label>Stwórz konefkę</Make_Mizu_WateringPot.label>
+  <Make_Mizu_WateringPot.description>Stwórz konefkę.</Make_Mizu_WateringPot.description>
+  <Make_Mizu_WateringPot.jobString>Tworzy konefkę</Make_Mizu_WateringPot.jobString>
+  <Make_Mizu_Bucket.label>Stwórz wiadro</Make_Mizu_Bucket.label>
+  <Make_Mizu_Bucket.description>Stwórz wiadro.</Make_Mizu_Bucket.description>
+  <Make_Mizu_Bucket.jobString>Tworzy wiadro</Make_Mizu_Bucket.jobString>
+</LanguageData>
