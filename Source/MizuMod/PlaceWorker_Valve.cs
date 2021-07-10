@@ -10,8 +10,8 @@ namespace MizuMod
         {
             var intVecSouth = center + IntVec3.South.RotatedBy(rot);
             var intVecNorth = center + IntVec3.North.RotatedBy(rot);
-            GenDraw.DrawFieldEdges(new List<IntVec3> { intVecSouth }, Color.blue);
-            GenDraw.DrawFieldEdges(new List<IntVec3> { intVecNorth }, Color.blue);
+            GenDraw.DrawFieldEdges(new List<IntVec3> {intVecSouth}, Color.blue);
+            GenDraw.DrawFieldEdges(new List<IntVec3> {intVecNorth}, Color.blue);
         }
     }
 }

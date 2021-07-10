@@ -11,7 +11,7 @@ namespace MizuMod
 
         public string MessageKey => Props.messageKey;
 
-        public CompProperties_DestroyMessage Props => (CompProperties_DestroyMessage)props;
+        public CompProperties_DestroyMessage Props => (CompProperties_DestroyMessage) props;
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {

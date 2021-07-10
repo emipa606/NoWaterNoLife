@@ -67,7 +67,7 @@ namespace MizuMod
                             Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
 
                             // 水やりエフェクト(仮)
-                            var mote = (MoteThrown)ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
+                            var mote = (MoteThrown) ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);
 
                             // mote.Scale = 1f;
                             // mote.rotationRate = (float)(Rand.Chance(0.5f) ? -30 : 30);

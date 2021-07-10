@@ -53,12 +53,17 @@ namespace MizuMod
             }
 
             // 水やりしていない時の肥沃度係数
-            listing_standard.Label(string.Concat(MizuStrings.OptionGrowthRateFactorInNotWatering.Translate(), " (", MinFertilityFactorInNotWatering.ToString("F2"), " - ", MaxFertilityFactorInNotWatering.ToString("F2"), ")"));
-            listing_standard.TextFieldNumeric(ref fertilityFactorInNotWatering, ref fertilityFactorInNotWateringBuffer, MinFertilityFactorInNotWatering, MaxFertilityFactorInNotWatering);
+            listing_standard.Label(string.Concat(MizuStrings.OptionGrowthRateFactorInNotWatering.Translate(), " (",
+                MinFertilityFactorInNotWatering.ToString("F2"), " - ", MaxFertilityFactorInNotWatering.ToString("F2"),
+                ")"));
+            listing_standard.TextFieldNumeric(ref fertilityFactorInNotWatering, ref fertilityFactorInNotWateringBuffer,
+                MinFertilityFactorInNotWatering, MaxFertilityFactorInNotWatering);
 
             // 水やりした時の肥沃度係数
-            listing_standard.Label(string.Concat(MizuStrings.OptionGrowthRateFactorInWatering.Translate(), " (", MinFertilityFactorInWatering.ToString("F2"), " - ", MaxFertilityFactorInWatering.ToString("F2"), ")"));
-            listing_standard.TextFieldNumeric(ref fertilityFactorInWatering, ref fertilityFactorInWateringBuffer, MinFertilityFactorInWatering, MaxFertilityFactorInWatering);
+            listing_standard.Label(string.Concat(MizuStrings.OptionGrowthRateFactorInWatering.Translate(), " (",
+                MinFertilityFactorInWatering.ToString("F2"), " - ", MaxFertilityFactorInWatering.ToString("F2"), ")"));
+            listing_standard.TextFieldNumeric(ref fertilityFactorInWatering, ref fertilityFactorInWateringBuffer,
+                MinFertilityFactorInWatering, MaxFertilityFactorInWatering);
 
             listing_standard.End();
         }
@@ -67,8 +72,10 @@ namespace MizuMod
         {
             base.ExposeData();
 
-            Scribe_Values.Look(ref fertilityFactorInNotWatering, "fertilityFactorInNotWatering", DefaultFertilityFactorInNotWatering);
-            Scribe_Values.Look(ref fertilityFactorInWatering, "fertilityFactorInWatering", DefaultFertilityFactorInWatering);
+            Scribe_Values.Look(ref fertilityFactorInNotWatering, "fertilityFactorInNotWatering",
+                DefaultFertilityFactorInNotWatering);
+            Scribe_Values.Look(ref fertilityFactorInWatering, "fertilityFactorInWatering",
+                DefaultFertilityFactorInWatering);
         }
     }
 }

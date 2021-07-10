@@ -9,7 +9,7 @@ namespace MizuMod
 
         public virtual bool IsActivated => WaterNetBuilding.IsActivated;
 
-        public CompProperties_WaterNet Props => (CompProperties_WaterNet)props;
+        public CompProperties_WaterNet Props => (CompProperties_WaterNet) props;
 
         protected CompWaterNetInput InputComp => WaterNetBuilding.InputComp;
 

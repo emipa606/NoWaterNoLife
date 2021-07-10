@@ -17,7 +17,7 @@ namespace MizuMod
 
         private const int WorkingTicks = 60;
 
-        private ThingWithComps Tool => (ThingWithComps)job.GetTarget(ToolInd).Thing;
+        private ThingWithComps Tool => (ThingWithComps) job.GetTarget(ToolInd).Thing;
 
         private IntVec3 WateringPos => job.GetTarget(WateringInd).Cell;
 
@@ -40,10 +40,10 @@ namespace MizuMod
             var initExtractTargetFromQueue = Toils_Mizu.ClearConditionSatisfiedTargets(
                 WateringInd,
                 lti =>
-                    {
-                        var mapComp = Map.GetComponent<MapComponent_Watering>();
-                        return mapComp.Get(Map.cellIndices.CellToIndex(lti.Cell)) > 0;
-                    });
+                {
+                    var mapComp = Map.GetComponent<MapComponent_Watering>();
+                    return mapComp.Get(Map.cellIndices.CellToIndex(lti.Cell)) > 0;
+                });
             yield return initExtractTargetFromQueue;
 
             yield return Toils_JobTransforms.SucceedOnNoTargetInQueue(WateringInd);
@@ -56,38 +56,38 @@ namespace MizuMod
 
             // 作業中
             var workToil = new Toil
-                               {
-                                   initAction = delegate
-                                       {
-                                           // 必要工数の計算
-                                           ticksLeftThisToil = WorkingTicks;
-                                       },
+            {
+                initAction = delegate
+                {
+                    // 必要工数の計算
+                    ticksLeftThisToil = WorkingTicks;
+                },
 
-                                   // 細々とした設定
-                                   defaultCompleteMode = ToilCompleteMode.Delay
-                               };
-            workToil.WithProgressBar(WateringInd, () => 1f - ((float)ticksLeftThisToil / WorkingTicks), true);
+                // 細々とした設定
+                defaultCompleteMode = ToilCompleteMode.Delay
+            };
+            workToil.WithProgressBar(WateringInd, () => 1f - ((float) ticksLeftThisToil / WorkingTicks), true);
             workToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             yield return workToil;
 
             // 作業終了
             var finishToil = new Toil
-                                 {
-                                     initAction = () =>
-                                         {
-                                             // 水やり更新
-                                             var mapComp = Map.GetComponent<MapComponent_Watering>();
-                                             mapComp.Set(
-                                                 Map.cellIndices.CellToIndex(WateringPos),
-                                                 MapComponent_Watering.MaxWateringValue);
-                                             Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlag.Terrain;
+            {
+                initAction = () =>
+                {
+                    // 水やり更新
+                    var mapComp = Map.GetComponent<MapComponent_Watering>();
+                    mapComp.Set(
+                        Map.cellIndices.CellToIndex(WateringPos),
+                        MapComponent_Watering.MaxWateringValue);
+                    Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlag.Terrain;
 
-                                             // ツールから水を減らす
-                                             var compTool = Tool.GetComp<CompWaterTool>();
-                                             compTool.StoredWaterVolume -= ConsumeWaterVolume;
-                                         },
-                                     defaultCompleteMode = ToilCompleteMode.Instant
-                                 };
+                    // ツールから水を減らす
+                    var compTool = Tool.GetComp<CompWaterTool>();
+                    compTool.StoredWaterVolume -= ConsumeWaterVolume;
+                },
+                defaultCompleteMode = ToilCompleteMode.Instant
+            };
             yield return finishToil;
 
             // 最初に戻る

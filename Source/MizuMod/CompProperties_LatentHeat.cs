@@ -5,6 +5,15 @@ namespace MizuMod
 {
     public class CompProperties_LatentHeat : CompProperties
     {
+        public enum AddCondition : byte
+        {
+            Undefined = 0,
+
+            Above,
+
+            Below
+        }
+
         // 温度閾値を上回ったら増加するのか、下回ったら増加するのか
         public AddCondition addLatentHeatCondition = AddCondition.Undefined;
 
@@ -26,15 +35,6 @@ namespace MizuMod
         public CompProperties_LatentHeat(Type compClass)
             : base(compClass)
         {
-        }
-
-        public enum AddCondition : byte
-        {
-            Undefined = 0,
-
-            Above,
-
-            Below
         }
     }
 }

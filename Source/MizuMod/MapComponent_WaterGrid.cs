@@ -23,9 +23,21 @@ namespace MizuMod
 
         public Color Color => Color.white;
 
+        public bool GetCellBool(int index)
+        {
+            return poolIDGrid[index] != 0;
+        }
+
+        public Color GetCellExtraColor(int index)
+        {
+            var pool = pools.Find(p => p.ID == poolIDGrid[index]);
+            return UndergroundWaterMaterials.Mat(
+                Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
+        }
+
         public void AddWaterPool(UndergroundWaterPool pool, IEnumerable<IntVec3> cells)
         {
-            var mergePools = new List<UndergroundWaterPool> { pool };
+            var mergePools = new List<UndergroundWaterPool> {pool};
 
             // 既存の水源と被るセルを調べる
             foreach (var c in cells)
@@ -58,6 +70,7 @@ namespace MizuMod
             {
                 return;
             }
+
             {
                 // 最小の水源IDのものに統合する
 
@@ -109,18 +122,6 @@ namespace MizuMod
                 "poolIDGrid");
 
             Scribe_Collections.Look(ref pools, "pools", LookMode.Deep, this);
-        }
-
-        public bool GetCellBool(int index)
-        {
-            return poolIDGrid[index] != 0;
-        }
-
-        public Color GetCellExtraColor(int index)
-        {
-            var pool = pools.Find(p => p.ID == poolIDGrid[index]);
-            return UndergroundWaterMaterials.Mat(
-                Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
         }
 
         public int GetID(int index)
@@ -266,7 +267,7 @@ namespace MizuMod
 
         private void SetID(int index, int id)
         {
-            poolIDGrid[index] = (ushort)id;
+            poolIDGrid[index] = (ushort) id;
         }
 
         private void SetID(IntVec3 c, int id)

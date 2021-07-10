@@ -18,7 +18,7 @@ namespace MizuMod
 
         public WaterType OutputWaterType { get; set; }
 
-        public new CompProperties_WaterNetOutput Props => (CompProperties_WaterNetOutput)props;
+        public new CompProperties_WaterNetOutput Props => (CompProperties_WaterNetOutput) props;
 
         protected virtual WaterType ForceOutputWaterType => Props.forceOutputWaterType;
 
@@ -44,7 +44,7 @@ namespace MizuMod
             stringBuilder.Append(
                 MizuStrings.InspectWaterFlowOutput.Translate() + ": " + OutputWaterFlow.ToString("F2") + " L/day");
             stringBuilder.Append(
-                string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(OutputWaterType), ")" }));
+                string.Concat(new[] {"(", MizuStrings.GetInspectWaterTypeString(OutputWaterType), ")"}));
 
             return stringBuilder.ToString();
         }

@@ -44,26 +44,26 @@ namespace MizuMod
             this.FailOnDestroyedNullOrForbidden(WaterIndex);
             this.FailOn(
                 () =>
+                {
+                    if (Patient == null)
                     {
-                        if (Patient == null)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        // 患者がベッドに入ってなかったらFail
-                        if (!Patient.InBed())
-                        {
-                            return true;
-                        }
+                    // 患者がベッドに入ってなかったらFail
+                    if (!Patient.InBed())
+                    {
+                        return true;
+                    }
 
-                        // 到達不能になっていたらFail
-                        if (!pawn.CanReach(Patient, PathEndMode.ClosestTouch, Danger.Deadly))
-                        {
-                            return true;
-                        }
+                    // 到達不能になっていたらFail
+                    if (!pawn.CanReach(Patient, PathEndMode.ClosestTouch, Danger.Deadly))
+                    {
+                        return true;
+                    }
 
-                        return false;
-                    });
+                    return false;
+                });
 
             // 水が予約出来ない状態なら中断
             if (!pawn.CanReserveAndReach(TargetA, PathEndMode.Touch, Danger.Deadly, 1, job.count))

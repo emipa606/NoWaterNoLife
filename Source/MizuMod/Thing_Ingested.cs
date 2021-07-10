@@ -37,7 +37,9 @@ namespace MizuMod
             insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_1));
             insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
             insert_codes.Add(new CodeInstruction(OpCodes.Ldloc_0));
-            insert_codes.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuUtility), nameof(MizuUtility.PrePostIngested), new[] { typeof(Pawn), typeof(Thing), typeof(int) })));
+            insert_codes.Add(new CodeInstruction(OpCodes.Call,
+                AccessTools.Method(typeof(MizuUtility), nameof(MizuUtility.PrePostIngested),
+                    new[] {typeof(Pawn), typeof(Thing), typeof(int)})));
 
             insert_codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
 

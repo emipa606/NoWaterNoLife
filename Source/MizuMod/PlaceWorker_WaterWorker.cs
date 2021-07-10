@@ -6,9 +6,11 @@ namespace MizuMod
     public class PlaceWorker_WaterWorker : PlaceWorker
     {
         // デバッグ用
-        private MapComponent_HiddenWaterSpot HiddenWaterSpot => Find.CurrentMap.GetComponent<MapComponent_HiddenWaterSpot>();
+        private MapComponent_HiddenWaterSpot HiddenWaterSpot =>
+            Find.CurrentMap.GetComponent<MapComponent_HiddenWaterSpot>();
 
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
+        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map,
+            Thing thingToIgnore = null, Thing thing = null)
         {
             if (!(checkingDef is ThingDef))
             {

@@ -90,7 +90,12 @@ namespace MizuMod
 
             // 手が使用可能で、入力水道網の水量が十分にある
             return p.CanManipulate() && InputWaterNet.StoredWaterVolumeForFaucet
-                   >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
+                >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
+        }
+
+        public void DrawWater(float amount)
+        {
+            InputWaterNet?.DrawWaterVolumeForFaucet(amount);
         }
 
         public override void CreateConnectors()
@@ -100,11 +105,6 @@ namespace MizuMod
 
             InputConnectors.Add(Position + Rotation.FacingCell);
             OutputConnectors.Add(Position + Rotation.FacingCell);
-        }
-
-        public void DrawWater(float amount)
-        {
-            InputWaterNet?.DrawWaterVolumeForFaucet(amount);
         }
     }
 }

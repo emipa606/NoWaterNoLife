@@ -29,7 +29,7 @@ namespace MizuMod
 
                         if (t.def.IsBlueprint
                             && typeof(IBuilding_WaterNet).IsAssignableFrom(
-                                ((ThingDef)t.def.entityDefToBuild).thingClass))
+                                ((ThingDef) t.def.entityDefToBuild).thingClass))
                         {
                             return new AcceptanceReport(MizuStrings.AcceptanceReportCannotBuildMulti.Translate());
                         }

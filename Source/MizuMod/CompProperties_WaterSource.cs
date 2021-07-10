@@ -6,6 +6,15 @@ namespace MizuMod
 {
     public class CompProperties_WaterSource : CompProperties
     {
+        public enum SourceType : byte
+        {
+            Undefined = 0,
+
+            Item,
+
+            Building
+        }
+
         // 飲むのにかかるTick
         // 水アイテムの場合、1個あたりのTick
         // 設備の場合、要求を1.0得るのにかかるTick
@@ -44,15 +53,6 @@ namespace MizuMod
         public CompProperties_WaterSource()
         {
             compClass = typeof(CompWaterSource);
-        }
-
-        public enum SourceType : byte
-        {
-            Undefined = 0,
-
-            Item,
-
-            Building
         }
 
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)

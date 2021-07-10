@@ -5,16 +5,6 @@ namespace MizuMod
 {
     public class DefExtension_WaterRecipe : DefModExtension
     {
-        public bool canDrawFromFaucet = false;
-
-        public int getItemCount = 1;
-
-        public List<WaterTerrainType> needWaterTerrainTypes = null;
-
-        public List<WaterType> needWaterTypes = null;
-
-        public RecipeType recipeType = RecipeType.Undefined;
-
         public enum RecipeType : byte
         {
             Undefined = 0,
@@ -27,5 +17,15 @@ namespace MizuMod
 
             PourWater
         }
+
+        public bool canDrawFromFaucet = false;
+
+        public int getItemCount = 1;
+
+        public List<WaterTerrainType> needWaterTerrainTypes = null;
+
+        public List<WaterType> needWaterTypes = null;
+
+        public RecipeType recipeType = RecipeType.Undefined;
     }
 }

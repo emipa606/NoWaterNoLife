@@ -46,7 +46,12 @@ namespace MizuMod
                 return codes.AsEnumerable();
             }
 
-            var new_codes = new List<CodeInstruction> { new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(CaravanUIUtility), "tmpInfo")), new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.DrawDaysWorthOfWater))) };
+            var new_codes = new List<CodeInstruction>
+            {
+                new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(CaravanUIUtility), "tmpInfo")),
+                new CodeInstruction(OpCodes.Call,
+                    AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.DrawDaysWorthOfWater)))
+            };
 
             codes.InsertRange(insert_index + 1, new_codes);
 

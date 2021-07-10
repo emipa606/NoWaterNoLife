@@ -12,7 +12,7 @@ namespace MizuMod
             var prisoner = t as Pawn;
 
             // 世話が必要でない
-            if (!ShouldTakeCareOfPrisoner_NewTemp(warden, prisoner))
+            if (!ShouldTakeCareOfPrisoner(warden, prisoner))
             {
                 return null;
             }
@@ -73,10 +73,10 @@ namespace MizuMod
 
             // 水を運んでくるジョブを発行
             return new Job(MizuDef.Job_DeliverWater, thing, prisoner)
-                       {
-                           count = MizuUtility.WillGetStackCountOf(prisoner, thing),
-                           targetC = RCellFinder.SpotToChewStandingNear(prisoner, thing)
-                       };
+            {
+                count = MizuUtility.WillGetStackCountOf(prisoner, thing),
+                targetC = RCellFinder.SpotToChewStandingNear(prisoner, thing)
+            };
         }
 
         private static float WaterAmountAvailableForFrom(Thing waterSource)

@@ -57,32 +57,32 @@ namespace MizuMod
             // 看病アイテムのチェック
             var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
                 thing =>
+                {
+                    // 使用禁止チェック
+                    if (thing.IsForbidden(pawn))
                     {
-                        // 使用禁止チェック
-                        if (thing.IsForbidden(pawn))
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        var comp = thing.TryGetComp<CompWaterTool>();
-                        if (comp == null)
-                        {
-                            return false;
-                        }
+                    var comp = thing.TryGetComp<CompWaterTool>();
+                    if (comp == null)
+                    {
+                        return false;
+                    }
 
-                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
-                        {
-                            return false;
-                        }
+                    if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
+                    {
+                        return false;
+                    }
 
-                        // 1回も使えないレベルの保有水量だったらダメ
-                        if (Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0)
-                        {
-                            return false;
-                        }
+                    // 1回も使えないレベルの保有水量だったらダメ
+                    if (Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    });
+                    return true;
+                });
             if (!mopList.Any())
             {
                 return false;
@@ -107,33 +107,33 @@ namespace MizuMod
             var minDist = int.MaxValue;
             var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
                 thing =>
+                {
+                    // 使用禁止チェック
+                    if (thing.IsForbidden(pawn))
                     {
-                        // 使用禁止チェック
-                        if (thing.IsForbidden(pawn))
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        var comp = thing.TryGetComp<CompWaterTool>();
-                        if (comp == null)
-                        {
-                            return false;
-                        }
+                    var comp = thing.TryGetComp<CompWaterTool>();
+                    if (comp == null)
+                    {
+                        return false;
+                    }
 
-                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
-                        {
-                            return false;
-                        }
+                    if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
+                    {
+                        return false;
+                    }
 
-                        // 1回も使えないレベルの保有水量だったらダメ
-                        // 80%未満で水を補充するので80%程度であれば使用可能とする
-                        if (Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0)
-                        {
-                            return false;
-                        }
+                    // 1回も使えないレベルの保有水量だったらダメ
+                    // 80%未満で水を補充するので80%程度であれば使用可能とする
+                    if (Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    });
+                    return true;
+                });
             foreach (var tool in toolList)
             {
                 // 予約できないツールはパス

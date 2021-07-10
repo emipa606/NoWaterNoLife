@@ -87,7 +87,7 @@ namespace MizuMod
             }
         }
 
-        private new CompProperties_WaterNetTank Props => (CompProperties_WaterNetTank)props;
+        private new CompProperties_WaterNetTank Props => (CompProperties_WaterNetTank) props;
 
         private bool ShowBar => Props.showBar;
 
@@ -122,7 +122,7 @@ namespace MizuMod
                     MaxWaterVolume.ToString("F2"),
                     " L"));
             stringBuilder.Append(
-                string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")" }));
+                string.Concat(new[] {"(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")"}));
 
             return stringBuilder.ToString();
         }
@@ -150,17 +150,17 @@ namespace MizuMod
             }
 
             var r = new GenDraw.FillableBarRequest
-                        {
-                            center = parent.DrawPos + (Vector3.up * 0.1f) + (Vector3.back * parent.def.size.z / 4.0f),
-                            size = new Vector2(parent.RotatedSize.x, BarThick),
+            {
+                center = parent.DrawPos + (Vector3.up * 0.1f) + (Vector3.back * parent.def.size.z / 4.0f),
+                size = new Vector2(parent.RotatedSize.x, BarThick),
 
-                            // r.center = new Vector3(this.parent.DrawPos.x, 0.1f, 1.0f - r.size.y / 2.0f);
-                            // Log.Message(this.parent.DrawPos.ToString());
-                            fillPercent = StoredWaterVolume / MaxWaterVolume,
-                            filledMat = BarFilledMat,
-                            unfilledMat = BarUnfilledMat,
-                            margin = 0.15f
-                        };
+                // r.center = new Vector3(this.parent.DrawPos.x, 0.1f, 1.0f - r.size.y / 2.0f);
+                // Log.Message(this.parent.DrawPos.ToString());
+                fillPercent = StoredWaterVolume / MaxWaterVolume,
+                filledMat = BarFilledMat,
+                unfilledMat = BarUnfilledMat,
+                margin = 0.15f
+            };
             GenDraw.DrawFillableBar(r);
         }
 

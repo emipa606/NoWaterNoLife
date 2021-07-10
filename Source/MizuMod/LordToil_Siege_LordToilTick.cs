@@ -29,7 +29,15 @@ namespace MizuMod
                 return codes.AsEnumerable();
             }
 
-            var insert_codes = new List<CodeInstruction> { new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(MizuDef), nameof(MizuDef.Thing_ClearWater))), new CodeInstruction(OpCodes.Ldc_I4_S, 20), new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LordToil_Siege), "DropSupplies", new[] { typeof(ThingDef), typeof(int) })) };
+            var insert_codes = new List<CodeInstruction>
+            {
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldsfld,
+                    AccessTools.Field(typeof(MizuDef), nameof(MizuDef.Thing_ClearWater))),
+                new CodeInstruction(OpCodes.Ldc_I4_S, 20),
+                new CodeInstruction(OpCodes.Call,
+                    AccessTools.Method(typeof(LordToil_Siege), "DropSupplies", new[] {typeof(ThingDef), typeof(int)}))
+            };
 
             codes.InsertRange(insert_index, insert_codes);
 

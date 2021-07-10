@@ -5,7 +5,16 @@ namespace MizuMod
 {
     public class CompProperties_WaterNetTank : CompProperties_WaterNet
     {
-        public List<DrawType> drawTypes = new List<DrawType> { DrawType.Faucet };
+        public enum DrawType : byte
+        {
+            Undefined = 0,
+
+            Self,
+
+            Faucet
+        }
+
+        public List<DrawType> drawTypes = new List<DrawType> {DrawType.Faucet};
 
         public int flatID = -1;
 
@@ -21,15 +30,6 @@ namespace MizuMod
         public CompProperties_WaterNetTank(Type compClass)
             : base(compClass)
         {
-        }
-
-        public enum DrawType : byte
-        {
-            Undefined = 0,
-
-            Self,
-
-            Faucet
         }
     }
 }

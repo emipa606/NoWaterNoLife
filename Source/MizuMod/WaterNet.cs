@@ -9,11 +9,11 @@ namespace MizuMod
     {
         private static int nextID = 1;
 
-        public readonly int ID;
-
         private readonly HashSet<IBuilding_WaterNet> allTanks = new HashSet<IBuilding_WaterNet>();
 
         private readonly HashSet<IBuilding_WaterNet> drainers = new HashSet<IBuilding_WaterNet>();
+
+        public readonly int ID;
 
         private readonly Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>> inputterTypeDic
             = new Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>>();
@@ -255,7 +255,7 @@ namespace MizuMod
                     continue;
                 }
 
-                var roofBonus = (float)t.GetRoofNumNearby(t.InputComp.RoofDistance) / building.def.size.Area
+                var roofBonus = (float) t.GetRoofNumNearby(t.InputComp.RoofDistance) / building.def.size.Area
                                 * t.InputComp.RoofEfficiency;
 
                 var addRainWaterVolume = t.InputComp.BaseRainFlow * Manager.map.weatherManager.RainRate
@@ -341,38 +341,39 @@ namespace MizuMod
                 // 水道網内の水質を更新
                 // 全ての出力水質のうち最低ランクの物にする
                 // ここでは水道網全体の水質を決めるだけ
-                outputWaterType = (WaterType)Mathf.Min((int)outputWaterType, (int)outputter.OutputComp.OutputWaterType);
+                outputWaterType =
+                    (WaterType) Mathf.Min((int) outputWaterType, (int) outputter.OutputComp.OutputWaterType);
 
                 // 出力設備が現在出力可能な相手のリスト
                 var effectiveInputters = inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterNet].Where(
                     t =>
+                    {
+                        // 自分自身は除外
+                        if (t == outputter)
                         {
-                            // 自分自身は除外
-                            if (t == outputter)
-                            {
-                                return false;
-                            }
+                            return false;
+                        }
 
-                            // 機能していないものは除外
-                            if (!t.InputComp.IsActivated)
-                            {
-                                return false;
-                            }
+                        // 機能していないものは除外
+                        if (!t.InputComp.IsActivated)
+                        {
+                            return false;
+                        }
 
-                            // タンクが満タンであれば除外
-                            if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0.0f)
-                            {
-                                return false;
-                            }
+                        // タンクが満タンであれば除外
+                        if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0.0f)
+                        {
+                            return false;
+                        }
 
-                            // 出力水質が入力可能水質リストになければ除外
-                            if (!t.InputComp.AcceptWaterTypes.Contains(outputter.OutputComp.OutputWaterType))
-                            {
-                                return false;
-                            }
+                        // 出力水質が入力可能水質リストになければ除外
+                        if (!t.InputComp.AcceptWaterTypes.Contains(outputter.OutputComp.OutputWaterType))
+                        {
+                            return false;
+                        }
 
-                            return true;
-                        });
+                        return true;
+                    });
 
                 // 残り出力量
                 var remainOutputWaterFlow = outputter.OutputComp.OutputWaterFlow;
@@ -400,32 +401,33 @@ namespace MizuMod
                 // 出力可能な相手のうち、任意入力で良い物
                 var anyInputters = effectiveInputters.Where(
                     t =>
+                    {
+                        // 入力が任意で良いもの以外は除外
+                        if (t.InputComp.InputWaterFlowType != CompProperties_WaterNetInput.InputWaterFlowType.Any)
                         {
-                            // 入力が任意で良いもの以外は除外
-                            if (t.InputComp.InputWaterFlowType != CompProperties_WaterNetInput.InputWaterFlowType.Any)
-                            {
-                                return false;
-                            }
+                            return false;
+                        }
 
-                            // タンクがあり満タンになったものは除外
-                            if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0.0f)
-                            {
-                                return false;
-                            }
+                        // タンクがあり満タンになったものは除外
+                        if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0.0f)
+                        {
+                            return false;
+                        }
 
-                            // 入力量が最大まで達している物は除外
-                            if (t.InputComp.InputWaterFlow >= t.InputComp.MaxInputWaterFlow)
-                            {
-                                return false;
-                            }
+                        // 入力量が最大まで達している物は除外
+                        if (t.InputComp.InputWaterFlow >= t.InputComp.MaxInputWaterFlow)
+                        {
+                            return false;
+                        }
 
-                            return true;
-                        });
+                        return true;
+                    });
                 var buildingWaterNets = anyInputters as IBuilding_WaterNet[] ?? anyInputters.ToArray();
                 if (buildingWaterNets.Length <= 0)
                 {
                     continue;
                 }
+
                 {
                     // 均等割り
                     var aveOutputWaterFlow = remainOutputWaterFlow / buildingWaterNets.Length;
@@ -504,9 +506,9 @@ namespace MizuMod
                 else
                 {
                     // 空っぽでなければ現在のタンク水質と入力水質の低い方を選ぶ
-                    tank.TankComp.StoredWaterType = (WaterType)Mathf.Min(
-                        (int)tank.TankComp.StoredWaterType,
-                        (int)tank.InputComp.InputWaterType);
+                    tank.TankComp.StoredWaterType = (WaterType) Mathf.Min(
+                        (int) tank.TankComp.StoredWaterType,
+                        (int) tank.InputComp.InputWaterType);
                 }
             }
 
@@ -514,7 +516,7 @@ namespace MizuMod
             StoredWaterType = WaterType.NoWater;
             foreach (var tank in allTanks)
             {
-                StoredWaterType = (WaterType)Mathf.Min((int)StoredWaterType, (int)tank.TankComp.StoredWaterType);
+                StoredWaterType = (WaterType) Mathf.Min((int) StoredWaterType, (int) tank.TankComp.StoredWaterType);
             }
 
             // 貯水量平坦化
@@ -533,7 +535,7 @@ namespace MizuMod
                 {
                     allMax += t.TankComp.MaxWaterVolume;
                     allCur += t.TankComp.StoredWaterVolume;
-                    allWaterType = (WaterType)Mathf.Min((int)allWaterType, (int)t.TankComp.StoredWaterType);
+                    allWaterType = (WaterType) Mathf.Min((int) allWaterType, (int) t.TankComp.StoredWaterType);
                 }
 
                 // 割合を求める
@@ -645,7 +647,7 @@ namespace MizuMod
                 if (foundLists.Count == 0)
                 {
                     // 新しい平坦化リストを作成
-                    flatTankListTmp.Add(new HashSet<IBuilding_WaterNet> { t });
+                    flatTankListTmp.Add(new HashSet<IBuilding_WaterNet> {t});
                 }
                 else if (foundLists.Count == 1)
                 {

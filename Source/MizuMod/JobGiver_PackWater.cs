@@ -80,7 +80,8 @@ namespace MizuMod
 
             // マップ中の水アイテムの合計水分量が、最低限必要とされる水の量(×入植者の人数)以下しかなければ、
             // 個人の所持品には入れない
-            if (pawn.Map.resourceCounter.TotalWater() < pawn.Map.mapPawns.ColonistsSpawnedCount * MinWaterPerColonistToDo)
+            if (pawn.Map.resourceCounter.TotalWater() <
+                pawn.Map.mapPawns.ColonistsSpawnedCount * MinWaterPerColonistToDo)
             {
                 return null;
             }
@@ -93,29 +94,29 @@ namespace MizuMod
                 TraverseParms.For(pawn),
                 20f,
                 t =>
+                {
+                    if (!validator(t))
                     {
-                        if (!validator(t))
-                        {
-                            return false; // 所持品チェック時と同じ条件を満たしていない×
-                        }
+                        return false; // 所持品チェック時と同じ条件を満たしていない×
+                    }
 
-                        if (t.IsForbidden(pawn))
-                        {
-                            return false; // 禁止されている×
-                        }
+                    if (t.IsForbidden(pawn))
+                    {
+                        return false; // 禁止されている×
+                    }
 
-                        if (!pawn.CanReserve(t))
-                        {
-                            return false; // 予約不可能×
-                        }
+                    if (!pawn.CanReserve(t))
+                    {
+                        return false; // 予約不可能×
+                    }
 
-                        if (!t.IsSociallyProper(pawn))
-                        {
-                            return false; // 囚人部屋の物×
-                        }
+                    if (!t.IsSociallyProper(pawn))
+                    {
+                        return false; // 囚人部屋の物×
+                    }
 
-                        return true;
-                    }, // スコアの高いものが優先？
+                    return true;
+                }, // スコアの高いものが優先？
                 x => MizuUtility.GetWaterItemScore(pawn, x, 0f, true));
 
             if (waterThing == null)
@@ -123,7 +124,11 @@ namespace MizuMod
                 return null;
             }
 
-            return new Job(JobDefOf.TakeInventory, waterThing) { count = Mathf.Min(MizuUtility.StackCountForWater(waterThing, NeedTotalWaterAmount), waterThing.stackCount) };
+            return new Job(JobDefOf.TakeInventory, waterThing)
+            {
+                count = Mathf.Min(MizuUtility.StackCountForWater(waterThing, NeedTotalWaterAmount),
+                    waterThing.stackCount)
+            };
         }
     }
 }

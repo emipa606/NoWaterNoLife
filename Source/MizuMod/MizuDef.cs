@@ -106,22 +106,22 @@ namespace MizuMod
         static MizuDef()
         {
             List_WaterItem = new List<ThingDef>
-                                 {
-                                     Thing_ClearWater,
-                                     Thing_NormalWater,
-                                     Thing_RawWater,
-                                     Thing_MudWater,
-                                     Thing_SeaWater
-                                 };
+            {
+                Thing_ClearWater,
+                Thing_NormalWater,
+                Thing_RawWater,
+                Thing_MudWater,
+                Thing_SeaWater
+            };
 
             Dic_WaterTypeDef = new Dictionary<WaterType, WaterTypeDef>
-                                   {
-                                       { WaterType.ClearWater, WaterType_Clear },
-                                       { WaterType.NormalWater, WaterType_Normal },
-                                       { WaterType.RawWater, WaterType_Raw },
-                                       { WaterType.MudWater, WaterType_Mud },
-                                       { WaterType.SeaWater, WaterType_Sea }
-                                   };
+            {
+                {WaterType.ClearWater, WaterType_Clear},
+                {WaterType.NormalWater, WaterType_Normal},
+                {WaterType.RawWater, WaterType_Raw},
+                {WaterType.MudWater, WaterType_Mud},
+                {WaterType.SeaWater, WaterType_Sea}
+            };
         }
     }
 }

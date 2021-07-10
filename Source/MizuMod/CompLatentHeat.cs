@@ -31,7 +31,7 @@ namespace MizuMod
 
         private float LatentHeatThreshold => Props.latentHeatThreshold;
 
-        private CompProperties_LatentHeat Props => (CompProperties_LatentHeat)props;
+        private CompProperties_LatentHeat Props => (CompProperties_LatentHeat) props;
 
         private float TemperatureThreshold => Props.temperatureThreshold;
 
@@ -142,7 +142,7 @@ namespace MizuMod
             base.PreAbsorbStack(otherStack, count);
 
             // 全体に対するother側の割合
-            var otherRatio = count / (float)(parent.stackCount + count);
+            var otherRatio = count / (float) (parent.stackCount + count);
 
             var otherComp = otherStack.TryGetComp<CompLatentHeat>();
             if (otherComp == null)

@@ -13,11 +13,11 @@ namespace MizuMod
 
         public const float NeedWaterVolumePerDay = 1.5f;
 
-        public int lastSearchWaterTick;
-
         private DefExtension_NeedWater extInt;
 
         private bool isSetRaceThirstRate;
+
+        public int lastSearchWaterTick;
 
         private float raceThirstRate = 1f;
 
@@ -65,7 +65,8 @@ namespace MizuMod
 
         public float PercentageThreshThirsty => Ext.thirstyBorder;
 
-        public int TicksUntilThirstyWhenHealthy => Mathf.CeilToInt(WaterAmountBetweenThirstyAndHealthy / WaterFallPerTick);
+        public int TicksUntilThirstyWhenHealthy =>
+            Mathf.CeilToInt(WaterAmountBetweenThirstyAndHealthy / WaterFallPerTick);
 
         public float WaterAmountBetweenThirstyAndHealthy => (1f - PercentageThreshThirsty) * MaxLevel;
 
@@ -105,14 +106,16 @@ namespace MizuMod
 
         private float WaterFallPerTick => WaterFallPerTickAssumingCategory(CurCategory);
 
-        public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1F, bool drawArrows = true, bool doTooltip = true)
+        public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1F,
+            bool drawArrows = true, bool doTooltip = true, Rect? rectForTooltip = null)
         {
             if (threshPercents == null)
             {
-                threshPercents = new List<float> { PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty };
+                threshPercents = new List<float>
+                    {PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty};
             }
 
-            base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
+            base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip, rectForTooltip);
         }
 
         public override void ExposeData()
@@ -124,7 +127,8 @@ namespace MizuMod
 
         public override string GetTipString()
         {
-            return string.Concat(LabelCap, ": ", CurLevelPercentage.ToStringPercent(), " (", CurLevel.ToString("0.##"), " / ", MaxLevel.ToString("0.##"), ")\n", def.description);
+            return string.Concat(LabelCap, ": ", CurLevelPercentage.ToStringPercent(), " (", CurLevel.ToString("0.##"),
+                " / ", MaxLevel.ToString("0.##"), ")\n", def.description);
         }
 
         public override void NeedInterval()
@@ -150,7 +154,9 @@ namespace MizuMod
             }
 
             // 脱水症状進行度更新
-            HealthUtility.AdjustSeverity(pawn, MizuDef.Hediff_Dehydration, directionFactor * Ext.dehydrationSeverityPerDay / 150 * MizuDef.GlobalSettings.forDebug.needWaterReduceRate);
+            HealthUtility.AdjustSeverity(pawn, MizuDef.Hediff_Dehydration,
+                directionFactor * Ext.dehydrationSeverityPerDay / 150 *
+                MizuDef.GlobalSettings.forDebug.needWaterReduceRate);
         }
 
         public override void SetInitialLevel()
@@ -166,10 +172,13 @@ namespace MizuMod
         private float WaterFallPerTickAssumingCategory(ThirstCategory cat)
         {
             // 基本低下量(基本値＋温度補正)
-            var fallPerTickBase = Ext.fallPerTickBase + Ext.fallPerTickFromTempCurve.Evaluate(pawn.AmbientTemperature - pawn.ComfortableTemperatureRange().max);
+            var fallPerTickBase = Ext.fallPerTickBase +
+                                  Ext.fallPerTickFromTempCurve.Evaluate(pawn.AmbientTemperature -
+                                                                        pawn.ComfortableTemperatureRange().max);
 
             // 食事と同じ値を利用
-            fallPerTickBase *= pawn.ageTracker.CurLifeStage.hungerRateFactor * RaceThirstRate * pawn.health.hediffSet.GetThirstRateFactor();
+            fallPerTickBase *= pawn.ageTracker.CurLifeStage.hungerRateFactor * RaceThirstRate *
+                               pawn.health.hediffSet.GetThirstRateFactor();
 
             switch (cat)
             {

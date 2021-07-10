@@ -61,33 +61,33 @@ namespace MizuMod
             // モップアイテムのチェック
             var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
                 t =>
+                {
+                    // 使用禁止チェック
+                    if (t.IsForbidden(pawn))
                     {
-                        // 使用禁止チェック
-                        if (t.IsForbidden(pawn))
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        var comp = t.TryGetComp<CompWaterTool>();
-                        if (comp == null)
-                        {
-                            return false;
-                        }
+                    var comp = t.TryGetComp<CompWaterTool>();
+                    if (comp == null)
+                    {
+                        return false;
+                    }
 
-                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
-                        {
-                            return false;
-                        }
+                    if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+                    {
+                        return false;
+                    }
 
-                        var maxQueueLength =
-                            (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                        if (maxQueueLength <= 0)
-                        {
-                            return false;
-                        }
+                    var maxQueueLength =
+                        (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                    if (maxQueueLength <= 0)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    });
+                    return true;
+                });
             if (!mopList.Any())
             {
                 return false;
@@ -112,33 +112,33 @@ namespace MizuMod
             var minDist = int.MaxValue;
             var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
                 t =>
+                {
+                    // 使用禁止チェック
+                    if (t.IsForbidden(pawn))
                     {
-                        // 使用禁止チェック
-                        if (t.IsForbidden(pawn))
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        var comp = t.TryGetComp<CompWaterTool>();
-                        if (comp == null)
-                        {
-                            return false;
-                        }
+                    var comp = t.TryGetComp<CompWaterTool>();
+                    if (comp == null)
+                    {
+                        return false;
+                    }
 
-                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
-                        {
-                            return false;
-                        }
+                    if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+                    {
+                        return false;
+                    }
 
-                        var maxQueueLengthForCheck =
-                            (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                        if (maxQueueLengthForCheck <= 0)
-                        {
-                            return false;
-                        }
+                    var maxQueueLengthForCheck =
+                        (int) Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+                    if (maxQueueLengthForCheck <= 0)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    });
+                    return true;
+                });
 
             foreach (var mop in mopList)
             {

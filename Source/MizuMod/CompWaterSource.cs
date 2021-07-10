@@ -26,7 +26,7 @@ namespace MizuMod
 
         public bool NeedManipulate => Props.needManipulate;
 
-        public CompProperties_WaterSource Props => (CompProperties_WaterSource)props;
+        public CompProperties_WaterSource Props => (CompProperties_WaterSource) props;
 
         public CompProperties_WaterSource.SourceType SourceType => Props.sourceType;
 
@@ -114,13 +114,13 @@ namespace MizuMod
             yield return new FloatMenuOption(
                 stringBuilder.ToString(),
                 () =>
+                {
+                    var job = new Job(MizuDef.Job_DrinkWater, parent)
                     {
-                        var job = new Job(MizuDef.Job_DrinkWater, parent)
-                                      {
-                                          count = MizuUtility.WillGetStackCountOf(selPawn, parent)
-                                      };
-                        selPawn.jobs.TryTakeOrderedJob(job, JobTag.SatisfyingNeeds);
-                    });
+                        count = MizuUtility.WillGetStackCountOf(selPawn, parent)
+                    };
+                    selPawn.jobs.TryTakeOrderedJob(job, JobTag.SatisfyingNeeds);
+                });
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)

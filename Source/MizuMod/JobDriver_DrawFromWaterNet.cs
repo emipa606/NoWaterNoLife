@@ -31,8 +31,8 @@ namespace MizuMod
         protected override Thing FinishAction()
         {
             var targetWaterType = Ext.canDrawFromFaucet
-                                      ? WaterNet.StoredWaterTypeForFaucet
-                                      : WorkTable.TankComp.StoredWaterType;
+                ? WaterNet.StoredWaterTypeForFaucet
+                : WorkTable.TankComp.StoredWaterType;
 
             // 水道網の水の種類から水アイテムの種類を決定
             var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);

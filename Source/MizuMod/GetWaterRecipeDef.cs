@@ -25,7 +25,7 @@ namespace MizuMod
             DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingCountClass, "thingDef", "Mizu_NormalWater");
             thingCountClass.count = 1;
 
-            products = new List<ThingDefCountClass> { thingCountClass };
+            products = new List<ThingDefCountClass> {thingCountClass};
         }
     }
 }

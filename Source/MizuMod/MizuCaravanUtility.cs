@@ -182,10 +182,9 @@ namespace MizuMod
 
             // 省略テキストの描画サイズ
             var truncTextSize = Text.CalcSize(truncText);
-            Rect truncTextRect;
-            truncTextRect = alignRight
-                                ? new Rect(rect.xMax - truncTextSize.x, rect.y, truncTextSize.x, truncTextSize.y)
-                                : new Rect(rect.x, rect.y, truncTextSize.x, truncTextSize.y);
+            var truncTextRect = alignRight
+                ? new Rect(rect.xMax - truncTextSize.x, rect.y, truncTextSize.x, truncTextSize.y)
+                : new Rect(rect.x, rect.y, truncTextSize.x, truncTextSize.y);
 
             // ラベル生成
             Widgets.Label(truncTextRect, truncText);
@@ -212,7 +211,7 @@ namespace MizuMod
             var compprop = water.GetCompProperties<CompProperties_WaterSource>();
             if (compprop != null)
             {
-                return (float)compprop.waterType;
+                return (float) compprop.waterType;
             }
 
             return 0.0f;
@@ -343,7 +342,7 @@ namespace MizuMod
 
         private static float GetWaterScore(Thing water)
         {
-            return (float)water.GetWaterPreferability();
+            return (float) water.GetWaterPreferability();
         }
 
         // public static void LogBool(bool b)

@@ -73,18 +73,18 @@ namespace MizuMod
             Predicate<LocalTargetInfo> cond)
         {
             toil.initAction = delegate
-                {
-                    var actor = toil.actor;
-                    var curJob = actor.jobs.curJob;
-                    var targetQueue = curJob.GetTargetQueue(ind);
-                    targetQueue.RemoveAll(cond);
-                };
+            {
+                var actor = toil.actor;
+                var curJob = actor.jobs.curJob;
+                var targetQueue = curJob.GetTargetQueue(ind);
+                targetQueue.RemoveAll(cond);
+            };
             return toil;
         }
 
         public static WaterType GetMinType(this WaterType me, WaterType other)
         {
-            return (WaterType)Mathf.Min((int)me, (int)other);
+            return (WaterType) Mathf.Min((int) me, (int) other);
         }
 
         public static int GetRoofNumNearby(this IBuilding_WaterNet t, int dist)
@@ -162,7 +162,7 @@ namespace MizuMod
                 return 0f;
             }
 
-            return (float)unroofedCells / allCells;
+            return (float) unroofedCells / allCells;
         }
 
         public static float GetWaterAmount(this Thing t)
@@ -207,7 +207,7 @@ namespace MizuMod
                 return;
             }
 
-            numTaken = (int)Math.Ceiling(waterWanted / waterAmount); // そのアイテムで必要な水分を満たすのに何個必要か
+            numTaken = (int) Math.Ceiling(waterWanted / waterAmount); // そのアイテムで必要な水分を満たすのに何個必要か
             numTaken = Mathf.Min(
                 numTaken,
                 t.stackCount,
@@ -273,34 +273,34 @@ namespace MizuMod
             if (biomeDefName.Contains("Desert"))
             {
                 // 砂漠Desert、極限の砂漠ExtremeDesertは水なし
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.NoWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.NoWater);
             }
             else if (biomeDefName.Contains("SeaIce"))
             {
                 // 海氷SeaIceは海水
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.SeaWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.SeaWater);
             }
             else if (biomeDefName.Contains("ColdBog") || biomeDefName.Contains("Swamp"))
             {
                 // 寒冷湿地ColdBog、温帯湿地TemperateSwamp、熱帯湿地TropicalSwampは泥水
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.MudWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.MudWater);
             }
             else
             {
                 // それ以外は真水
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.RawWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.RawWater);
             }
 
             if (tile.Rivers != null && tile.Rivers.Count > 0)
             {
                 // 川があれば真水が飲める(凍ってるか等はチェックしないことにする)
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.RawWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.RawWater);
             }
 
             if (Find.World.CoastDirectionAt(caravan.Tile).IsValid)
             {
                 // 海岸線があるなら海水が飲める
-                result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.SeaWater);
+                result = (WaterTerrainType) Mathf.Max((int) result, (int) WaterTerrainType.SeaWater);
             }
 
             return result;
@@ -446,12 +446,12 @@ namespace MizuMod
         {
             return toil.JumpIf(
                 delegate
-                    {
-                        var target = toil.actor.jobs.curJob.GetTarget(ind);
-                        var pos = target.HasThing ? target.Thing.Position : target.Cell;
+                {
+                    var target = toil.actor.jobs.curJob.GetTarget(ind);
+                    var pos = target.HasThing ? target.Thing.Position : target.Cell;
 
-                        return !toil.actor.Map.areaManager.Mop()[pos];
-                    },
+                    return !toil.actor.Map.areaManager.Mop()[pos];
+                },
                 jumpToil);
         }
 
@@ -487,7 +487,7 @@ namespace MizuMod
             foreach (var current in rc.AllCountedAmounts)
             {
                 var compprop =
-                    (CompProperties_WaterSource)current.Key.comps?.Find(c => c.compClass == typeof(CompWaterSource));
+                    (CompProperties_WaterSource) current.Key.comps?.Find(c => c.compClass == typeof(CompWaterSource));
                 if (compprop == null)
                 {
                     continue;

@@ -17,7 +17,7 @@ namespace MizuMod
 
         private const TargetIndex MopPlaceInd = TargetIndex.C;
 
-        private ThingWithComps Mop => (ThingWithComps)job.GetTarget(MopInd).Thing;
+        private ThingWithComps Mop => (ThingWithComps) job.GetTarget(MopInd).Thing;
 
         private IntVec3 MoppingPos => job.GetTarget(MoppingInd).Cell;
 
@@ -51,63 +51,63 @@ namespace MizuMod
             // ターゲットの元へ移動
             yield return Toils_Goto.GotoCell(MoppingInd, PathEndMode.Touch).JumpIf(
                 () =>
+                {
+                    var target = pawn.jobs.curJob.GetTarget(MoppingInd);
+                    if (target.HasThing)
                     {
-                        var target = pawn.jobs.curJob.GetTarget(MoppingInd);
-                        if (target.HasThing)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        return target.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null;
-                    },
+                    return target.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null;
+                },
                 initExtractTargetFromQueue).JumpIfOutsideMopArea(MoppingInd, initExtractTargetFromQueue);
 
             // モップ掛け作業中
             var mopToil = new Toil
-                              {
-                                  initAction = delegate
-                                      {
-                                          // 必要工数の計算
-                                          ticksLeftThisToil = MoppingTicks;
-                                      },
+            {
+                initAction = delegate
+                {
+                    // 必要工数の計算
+                    ticksLeftThisToil = MoppingTicks;
+                },
 
-                                  // 細々とした設定
-                                  defaultCompleteMode = ToilCompleteMode.Delay
-                              };
-            mopToil.WithProgressBar(MoppingInd, () => 1f - ((float)ticksLeftThisToil / MoppingTicks), true);
+                // 細々とした設定
+                defaultCompleteMode = ToilCompleteMode.Delay
+            };
+            mopToil.WithProgressBar(MoppingInd, () => 1f - ((float) ticksLeftThisToil / MoppingTicks), true);
             mopToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
 
             // 掃除中に条件が変更されたら最初に戻る
             mopToil.JumpIf(
                 () =>
+                {
+                    var target = pawn.jobs.curJob.GetTarget(MoppingInd);
+                    if (target.HasThing)
                     {
-                        var target = pawn.jobs.curJob.GetTarget(MoppingInd);
-                        if (target.HasThing)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        return target.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null;
-                    },
+                    return target.Cell.GetFirstThing(pawn.Map, MizuDef.Thing_MoppedThing) != null;
+                },
                 initExtractTargetFromQueue);
             mopToil.JumpIfOutsideMopArea(MoppingInd, initExtractTargetFromQueue);
             yield return mopToil;
 
             // モップ掛け終了
             var finishToil = new Toil
-                                 {
-                                     initAction = () =>
-                                         {
-                                             // モップオブジェクト生成
-                                             var moppedThing = ThingMaker.MakeThing(MizuDef.Thing_MoppedThing);
-                                             GenSpawn.Spawn(moppedThing, MoppingPos, mopToil.actor.Map);
+            {
+                initAction = () =>
+                {
+                    // モップオブジェクト生成
+                    var moppedThing = ThingMaker.MakeThing(MizuDef.Thing_MoppedThing);
+                    GenSpawn.Spawn(moppedThing, MoppingPos, mopToil.actor.Map);
 
-                                             // モップから水を減らす
-                                             var compTool = Mop.GetComp<CompWaterTool>();
-                                             compTool.StoredWaterVolume -= ConsumeWaterVolume;
-                                         },
-                                     defaultCompleteMode = ToilCompleteMode.Instant
-                                 };
+                    // モップから水を減らす
+                    var compTool = Mop.GetComp<CompWaterTool>();
+                    compTool.StoredWaterVolume -= ConsumeWaterVolume;
+                },
+                defaultCompleteMode = ToilCompleteMode.Instant
+            };
             yield return finishToil;
 
             // 最初に戻る

@@ -20,7 +20,9 @@ namespace MizuMod
             {
                 if (found_caravanDaysOfFood == false)
                 {
-                    if (codes[i].opcode != OpCodes.Ldstr || codes[i].operand.ToString().Contains("CaravanDaysOfFoodRot") || !codes[i].operand.ToString().Contains("CaravanDaysOfFood"))
+                    if (codes[i].opcode != OpCodes.Ldstr ||
+                        codes[i].operand.ToString().Contains("CaravanDaysOfFoodRot") ||
+                        !codes[i].operand.ToString().Contains("CaravanDaysOfFood"))
                     {
                         continue;
                     }
@@ -47,7 +49,13 @@ namespace MizuMod
                 return codes.AsEnumerable();
             }
 
-            var new_codes = new List<CodeInstruction> { new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldloc_0), new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(MizuCaravanUtility), nameof(MizuCaravanUtility.AppendWaterWorthToCaravanInspectString))) };
+            var new_codes = new List<CodeInstruction>
+            {
+                new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldloc_0),
+                new CodeInstruction(OpCodes.Call,
+                    AccessTools.Method(typeof(MizuCaravanUtility),
+                        nameof(MizuCaravanUtility.AppendWaterWorthToCaravanInspectString)))
+            };
 
             codes.InsertRange(insert_index + 1, new_codes);
 

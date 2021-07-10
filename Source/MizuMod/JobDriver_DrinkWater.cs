@@ -78,7 +78,9 @@ namespace MizuMod
                 // ターゲットがThingではない=水アイテムを摂取しない場合=水地形を利用する場合
 
                 // 選んだ水地形が使用不可能or到達不可能になったらFail
-                this.FailOn(() => job.targetA.Cell.IsForbidden(pawn) || !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
+                this.FailOn(() =>
+                    job.targetA.Cell.IsForbidden(pawn) ||
+                    !pawn.CanReach(job.targetA.Cell, PathEndMode.ClosestTouch, Danger.Deadly));
 
                 // 水地形まで移動
                 yield return Toils_Goto.GotoCell(WaterIndex, PathEndMode.OnCell);

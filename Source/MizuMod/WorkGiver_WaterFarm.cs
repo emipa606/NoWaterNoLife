@@ -100,33 +100,33 @@ namespace MizuMod
             // ツールチェック
             var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
                 t =>
+                {
+                    // 使用禁止チェック
+                    if (t.IsForbidden(pawn))
                     {
-                        // 使用禁止チェック
-                        if (t.IsForbidden(pawn))
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        var comp = t.TryGetComp<CompWaterTool>();
-                        if (comp == null)
-                        {
-                            return false;
-                        }
+                    var comp = t.TryGetComp<CompWaterTool>();
+                    if (comp == null)
+                    {
+                        return false;
+                    }
 
-                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
-                        {
-                            return false;
-                        }
+                    if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
+                    {
+                        return false;
+                    }
 
-                        var maxQueueLength = (int)Mathf.Floor(
-                            comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                        if (maxQueueLength <= 0)
-                        {
-                            return false;
-                        }
+                    var maxQueueLength = (int) Mathf.Floor(
+                        comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+                    if (maxQueueLength <= 0)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    });
+                    return true;
+                });
             if (!toolList.Any())
             {
                 return false;
@@ -151,33 +151,33 @@ namespace MizuMod
             var minDist = int.MaxValue;
             var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
                 t =>
+                {
+                    // 使用禁止チェック
+                    if (t.IsForbidden(pawn))
                     {
-                        // 使用禁止チェック
-                        if (t.IsForbidden(pawn))
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        var comp = t.TryGetComp<CompWaterTool>();
-                        if (comp == null)
-                        {
-                            return false;
-                        }
+                    var comp = t.TryGetComp<CompWaterTool>();
+                    if (comp == null)
+                    {
+                        return false;
+                    }
 
-                        if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
-                        {
-                            return false;
-                        }
+                    if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
+                    {
+                        return false;
+                    }
 
-                        var maxQueueLengthForCheck = (int)Mathf.Floor(
-                            comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                        if (maxQueueLengthForCheck <= 0)
-                        {
-                            return false;
-                        }
+                    var maxQueueLengthForCheck = (int) Mathf.Floor(
+                        comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+                    if (maxQueueLengthForCheck <= 0)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    });
+                    return true;
+                });
 
             foreach (var tool in toolList)
             {
@@ -254,15 +254,15 @@ namespace MizuMod
             // 農地チェック
             var growingZoneList = pawn.Map.zoneManager.AllZones.Where(
                 zone =>
+                {
+                    // 種まきを許可された農地ゾーンのみ手動水やりOK
+                    if (zone is Zone_Growing z && z.allowSow)
                     {
-                        // 種まきを許可された農地ゾーンのみ手動水やりOK
-                        if (zone is Zone_Growing z && z.allowSow)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        return false;
-                    });
+                    return false;
+                });
             foreach (var zone in growingZoneList)
             {
                 potentialCells = potentialCells == null ? zone.Cells.AsEnumerable() : potentialCells.Concat(zone.Cells);
@@ -278,8 +278,8 @@ namespace MizuMod
                 }
 
                 potentialCells = potentialCells == null
-                                     ? building.OccupiedRect().Cells
-                                     : potentialCells.Concat(building.OccupiedRect().Cells);
+                    ? building.OccupiedRect().Cells
+                    : potentialCells.Concat(building.OccupiedRect().Cells);
             }
 
             if (potentialCells == null)

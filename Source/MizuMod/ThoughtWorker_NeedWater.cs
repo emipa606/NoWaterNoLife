@@ -24,13 +24,13 @@ namespace MizuMod
                 case ThirstCategory.UrgentlyThirsty:
                     return ThoughtState.ActiveAtStage(2);
                 case ThirstCategory.Dehydration:
-                    {
-                        var firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration);
-                        var num = firstHediffOfDef != null ? firstHediffOfDef.CurStageIndex : 0;
+                {
+                    var firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration);
+                    var num = firstHediffOfDef != null ? firstHediffOfDef.CurStageIndex : 0;
 
-                        // 脱水症状の1段階目=喉の渇き心情の4段階目 => +3する
-                        return ThoughtState.ActiveAtStage(3 + num);
-                    }
+                    // 脱水症状の1段階目=喉の渇き心情の4段階目 => +3する
+                    return ThoughtState.ActiveAtStage(3 + num);
+                }
 
                 default:
                     throw new NotImplementedException();

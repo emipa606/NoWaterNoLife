@@ -29,21 +29,21 @@ namespace MizuMod
             // 雪を集める
             var getToil = new Toil();
             getToil.tickAction = () =>
+            {
+                var actor = getToil.actor;
+                var statValue = actor.GetStatValue(StatDefOf.WorkSpeedGlobal);
+                var num = statValue;
+                workDone += num;
+                if (!(workDone >= WorkGiver_GetSnow.ConsumeSnowPerOne * 100f))
                 {
-                    var actor = getToil.actor;
-                    var statValue = actor.GetStatValue(StatDefOf.WorkSpeedGlobal);
-                    var num = statValue;
-                    workDone += num;
-                    if (!(workDone >= WorkGiver_GetSnow.ConsumeSnowPerOne * 100f))
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    var snowDepth = Map.snowGrid.GetDepth(TargetLocA);
-                    snowDepth = Math.Max(0f, snowDepth - WorkGiver_GetSnow.ConsumeSnowPerOne);
-                    Map.snowGrid.SetDepth(TargetLocA, snowDepth);
-                    ReadyForNextToil();
-                };
+                var snowDepth = Map.snowGrid.GetDepth(TargetLocA);
+                snowDepth = Math.Max(0f, snowDepth - WorkGiver_GetSnow.ConsumeSnowPerOne);
+                Map.snowGrid.SetDepth(TargetLocA, snowDepth);
+                ReadyForNextToil();
+            };
             getToil.defaultCompleteMode = ToilCompleteMode.Never;
             getToil.WithEffect(EffecterDefOf.ClearSnow, GetSnowCellIndex);
             getToil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
@@ -54,17 +54,17 @@ namespace MizuMod
             // 雪玉生成
             var makeToil = new Toil();
             makeToil.initAction = () =>
-                {
-                    var actor = makeToil.actor;
-                    var snowThing = ThingMaker.MakeThing(MizuDef.Thing_Snowball);
-                    snowThing.stackCount = 1;
+            {
+                var actor = makeToil.actor;
+                var snowThing = ThingMaker.MakeThing(MizuDef.Thing_Snowball);
+                snowThing.stackCount = 1;
 
-                    if (!GenPlace.TryPlaceThing(snowThing, actor.Position, actor.Map, ThingPlaceMode.Near))
-                    {
-                        Log.Error(
-                            string.Concat(actor, " could not drop recipe product ", snowThing, " near ", TargetLocA));
-                    }
-                };
+                if (!GenPlace.TryPlaceThing(snowThing, actor.Position, actor.Map, ThingPlaceMode.Near))
+                {
+                    Log.Error(
+                        string.Concat(actor, " could not drop recipe product ", snowThing, " near ", TargetLocA));
+                }
+            };
             makeToil.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return makeToil;
         }

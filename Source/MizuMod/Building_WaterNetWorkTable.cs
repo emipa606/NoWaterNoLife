@@ -55,6 +55,42 @@ namespace MizuMod
             }
         }
 
+        public WaterType StoredWaterType
+        {
+            get
+            {
+                if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+                {
+                    return InputWaterNet.StoredWaterType;
+                }
+
+                if (tankComp != null)
+                {
+                    return tankComp.StoredWaterType;
+                }
+
+                return WaterType.NoWater;
+            }
+        }
+
+        public float StoredWaterVolume
+        {
+            get
+            {
+                if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
+                {
+                    return InputWaterNet.StoredWaterVolume;
+                }
+
+                if (tankComp != null)
+                {
+                    return tankComp.StoredWaterVolume;
+                }
+
+                return 0.0f;
+            }
+        }
+
         // コネクタがあるか
         public virtual bool HasConnector => HasInputConnector || HasOutputConnector;
 
@@ -138,42 +174,6 @@ namespace MizuMod
             }
         }
 
-        public WaterType StoredWaterType
-        {
-            get
-            {
-                if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
-                {
-                    return InputWaterNet.StoredWaterType;
-                }
-
-                if (tankComp != null)
-                {
-                    return tankComp.StoredWaterType;
-                }
-
-                return WaterType.NoWater;
-            }
-        }
-
-        public float StoredWaterVolume
-        {
-            get
-            {
-                if (inputComp != null && inputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet))
-                {
-                    return InputWaterNet.StoredWaterVolume;
-                }
-
-                if (tankComp != null)
-                {
-                    return tankComp.StoredWaterVolume;
-                }
-
-                return 0.0f;
-            }
-        }
-
         // スイッチはONか
         public bool SwitchIsOn => FlickUtility.WantsToBeOn(this);
 
@@ -194,11 +194,6 @@ namespace MizuMod
         public MapComponent_WaterNetManager WaterNetManager => Map.GetComponent<MapComponent_WaterNetManager>();
 
         public virtual UndergroundWaterPool WaterPool => null;
-
-        public void AddWaterVolume(float amount)
-        {
-            tankComp?.AddWaterVolume(amount);
-        }
 
         public virtual void CreateConnectors()
         {
@@ -231,6 +226,29 @@ namespace MizuMod
                 InputConnectors.Add(cell);
                 OutputConnectors.Add(cell);
             }
+        }
+
+        public virtual bool IsAdjacentToCardinalOrInside(IBuilding_WaterNet other)
+        {
+            return GenAdj.IsAdjacentToCardinalOrInside(OccupiedRect(), other.OccupiedRect());
+        }
+
+        public virtual CellRect OccupiedRect()
+        {
+            return GenAdj.OccupiedRect(this);
+        }
+
+        public virtual void PrintForGrid(SectionLayer sectionLayer)
+        {
+            if (IsActivatedForWaterNet)
+            {
+                MizuGraphics.LinkedWaterNetOverlay.Print(sectionLayer, this, 0f);
+            }
+        }
+
+        public void AddWaterVolume(float amount)
+        {
+            tankComp?.AddWaterVolume(amount);
         }
 
         public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
@@ -293,7 +311,7 @@ namespace MizuMod
                     string.Join(
                         ",",
                         $"OutNetID({OutputWaterNet.ID})",
-                        $"Stored({OutputWaterNet.StoredWaterVolume.ToString("F2")},{OutputWaterNet.StoredWaterType.ToString()})",
+                        $"Stored({OutputWaterNet.StoredWaterVolume:F2},{OutputWaterNet.StoredWaterType.ToString()})",
                         $"Flow({OutputWaterNet.WaterType})"));
             }
             else
@@ -302,24 +320,6 @@ namespace MizuMod
             }
 
             return stringBuilder.ToString();
-        }
-
-        public virtual bool IsAdjacentToCardinalOrInside(IBuilding_WaterNet other)
-        {
-            return GenAdj.IsAdjacentToCardinalOrInside(OccupiedRect(), other.OccupiedRect());
-        }
-
-        public virtual CellRect OccupiedRect()
-        {
-            return GenAdj.OccupiedRect(this);
-        }
-
-        public virtual void PrintForGrid(SectionLayer sectionLayer)
-        {
-            if (IsActivatedForWaterNet)
-            {
-                MizuGraphics.LinkedWaterNetOverlay.Print(sectionLayer, this);
-            }
         }
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)

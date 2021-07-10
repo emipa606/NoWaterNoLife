@@ -13,7 +13,7 @@ namespace MizuMod
 
         public float MaxWaterVolume => Props.maxWaterVolume;
 
-        public CompProperties_WaterTool Props => (CompProperties_WaterTool)props;
+        public CompProperties_WaterTool Props => (CompProperties_WaterTool) props;
 
         public WaterType StoredWaterType
         {
@@ -53,10 +53,10 @@ namespace MizuMod
             stringBuilder.Append(
                 string.Concat(
                     new[]
-                        {
-                            MizuStrings.InspectWaterToolStored.Translate().RawText, ":",
-                            (StoredWaterVolumePercent * 100).ToString("F0"), "%"
-                        }));
+                    {
+                        MizuStrings.InspectWaterToolStored.Translate().RawText, ":",
+                        (StoredWaterVolumePercent * 100).ToString("F0"), "%"
+                    }));
 
             if (DebugSettings.godMode)
             {
@@ -65,7 +65,7 @@ namespace MizuMod
             }
 
             stringBuilder.Append(
-                string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")" }));
+                string.Concat(new[] {"(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")"}));
 
             return stringBuilder.ToString();
         }

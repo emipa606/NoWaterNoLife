@@ -14,7 +14,7 @@ namespace MizuMod
         {
         }
 
-        public override void Print(SectionLayer layer, Thing parent)
+        public override void Print(SectionLayer layer, Thing parent, float extraRotation)
         {
             foreach (var current in parent.OccupiedRect())
             {

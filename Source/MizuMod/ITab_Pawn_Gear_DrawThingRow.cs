@@ -52,21 +52,23 @@ namespace MizuMod
 
             // 水アイテムでなかったり、食べられるものは能動的に飲むことはできない
             var comp = thing.TryGetComp<CompWaterSource>();
-            if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item || thing.IsIngestibleFor(selPawn))
+            if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item ||
+                thing.IsIngestibleFor(selPawn))
             {
                 return;
             }
 
             // ツールチップとボタンを追加
             var dbRect = new Rect(dbRight - dbWidth, dbTop, dbWidth, dbHeight);
-            TooltipHandler.TipRegion(dbRect, string.Format(MizuStrings.FloatMenuGetWater.Translate(), thing.LabelNoCount));
+            TooltipHandler.TipRegion(dbRect,
+                string.Format(MizuStrings.FloatMenuGetWater.Translate(), thing.LabelNoCount));
             if (!Widgets.ButtonImage(dbRect, MizuGraphics.Texture_ButtonIngest))
             {
                 return;
             }
 
             SoundDefOf.Tick_High.PlayOneShotOnCamera();
-            var job = new Job(MizuDef.Job_DrinkWater, thing) { count = MizuUtility.WillGetStackCountOf(selPawn, thing) };
+            var job = new Job(MizuDef.Job_DrinkWater, thing) {count = MizuUtility.WillGetStackCountOf(selPawn, thing)};
             selPawn.jobs.TryTakeOrderedJob(job, JobTag.SatisfyingNeeds);
         }
     }

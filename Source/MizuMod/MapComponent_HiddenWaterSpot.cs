@@ -32,9 +32,19 @@ namespace MizuMod
             lastUpdateTick = Find.TickManager.TicksGame;
         }
 
+        public HashSet<IntVec3> SpotCells => spotCells;
+
         public Color Color => Color.white;
 
-        public HashSet<IntVec3> SpotCells => spotCells;
+        public bool GetCellBool(int index)
+        {
+            return spotGrid[index] != 0;
+        }
+
+        public Color GetCellExtraColor(int index)
+        {
+            return spotGrid[index] != 0 ? new Color(1f, 0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f, 0f);
+        }
 
         public void CreateWaterSpot(int blockSizeX, int blockSizeZ, int allSpotNum)
         {
@@ -44,8 +54,8 @@ namespace MizuMod
             this.blockSizeZ = blockSizeZ;
             this.allSpotNum = allSpotNum;
 
-            var blockNumX = Mathf.CeilToInt((float)map.Size.x / 2 / blockSizeX);
-            var blockNumZ = Mathf.CeilToInt((float)map.Size.z / 2 / blockSizeZ);
+            var blockNumX = Mathf.CeilToInt((float) map.Size.x / 2 / blockSizeX);
+            var blockNumZ = Mathf.CeilToInt((float) map.Size.z / 2 / blockSizeZ);
             var waterCellMap = new List<IntVec3>[blockNumX * 2, blockNumZ * 2];
             var allWaterNum = 0;
 
@@ -78,7 +88,7 @@ namespace MizuMod
                 {
                     var waterCells = waterCellMap[bx + blockNumX, bz + blockNumZ];
                     var spotNum = Mathf.Min(
-                        Mathf.CeilToInt((float)waterCells.Count / allWaterNum * allSpotNum),
+                        Mathf.CeilToInt((float) waterCells.Count / allWaterNum * allSpotNum),
                         waterCells.Count);
                     var randomCells = waterCells.InRandomOrder().ToList();
                     for (var i = 0; i < spotNum; i++)
@@ -115,16 +125,6 @@ namespace MizuMod
                 MizuDef.GlobalSettings.forDebug.resetHiddenWaterSpotBlockSizeX,
                 MizuDef.GlobalSettings.forDebug.resetHiddenWaterSpotBlockSizeZ,
                 MizuDef.GlobalSettings.forDebug.resetHiddenWaterSpotAllSpotNum);
-        }
-
-        public bool GetCellBool(int index)
-        {
-            return spotGrid[index] != 0;
-        }
-
-        public Color GetCellExtraColor(int index)
-        {
-            return spotGrid[index] != 0 ? new Color(1f, 0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f, 0f);
         }
 
         public override void MapComponentTick()

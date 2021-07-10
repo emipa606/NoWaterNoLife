@@ -110,19 +110,19 @@ namespace MizuMod
             // 周囲8方向で立つことが出来るセルを探す
             var standableAdjacentCells = building.OccupiedRect().ExpandedBy(1).EdgeCells.Where(
                 c =>
+                {
+                    foreach (var t in building.Map.thingGrid.ThingsListAt(c))
                     {
-                        foreach (var t in building.Map.thingGrid.ThingsListAt(c))
+                        // そのセルに、「立つことが出来る」以外の物がある⇒立てないセルはfalse
+                        if (t.def.passability != Traversability.Standable)
                         {
-                            // そのセルに、「立つことが出来る」以外の物がある⇒立てないセルはfalse
-                            if (t.def.passability != Traversability.Standable)
-                            {
-                                return false;
-                            }
+                            return false;
                         }
+                    }
 
-                        // 立てるセルの場合true
-                        return true;
-                    });
+                    // 立てるセルの場合true
+                    return true;
+                });
 
             var adjacentCells = standableAdjacentCells as IntVec3[] ?? standableAdjacentCells.ToArray();
             if (!adjacentCells.Any())
@@ -273,10 +273,10 @@ namespace MizuMod
 
                     // そのリージョンからその物にタッチしに行けるか
                     if (!ReachabilityWithinRegion.ThingFromRegionListerReachable(
-                            thing,
-                            r,
-                            PathEndMode.ClosestTouch,
-                            pawn))
+                        thing,
+                        r,
+                        PathEndMode.ClosestTouch,
+                        pawn))
                     {
                         continue;
                     }
@@ -302,8 +302,8 @@ namespace MizuMod
                 // 二つの物の距離を比べる
                 int comparison(Thing t1, Thing t2)
                 {
-                    var t1dist = (float)(t1.Position - rootCell).LengthHorizontalSquared;
-                    var t2dist = (float)(t2.Position - rootCell).LengthHorizontalSquared;
+                    var t1dist = (float) (t1.Position - rootCell).LengthHorizontalSquared;
+                    var t2dist = (float) (t2.Position - rootCell).LengthHorizontalSquared;
                     return t1dist.CompareTo(t2dist);
                 }
 
@@ -370,7 +370,7 @@ namespace MizuMod
                     var curCount = availableCounts.GetCount(j);
 
                     // レシピ完遂のためにそれが何個必要なのか
-                    var requiredCount = (float)ingredientCount.CountRequiredOfFor(curDef, bill.recipe);
+                    var requiredCount = (float) ingredientCount.CountRequiredOfFor(curDef, bill.recipe);
                     var remainRequiredCount = requiredCount;
 
                     // 利用可能な個数は必要数より少ない
@@ -469,89 +469,89 @@ namespace MizuMod
             switch (ext.recipeType)
             {
                 case DefExtension_WaterRecipe.RecipeType.DrawFromTerrain:
-                    {
-                        // 水質チェック
-                        return ext.needWaterTerrainTypes != null && ext.needWaterTerrainTypes.Contains(
-                                   thing.Map.terrainGrid.TerrainAt(thing.Position).GetWaterTerrainType());
-                    }
+                {
+                    // 水質チェック
+                    return ext.needWaterTerrainTypes != null && ext.needWaterTerrainTypes.Contains(
+                        thing.Map.terrainGrid.TerrainAt(thing.Position).GetWaterTerrainType());
+                }
 
                 case DefExtension_WaterRecipe.RecipeType.DrawFromWaterPool:
+                {
+                    var waterGrid = thing.Map.GetComponent<MapComponent_ShallowWaterGrid>();
+                    var pool = waterGrid.GetPool(thing.Map.cellIndices.CellToIndex(thing.Position));
+
+                    // 水質条件チェック
+                    if (!ext.needWaterTypes.Contains(pool.WaterType))
                     {
-                        var waterGrid = thing.Map.GetComponent<MapComponent_ShallowWaterGrid>();
-                        var pool = waterGrid.GetPool(thing.Map.cellIndices.CellToIndex(thing.Position));
-
-                        // 水質条件チェック
-                        if (!ext.needWaterTypes.Contains(pool.WaterType))
-                        {
-                            return false;
-                        }
-
-                        // 入力水道網の水の種類から水アイテムの種類を決定
-                        var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(pool.WaterType);
-
-                        // 水アイテムの水源情報を得る
-                        var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
-                        if (compprop == null)
-                        {
-                            return false;
-                        }
-
-                        // 水量チェック
-                        if (pool.CurrentWaterVolume < compprop.waterVolume * ext.getItemCount)
-                        {
-                            return false;
-                        }
-
-                        return true;
+                        return false;
                     }
+
+                    // 入力水道網の水の種類から水アイテムの種類を決定
+                    var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(pool.WaterType);
+
+                    // 水アイテムの水源情報を得る
+                    var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
+                    if (compprop == null)
+                    {
+                        return false;
+                    }
+
+                    // 水量チェック
+                    if (pool.CurrentWaterVolume < compprop.waterVolume * ext.getItemCount)
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
 
                 case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
+                {
+                    if (!(giver is Building_WaterNetWorkTable workTable) || workTable.InputWaterNet == null)
                     {
-                        if (!(giver is Building_WaterNetWorkTable workTable) || workTable.InputWaterNet == null)
-                        {
-                            return false;
-                        }
-
-                        WaterType targetWaterType;
-                        float targetWaterVolume;
-
-                        if (ext.canDrawFromFaucet)
-                        {
-                            // 蛇口から汲むレシピ
-                            targetWaterType = workTable.InputWaterNet.StoredWaterTypeForFaucet;
-                            targetWaterVolume = workTable.InputWaterNet.StoredWaterVolumeForFaucet;
-                        }
-                        else
-                        {
-                            // 自身から汲むレシピ(水箱など)
-                            targetWaterType = workTable.TankComp.StoredWaterType;
-                            targetWaterVolume = workTable.TankComp.StoredWaterVolume;
-                        }
-
-                        // 水質チェック
-                        if (!ext.needWaterTypes.Contains(targetWaterType))
-                        {
-                            return false;
-                        }
-
-                        // 入力水道網の水の種類から水アイテムの種類を決定
-                        var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);
-
-                        // 水アイテムの水源情報を得る
-                        var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
-                        if (compprop == null)
-                        {
-                            return false;
-                        }
-
-                        // 水量チェック
-                        if (targetWaterVolume < compprop.waterVolume * ext.getItemCount)
-                        {
-                            return false;
-                        }
-
-                        return true;
+                        return false;
                     }
+
+                    WaterType targetWaterType;
+                    float targetWaterVolume;
+
+                    if (ext.canDrawFromFaucet)
+                    {
+                        // 蛇口から汲むレシピ
+                        targetWaterType = workTable.InputWaterNet.StoredWaterTypeForFaucet;
+                        targetWaterVolume = workTable.InputWaterNet.StoredWaterVolumeForFaucet;
+                    }
+                    else
+                    {
+                        // 自身から汲むレシピ(水箱など)
+                        targetWaterType = workTable.TankComp.StoredWaterType;
+                        targetWaterVolume = workTable.TankComp.StoredWaterVolume;
+                    }
+
+                    // 水質チェック
+                    if (!ext.needWaterTypes.Contains(targetWaterType))
+                    {
+                        return false;
+                    }
+
+                    // 入力水道網の水の種類から水アイテムの種類を決定
+                    var waterThingDef = MizuUtility.GetWaterThingDefFromWaterType(targetWaterType);
+
+                    // 水アイテムの水源情報を得る
+                    var compprop = waterThingDef?.GetCompProperties<CompProperties_WaterSource>();
+                    if (compprop == null)
+                    {
+                        return false;
+                    }
+
+                    // 水量チェック
+                    if (targetWaterVolume < compprop.waterVolume * ext.getItemCount)
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
 
                 case DefExtension_WaterRecipe.RecipeType.PourWater:
                     return true;
@@ -587,29 +587,29 @@ namespace MizuMod
                 case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
                     return true;
                 case DefExtension_WaterRecipe.RecipeType.PourWater:
+                {
+                    if (!(thing is Building_WaterNetWorkTable building))
                     {
-                        if (!(thing is Building_WaterNetWorkTable building))
-                        {
-                            return false;
-                        }
-
-                        var totalWaterVolume = 0f;
-                        foreach (var ta in chosen)
-                        {
-                            var sourceComp = ta.Thing.TryGetComp<CompWaterSource>();
-                            if (sourceComp != null)
-                            {
-                                totalWaterVolume += sourceComp.WaterVolume * ta.Count;
-                            }
-                        }
-
-                        if (GetTotalAmountCanAccept(building) < totalWaterVolume)
-                        {
-                            return false;
-                        }
-
-                        return true;
+                        return false;
                     }
+
+                    var totalWaterVolume = 0f;
+                    foreach (var ta in chosen)
+                    {
+                        var sourceComp = ta.Thing.TryGetComp<CompWaterSource>();
+                        if (sourceComp != null)
+                        {
+                            totalWaterVolume += sourceComp.WaterVolume * ta.Count;
+                        }
+                    }
+
+                    if (GetTotalAmountCanAccept(building) < totalWaterVolume)
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
 
                 default:
                     Log.Error("recipeType is Undefined");
@@ -658,7 +658,7 @@ namespace MizuMod
                 }
 
                 // 材料はあるか
-                var isFoundIngredients = TryFindBestBillIngredients(bill, pawn, (Thing)giver, chosenIngThings);
+                var isFoundIngredients = TryFindBestBillIngredients(bill, pawn, (Thing) giver, chosenIngThings);
 
                 // 消費する水はあるか
                 var isFoundWater = IsFoundWater(giver, bill.recipe.GetModExtension<DefExtension_WaterRecipe>());

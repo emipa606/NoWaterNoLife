@@ -8,7 +8,7 @@ namespace MizuMod
 
         private int DestroyTicks => Props.destroyTicks;
 
-        private CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime)props;
+        private CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime) props;
 
         public override void CompTick()
         {

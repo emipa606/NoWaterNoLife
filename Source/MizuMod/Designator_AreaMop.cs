@@ -29,13 +29,12 @@ namespace MizuMod
                 return false;
             }
 
-            var flag = Map.areaManager.Mop()[c];
             if (mode == DesignateMode.Add)
             {
-                return !flag;
+                return !Map.areaManager.Mop()[c];
             }
 
-            return flag;
+            return Map.areaManager.Mop()[c];
         }
 
         public override void DesignateSingleCell(IntVec3 c)

@@ -4,6 +4,15 @@ namespace MizuMod
 {
     public class CompProperties_WaterNetOutput : CompProperties_WaterNet
     {
+        public enum OutputWaterFlowType : byte
+        {
+            Undefined = 0,
+
+            Constant,
+
+            Any
+        }
+
         public WaterType forceOutputWaterType = WaterType.Undefined;
 
         public float maxOutputWaterFlow = 0.0f;
@@ -18,15 +27,6 @@ namespace MizuMod
         public CompProperties_WaterNetOutput(Type compClass)
             : base(compClass)
         {
-        }
-
-        public enum OutputWaterFlowType : byte
-        {
-            Undefined = 0,
-
-            Constant,
-
-            Any
         }
     }
 }

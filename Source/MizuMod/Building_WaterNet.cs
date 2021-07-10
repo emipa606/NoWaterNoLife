@@ -155,6 +155,24 @@ namespace MizuMod
             }
         }
 
+        public virtual bool IsAdjacentToCardinalOrInside(IBuilding_WaterNet other)
+        {
+            return GenAdj.IsAdjacentToCardinalOrInside(OccupiedRect(), other.OccupiedRect());
+        }
+
+        public virtual CellRect OccupiedRect()
+        {
+            return GenAdj.OccupiedRect(this);
+        }
+
+        public virtual void PrintForGrid(SectionLayer sectionLayer)
+        {
+            if (IsActivatedForWaterNet)
+            {
+                MizuGraphics.LinkedWaterNetOverlay.Print(sectionLayer, this, 0f);
+            }
+        }
+
         public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
         {
             WaterNetManager.RemoveThing(this);
@@ -212,24 +230,6 @@ namespace MizuMod
             }
 
             return stringBuilder.ToString();
-        }
-
-        public virtual bool IsAdjacentToCardinalOrInside(IBuilding_WaterNet other)
-        {
-            return GenAdj.IsAdjacentToCardinalOrInside(OccupiedRect(), other.OccupiedRect());
-        }
-
-        public virtual CellRect OccupiedRect()
-        {
-            return GenAdj.OccupiedRect(this);
-        }
-
-        public virtual void PrintForGrid(SectionLayer sectionLayer)
-        {
-            if (IsActivatedForWaterNet)
-            {
-                MizuGraphics.LinkedWaterNetOverlay.Print(sectionLayer, this);
-            }
         }
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)

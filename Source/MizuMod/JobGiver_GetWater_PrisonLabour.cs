@@ -60,9 +60,9 @@ namespace MizuMod
                 if (thing.CanDrinkWater())
                 {
                     return new Job(MizuDef.Job_DrinkWater, thing)
-                               {
-                                   count = MizuUtility.WillGetStackCountOf(pawn, thing)
-                               };
+                    {
+                        count = MizuUtility.WillGetStackCountOf(pawn, thing)
+                    };
                 }
 
                 if (thing is IBuilding_DrinkWater)
@@ -75,7 +75,7 @@ namespace MizuMod
             // 人間、家畜、野生の動物全て
             if (MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot))
             {
-                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 };
+                return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) {count = 1};
             }
 
             // 水を発見できず

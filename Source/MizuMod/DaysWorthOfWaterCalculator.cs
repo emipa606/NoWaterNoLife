@@ -32,7 +32,7 @@ namespace MizuMod
                 {
                     for (var j = 0; j < transferableOneWay.CountToTransfer; j++)
                     {
-                        tmpPawns.Add((Pawn)transferableOneWay.things[j]);
+                        tmpPawns.Add((Pawn) transferableOneWay.things[j]);
                     }
                 }
                 else
@@ -165,10 +165,10 @@ namespace MizuMod
             }
 
             var num = 0f;
-            bool flag;
+            bool b;
             do
             {
-                flag = false;
+                b = false;
                 for (var m = 0; m < pawns.Count; m++)
                 {
                     var pawn = pawns[m];
@@ -211,17 +211,15 @@ namespace MizuMod
 
                         var num3 = Mathf.Min(compprop.waterAmount, need_water.WaterAmountBetweenThirstyAndHealthy);
                         var num4 = num3 / need_water.WaterAmountBetweenThirstyAndHealthy
-                                   * need_water.TicksUntilThirstyWhenHealthy / 60000f;
+                            * need_water.TicksUntilThirstyWhenHealthy / 60000f;
                         tmpDaysWorthOfFoodPerPawn[m] = tmpDaysWorthOfFoodPerPawn[m] + num4;
                         tmpWater[num2] = tmpWater[num2].WithCount(tmpWater[num2].Count - 1);
-                        flag = true;
-                    }
-                    while (tmpDaysWorthOfFoodPerPawn[m] < num);
+                        b = true;
+                    } while (tmpDaysWorthOfFoodPerPawn[m] < num);
 
                     num = Mathf.Max(num, tmpDaysWorthOfFoodPerPawn[m]);
                 }
-            }
-            while (flag);
+            } while (b);
 
             var num6 = 1000f;
             for (var n = 0; n < pawns.Count; n++)

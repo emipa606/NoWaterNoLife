@@ -25,7 +25,7 @@ namespace MizuMod
 
         public void Add(int index, ushort val)
         {
-            Set(index, (ushort)(Get(index) + val));
+            Set(index, (ushort) (Get(index) + val));
         }
 
         public override void ExposeData()

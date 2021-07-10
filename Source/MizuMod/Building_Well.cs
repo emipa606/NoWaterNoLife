@@ -95,7 +95,7 @@ namespace MizuMod
 
             // 手が使用可能で、地下水の水量が十分にある
             return p.CanManipulate() && pool.CurrentWaterVolume
-                   >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
+                >= p.needs.Water().WaterWanted * Need_Water.DrinkFromBuildingMargin;
         }
 
         public void DrawWater(float amount)

@@ -7,8 +7,6 @@ namespace MizuMod
 {
     public class UndergroundWaterPool : IExposable
     {
-        public int ID;
-
         private readonly MapComponent_WaterGrid waterGrid;
 
         private float baseRegenRate;
@@ -16,6 +14,7 @@ namespace MizuMod
         private float currentWaterVolume;
 
         private bool debugFlag = true;
+        public int ID;
 
         private int lastMaterialIndex = UndergroundWaterMaterials.MaterialCount;
 
@@ -143,7 +142,7 @@ namespace MizuMod
             {
                 if (idGrid[i] == p.ID)
                 {
-                    idGrid[i] = (ushort)ID;
+                    idGrid[i] = (ushort) ID;
                 }
             }
         }

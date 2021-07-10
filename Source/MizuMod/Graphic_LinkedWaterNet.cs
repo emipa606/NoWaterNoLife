@@ -18,12 +18,12 @@ namespace MizuMod
         public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
         {
             return new Graphic_LinkedWaterNet(subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
-                       {
-                           data = data
-                       };
+            {
+                data = data
+            };
         }
 
-        public override void Print(SectionLayer layer, Thing parent)
+        public override void Print(SectionLayer layer, Thing parent, float extraRotation)
         {
             Printer_Plane.PrintPlane(
                 layer,
@@ -70,6 +70,7 @@ namespace MizuMod
             {
                 return c.InBounds(parent.Map);
             }
+
             {
                 foreach (var t in thing.WaterNetManager.UnNetThings)
                 {

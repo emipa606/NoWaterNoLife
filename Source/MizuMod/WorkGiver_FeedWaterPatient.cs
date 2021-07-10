@@ -74,11 +74,11 @@ namespace MizuMod
 
             // 水を与えるジョブを発行
             return new Job(MizuDef.Job_FeedWaterPatient)
-                       {
-                           targetA = waterThing,
-                           targetB = patient,
-                           count = MizuUtility.WillGetStackCountOf(patient, waterThing)
-                       };
+            {
+                targetA = waterThing,
+                targetB = patient,
+                count = MizuUtility.WillGetStackCountOf(patient, waterThing)
+            };
         }
     }
 }

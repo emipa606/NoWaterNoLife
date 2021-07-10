@@ -54,7 +54,7 @@ namespace MizuMod
 
         public virtual float MaxInputWaterFlow => Props.maxInputWaterFlow;
 
-        public new CompProperties_WaterNetInput Props => (CompProperties_WaterNetInput)props;
+        public new CompProperties_WaterNetInput Props => (CompProperties_WaterNetInput) props;
 
         public virtual int RoofDistance => Props.roofDistance;
 
@@ -75,7 +75,7 @@ namespace MizuMod
             stringBuilder.Append(
                 MizuStrings.InspectWaterFlowInput.Translate() + ": " + InputWaterFlow.ToString("F2") + " L/day");
             stringBuilder.Append(
-                string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(InputWaterType), ")" }));
+                string.Concat(new[] {"(", MizuStrings.GetInspectWaterTypeString(InputWaterType), ")"}));
 
             return stringBuilder.ToString();
         }
