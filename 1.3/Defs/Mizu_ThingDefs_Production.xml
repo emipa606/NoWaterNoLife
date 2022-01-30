@@ -792,6 +792,53 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="Mizu_WaterFilterBase">
+    <defName>Mizu_DirtyWaterFilterIndustrial</defName>
+    <label>Industrial dirty water filter</label>
+    <description>Convert raw/mud/sea water to normal water in waterworks. Need electrical power. 10x effective.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFilter_Dirty_Industrial</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>500</MaxHitPoints>
+      <WorkToBuild>350</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-6</Beauty>
+    </statBases>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>150</maxInputWaterFlow>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <acceptWaterTypes>
+          <li>RawWater</li>
+          <li>MudWater</li>
+          <li>SeaWater</li>
+        </acceptWaterTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>150</maxOutputWaterFlow>
+        <outputWaterFlowType>Any</outputWaterFlowType>
+        <forceOutputWaterType>NormalWater</forceOutputWaterType>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>250</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterFilterBase">
     <defName>Mizu_ClearWaterFilter</defName>
     <label>Clear water filter</label>
     <description>Convert normal water to clear water in waterworks. Need electrical power.</description>
@@ -823,6 +870,51 @@
       <li Class="CompProperties_Power">
         <compClass>CompPowerTrader</compClass>
         <basePowerConsumption>25</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterFilterBase">
+    <defName>Mizu_ClearWaterFilterIndustrial</defName>
+    <label>Industrial clear water filter</label>
+    <description>Convert normal water to clear water in waterworks. Need electrical power. 10x effective.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFilter_Clear_Industrial</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>500</MaxHitPoints>
+      <WorkToBuild>350</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-6</Beauty>
+    </statBases>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>150</maxInputWaterFlow>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <acceptWaterTypes>
+          <li>NormalWater</li>
+        </acceptWaterTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>150</maxOutputWaterFlow>
+        <outputWaterFlowType>Any</outputWaterFlowType>
+        <forceOutputWaterType>ClearWater</forceOutputWaterType>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>250</basePowerConsumption>
       </li>
       <li Class="CompProperties_Flickable" />
       <li Class="CompProperties_Breakdownable" />

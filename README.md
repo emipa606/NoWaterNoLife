@@ -1,6 +1,6 @@
 # NoWaterNoLife
 
-![Image](https://i.imgur.com/WAEzk68.png)
+![Image](https://i.imgur.com/buuPQel.png)
 
 Update of himesama, schooss mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1541840184
@@ -13,26 +13,17 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2024595829
 - Added polish translation, thanks BLyy!
 - This info was a part of the original mod but was removed by the previous mod author for some reason: ”This mod should NOT be applied to saved games, it is best to start with a new game. This mod cannot be removed form a savegame.”
 
-![Image](https://i.imgur.com/7Gzt3Rg.png)
+![Image](https://i.imgur.com/pufA0kM.png)
 
-
-[table]
-    [tr]
-        [td]https://invite.gg/Mlie]![Image](https://i.imgur.com/zdzzBrc.png)
-[/td]
-        [td]https://github.com/emipa606/NoWaterNoLife]![Image](https://i.imgur.com/kTkpTOE.png)
-[/td]
-    [/tr]
-[/table]
 	
-![Image](https://i.imgur.com/NOW7jU1.png)
+![Image](https://i.imgur.com/Z4GOv8H.png)
 
 for RimWorld 1.1
 mod version 1.8.1
 
 Description
 
-This mod adds &quot;Need Water&quot; to pawns. There are various means to get and transport water, such as: wells, pumps, water pipes, faucets, water cleaners, and more.
+This mod adds "Need Water" to pawns. There are various means to get and transport water, such as: wells, pumps, water pipes, faucets, water cleaners, and more.
 This mod should NOT be applied to saved games.
 
 License
@@ -66,9 +57,9 @@ Please refer to the 1.0 mod for FAQs and other information:
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1541840184
 
-This workshop post was intended to get a working 1.1 version of this mod. Eventually my goal will be to merge this back into schoos76&apos;s workshop post and github repository as I&apos;m not a skilled game programmer.
+This workshop post was intended to get a working 1.1 version of this mod. Eventually my goal will be to merge this back into schoos76's workshop post and github repository as I'm not a skilled game programmer.
 
-![Image](https://i.imgur.com/Rs6T6cr.png)
+![Image](https://i.imgur.com/PwoNOj4.png)
 
 
 

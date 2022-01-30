@@ -1,5 +1,8 @@
 # Changelog for NoWaterNoLife
 
+1.3.1 - Added industrial water-filters for performance-gain
+
+
 1.0.9.0 - Mod updated for 1.3 and passed autotests
 
 
