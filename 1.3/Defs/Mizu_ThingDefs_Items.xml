@@ -10,6 +10,7 @@
       <MaxHitPoints>50</MaxHitPoints>
       <Beauty>-1</Beauty>
       <Mass>0.5</Mass>
+      <Nutrition>0.01</Nutrition>
     </statBases>
     <altitudeLayer>Item</altitudeLayer>
     <stackLimit>25</stackLimit>
@@ -22,6 +23,10 @@
     <comps>
       <li Class="CompProperties_Forbiddable" />
     </comps>
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Processed</foodType>
+    </ingestible>
     <pathCost>15</pathCost>
     <resourceReadoutPriority>Last</resourceReadoutPriority>
     <drawGUIOverlay>true</drawGUIOverlay>

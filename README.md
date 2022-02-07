@@ -11,6 +11,8 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2024595829
 - Updated VGP-patches via old Github RP from redbrick
 - Added a patch for Alpha Animals for non-drinking animals
 - Added polish translation, thanks BLyy!
+- Added industrial versions of the two water-filters with 10x the throughput
+
 - This info was a part of the original mod but was removed by the previous mod author for some reason: ”This mod should NOT be applied to saved games, it is best to start with a new game. This mod cannot be removed form a savegame.”
 
 ![Image](https://i.imgur.com/pufA0kM.png)
