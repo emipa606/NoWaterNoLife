@@ -1,5 +1,8 @@
 # Changelog for NoWaterNoLife
 
+1.3.4 - More unique defname for the HugLib-news base-definition, to avoid conflicts with other mods.
+
+
 1.3.3 - Reverted the water change. Apparently having a nutritional value stops it from removing thirst need.
 
 
