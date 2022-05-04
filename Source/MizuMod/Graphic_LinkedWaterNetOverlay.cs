@@ -1,73 +1,72 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class Graphic_LinkedWaterNetOverlay : Graphic_Linked
 {
-    public class Graphic_LinkedWaterNetOverlay : Graphic_Linked
+    public Graphic_LinkedWaterNetOverlay()
     {
-        public Graphic_LinkedWaterNetOverlay()
+    }
+
+    public Graphic_LinkedWaterNetOverlay(Graphic subGraphic)
+        : base(subGraphic)
+    {
+    }
+
+    public override void Print(SectionLayer layer, Thing parent, float extraRotation)
+    {
+        foreach (var current in parent.OccupiedRect())
         {
+            var vector = current.ToVector3ShiftedWithAltitude(AltitudeLayer.MapDataOverlay);
+            Printer_Plane.PrintPlane(layer, vector, Vector2.one, LinkedDrawMatFrom(parent, current));
+        }
+    }
+
+    public override bool ShouldLinkWith(IntVec3 c, Thing parent)
+    {
+        var isFound = false;
+        if (!(parent is IBuilding_WaterNet thing))
+        {
+            return false;
         }
 
-        public Graphic_LinkedWaterNetOverlay(Graphic subGraphic)
-            : base(subGraphic)
+        if (parent.OccupiedRect().Contains(c))
         {
+            return c.InBounds(parent.Map);
         }
 
-        public override void Print(SectionLayer layer, Thing parent, float extraRotation)
+        if (!thing.HasConnector)
         {
-            foreach (var current in parent.OccupiedRect())
-            {
-                var vector = current.ToVector3ShiftedWithAltitude(AltitudeLayer.MapDataOverlay);
-                Printer_Plane.PrintPlane(layer, vector, Vector2.one, LinkedDrawMatFrom(parent, current));
-            }
+            return false;
         }
 
-        public override bool ShouldLinkWith(IntVec3 c, Thing parent)
+        foreach (var net in thing.WaterNetManager.Nets)
         {
-            var isFound = false;
-            if (!(parent is IBuilding_WaterNet thing))
+            foreach (var t in net.AllThings)
             {
-                return false;
-            }
-
-            if (parent.OccupiedRect().Contains(c))
-            {
-                return c.InBounds(parent.Map);
-            }
-
-            if (!thing.HasConnector)
-            {
-                return false;
-            }
-
-            foreach (var net in thing.WaterNetManager.Nets)
-            {
-                foreach (var t in net.AllThings)
+                if (t == thing)
                 {
-                    if (t == thing)
-                    {
-                        continue;
-                    }
-
-                    if (!t.HasConnector)
-                    {
-                        continue;
-                    }
-
-                    if (t.IsConnectedOr(thing) && t.OccupiedRect().Contains(c))
-                    {
-                        isFound = true;
-                    }
+                    continue;
                 }
 
-                if (isFound)
+                if (!t.HasConnector)
                 {
-                    break;
+                    continue;
+                }
+
+                if (t.IsConnectedOr(thing) && t.OccupiedRect().Contains(c))
+                {
+                    isFound = true;
                 }
             }
 
-            return c.InBounds(parent.Map) && isFound;
+            if (isFound)
+            {
+                break;
+            }
         }
+
+        return c.InBounds(parent.Map) && isFound;
     }
 }

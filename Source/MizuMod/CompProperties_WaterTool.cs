@@ -2,37 +2,36 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class CompProperties_WaterTool : CompProperties
 {
-    public class CompProperties_WaterTool : CompProperties
+    public enum UseWorkType : byte
     {
-        public enum UseWorkType : byte
-        {
-            Undefined = 0,
+        Undefined = 0,
 
-            Mop,
+        Mop,
 
-            Nurse,
+        Nurse,
 
-            WaterFarm,
+        WaterFarm,
 
-            FightFire
-        }
+        FightFire
+    }
 
-        public float maxWaterVolume = 1f;
+    public float maxWaterVolume = 1f;
 
-        public List<WorkTypeDef> supplyWorkType = new List<WorkTypeDef>();
+    public List<WorkTypeDef> supplyWorkType = new List<WorkTypeDef>();
 
-        public List<UseWorkType> useWorkType = new List<UseWorkType>();
+    public List<UseWorkType> useWorkType = new List<UseWorkType>();
 
-        public CompProperties_WaterTool()
-            : base(typeof(CompWaterTool))
-        {
-        }
+    public CompProperties_WaterTool()
+        : base(typeof(CompWaterTool))
+    {
+    }
 
-        public CompProperties_WaterTool(Type compClass)
-            : base(compClass)
-        {
-        }
+    public CompProperties_WaterTool(Type compClass)
+        : base(compClass)
+    {
     }
 }

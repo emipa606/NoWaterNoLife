@@ -2,277 +2,276 @@
 using UnityEngine;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
 {
-    public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
+    private CellBoolDrawer drawer;
+
+    private int gridUpdates;
+
+    private ushort[] poolIDGrid;
+
+    private List<UndergroundWaterPool> pools = new List<UndergroundWaterPool>();
+
+    protected MapComponent_WaterGrid(Map map)
+        : base(map)
     {
-        private CellBoolDrawer drawer;
+        poolIDGrid = new ushort[map.cellIndices.NumGridCells];
+        drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
+    }
 
-        private int gridUpdates;
+    public Color Color => Color.white;
 
-        private ushort[] poolIDGrid;
+    public bool GetCellBool(int index)
+    {
+        return poolIDGrid[index] != 0;
+    }
 
-        private List<UndergroundWaterPool> pools = new List<UndergroundWaterPool>();
+    public Color GetCellExtraColor(int index)
+    {
+        var pool = pools.Find(p => p.ID == poolIDGrid[index]);
+        return UndergroundWaterMaterials.Mat(
+            Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
+    }
 
-        protected MapComponent_WaterGrid(Map map)
-            : base(map)
+    public void AddWaterPool(UndergroundWaterPool pool, IEnumerable<IntVec3> cells)
+    {
+        var mergePools = new List<UndergroundWaterPool> { pool };
+
+        // 既存の水源と被るセルを調べる
+        foreach (var c in cells)
         {
-            poolIDGrid = new ushort[map.cellIndices.NumGridCells];
-            drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
-        }
-
-        public Color Color => Color.white;
-
-        public bool GetCellBool(int index)
-        {
-            return poolIDGrid[index] != 0;
-        }
-
-        public Color GetCellExtraColor(int index)
-        {
-            var pool = pools.Find(p => p.ID == poolIDGrid[index]);
-            return UndergroundWaterMaterials.Mat(
-                Mathf.RoundToInt(pool.CurrentWaterVolumePercent * UndergroundWaterMaterials.MaterialCount)).color;
-        }
-
-        public void AddWaterPool(UndergroundWaterPool pool, IEnumerable<IntVec3> cells)
-        {
-            var mergePools = new List<UndergroundWaterPool> {pool};
-
-            // 既存の水源と被るセルを調べる
-            foreach (var c in cells)
+            if (GetID(c) == 0)
             {
-                if (GetID(c) == 0)
+                continue;
+            }
+
+            var existPool = pools.Find(p => p.ID == GetID(c));
+            if (existPool == null)
+            {
+                Log.Error("existPool is null");
+            }
+
+            if (!mergePools.Contains(existPool))
+            {
+                mergePools.Add(existPool);
+            }
+        }
+
+        // 上書き覚悟でとりあえず追加
+        pools.Add(pool);
+        foreach (var c in cells)
+        {
+            SetID(c, pool.ID);
+        }
+
+        if (mergePools.Count < 2)
+        {
+            return;
+        }
+
+        {
+            // 最小の水源IDのものに統合する
+
+            // 最小の水源IDを調べる
+            UndergroundWaterPool minPool = null;
+            foreach (var p in mergePools)
+            {
+                if (minPool == null || minPool.ID > p.ID)
+                {
+                    minPool = p;
+                }
+            }
+
+            // 統合される水源から最小IDのものを除き、消滅予定水源リストに変換
+            mergePools.Remove(minPool);
+
+            // 水源リストから消滅予定水源を除去しつつ水量を統合
+            foreach (var p in mergePools)
+            {
+                pools.Remove(p);
+                minPool?.MergeWaterVolume(p);
+            }
+
+            // 全セルを調べ、消滅予定水源IDの場所を最小IDに変更
+            for (var i = 0; i < poolIDGrid.Length; i++)
+            {
+                // Log.Message("i=" + i.ToString());
+                if (mergePools.Find(p => p.ID == GetID(i)) == null)
                 {
                     continue;
                 }
 
-                var existPool = pools.Find(p => p.ID == GetID(c));
-                if (existPool == null)
+                if (minPool != null)
                 {
-                    Log.Error("existPool is null");
-                }
-
-                if (!mergePools.Contains(existPool))
-                {
-                    mergePools.Add(existPool);
+                    SetID(i, minPool.ID);
                 }
             }
+        }
+    }
 
-            // 上書き覚悟でとりあえず追加
-            pools.Add(pool);
-            foreach (var c in cells)
+    public override void ExposeData()
+    {
+        base.ExposeData();
+
+        MapExposeUtility.ExposeUshort(
+            map,
+            c => poolIDGrid[map.cellIndices.CellToIndex(c)],
+            (c, id) => poolIDGrid[map.cellIndices.CellToIndex(c)] = id,
+            "poolIDGrid");
+
+        Scribe_Collections.Look(ref pools, "pools", LookMode.Deep, this);
+    }
+
+    public int GetID(int index)
+    {
+        return poolIDGrid[index];
+    }
+
+    public int GetID(IntVec3 c)
+    {
+        return GetID(map.cellIndices.CellToIndex(c));
+    }
+
+    public UndergroundWaterPool GetPool(int index)
+    {
+        return pools.Find(p => p.ID == poolIDGrid[index]);
+    }
+
+    public override void MapComponentUpdate()
+    {
+        base.MapComponentUpdate();
+
+        drawer.CellBoolDrawerUpdate();
+        var anyPools = false;
+        foreach (var pool in pools)
+        {
+            if (pool == null)
             {
-                SetID(c, pool.ID);
+                continue;
             }
 
-            if (mergePools.Count < 2)
+            pool.Update();
+            anyPools = true;
+        }
+
+        if (anyPools)
+        {
+            return;
+        }
+
+        if (gridUpdates > 20)
+        {
+            if (gridUpdates >= 50)
             {
                 return;
             }
 
+            Log.Message("No water no life: Water grid not found, and failed to regenerate after 20 tries");
+            gridUpdates = 55;
+            return;
+        }
+
+        gridUpdates++;
+        poolIDGrid = new ushort[map.cellIndices.NumGridCells];
+        drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
+        pools = new List<UndergroundWaterPool>();
+        MizuUtility.GenerateUndergroundWaterGrid(map, this);
+    }
+
+    public void MarkForDraw()
+    {
+        if (map == Find.CurrentMap)
+        {
+            drawer.MarkForDraw();
+        }
+    }
+
+    public void ModifyPoolGrid()
+    {
+        var nearVecs = new List<IntVec3>();
+        for (var x = 0; x < map.Size.x; x++)
+        {
+            for (var z = 0; z < map.Size.z; z++)
             {
-                // 最小の水源IDのものに統合する
-
-                // 最小の水源IDを調べる
-                UndergroundWaterPool minPool = null;
-                foreach (var p in mergePools)
-                {
-                    if (minPool == null || minPool.ID > p.ID)
-                    {
-                        minPool = p;
-                    }
-                }
-
-                // 統合される水源から最小IDのものを除き、消滅予定水源リストに変換
-                mergePools.Remove(minPool);
-
-                // 水源リストから消滅予定水源を除去しつつ水量を統合
-                foreach (var p in mergePools)
-                {
-                    pools.Remove(p);
-                    minPool?.MergeWaterVolume(p);
-                }
-
-                // 全セルを調べ、消滅予定水源IDの場所を最小IDに変更
-                for (var i = 0; i < poolIDGrid.Length; i++)
-                {
-                    // Log.Message("i=" + i.ToString());
-                    if (mergePools.Find(p => p.ID == GetID(i)) == null)
-                    {
-                        continue;
-                    }
-
-                    if (minPool != null)
-                    {
-                        SetID(i, minPool.ID);
-                    }
-                }
-            }
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-
-            MapExposeUtility.ExposeUshort(
-                map,
-                c => poolIDGrid[map.cellIndices.CellToIndex(c)],
-                (c, id) => poolIDGrid[map.cellIndices.CellToIndex(c)] = id,
-                "poolIDGrid");
-
-            Scribe_Collections.Look(ref pools, "pools", LookMode.Deep, this);
-        }
-
-        public int GetID(int index)
-        {
-            return poolIDGrid[index];
-        }
-
-        public int GetID(IntVec3 c)
-        {
-            return GetID(map.cellIndices.CellToIndex(c));
-        }
-
-        public UndergroundWaterPool GetPool(int index)
-        {
-            return pools.Find(p => p.ID == poolIDGrid[index]);
-        }
-
-        public override void MapComponentUpdate()
-        {
-            base.MapComponentUpdate();
-
-            drawer.CellBoolDrawerUpdate();
-            var anyPools = false;
-            foreach (var pool in pools)
-            {
-                if (pool == null)
+                var curIndex = map.cellIndices.CellToIndex(new IntVec3(x, 0, z));
+                if (GetID(curIndex) == 0)
                 {
                     continue;
                 }
 
-                pool.Update();
-                anyPools = true;
-            }
-
-            if (anyPools)
-            {
-                return;
-            }
-
-            if (gridUpdates > 20)
-            {
-                if (gridUpdates >= 50)
+                nearVecs.Clear();
+                if (x - 1 >= 0)
                 {
-                    return;
+                    nearVecs.Add(new IntVec3(x - 1, 0, z));
                 }
 
-                Log.Message("No water no life: Water grid not found, and failed to regenerate after 20 tries");
-                gridUpdates = 55;
-                return;
-            }
-
-            gridUpdates++;
-            poolIDGrid = new ushort[map.cellIndices.NumGridCells];
-            drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
-            pools = new List<UndergroundWaterPool>();
-            MizuUtility.GenerateUndergroundWaterGrid(map, this);
-        }
-
-        public void MarkForDraw()
-        {
-            if (map == Find.CurrentMap)
-            {
-                drawer.MarkForDraw();
-            }
-        }
-
-        public void ModifyPoolGrid()
-        {
-            var nearVecs = new List<IntVec3>();
-            for (var x = 0; x < map.Size.x; x++)
-            {
-                for (var z = 0; z < map.Size.z; z++)
+                if (x + 1 < map.Size.x)
                 {
-                    var curIndex = map.cellIndices.CellToIndex(new IntVec3(x, 0, z));
-                    if (GetID(curIndex) == 0)
+                    nearVecs.Add(new IntVec3(x + 1, 0, z));
+                }
+
+                if (z - 1 >= 0)
+                {
+                    nearVecs.Add(new IntVec3(x, 0, z - 1));
+                }
+
+                if (z + 1 < map.Size.z)
+                {
+                    nearVecs.Add(new IntVec3(x, 0, z + 1));
+                }
+
+                foreach (var nearVec in nearVecs)
+                {
+                    var nearIndex = map.cellIndices.CellToIndex(nearVec);
+                    if (GetID(nearIndex) == 0)
                     {
                         continue;
                     }
 
-                    nearVecs.Clear();
-                    if (x - 1 >= 0)
+                    if (GetID(curIndex) == GetID(nearIndex))
                     {
-                        nearVecs.Add(new IntVec3(x - 1, 0, z));
+                        continue;
                     }
 
-                    if (x + 1 < map.Size.x)
+                    var curPool = pools.Find(p => p.ID == GetID(curIndex));
+                    if (curPool == null)
                     {
-                        nearVecs.Add(new IntVec3(x + 1, 0, z));
+                        Log.Error("curPool is null");
                     }
 
-                    if (z - 1 >= 0)
+                    var nearPool = pools.Find(p => p.ID == GetID(nearIndex));
+                    if (nearPool == null)
                     {
-                        nearVecs.Add(new IntVec3(x, 0, z - 1));
+                        Log.Error("nearPool is null");
                     }
 
-                    if (z + 1 < map.Size.z)
-                    {
-                        nearVecs.Add(new IntVec3(x, 0, z + 1));
-                    }
+                    curPool?.MergePool(nearPool, poolIDGrid);
 
-                    foreach (var nearVec in nearVecs)
-                    {
-                        var nearIndex = map.cellIndices.CellToIndex(nearVec);
-                        if (GetID(nearIndex) == 0)
-                        {
-                            continue;
-                        }
+                    pools.Remove(nearPool);
 
-                        if (GetID(curIndex) == GetID(nearIndex))
-                        {
-                            continue;
-                        }
-
-                        var curPool = pools.Find(p => p.ID == GetID(curIndex));
-                        if (curPool == null)
-                        {
-                            Log.Error("curPool is null");
-                        }
-
-                        var nearPool = pools.Find(p => p.ID == GetID(nearIndex));
-                        if (nearPool == null)
-                        {
-                            Log.Error("nearPool is null");
-                        }
-
-                        curPool?.MergePool(nearPool, poolIDGrid);
-
-                        pools.Remove(nearPool);
-
-                        break;
-                    }
+                    break;
                 }
             }
         }
+    }
 
-        public void SetDirty()
+    public void SetDirty()
+    {
+        if (map == Find.CurrentMap)
         {
-            if (map == Find.CurrentMap)
-            {
-                drawer.SetDirty();
-            }
+            drawer.SetDirty();
         }
+    }
 
-        private void SetID(int index, int id)
-        {
-            poolIDGrid[index] = (ushort) id;
-        }
+    private void SetID(int index, int id)
+    {
+        poolIDGrid[index] = (ushort)id;
+    }
 
-        private void SetID(IntVec3 c, int id)
-        {
-            SetID(map.cellIndices.CellToIndex(c), id);
-        }
+    private void SetID(IntVec3 c, int id)
+    {
+        SetID(map.cellIndices.CellToIndex(c), id);
     }
 }

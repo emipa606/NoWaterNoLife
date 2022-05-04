@@ -1,21 +1,20 @@
-﻿namespace MizuMod
+﻿namespace MizuMod;
+
+public enum WaterPreferability : byte
 {
-    public enum WaterPreferability : byte
-    {
-        Undefined = 0,
+    Undefined = 0,
 
-        NeverDrink = 10,
+    NeverDrink = 10,
 
-        TerrainWater = 20,
+    TerrainWater = 20,
 
-        SeaWater = 30,
+    SeaWater = 30,
 
-        MudWater = 40,
+    MudWater = 40,
 
-        RawWater = 50,
+    RawWater = 50,
 
-        NormalWater = 60,
+    NormalWater = 60,
 
-        ClearWater = 70
-    }
+    ClearWater = 70
 }

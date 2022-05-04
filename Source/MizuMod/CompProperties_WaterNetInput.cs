@@ -1,62 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class CompProperties_WaterNetInput : CompProperties_WaterNet
 {
-    public class CompProperties_WaterNetInput : CompProperties_WaterNet
+    public enum InputType : byte
     {
-        public enum InputType : byte
-        {
-            Undefined = 0,
+        Undefined = 0,
 
-            WaterNet,
+        WaterNet,
 
-            Rain,
+        Rain,
 
-            WaterPool,
+        WaterPool,
 
-            Terrain
-        }
+        Terrain
+    }
 
-        public enum InputWaterFlowType : byte
-        {
-            Undefined = 0,
+    public enum InputWaterFlowType : byte
+    {
+        Undefined = 0,
 
-            Constant,
+        Constant,
 
-            Any
-        }
+        Any
+    }
 
-        public List<WaterType> acceptWaterTypes = new List<WaterType>
-        {
-            WaterType.ClearWater,
-            WaterType.NormalWater,
-            WaterType.RawWater,
-            WaterType.MudWater,
-            WaterType.SeaWater
-        };
+    public List<WaterType> acceptWaterTypes = new List<WaterType>
+    {
+        WaterType.ClearWater,
+        WaterType.NormalWater,
+        WaterType.RawWater,
+        WaterType.MudWater,
+        WaterType.SeaWater
+    };
 
-        public float baseRainFlow = 1000f;
+    public float baseRainFlow = 1000f;
 
-        // public InputType inputType = InputType.WaterNet;
-        public List<InputType> inputTypes = new List<InputType> {InputType.WaterNet};
+    // public InputType inputType = InputType.WaterNet;
+    public List<InputType> inputTypes = new List<InputType> { InputType.WaterNet };
 
-        public InputWaterFlowType inputWaterFlowType = InputWaterFlowType.Any;
+    public InputWaterFlowType inputWaterFlowType = InputWaterFlowType.Any;
 
-        public float maxInputWaterFlow = float.MaxValue;
+    public float maxInputWaterFlow = float.MaxValue;
 
-        public int roofDistance = 1;
+    public int roofDistance = 1;
 
-        public float roofEfficiency = 0.5f;
+    public float roofEfficiency = 0.5f;
 
-        public CompProperties_WaterNetInput()
-            : base(typeof(CompWaterNetInput))
-        {
-        }
+    public CompProperties_WaterNetInput()
+        : base(typeof(CompWaterNetInput))
+    {
+    }
 
-        public CompProperties_WaterNetInput(Type compClass)
-            : base(compClass)
-        {
-        }
+    public CompProperties_WaterNetInput(Type compClass)
+        : base(compClass)
+    {
     }
 }

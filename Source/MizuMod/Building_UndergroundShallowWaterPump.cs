@@ -1,28 +1,27 @@
 ﻿using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class Building_UndergroundShallowWaterPump : Building_UndergroundWaterPump
 {
-    public class Building_UndergroundShallowWaterPump : Building_UndergroundWaterPump
+    private MapComponent_WaterGrid waterGrid;
+
+    protected override MapComponent_WaterGrid WaterGrid
     {
-        private MapComponent_WaterGrid waterGrid;
-
-        protected override MapComponent_WaterGrid WaterGrid
+        get
         {
-            get
+            if (waterGrid != null)
             {
-                if (waterGrid != null)
-                {
-                    return waterGrid;
-                }
-
-                waterGrid = Map.GetComponent<MapComponent_ShallowWaterGrid>();
-                if (waterGrid == null)
-                {
-                    Log.Error("waterGrid is null");
-                }
-
                 return waterGrid;
             }
+
+            waterGrid = Map.GetComponent<MapComponent_ShallowWaterGrid>();
+            if (waterGrid == null)
+            {
+                Log.Error("waterGrid is null");
+            }
+
+            return waterGrid;
         }
     }
 }

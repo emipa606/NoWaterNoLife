@@ -1,5 +1,8 @@
 # Changelog for NoWaterNoLife
 
+1.3.6 - Wild men should now drink water similar to animals and not die of thirst.
+
+
 1.3.5 - Fixed the VGP-patch for 1.2 and 1.3
 
 

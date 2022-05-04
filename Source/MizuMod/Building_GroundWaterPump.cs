@@ -1,7 +1,6 @@
-﻿namespace MizuMod
+﻿namespace MizuMod;
+
+public class Building_GroundWaterPump : Building_WaterNet
 {
-    public class Building_GroundWaterPump : Building_WaterNet
-    {
-        public override WaterType OutputWaterType => Map.terrainGrid.TerrainAt(Position).ToWaterType();
-    }
+    public override WaterType OutputWaterType => Map.terrainGrid.TerrainAt(Position).ToWaterType();
 }

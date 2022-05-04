@@ -1,9 +1,8 @@
 ﻿using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class GlobalSettingDef : Def
 {
-    public class GlobalSettingDef : Def
-    {
-        public GSForDebug forDebug = new GSForDebug();
-    }
+    public GSForDebug forDebug = new GSForDebug();
 }

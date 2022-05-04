@@ -1,81 +1,80 @@
 ﻿using System.Text;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+// バルブの場合、スイッチON/OFF⇒バルブの開閉(水を通すかどうか)
+public class Building_Valve : Building_WaterNet
 {
-    // バルブの場合、スイッチON/OFF⇒バルブの開閉(水を通すかどうか)
-    public class Building_Valve : Building_WaterNet
+    private bool lastSwitchIsOn = true;
+
+    public override Graphic Graphic
     {
-        private bool lastSwitchIsOn = true;
-
-        public override Graphic Graphic
+        get
         {
-            get
+            if (flickableComp == null)
             {
-                if (flickableComp == null)
-                {
-                    return base.Graphic;
-                }
-
-                return flickableComp.CurrentGraphic;
-            }
-        }
-
-        public override bool HasInputConnector => base.HasInputConnector && SwitchIsOn;
-
-        public override bool HasOutputConnector => base.HasOutputConnector && SwitchIsOn;
-
-        public override bool IsActivatedForWaterNet => base.IsActivatedForWaterNet && SwitchIsOn;
-
-        public override void CreateConnectors()
-        {
-            InputConnectors.Clear();
-            OutputConnectors.Clear();
-
-            InputConnectors.Add(Position + Rotation.FacingCell);
-            InputConnectors.Add(Position + (Rotation.FacingCell * -1));
-
-            OutputConnectors.Add(Position + Rotation.FacingCell);
-            OutputConnectors.Add(Position + (Rotation.FacingCell * -1));
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look(ref lastSwitchIsOn, "lastSwitchIsOn");
-        }
-
-        public override void Tick()
-        {
-            base.Tick();
-
-            if (lastSwitchIsOn == SwitchIsOn)
-            {
-                return;
+                return base.Graphic;
             }
 
-            lastSwitchIsOn = SwitchIsOn;
-            WaterNetManager.UpdateWaterNets();
+            return flickableComp.CurrentGraphic;
+        }
+    }
+
+    public override bool HasInputConnector => base.HasInputConnector && SwitchIsOn;
+
+    public override bool HasOutputConnector => base.HasOutputConnector && SwitchIsOn;
+
+    public override bool IsActivatedForWaterNet => base.IsActivatedForWaterNet && SwitchIsOn;
+
+    public override void CreateConnectors()
+    {
+        InputConnectors.Clear();
+        OutputConnectors.Clear();
+
+        InputConnectors.Add(Position + Rotation.FacingCell);
+        InputConnectors.Add(Position + (Rotation.FacingCell * -1));
+
+        OutputConnectors.Add(Position + Rotation.FacingCell);
+        OutputConnectors.Add(Position + (Rotation.FacingCell * -1));
+    }
+
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Values.Look(ref lastSwitchIsOn, "lastSwitchIsOn");
+    }
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        if (lastSwitchIsOn == SwitchIsOn)
+        {
+            return;
         }
 
-        public override string GetInspectString()
+        lastSwitchIsOn = SwitchIsOn;
+        WaterNetManager.UpdateWaterNets();
+    }
+
+    public override string GetInspectString()
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append(base.GetInspectString());
+
+        if (SwitchIsOn)
         {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append(base.GetInspectString());
-
-            if (SwitchIsOn)
-            {
-                return stringBuilder.ToString();
-            }
-
-            if (stringBuilder.Length > 0)
-            {
-                stringBuilder.AppendLine();
-            }
-
-            stringBuilder.Append(MizuStrings.InspectValveClosed.Translate());
-
             return stringBuilder.ToString();
         }
+
+        if (stringBuilder.Length > 0)
+        {
+            stringBuilder.AppendLine();
+        }
+
+        stringBuilder.Append(MizuStrings.InspectValveClosed.Translate());
+
+        return stringBuilder.ToString();
     }
 }

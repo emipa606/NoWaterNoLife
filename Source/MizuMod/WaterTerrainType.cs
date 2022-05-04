@@ -1,11 +1,10 @@
-﻿namespace MizuMod
+﻿namespace MizuMod;
+
+public enum WaterTerrainType : byte
 {
-    public enum WaterTerrainType : byte
-    {
-        Undefined = 0,
-        NoWater,
-        SeaWater,
-        MudWater,
-        RawWater
-    }
+    Undefined = 0,
+    NoWater,
+    SeaWater,
+    MudWater,
+    RawWater
 }

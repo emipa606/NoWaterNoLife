@@ -1,25 +1,24 @@
 ﻿using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class PlaceWorker_UndergroundShallowWater : PlaceWorker_UndergroundWater
 {
-    public class PlaceWorker_UndergroundShallowWater : PlaceWorker_UndergroundWater
+    private MapComponent_WaterGrid waterGrid;
+
+    public override MapComponent_WaterGrid WaterGrid
     {
-        private MapComponent_WaterGrid waterGrid;
-
-        public override MapComponent_WaterGrid WaterGrid
+        get
         {
-            get
+            if (waterGrid != null)
             {
-                if (waterGrid != null)
-                {
-                    return waterGrid;
-                }
-
-                var visibleMap = Find.CurrentMap;
-                waterGrid = visibleMap.GetComponent<MapComponent_ShallowWaterGrid>();
-
                 return waterGrid;
             }
+
+            var visibleMap = Find.CurrentMap;
+            waterGrid = visibleMap.GetComponent<MapComponent_ShallowWaterGrid>();
+
+            return waterGrid;
         }
     }
 }

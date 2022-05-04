@@ -2,18 +2,17 @@
 using RimWorld;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class WaterTypeDef : Def
 {
-    public class WaterTypeDef : Def
-    {
-        public float foodPoisonChance = 0.0f;
+    public float foodPoisonChance = 0.0f;
 
-        public List<HediffDef> hediffs = null;
+    public List<HediffDef> hediffs = null;
 
-        public List<ThoughtDef> thoughts = null;
+    public List<ThoughtDef> thoughts = null;
 
-        public WaterPreferability waterPreferability = WaterPreferability.Undefined;
+    public WaterPreferability waterPreferability = WaterPreferability.Undefined;
 
-        public WaterType waterType = WaterType.Undefined;
-    }
+    public WaterType waterType = WaterType.Undefined;
 }

@@ -2,64 +2,63 @@
 using UnityEngine;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class Alert_LowWater : Alert
 {
-    public class Alert_LowWater : Alert
+    private const float WaterAmountThresholdPerColonist = 4f;
+
+    public Alert_LowWater()
     {
-        private const float WaterAmountThresholdPerColonist = 4f;
+        defaultLabel = MizuStrings.AlertLowWater.Translate();
+        defaultPriority = AlertPriority.High;
+    }
 
-        public Alert_LowWater()
+    public override TaggedString GetExplanation()
+    {
+        var map = MapWithLowWater();
+        if (map == null)
         {
-            defaultLabel = MizuStrings.AlertLowWater.Translate();
-            defaultPriority = AlertPriority.High;
+            return string.Empty;
         }
 
-        public override TaggedString GetExplanation()
+        var totalWater = map.resourceCounter.TotalWater();
+        var num = map.mapPawns.FreeColonistsSpawnedCount + map.mapPawns.PrisonersOfColonyCount;
+        var num2 = Mathf.FloorToInt(totalWater / num);
+        return string.Format(
+            MizuStrings.AlertLowWaterDesc.Translate(),
+            totalWater.ToString("F0"),
+            num.ToStringCached(),
+            num2.ToStringCached());
+    }
+
+    public override AlertReport GetReport()
+    {
+        if (Find.TickManager.TicksGame < 150000)
         {
-            var map = MapWithLowWater();
-            if (map == null)
+            return false;
+        }
+
+        return MapWithLowWater() != null;
+    }
+
+    private Map MapWithLowWater()
+    {
+        var maps = Find.Maps;
+        foreach (var map in maps)
+        {
+            if (!map.IsPlayerHome)
             {
-                return string.Empty;
+                continue;
             }
 
-            var totalWater = map.resourceCounter.TotalWater();
-            var num = map.mapPawns.FreeColonistsSpawnedCount + map.mapPawns.PrisonersOfColonyCount;
-            var num2 = Mathf.FloorToInt(totalWater / num);
-            return string.Format(
-                MizuStrings.AlertLowWaterDesc.Translate(),
-                totalWater.ToString("F0"),
-                num.ToStringCached(),
-                num2.ToStringCached());
-        }
-
-        public override AlertReport GetReport()
-        {
-            if (Find.TickManager.TicksGame < 150000)
+            var freeColonistsSpawnedCount = map.mapPawns.FreeColonistsSpawnedCount;
+            if (map.resourceCounter.TotalWater() < WaterAmountThresholdPerColonist * freeColonistsSpawnedCount)
             {
-                return false;
+                return map;
             }
-
-            return MapWithLowWater() != null;
         }
 
-        private Map MapWithLowWater()
-        {
-            var maps = Find.Maps;
-            foreach (var map in maps)
-            {
-                if (!map.IsPlayerHome)
-                {
-                    continue;
-                }
-
-                var freeColonistsSpawnedCount = map.mapPawns.FreeColonistsSpawnedCount;
-                if (map.resourceCounter.TotalWater() < WaterAmountThresholdPerColonist * freeColonistsSpawnedCount)
-                {
-                    return map;
-                }
-            }
-
-            return null;
-        }
+        return null;
     }
 }

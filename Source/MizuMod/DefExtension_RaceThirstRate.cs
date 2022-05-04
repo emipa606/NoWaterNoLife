@@ -1,9 +1,8 @@
 ﻿using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class DefExtension_RaceThirstRate : DefModExtension
 {
-    public class DefExtension_RaceThirstRate : DefModExtension
-    {
-        public float baseThirstRate = 1f;
-    }
+    public float baseThirstRate = 1f;
 }

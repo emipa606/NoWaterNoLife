@@ -1,15 +1,14 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod
+namespace MizuMod;
+
+[HarmonyPatch(typeof(Dialog_FormCaravan))]
+[HarmonyPatch("CountToTransferChanged")]
+internal class Dialog_FormCaravan_CountToTransferChanged
 {
-    [HarmonyPatch(typeof(Dialog_FormCaravan))]
-    [HarmonyPatch("CountToTransferChanged")]
-    internal class Dialog_FormCaravan_CountToTransferChanged
+    private static void Postfix()
     {
-        private static void Postfix()
-        {
-            MizuCaravanUtility.daysWorthOfWaterDirty = true;
-        }
+        MizuCaravanUtility.daysWorthOfWaterDirty = true;
     }
 }

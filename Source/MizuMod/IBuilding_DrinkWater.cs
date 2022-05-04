@@ -1,16 +1,15 @@
 ﻿using Verse;
 
-namespace MizuMod
-{
-    public interface IBuilding_DrinkWater
-    {
-        WaterType WaterType { get; }
-        float WaterVolume { get; }
-        bool IsActivated { get; }
-        bool IsEmpty { get; }
+namespace MizuMod;
 
-        bool CanDrinkFor(Pawn p);
-        bool CanDrawFor(Pawn p);
-        void DrawWater(float amount);
-    }
+public interface IBuilding_DrinkWater
+{
+    WaterType WaterType { get; }
+    float WaterVolume { get; }
+    bool IsActivated { get; }
+    bool IsEmpty { get; }
+
+    bool CanDrinkFor(Pawn p);
+    bool CanDrawFor(Pawn p);
+    void DrawWater(float amount);
 }

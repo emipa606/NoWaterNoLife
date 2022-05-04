@@ -1,11 +1,10 @@
 ﻿using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class MapComponent_ShallowWaterGrid : MapComponent_WaterGrid
 {
-    public class MapComponent_ShallowWaterGrid : MapComponent_WaterGrid
+    public MapComponent_ShallowWaterGrid(Map map) : base(map)
     {
-        public MapComponent_ShallowWaterGrid(Map map) : base(map)
-        {
-        }
     }
 }

@@ -1,45 +1,44 @@
 ﻿using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class CompDestroyByTime : ThingComp
 {
-    public class CompDestroyByTime : ThingComp
+    private int elapsedTicks;
+
+    private int DestroyTicks => Props.destroyTicks;
+
+    private CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime)props;
+
+    public override void CompTick()
     {
-        private int elapsedTicks;
+        elapsedTicks += 1;
+        CheckTick();
+    }
 
-        private int DestroyTicks => Props.destroyTicks;
+    public override void CompTickRare()
+    {
+        elapsedTicks += 250;
+        CheckTick();
+    }
 
-        private CompProperties_DestroyByTime Props => (CompProperties_DestroyByTime) props;
+    public override void PostExposeData()
+    {
+        base.PostExposeData();
+        Scribe_Values.Look(ref elapsedTicks, "elapsedTicks");
+    }
 
-        public override void CompTick()
+    private void CheckTick()
+    {
+        if (elapsedTicks < DestroyTicks)
         {
-            elapsedTicks += 1;
-            CheckTick();
+            return;
         }
 
-        public override void CompTickRare()
-        {
-            elapsedTicks += 250;
-            CheckTick();
-        }
+        var t = parent;
 
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
-            Scribe_Values.Look(ref elapsedTicks, "elapsedTicks");
-        }
+        t.holdingOwner?.Remove(t);
 
-        private void CheckTick()
-        {
-            if (elapsedTicks < DestroyTicks)
-            {
-                return;
-            }
-
-            var t = parent;
-
-            t.holdingOwner?.Remove(t);
-
-            t.Destroy();
-        }
+        t.Destroy();
     }
 }

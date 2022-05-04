@@ -1,49 +1,48 @@
 ﻿using System.Text;
 using Verse;
 
-namespace MizuMod
+namespace MizuMod;
+
+public abstract class Building_UndergroundWaterPump : Building_WaterNet
 {
-    public abstract class Building_UndergroundWaterPump : Building_WaterNet
+    private UndergroundWaterPool pool;
+
+    public override WaterType OutputWaterType => pool.WaterType;
+
+    public override UndergroundWaterPool WaterPool => pool;
+
+    protected abstract MapComponent_WaterGrid WaterGrid { get; }
+
+    public override string GetInspectString()
     {
-        private UndergroundWaterPool pool;
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append(base.GetInspectString());
 
-        public override WaterType OutputWaterType => pool.WaterType;
-
-        public override UndergroundWaterPool WaterPool => pool;
-
-        protected abstract MapComponent_WaterGrid WaterGrid { get; }
-
-        public override string GetInspectString()
+        if (stringBuilder.ToString() != string.Empty)
         {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append(base.GetInspectString());
-
-            if (stringBuilder.ToString() != string.Empty)
-            {
-                stringBuilder.AppendLine();
-            }
-
-            stringBuilder.Append(
-                string.Format(
-                    MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
-                    (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
-            if (DebugSettings.godMode)
-            {
-                stringBuilder.Append($" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
-            }
-
-            return stringBuilder.ToString();
+            stringBuilder.AppendLine();
         }
 
-        public override void SpawnSetup(Map map, bool respawningAfterLoad)
+        stringBuilder.Append(
+            string.Format(
+                MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
+                (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
+        if (DebugSettings.godMode)
         {
-            base.SpawnSetup(map, respawningAfterLoad);
+            stringBuilder.Append($" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
+        }
 
-            pool = WaterGrid.GetPool(map.cellIndices.CellToIndex(Position));
-            if (pool == null)
-            {
-                Log.Error("pool is null");
-            }
+        return stringBuilder.ToString();
+    }
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+
+        pool = WaterGrid.GetPool(map.cellIndices.CellToIndex(Position));
+        if (pool == null)
+        {
+            Log.Error("pool is null");
         }
     }
 }

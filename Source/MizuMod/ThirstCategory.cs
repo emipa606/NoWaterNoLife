@@ -1,11 +1,10 @@
-﻿namespace MizuMod
+﻿namespace MizuMod;
+
+public enum ThirstCategory
 {
-    public enum ThirstCategory
-    {
-        Healthy,
-        SlightlyThirsty,
-        Thirsty,
-        UrgentlyThirsty,
-        Dehydration
-    }
+    Healthy,
+    SlightlyThirsty,
+    Thirsty,
+    UrgentlyThirsty,
+    Dehydration
 }

@@ -1,32 +1,31 @@
 ﻿using System;
 
-namespace MizuMod
+namespace MizuMod;
+
+public class CompProperties_WaterNetOutput : CompProperties_WaterNet
 {
-    public class CompProperties_WaterNetOutput : CompProperties_WaterNet
+    public enum OutputWaterFlowType : byte
     {
-        public enum OutputWaterFlowType : byte
-        {
-            Undefined = 0,
+        Undefined = 0,
 
-            Constant,
+        Constant,
 
-            Any
-        }
+        Any
+    }
 
-        public WaterType forceOutputWaterType = WaterType.Undefined;
+    public WaterType forceOutputWaterType = WaterType.Undefined;
 
-        public float maxOutputWaterFlow = 0.0f;
+    public float maxOutputWaterFlow = 0.0f;
 
-        public OutputWaterFlowType outputWaterFlowType = OutputWaterFlowType.Constant;
+    public OutputWaterFlowType outputWaterFlowType = OutputWaterFlowType.Constant;
 
-        public CompProperties_WaterNetOutput()
-            : base(typeof(CompWaterNetOutput))
-        {
-        }
+    public CompProperties_WaterNetOutput()
+        : base(typeof(CompWaterNetOutput))
+    {
+    }
 
-        public CompProperties_WaterNetOutput(Type compClass)
-            : base(compClass)
-        {
-        }
+    public CompProperties_WaterNetOutput(Type compClass)
+        : base(compClass)
+    {
     }
 }
