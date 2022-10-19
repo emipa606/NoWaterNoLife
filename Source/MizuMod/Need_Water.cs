@@ -107,7 +107,7 @@ public class Need_Water : Need
     private float WaterFallPerTick => WaterFallPerTickAssumingCategory(CurCategory);
 
     public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1F,
-        bool drawArrows = true, bool doTooltip = true, Rect? rectForTooltip = null)
+        bool drawArrows = true, bool doTooltip = true, Rect? rectForTooltip = null, bool drawLabel = true)
     {
         if (threshPercents == null)
         {
@@ -115,7 +115,7 @@ public class Need_Water : Need
                 { PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty };
         }
 
-        base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip, rectForTooltip);
+        base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip, rectForTooltip, drawLabel);
     }
 
     public override void ExposeData()

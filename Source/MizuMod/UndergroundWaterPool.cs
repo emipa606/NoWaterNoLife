@@ -167,11 +167,14 @@ public class UndergroundWaterPool : IExposable
 
         // 屋根チェック
         var unroofedCells = 0;
-        foreach (var c in poolCells)
+        if (poolCells != null)
         {
-            if (!c.Roofed(waterGrid.map))
+            foreach (var c in poolCells)
             {
-                unroofedCells++;
+                if (!c.Roofed(waterGrid.map))
+                {
+                    unroofedCells++;
+                }
             }
         }
 

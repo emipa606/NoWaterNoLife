@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+  <MizuModVersion>Installed mod-version: {0}</MizuModVersion>
   <MizuWaterAmount>Water Amount</MizuWaterAmount>
   <MizuConsumeWater>drink {0}</MizuConsumeWater>
   <MizuNoWater>no water</MizuNoWater>

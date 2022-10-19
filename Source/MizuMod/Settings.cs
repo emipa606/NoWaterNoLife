@@ -63,6 +63,13 @@ public class Settings : ModSettings
             $"{MizuStrings.OptionGrowthRateFactorInWatering.Translate()} ({MinFertilityFactorInWatering:F2} - {MaxFertilityFactorInWatering:F2})");
         listing_standard.TextFieldNumeric(ref fertilityFactorInWatering, ref fertilityFactorInWateringBuffer,
             MinFertilityFactorInWatering, MaxFertilityFactorInWatering);
+        if (MizuModBody.currentVersion != null)
+        {
+            listing_standard.Gap();
+            GUI.contentColor = Color.gray;
+            listing_standard.Label("MizuModVersion".Translate(MizuModBody.currentVersion));
+            GUI.contentColor = Color.white;
+        }
 
         listing_standard.End();
     }

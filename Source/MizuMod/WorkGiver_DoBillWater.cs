@@ -624,15 +624,14 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             }
 
             // 再チェック時間を過ぎていないかチェック(右クリックメニューからの場合は例外)
-            if (Find.TickManager.TicksGame
-                < bill.lastIngredientSearchFailTicks + ReCheckFailedBillTicksRange.RandomInRange
-                && FloatMenuMakerMap.makingFor != pawn)
+            if (Find.TickManager.TicksGame < bill.nextTickToSearchForIngredients && FloatMenuMakerMap.makingFor != pawn)
             {
                 continue;
             }
 
             // チェック時間更新
-            bill.lastIngredientSearchFailTicks = 0;
+            bill.nextTickToSearchForIngredients =
+                Find.TickManager.TicksGame + ReCheckFailedBillTicksRange.RandomInRange;
 
             // 今それをする必要があるか
             if (!bill.ShouldDoNow())
@@ -673,7 +672,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             if (FloatMenuMakerMap.makingFor != pawn)
             {
                 // 右クリックメニューからでなく、ジョブを開始できなかったらチェック時間を更新
-                bill.lastIngredientSearchFailTicks = Find.TickManager.TicksGame;
+                bill.nextTickToSearchForIngredients = Find.TickManager.TicksGame + 1;
             }
             else
             {

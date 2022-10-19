@@ -94,12 +94,12 @@ public class Building_SprinklerGrowing : Building_WaterNet
         if (compSchedule.Allowed)
         {
             // 稼働中の消費電力
-            compPowerTrader.PowerOutput = -compPowerTrader.Props.basePowerConsumption;
+            compPowerTrader.PowerOutput = -compPowerTrader.Props.PowerConsumption;
         }
         else
         {
             // 非稼働時の消費電力
-            compPowerTrader.PowerOutput = -compPowerTrader.Props.basePowerConsumption * 0.1f;
+            compPowerTrader.PowerOutput = -compPowerTrader.Props.PowerConsumption * 0.1f;
         }
     }
 }

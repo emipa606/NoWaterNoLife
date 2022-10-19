@@ -1,0 +1,1044 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ThingDef Name="Mizu_BuildingBase" Abstract="True">
+    <category>Building</category>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <selectable>true</selectable>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <designationCategory>Mizu</designationCategory>
+    <altitudeLayer>Building</altitudeLayer>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <passability>PassThroughOnly</passability>
+    <repairEffect>Repair</repairEffect>
+    <filthLeaving>Filth_RubbleBuilding</filthLeaving>
+    <useHitPoints>True</useHitPoints>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_DrawingWaterSpot</defName>
+    <label>Drawing water spot</label>
+    <description>A place for drawing water. This can be built on water or marsh.</description>
+    <thingClass>MizuMod.Building_DrawingWaterSpot</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/CraftingSpot</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <statBases>
+      <WorkToBuild>0</WorkToBuild>
+    </statBases>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <useHitPoints>False</useHitPoints>
+    <size>(1,1)</size>
+    <passability>Standable</passability>
+    <hasInteractionCell>True</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <surfaceType>Item</surfaceType>
+    <filthLeaving>
+    </filthLeaving>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <building>
+      <spawnedConceptLearnOpportunity>BillsTab</spawnedConceptLearnOpportunity>
+      <sowTag>SupportPlantsOnly</sowTag>
+      <canPlaceOverImpassablePlant>false</canPlaceOverImpassablePlant>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Building</sourceType>
+        <getSound>Ingest_Water</getSound>
+        <baseDrinkTicks>2000</baseDrinkTicks>
+        <needManipulate>false</needManipulate>
+      </li>
+      <li Class="CompProperties_Forbiddable" />
+    </comps>
+    <terrainAffordanceNeeded>ShallowWater</terrainAffordanceNeeded>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterWorker</li>
+    </placeWorkers>
+    <recipes>
+      <li>Mizu_DrawWater</li>
+      <li>Mizu_DrawWaterMulti</li>
+    </recipes>
+    <designationHotKey>Misc1</designationHotKey>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_IceHarvestingSpot</defName>
+    <label>Ice harvesting spot</label>
+    <description>A place for harvesting ice. This can be built on ice.</description>
+    <thingClass>Building_WorkTable</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/CraftingSpot</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <statBases>
+      <WorkToBuild>0</WorkToBuild>
+    </statBases>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <useHitPoints>False</useHitPoints>
+    <size>(1,1)</size>
+    <passability>Standable</passability>
+    <hasInteractionCell>True</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <surfaceType>Item</surfaceType>
+    <filthLeaving>
+    </filthLeaving>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <building>
+      <spawnedConceptLearnOpportunity>BillsTab</spawnedConceptLearnOpportunity>
+      <sowTag>SupportPlantsOnly</sowTag>
+      <canPlaceOverImpassablePlant>false</canPlaceOverImpassablePlant>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <comps>
+      <li Class="CompProperties_Forbiddable" />
+    </comps>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_IceWorker</li>
+    </placeWorkers>
+    <recipes>
+      <li>Mizu_HarvestIce</li>
+      <li>Mizu_HarvestIceMulti</li>
+    </recipes>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_Well</defName>
+    <label>Well</label>
+    <description>A building for drawing underground water.</description>
+    <thingClass>MizuMod.Building_Well</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_Well</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>100</costStuffCount>
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToBuild>2500</WorkToBuild>
+      <Flammability>1.0</Flammability>
+    </statBases>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <size>(1,1)</size>
+    <pathCost>70</pathCost>
+    <hasInteractionCell>True</hasInteractionCell>
+    <surfaceType>Item</surfaceType>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <building>
+      <spawnedConceptLearnOpportunity>BillsTab</spawnedConceptLearnOpportunity>
+      <sowTag>SupportPlantsOnly</sowTag>
+      <canPlaceOverImpassablePlant>false</canPlaceOverImpassablePlant>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Building</sourceType>
+        <getSound>Ingest_Water</getSound>
+        <baseDrinkTicks>1200</baseDrinkTicks>
+        <needManipulate>true</needManipulate>
+      </li>
+      <li Class="CompProperties_Forbiddable" />
+    </comps>
+    <recipes>
+      <li>Mizu_DrawWaterFromWaterPool</li>
+      <li>Mizu_DrawWaterFromWaterPoolMulti</li>
+    </recipes>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_UndergroundShallowWater</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_UndergroundWater</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc2</designationHotKey>
+  </ThingDef>
+  <ThingDef Name="Mizu_WaterCleanerBase" ParentName="Mizu_BuildingBase" Abstract="True">
+    <constructEffect>ConstructMetal</constructEffect>
+    <fillPercent>0.5</fillPercent>
+    <statBases>
+      <WorkToBuild>2000</WorkToBuild>
+      <MaxHitPoints>180</MaxHitPoints>
+      <Flammability>1.0</Flammability>
+      <SellPriceFactor>0.70</SellPriceFactor>
+    </statBases>
+    <size>(2,1)</size>
+    <pathCost>70</pathCost>
+    <hasInteractionCell>True</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <surfaceType>Item</surfaceType>
+    <recipes>
+      <li>Mizu_PurifyWater</li>
+      <li>Mizu_BoilRawWater</li>
+      <li>Mizu_PercolateMudWater</li>
+      <li>Mizu_DesalinateSeaWater</li>
+      <li>Mizu_PurifyWaterMulti</li>
+      <li>Mizu_BoilRawWaterMulti</li>
+      <li>Mizu_PercolateMudWaterMulti</li>
+      <li>Mizu_DesalinateSeaWaterMulti</li>
+      <li>Mizu_BottleSnow</li>
+      <li>Mizu_BottleSnowMulti</li>
+    </recipes>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <comps>
+      <li>
+        <compClass>CompReportWorkSpeed</compClass>
+      </li>
+    </comps>
+    <building>
+      <spawnedConceptLearnOpportunity>BillsTab</spawnedConceptLearnOpportunity>
+      <heatPerTickWhileWorking>0.10</heatPerTickWhileWorking>
+    </building>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.20</staticSunShadowHeight>
+    <canOverlapZones>false</canOverlapZones>
+    <placeWorkers>
+      <li>PlaceWorker_ReportWorkSpeedPenalties</li>
+    </placeWorkers>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterCleanerBase">
+    <defName>Mizu_FueledWaterCleaner</defName>
+    <label>Fueled water purifier</label>
+    <thingClass>Building_WorkTable_HeatPush</thingClass>
+    <description>A simple wood-fueled water purifier.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterCleaner</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(2,1)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <costList>
+      <Steel>40</Steel>
+    </costList>
+    <filthLeaving>
+    </filthLeaving>
+    <comps>
+      <li Class="CompProperties_Refuelable">
+        <fuelConsumptionRate>80.0</fuelConsumptionRate>
+        <fuelCapacity>50.0</fuelCapacity>
+        <fuelFilter>
+          <thingDefs>
+            <li>WoodLog</li>
+          </thingDefs>
+        </fuelFilter>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+      </li>
+    </comps>
+    <researchPrerequisites>
+      <li>Mizu_CleanWater</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc3</designationHotKey>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterCleanerBase">
+    <defName>Mizu_ElectricWaterCleaner</defName>
+    <label>Electric water purifier</label>
+    <thingClass>Building_WorkTable_HeatPush</thingClass>
+    <description>An electrically-powered water purifier.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterCleaner</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(2,1)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <costList>
+      <Steel>40</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <shortCircuitInRain>false</shortCircuitInRain>
+        <basePowerConsumption>150</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+    <researchPrerequisites>
+      <li>Electricity</li>
+      <li>Mizu_CleanWater</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc4</designationHotKey>
+  </ThingDef>
+  <ThingDef Name="Mizu_WaterPipeBase" ParentName="Mizu_BuildingBase" Abstract="True">
+    <thingClass>MizuMod.Building_Pipe</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterPipe</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <linkType>Basic</linkType>
+      <linkFlags>
+        <li>Custom5</li>
+      </linkFlags>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <size>(1,1)</size>
+    <building>
+      <isInert>true</isInert>
+      <isEdifice>false</isEdifice>
+    </building>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <passability>Standable</passability>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>35</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-2</Beauty>
+    </statBases>
+    <placingDraggableDimensions>1</placingDraggableDimensions>
+    <rotatable>false</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <clearBuildingArea>false</clearBuildingArea>
+    <researchPrerequisites>
+      <li>Mizu_Waterworks</li>
+    </researchPrerequisites>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterPipeBase">
+    <defName>Mizu_WaterPipe</defName>
+    <label>Water pipe</label>
+    <description>A building for connecting water network tools (pump, tank, faucet ...)</description>
+    <uiIconPath>UI/Icons/Buildings/Mizu_WaterPipe_Icon</uiIconPath>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Woody</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>1</costStuffCount>
+    <designationHotKey>Misc5</designationHotKey>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterPipeBase">
+    <defName>Mizu_WaterPipeInWater</defName>
+    <label>Water pipe (in water)</label>
+    <description>A building for connecting water network tools (pump, tank, faucet ...)</description>
+    <uiIconPath>UI/Icons/Buildings/Mizu_WaterPipe_Icon</uiIconPath>
+    <terrainAffordanceNeeded>ShallowWater</terrainAffordanceNeeded>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>1</costStuffCount>
+    <designationHotKey>Misc6</designationHotKey>
+  </ThingDef>
+  <ThingDef Name="Mizu_WaterValveBase" ParentName="Mizu_BuildingBase" Abstract="True">
+    <thingClass>MizuMod.Building_Valve</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterValve</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <building>
+      <isInert>true</isInert>
+      <isEdifice>false</isEdifice>
+    </building>
+    <passability>Standable</passability>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <tickerType>Normal</tickerType>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>35</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-2</Beauty>
+    </statBases>
+    <placingDraggableDimensions>1</placingDraggableDimensions>
+    <rotatable>true</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <comps>
+      <li Class="CompProperties_Flickable">
+        <commandTexture>Things/Building/Production/Mizu_WaterValve</commandTexture>
+        <commandLabelKey>MizuCommandDesignateOpenCloseValveLabel</commandLabelKey>
+        <commandDescKey>MizuCommandDesignateOpenCloseValveDesc</commandDescKey>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_Valve</li>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_Waterworks</li>
+    </researchPrerequisites>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterValveBase">
+    <defName>Mizu_WaterValve</defName>
+    <label>Water valve</label>
+    <description>A building for connect water network. You can switch state (open/close).</description>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>5</costStuffCount>
+    <designationHotKey>Misc7</designationHotKey>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_GroundWaterPump</defName>
+    <label>Ground water pump</label>
+    <description>A building for pumping water for river, lake, pond, sea and marsh. Need electrical power.</description>
+    <thingClass>MizuMod.Building_GroundWaterPump</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_GroundPump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <pathCost>8</pathCost>
+    <size>(1,1)</size>
+    <tickerType>Normal</tickerType>
+    <costList>
+      <Steel>50</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>140</MaxHitPoints>
+      <WorkToBuild>5000</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-25</Beauty>
+    </statBases>
+    <rotatable>true</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>150</maxInputWaterFlow>
+        <inputTypes>
+          <li>Terrain</li>
+        </inputTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>150</maxOutputWaterFlow>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>150</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterWorker</li>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_Waterworks</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc8</designationHotKey>
+    <terrainAffordanceNeeded>ShallowWater</terrainAffordanceNeeded>
+  </ThingDef>
+  <ThingDef Name="Mizu_UndergroundWaterPumpBase" ParentName="Mizu_BuildingBase" Abstract="True">
+    <blockWind>false</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <pathCost>8</pathCost>
+    <size>(1,1)</size>
+    <tickerType>Normal</tickerType>
+    <costList>
+      <Steel>50</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>140</MaxHitPoints>
+      <WorkToBuild>5000</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-25</Beauty>
+    </statBases>
+    <rotatable>false</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>150</maxInputWaterFlow>
+        <inputTypes>
+          <li>WaterPool</li>
+        </inputTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>150</maxOutputWaterFlow>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>150</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_UndergroundWaterPumpBase">
+    <defName>Mizu_UndergroundWaterPumpShallow</defName>
+    <label>Underground water pump (shallow)</label>
+    <description>A building for pumping water for underground shallow layer. Need electrical power.</description>
+    <thingClass>MizuMod.Building_UndergroundShallowWaterPump</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_ShallowPump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <drawRotated>false</drawRotated>
+    </graphicData>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_UndergroundShallowWater</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_Waterworks</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc9</designationHotKey>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_UndergroundWaterPumpBase">
+    <defName>Mizu_UndergroundWaterPumpDeep</defName>
+    <label>Underground water pump (deep)</label>
+    <description>A building for pumping water for underground deep layer. Need electrical power.</description>
+    <thingClass>MizuMod.Building_UndergroundDeepWaterPump</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_DeepPump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <drawRotated>false</drawRotated>
+    </graphicData>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_UndergroundDeepWater</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_DeepUndergroundWater</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc10</designationHotKey>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_WaterTank</defName>
+    <label>Water tank</label>
+    <description>A building for storing water.</description>
+    <thingClass>MizuMod.Building_WaterNet</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterTank</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <rect>(0.05,0.05,0.95,0.95)</rect>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <pathCost>8</pathCost>
+    <tickerType>Normal</tickerType>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Woody</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>20</costStuffCount>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <WorkToBuild>1000</WorkToBuild>
+      <Mass>200</Mass>
+      <Flammability>1.0</Flammability>
+      <Beauty>-6</Beauty>
+    </statBases>
+    <rotatable>false</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetTank">
+        <maxWaterVolume>100</maxWaterVolume>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <inputWaterFlowType>Any</inputWaterFlowType>
+      </li>
+    </comps>
+    <researchPrerequisites>
+      <li>Mizu_Waterworks</li>
+    </researchPrerequisites>
+    <designationHotKey>Misc11</designationHotKey>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_WaterBox</defName>
+    <label>Water box</label>
+    <description>A topless facility for storing small amount of water. It allows animals to drink water.</description>
+    <thingClass>MizuMod.Building_WaterBox</thingClass>
+    <uiIconPath>UI/Icons/Buildings/Mizu_WaterBox_Icon</uiIconPath>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterBox0</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <linkType>Basic</linkType>
+      <linkFlags>
+        <li>Custom6</li>
+      </linkFlags>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <size>(1,1)</size>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <pathCost>8</pathCost>
+    <tickerType>Normal</tickerType>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Woody</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>7</costStuffCount>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <WorkToBuild>800</WorkToBuild>
+      <Mass>200</Mass>
+      <Flammability>1.0</Flammability>
+      <Beauty>-6</Beauty>
+    </statBases>
+    <rotatable>false</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Building</sourceType>
+        <getSound>Ingest_Water</getSound>
+        <baseDrinkTicks>2000</baseDrinkTicks>
+        <needManipulate>false</needManipulate>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetTank">
+        <maxWaterVolume>15</maxWaterVolume>
+        <flatID>1</flatID>
+        <showBar>false</showBar>
+        <drawTypes>
+          <li>Self</li>
+        </drawTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <inputTypes>
+          <li>WaterNet</li>
+          <li>Rain</li>
+        </inputTypes>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <maxInputWaterFlow>1500</maxInputWaterFlow>
+        <baseRainFlow>70</baseRainFlow>
+        <roofEfficiency>0.25</roofEfficiency>
+        <roofDistance>1</roofDistance>
+      </li>
+    </comps>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <recipes>
+      <li>Mizu_DrawWaterFromWaterBox</li>
+      <li>Mizu_DrawWaterFromWaterBoxMulti</li>
+      <li>Mizu_PourWater</li>
+      <li>Mizu_PourWaterMulti</li>
+    </recipes>
+    <designationHotKey>Misc12</designationHotKey>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+    <placingDraggableDimensions>2</placingDraggableDimensions>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_WaterFaucet</defName>
+    <label>Faucet</label>
+    <description>In use this tool, you take water for drinking from water tank.</description>
+    <thingClass>MizuMod.Building_Faucet</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFaucet</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <rect>(0.05,0.05,0.95,0.95)</rect>
+      </damageData>
+    </graphicData>
+    <uiIconPath>UI/Icons/Buildings/Mizu_WaterFaucet_Icon</uiIconPath>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <pathCost>8</pathCost>
+    <tickerType>Normal</tickerType>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>2</costStuffCount>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <WorkToBuild>200</WorkToBuild>
+      <Flammability>0.4</Flammability>
+      <Beauty>-2</Beauty>
+    </statBases>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <rotatable>true</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <comps>
+      <li Class="CompProperties_Flickable">
+        <commandTexture>Things/Building/Production/Mizu_WaterFaucet</commandTexture>
+        <commandLabelKey>MizuCommandDesignateDrainTankLabel</commandLabelKey>
+        <commandDescKey>MizuCommandDesignateDrainTankDesc</commandDescKey>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterSource">
+        <sourceType>Building</sourceType>
+        <getSound>Pour_Water</getSound>
+        <baseDrinkTicks>400</baseDrinkTicks>
+        <needManipulate>true</needManipulate>
+      </li>
+      <li Class="CompProperties_Forbiddable" />
+    </comps>
+    <recipes>
+      <li>Mizu_DrawWaterFromWaterNet</li>
+      <li>Mizu_DrawWaterFromWaterNetMulti</li>
+    </recipes>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_Faucet</li>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_Waterworks</li>
+    </researchPrerequisites>
+  </ThingDef>
+  <ThingDef Name="Mizu_WaterFilterBase" ParentName="Mizu_BuildingBase" Abstract="True">
+    <thingClass>MizuMod.Building_WaterFilter</thingClass>
+    <building>
+      <isInert>true</isInert>
+      <isEdifice>false</isEdifice>
+    </building>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <tickerType>Normal</tickerType>
+    <filthLeaving>
+    </filthLeaving>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>35</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-2</Beauty>
+    </statBases>
+    <placingDraggableDimensions>1</placingDraggableDimensions>
+    <rotatable>true</rotatable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_Valve</li>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>Mizu_WaterFilter</li>
+    </researchPrerequisites>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterFilterBase">
+    <defName>Mizu_DirtyWaterFilter</defName>
+    <label>Dirty water filter</label>
+    <description>Convert raw/mud/sea water to normal water in waterworks. Need electrical power.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFilter_Dirty</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <shaderType>CutoutComplex</shaderType>
+    </graphicData>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>5</costStuffCount>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>15</maxInputWaterFlow>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <acceptWaterTypes>
+          <li>RawWater</li>
+          <li>MudWater</li>
+          <li>SeaWater</li>
+        </acceptWaterTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>15</maxOutputWaterFlow>
+        <outputWaterFlowType>Any</outputWaterFlowType>
+        <forceOutputWaterType>NormalWater</forceOutputWaterType>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>25</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterFilterBase">
+    <defName>Mizu_DirtyWaterFilterIndustrial</defName>
+    <label>Industrial dirty water filter</label>
+    <description>Convert raw/mud/sea water to normal water in waterworks. Need electrical power. 10x effective.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFilter_Dirty_Industrial</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>500</MaxHitPoints>
+      <WorkToBuild>350</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-6</Beauty>
+    </statBases>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>150</maxInputWaterFlow>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <acceptWaterTypes>
+          <li>RawWater</li>
+          <li>MudWater</li>
+          <li>SeaWater</li>
+        </acceptWaterTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>150</maxOutputWaterFlow>
+        <outputWaterFlowType>Any</outputWaterFlowType>
+        <forceOutputWaterType>NormalWater</forceOutputWaterType>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>250</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterFilterBase">
+    <defName>Mizu_ClearWaterFilter</defName>
+    <label>Clear water filter</label>
+    <description>Convert normal water to clear water in waterworks. Need electrical power.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFilter_Clear</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <shaderType>CutoutComplex</shaderType>
+    </graphicData>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>5</costStuffCount>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>15</maxInputWaterFlow>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <acceptWaterTypes>
+          <li>NormalWater</li>
+        </acceptWaterTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>15</maxOutputWaterFlow>
+        <outputWaterFlowType>Any</outputWaterFlowType>
+        <forceOutputWaterType>ClearWater</forceOutputWaterType>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>25</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_WaterFilterBase">
+    <defName>Mizu_ClearWaterFilterIndustrial</defName>
+    <label>Industrial clear water filter</label>
+    <description>Convert normal water to clear water in waterworks. Need electrical power. 10x effective.</description>
+    <graphicData>
+      <texPath>Things/Building/Production/Mizu_WaterFilter_Clear_Industrial</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <damageData>
+        <rect>(0,0.35,1,0.3)</rect>
+      </damageData>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>500</MaxHitPoints>
+      <WorkToBuild>350</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-6</Beauty>
+    </statBases>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <comps>
+      <li Class="MizuMod.CompProperties_WaterNetInput">
+        <maxInputWaterFlow>150</maxInputWaterFlow>
+        <inputWaterFlowType>Any</inputWaterFlowType>
+        <acceptWaterTypes>
+          <li>NormalWater</li>
+        </acceptWaterTypes>
+      </li>
+      <li Class="MizuMod.CompProperties_WaterNetOutput">
+        <maxOutputWaterFlow>150</maxOutputWaterFlow>
+        <outputWaterFlowType>Any</outputWaterFlowType>
+        <forceOutputWaterType>ClearWater</forceOutputWaterType>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>250</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_SprinklerGrowing</defName>
+    <label>Sprinkler (growing)</label>
+    <description>Water farm every morning. Need electrical power.</description>
+    <thingClass>MizuMod.Building_SprinklerGrowing</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Misc/MoisturePump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shadowData>
+        <volume>(0.25, 0.5, 0.25)</volume>
+        <offset>(0,0,-0.1)</offset>
+      </shadowData>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+    </graphicData>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <costList>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <building>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <tickerType>Rare</tickerType>
+    <altitudeLayer>Building</altitudeLayer>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <WorkToBuild>1500</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-8</Beauty>
+    </statBases>
+    <fillPercent>0.15</fillPercent>
+    <rotatable>false</rotatable>
+    <specialDisplayRadius>4.9</specialDisplayRadius>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <pathCost>25</pathCost>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>150</basePowerConsumption>
+        <shortCircuitInRain>false</shortCircuitInRain>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="CompProperties_Schedule">
+        <startTime>0.205</startTime>
+        <endTime>0.25</endTime>
+        <offMessage>Off(Active time 5-6am)</offMessage>
+      </li>
+    </comps>
+    <researchPrerequisites>
+      <li>Mizu_WaterFacility</li>
+    </researchPrerequisites>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+  </ThingDef>
+  <ThingDef ParentName="Mizu_BuildingBase">
+    <defName>Mizu_SprinklerExtinguishing</defName>
+    <label>Sprinkler (extinguishing)</label>
+    <category>Building</category>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <description>Automatically extinguish fire within range. Need electrical power.</description>
+    <thingClass>MizuMod.Building_SprinklerExtinguishing</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Misc/MoisturePump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shadowData>
+        <volume>(0.25, 0.5, 0.25)</volume>
+        <offset>(0,0,-0.1)</offset>
+      </shadowData>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+    </graphicData>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <costList>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <building>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <tickerType>Rare</tickerType>
+    <altitudeLayer>Building</altitudeLayer>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <WorkToBuild>1500</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-8</Beauty>
+      <Mass>50</Mass>
+    </statBases>
+    <fillPercent>0.15</fillPercent>
+    <rotatable>false</rotatable>
+    <specialDisplayRadius>4.9</specialDisplayRadius>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <pathCost>25</pathCost>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>150</basePowerConsumption>
+        <shortCircuitInRain>false</shortCircuitInRain>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+    <researchPrerequisites>
+      <li>Mizu_WaterFacility</li>
+    </researchPrerequisites>
+    <placeWorkers>
+      <li>MizuMod.PlaceWorker_WaterNet</li>
+    </placeWorkers>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+  </ThingDef>
+</Defs>
