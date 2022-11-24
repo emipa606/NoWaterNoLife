@@ -123,7 +123,7 @@ public class WorkGiver_Warden_DeliverWater : WorkGiver_Warden
             // 囚人の部屋のポーンの要求水分量の合計を計算
             foreach (var thing in region.ListerThings.ThingsInGroup(ThingRequestGroup.Pawn))
             {
-                if (!(thing is Pawn pawn))
+                if (thing is not Pawn pawn)
                 {
                     continue;
                 }

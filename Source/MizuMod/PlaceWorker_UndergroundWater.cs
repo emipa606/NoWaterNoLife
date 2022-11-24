@@ -15,7 +15,7 @@ public abstract class PlaceWorker_UndergroundWater : PlaceWorker
         Thing thingToIgnore = null,
         Thing thing = null)
     {
-        if (!(checkingDef is ThingDef def))
+        if (checkingDef is not ThingDef def)
         {
             return false;
         }

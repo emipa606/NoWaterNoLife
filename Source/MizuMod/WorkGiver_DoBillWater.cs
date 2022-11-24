@@ -33,7 +33,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
 
     public override Job JobOnThing(Pawn pawn, Thing thing, bool forced = false)
     {
-        if (!(thing is IBillGiver billGiver))
+        if (thing is not IBillGiver billGiver)
         {
             return null;
         }
@@ -94,7 +94,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
     private static IntVec3 GetBillGiverRootCell(Thing billGiver)
     {
         // 建造物でない
-        if (!(billGiver is Building building))
+        if (billGiver is not Building building)
         {
             return billGiver.Position;
         }
@@ -125,14 +125,13 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             });
 
         var adjacentCells = standableAdjacentCells as IntVec3[] ?? standableAdjacentCells.ToArray();
-        if (!adjacentCells.Any())
-        {
+        return !adjacentCells.Any()
+            ?
             // 候補がない場合、設備の真上を指定
-            return building.Position;
-        }
-
-        // 候補がある場合→1マスをランダムで選ぶ
-        return adjacentCells.RandomElement();
+            building.Position
+            :
+            // 候補がある場合→1マスをランダムで選ぶ
+            adjacentCells.RandomElement();
     }
 
     private static float GetTotalAmountCanAccept(Building_WaterNetWorkTable workTable)
@@ -452,12 +451,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             return true;
         }
 
-        if (giver == null)
-        {
-            return false;
-        }
-
-        if (!(giver is Thing thing))
+        if (giver is not Thing thing)
         {
             return false;
         }
@@ -493,17 +487,12 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
                 }
 
                 // 水量チェック
-                if (pool.CurrentWaterVolume < compprop.waterVolume * ext.getItemCount)
-                {
-                    return false;
-                }
-
-                return true;
+                return !(pool.CurrentWaterVolume < compprop.waterVolume * ext.getItemCount);
             }
 
             case DefExtension_WaterRecipe.RecipeType.DrawFromWaterNet:
             {
-                if (!(giver is Building_WaterNetWorkTable workTable) || workTable.InputWaterNet == null)
+                if (giver is not Building_WaterNetWorkTable workTable || workTable.InputWaterNet == null)
                 {
                     return false;
                 }
@@ -541,12 +530,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
                 }
 
                 // 水量チェック
-                if (targetWaterVolume < compprop.waterVolume * ext.getItemCount)
-                {
-                    return false;
-                }
-
-                return true;
+                return !(targetWaterVolume < compprop.waterVolume * ext.getItemCount);
             }
 
             case DefExtension_WaterRecipe.RecipeType.PourWater:
@@ -564,12 +548,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             return true;
         }
 
-        if (giver == null)
-        {
-            return false;
-        }
-
-        if (!(giver is Thing thing))
+        if (giver is not Thing thing)
         {
             return false;
         }
@@ -584,7 +563,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
                 return true;
             case DefExtension_WaterRecipe.RecipeType.PourWater:
             {
-                if (!(thing is Building_WaterNetWorkTable building))
+                if (thing is not Building_WaterNetWorkTable building)
                 {
                     return false;
                 }
@@ -599,12 +578,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
                     }
                 }
 
-                if (GetTotalAmountCanAccept(building) < totalWaterVolume)
-                {
-                    return false;
-                }
-
-                return true;
+                return !(GetTotalAmountCanAccept(building) < totalWaterVolume);
             }
 
             default:
@@ -623,15 +597,15 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
                 continue;
             }
 
-            // 再チェック時間を過ぎていないかチェック(右クリックメニューからの場合は例外)
-            if (Find.TickManager.TicksGame < bill.nextTickToSearchForIngredients && FloatMenuMakerMap.makingFor != pawn)
-            {
-                continue;
-            }
+            //// 再チェック時間を過ぎていないかチェック(右クリックメニューからの場合は例外)
+            //if (Find.TickManager.TicksGame < bill.nextTickToSearchForIngredients && FloatMenuMakerMap.makingFor != pawn)
+            //{
+            //    continue;
+            //}
 
-            // チェック時間更新
-            bill.nextTickToSearchForIngredients =
-                Find.TickManager.TicksGame + ReCheckFailedBillTicksRange.RandomInRange;
+            //// チェック時間更新
+            //bill.nextTickToSearchForIngredients =
+            //    Find.TickManager.TicksGame + ReCheckFailedBillTicksRange.RandomInRange;
 
             // 今それをする必要があるか
             if (!bill.ShouldDoNow())
@@ -666,7 +640,11 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
 
             if (isFoundIngredients && isFoundWater && isNotFullWater)
             {
-                return TryStartNewDoBillJob(pawn, bill, giver);
+                var jobToReturn = TryStartNewDoBillJob(pawn, bill, giver);
+                if (jobToReturn != null)
+                {
+                    return jobToReturn;
+                }
             }
 
             if (FloatMenuMakerMap.makingFor != pawn)

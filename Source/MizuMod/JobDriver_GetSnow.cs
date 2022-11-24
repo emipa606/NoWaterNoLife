@@ -32,8 +32,7 @@ public class JobDriver_GetSnow : JobDriver
         {
             var actor = getToil.actor;
             var statValue = actor.GetStatValue(StatDefOf.WorkSpeedGlobal);
-            var num = statValue;
-            workDone += num;
+            workDone += statValue;
             if (!(workDone >= WorkGiver_GetSnow.ConsumeSnowPerOne * 100f))
             {
                 return;

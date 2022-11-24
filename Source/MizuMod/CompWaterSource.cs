@@ -41,12 +41,8 @@ public class CompWaterSource : ThingComp
                 case CompProperties_WaterSource.SourceType.Item:
                     return Props.waterType;
                 case CompProperties_WaterSource.SourceType.Building:
-                    if (!(parent is IBuilding_DrinkWater building))
-                    {
-                        return WaterType.Undefined;
-                    }
+                    return parent is not IBuilding_DrinkWater building ? WaterType.Undefined : building.WaterType;
 
-                    return building.WaterType;
                 default:
                     return WaterType.Undefined;
             }

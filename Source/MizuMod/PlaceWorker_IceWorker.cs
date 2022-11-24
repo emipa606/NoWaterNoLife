@@ -12,7 +12,7 @@ public class PlaceWorker_IceWorker : PlaceWorker
         Thing thingToIgnore = null,
         Thing thing = null)
     {
-        if (!(checkingDef is ThingDef def))
+        if (checkingDef is not ThingDef def)
         {
             return false;
         }

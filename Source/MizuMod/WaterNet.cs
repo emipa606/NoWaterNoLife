@@ -134,8 +134,9 @@ public class WaterNet
         while (totalAmount > 0.0f)
         {
             var tanks = AllThings.FindAll(
-                t => t.TankComp != null && t.TankComp.AmountCanAccept > 0.0f && t.InputComp != null
-                     && t.InputComp.InputTypes.Contains(CompProperties_WaterNetInput.InputType.WaterNet));
+                t => t.TankComp is { AmountCanAccept: > 0.0f } && t.InputComp != null
+                                                               && t.InputComp.InputTypes.Contains(
+                                                                   CompProperties_WaterNetInput.InputType.WaterNet));
 
             if (tanks.Count == 0)
             {
@@ -249,8 +250,7 @@ public class WaterNet
             }
 
             // 屋根ボーナスの計算(屋根の枚数/設備の面積*屋根効率)
-            var building = t as Building;
-            if (building == null)
+            if (t is not Building building)
             {
                 continue;
             }
@@ -277,19 +277,16 @@ public class WaterNet
                 continue;
             }
 
-            // 自身に貯水機能がない＆出力機能があるが有効な出力先がない場合は入力しない
-            if (t.TankComp == null && t.OutputComp != null && !t.OutputComp.FoundEffectiveInputter)
+            switch (t.TankComp)
             {
-                continue;
+                // 自身に貯水機能がない＆出力機能があるが有効な出力先がない場合は入力しない
+                case null when t.OutputComp is { FoundEffectiveInputter: false }:
+                // 自身に貯水機能がある＆貯水量が満タンの場合は入力しない
+                case { AmountCanAccept: <= 0f }:
+                    continue;
             }
 
-            // 自身に貯水機能がある＆貯水量が満タンの場合は入力しない
-            if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0f)
-            {
-                continue;
-            }
-
-            if (t.WaterPool == null || !(t.WaterPool.CurrentWaterVolume > 0f))
+            if (t.WaterPool is not { CurrentWaterVolume: > 0f })
             {
                 continue;
             }
@@ -310,8 +307,7 @@ public class WaterNet
                 continue;
             }
 
-            var building = t as Building;
-            if (building == null)
+            if (t is not Building building)
             {
                 continue;
             }
@@ -361,7 +357,7 @@ public class WaterNet
                     }
 
                     // タンクが満タンであれば除外
-                    if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0.0f)
+                    if (t.TankComp is { AmountCanAccept: <= 0.0f })
                     {
                         return false;
                     }
@@ -409,18 +405,13 @@ public class WaterNet
                     }
 
                     // タンクがあり満タンになったものは除外
-                    if (t.TankComp != null && t.TankComp.AmountCanAccept <= 0.0f)
+                    if (t.TankComp is { AmountCanAccept: <= 0.0f })
                     {
                         return false;
                     }
 
                     // 入力量が最大まで達している物は除外
-                    if (t.InputComp.InputWaterFlow >= t.InputComp.MaxInputWaterFlow)
-                    {
-                        return false;
-                    }
-
-                    return true;
+                    return !(t.InputComp.InputWaterFlow >= t.InputComp.MaxInputWaterFlow);
                 });
             var buildingWaterNets = anyInputters as IBuilding_WaterNet[] ?? anyInputters.ToArray();
             if (buildingWaterNets.Length <= 0)
@@ -485,13 +476,14 @@ public class WaterNet
 
             // 水抜き量も考慮
             var deltaWaterFlow = inputWaterFlow - outputWaterFlow - averageDrainWaterFlow;
-            if (deltaWaterFlow > 0.0f)
+            switch (deltaWaterFlow)
             {
-                tank.TankComp.AddWaterVolume(deltaWaterFlow / 60000.0f);
-            }
-            else if (deltaWaterFlow < 0.0f)
-            {
-                tank.TankComp.DrawWaterVolume(-deltaWaterFlow / 60000.0f);
+                case > 0.0f:
+                    tank.TankComp.AddWaterVolume(deltaWaterFlow / 60000.0f);
+                    break;
+                case < 0.0f:
+                    tank.TankComp.DrawWaterVolume(-deltaWaterFlow / 60000.0f);
+                    break;
             }
         }
 
@@ -644,28 +636,31 @@ public class WaterNet
                 }
             }
 
-            if (foundLists.Count == 0)
+            switch (foundLists.Count)
             {
-                // 新しい平坦化リストを作成
-                flatTankListTmp.Add(new HashSet<IBuilding_WaterNet> { t });
-            }
-            else if (foundLists.Count == 1)
-            {
-                // 見つかった平坦化リストに追加
-                foundLists[0].Add(t);
-            }
-            else
-            {
-                // 複数のリストが見つかった→一つに統合
-                var firstList = foundLists[0];
-                for (var i = 1; i < foundLists.Count; i++)
+                case 0:
+                    // 新しい平坦化リストを作成
+                    flatTankListTmp.Add(new HashSet<IBuilding_WaterNet> { t });
+                    break;
+                case 1:
+                    // 見つかった平坦化リストに追加
+                    foundLists[0].Add(t);
+                    break;
+                default:
                 {
-                    foreach (var t2 in foundLists[i])
+                    // 複数のリストが見つかった→一つに統合
+                    var firstList = foundLists[0];
+                    for (var i = 1; i < foundLists.Count; i++)
                     {
-                        firstList.Add(t2);
+                        foreach (var t2 in foundLists[i])
+                        {
+                            firstList.Add(t2);
+                        }
+
+                        flatTankListTmp.Remove(foundLists[i]);
                     }
 
-                    flatTankListTmp.Remove(foundLists[i]);
+                    break;
                 }
             }
         }

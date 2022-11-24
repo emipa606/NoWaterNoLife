@@ -44,7 +44,7 @@ public class WorkGiver_SupplyWaterToTool : WorkGiver_Scanner
             return null;
         }
 
-        if (!(t is IBuilding_DrinkWater sourceBuilding))
+        if (t is not IBuilding_DrinkWater sourceBuilding)
         {
             return null;
         }

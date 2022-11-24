@@ -26,13 +26,8 @@ public static class Mizu_Extensions
         }
 
         // 心情有り、水分要求あり、状態が脱水症状 = (心情悪化するけど)地形から水を摂取する
-        if (need_water.CurCategory == ThirstCategory.Dehydration)
-        {
-            return true;
-        }
-
+        return need_water.CurCategory == ThirstCategory.Dehydration;
         // 心情あり、水分要求あり、状態はまだ大丈夫 = 地形から水を摂取しない
-        return false;
     }
 
     public static bool CanDrinkWater(this Thing t)
@@ -100,7 +95,7 @@ public static class Mizu_Extensions
 
             // 自然の屋根でなければボーナス
             var roofDef = t.Map.roofGrid.RoofAt(cell);
-            if (roofDef != null && roofDef.isNatural == false)
+            if (roofDef is { isNatural: false })
             {
                 roofNum++;
             }
@@ -174,12 +169,7 @@ public static class Mizu_Extensions
             return 0f;
         }
 
-        if (comp.SourceType != CompProperties_WaterSource.SourceType.Item)
-        {
-            return 0f;
-        }
-
-        return Math.Max(comp.WaterAmount, 0.0f);
+        return comp.SourceType != CompProperties_WaterSource.SourceType.Item ? 0f : Math.Max(comp.WaterAmount, 0.0f);
     }
 
     public static void GetWaterCalculateAmounts(
@@ -225,12 +215,9 @@ public static class Mizu_Extensions
             return WaterPreferability.Undefined;
         }
 
-        if (!comp.IsWaterSource)
-        {
-            return WaterPreferability.Undefined;
-        }
-
-        return MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability;
+        return !comp.IsWaterSource
+            ? WaterPreferability.Undefined
+            : MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability;
     }
 
     public static WaterTerrainType GetWaterTerrainType(this TerrainDef def)
@@ -250,12 +237,7 @@ public static class Mizu_Extensions
             return WaterTerrainType.RawWater;
         }
 
-        if (def.IsMarsh())
-        {
-            return WaterTerrainType.MudWater;
-        }
-
-        return WaterTerrainType.NoWater;
+        return def.IsMarsh() ? WaterTerrainType.MudWater : WaterTerrainType.NoWater;
     }
 
     public static WaterTerrainType GetWaterTerrainType(this Caravan caravan)
@@ -342,14 +324,11 @@ public static class Mizu_Extensions
 
     public static bool IsOutputTo(this IBuilding_WaterNet t1, IBuilding_WaterNet t2, bool ignoreActivate = false)
     {
-        if (!ignoreActivate && !t1.HasOutputConnector)
+        switch (ignoreActivate)
         {
-            return false;
-        }
-
-        if (!ignoreActivate && !t2.HasInputConnector)
-        {
-            return false;
+            case false when !t1.HasOutputConnector:
+            case false when !t2.HasInputConnector:
+                return false;
         }
 
         var t1_out_t2_body = false;
@@ -419,13 +398,8 @@ public static class Mizu_Extensions
             return false;
         }
 
-        if (compRottable.TicksUntilRotAtCurrentTemp >= 60000)
-        {
-            return false;
-        }
-
+        return compRottable.TicksUntilRotAtCurrentTemp < 60000;
         // 腐る水で、現在は新鮮で、あと1日以内に腐ってしまう場合、腐りかけと判断する
-        return true;
     }
 
     public static bool IsSea(this TerrainDef def)

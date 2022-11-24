@@ -59,12 +59,8 @@ public class JobGiver_PackWater : ThinkNode_JobGiver
                 return false; // 最低水分量を満たしていないもの×
             }
 
-            if (MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability < MinWaterPreferability)
-            {
-                return false; // 最低の水質を満たしていないもの×
-            }
-
-            return true;
+            return MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability >= MinWaterPreferability;
+            // 最低の水質を満たしていないもの×
         }
 
         // 既に条件を満たしたアイテムを持っているか？
@@ -105,17 +101,11 @@ public class JobGiver_PackWater : ThinkNode_JobGiver
                     return false; // 禁止されている×
                 }
 
-                if (!pawn.CanReserve(t))
-                {
-                    return false; // 予約不可能×
-                }
+                return pawn.CanReserve(t) &&
+                       // 予約不可能×
+                       t.IsSociallyProper(pawn);
 
-                if (!t.IsSociallyProper(pawn))
-                {
-                    return false; // 囚人部屋の物×
-                }
-
-                return true;
+                // 囚人部屋の物×
             }, // スコアの高いものが優先？
             x => MizuUtility.GetWaterItemScore(pawn, x, 0f, true));
 

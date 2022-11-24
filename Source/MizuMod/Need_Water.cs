@@ -46,12 +46,9 @@ public class Need_Water : Need
                 return ThirstCategory.Thirsty;
             }
 
-            if (CurLevelPercentage < PercentageThreshSlightlyThirsty)
-            {
-                return ThirstCategory.SlightlyThirsty;
-            }
-
-            return ThirstCategory.Healthy;
+            return CurLevelPercentage < PercentageThreshSlightlyThirsty
+                ? ThirstCategory.SlightlyThirsty
+                : ThirstCategory.Healthy;
         }
     }
 

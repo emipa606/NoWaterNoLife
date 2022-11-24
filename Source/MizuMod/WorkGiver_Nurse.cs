@@ -11,7 +11,7 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
     public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
     {
         // 対象がポーンではない
-        if (!(t is Pawn giver))
+        if (t is not Pawn giver)
         {
             return false;
         }
@@ -76,24 +76,14 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
                 }
 
                 // 1回も使えないレベルの保有水量だったらダメ
-                if (Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0)
-                {
-                    return false;
-                }
-
-                return true;
+                return !(Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0);
             });
         if (!mopList.Any())
         {
             return false;
         }
 
-        if (mopList.Count(thing => pawn.CanReserve(thing)) == 0)
-        {
-            return false;
-        }
-
-        return true;
+        return mopList.Count(thing => pawn.CanReserve(thing)) != 0;
     }
 
     public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)

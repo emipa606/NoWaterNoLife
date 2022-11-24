@@ -12,10 +12,8 @@ public class WorkGiver_FeedWaterPatient : WorkGiver_Scanner
 
     public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
     {
-        var taker = pawn;
-
         // 与える相手が人でない、自分自身に与える→×
-        if (!(t is Pawn giver) || giver == taker)
+        if (t is not Pawn giver || giver == pawn)
         {
             return false;
         }
@@ -46,12 +44,12 @@ public class WorkGiver_FeedWaterPatient : WorkGiver_Scanner
         }
 
         // 給仕者が与える相手を「予約可能＆到達可能」ではない→×
-        if (!taker.CanReserveAndReach(t, PathEndMode.ClosestTouch, Danger.Deadly, 1, -1, null, forced))
+        if (!pawn.CanReserveAndReach(t, PathEndMode.ClosestTouch, Danger.Deadly, 1, -1, null, forced))
         {
             return false;
         }
 
-        if (MizuUtility.TryFindBestWaterSourceFor(taker, giver, true) != null)
+        if (MizuUtility.TryFindBestWaterSourceFor(pawn, giver, true) != null)
         {
             return true;
         }

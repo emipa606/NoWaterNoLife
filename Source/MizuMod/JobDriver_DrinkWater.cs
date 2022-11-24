@@ -27,12 +27,7 @@ public class JobDriver_DrinkWater : JobDriver
 
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
-        if (job.targetA.HasThing)
-        {
-            return pawn.Reserve(job.targetA, job, 1, job.count);
-        }
-
-        return true;
+        return !job.targetA.HasThing || pawn.Reserve(job.targetA, job, 1, job.count);
     }
 
     protected override IEnumerable<Toil> MakeNewToils()

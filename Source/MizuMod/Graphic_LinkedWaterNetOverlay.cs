@@ -26,7 +26,7 @@ public class Graphic_LinkedWaterNetOverlay : Graphic_Linked
     public override bool ShouldLinkWith(IntVec3 c, Thing parent)
     {
         var isFound = false;
-        if (!(parent is IBuilding_WaterNet thing))
+        if (parent is not IBuilding_WaterNet thing)
         {
             return false;
         }

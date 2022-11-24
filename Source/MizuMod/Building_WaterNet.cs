@@ -23,8 +23,7 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
     public virtual bool HasConnector => HasInputConnector || HasOutputConnector;
 
     public bool HasDrainCapability =>
-        flickableComp != null && sourceComp != null
-                              && sourceComp.SourceType == CompProperties_WaterSource.SourceType.Building;
+        flickableComp != null && sourceComp is { SourceType: CompProperties_WaterSource.SourceType.Building };
 
     // 入力コネクタがあるか
     public virtual bool HasInputConnector => InputConnectors.Count > 0;
@@ -60,7 +59,7 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
     public virtual bool IsActivatedForWaterNet => true;
 
     // 水抜き中か
-    public bool IsDraining => flickableComp != null && !flickableComp.SwitchIsOn;
+    public bool IsDraining => flickableComp is { SwitchIsOn: false };
 
     // 入力コネクタと出力コネクタは同じか
     public virtual bool IsSameConnector => true;

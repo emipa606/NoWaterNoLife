@@ -20,12 +20,7 @@ public class JobDriver_DrawFromWaterNet : JobDriver_DrawWater
             return false;
         }
 
-        if (WaterNet == null)
-        {
-            return false;
-        }
-
-        return true;
+        return WaterNet != null;
     }
 
     protected override Thing FinishAction()

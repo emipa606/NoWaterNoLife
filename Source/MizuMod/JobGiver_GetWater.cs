@@ -16,7 +16,7 @@ public class JobGiver_GetWater : ThinkNode_JobGiver
 
     public override ThinkNode DeepCopy(bool resolve = true)
     {
-        if (!(base.DeepCopy(resolve) is JobGiver_GetWater jobGiver_GetWater))
+        if (base.DeepCopy(resolve) is not JobGiver_GetWater jobGiver_GetWater)
         {
             return null;
         }

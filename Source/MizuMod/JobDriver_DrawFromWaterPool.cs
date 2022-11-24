@@ -48,12 +48,7 @@ public class JobDriver_DrawFromWaterPool : JobDriver_DrawWater
             return false;
         }
 
-        if (Pool == null)
-        {
-            return false;
-        }
-
-        return true;
+        return Pool != null;
     }
 
     protected override Thing FinishAction()

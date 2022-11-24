@@ -120,42 +120,50 @@ public class MapComponent_WaterNetManager : MapComponent
                 }
             }
 
-            if (connectNets.Count == 0)
+            switch (connectNets.Count)
             {
-                // 0個=新しい水道網
-                var newNet = new WaterNet();
-                newNet.AddThing(thing);
-                AddNet(newNet);
-            }
-            else if (connectNets.Count == 1)
-            {
-                // 1個=既存の水道網に加える
-                if (!connectNets[0].AllThings.Contains(thing))
+                case 0:
                 {
-                    connectNets[0].AddThing(thing);
+                    // 0個=新しい水道網
+                    var newNet = new WaterNet();
+                    newNet.AddThing(thing);
+                    AddNet(newNet);
+                    break;
                 }
-            }
-            else
-            {
-                // 2個以上=新しい物と、既存の水道網を全て最初の水道網に結合する
-                if (!connectNets[0].AllThings.Contains(thing))
+                case 1:
                 {
-                    connectNets[0].AddThing(thing);
-                }
-
-                for (var i = 1; i < connectNets.Count; i++)
-                {
-                    // 消滅する水道網に所属している物を全て移し替える
-                    foreach (var t in connectNets[i].AllThings)
+                    // 1個=既存の水道網に加える
+                    if (!connectNets[0].AllThings.Contains(thing))
                     {
-                        if (!connectNets[0].AllThings.Contains(t))
-                        {
-                            connectNets[0].AddThing(t);
-                        }
+                        connectNets[0].AddThing(thing);
                     }
 
-                    // 接続水道網の終えたので水道網を削除
-                    Nets.Remove(connectNets[i]);
+                    break;
+                }
+                default:
+                {
+                    // 2個以上=新しい物と、既存の水道網を全て最初の水道網に結合する
+                    if (!connectNets[0].AllThings.Contains(thing))
+                    {
+                        connectNets[0].AddThing(thing);
+                    }
+
+                    for (var i = 1; i < connectNets.Count; i++)
+                    {
+                        // 消滅する水道網に所属している物を全て移し替える
+                        foreach (var t in connectNets[i].AllThings)
+                        {
+                            if (!connectNets[0].AllThings.Contains(t))
+                            {
+                                connectNets[0].AddThing(t);
+                            }
+                        }
+
+                        // 接続水道網の終えたので水道網を削除
+                        Nets.Remove(connectNets[i]);
+                    }
+
+                    break;
                 }
             }
         }
@@ -188,81 +196,97 @@ public class MapComponent_WaterNetManager : MapComponent
                 }
             }
 
-            if (inputNets.Count == 0)
+            switch (inputNets.Count)
             {
-                // 0個=新しい水道網
-                var newNet = new WaterNet();
-                newNet.AddInputThing(thing);
-                AddNet(newNet);
-            }
-            else if (inputNets.Count == 1)
-            {
-                // 1個=既存の水道網に加える
-                if (!inputNets[0].AllThings.Contains(thing))
+                case 0:
                 {
-                    inputNets[0].AddInputThing(thing);
+                    // 0個=新しい水道網
+                    var newNet = new WaterNet();
+                    newNet.AddInputThing(thing);
+                    AddNet(newNet);
+                    break;
                 }
-            }
-            else
-            {
-                // 2個以上=新しい物と、既存の水道網を全て最初の水道網に結合する
-                if (!inputNets[0].AllThings.Contains(thing))
+                case 1:
                 {
-                    inputNets[0].AddInputThing(thing);
-                }
-
-                for (var i = 1; i < inputNets.Count; i++)
-                {
-                    // 消滅する水道網に所属している物を全て移し替える
-                    foreach (var t in inputNets[i].AllThings)
+                    // 1個=既存の水道網に加える
+                    if (!inputNets[0].AllThings.Contains(thing))
                     {
-                        if (!inputNets[0].AllThings.Contains(t))
-                        {
-                            inputNets[0].AddInputThing(t);
-                        }
+                        inputNets[0].AddInputThing(thing);
                     }
 
-                    // 接続水道網の終えたので水道網を削除
-                    Nets.Remove(inputNets[i]);
+                    break;
                 }
-            }
-
-            if (outputNets.Count == 0)
-            {
-                // 0個=新しい水道網
-                var newNet = new WaterNet();
-                newNet.AddOutputThing(thing);
-                AddNet(newNet);
-            }
-            else if (outputNets.Count == 1)
-            {
-                // 1個=既存の水道網に加える
-                if (!outputNets[0].AllThings.Contains(thing))
+                default:
                 {
-                    outputNets[0].AddOutputThing(thing);
-                }
-            }
-            else
-            {
-                // 2個以上=新しい物と、既存の水道網を全て最初の水道網に結合する
-                if (!outputNets[0].AllThings.Contains(thing))
-                {
-                    outputNets[0].AddOutputThing(thing);
-                }
-
-                for (var i = 1; i < outputNets.Count; i++)
-                {
-                    // 消滅する水道網に所属している物を全て移し替える
-                    foreach (var t in outputNets[i].AllThings)
+                    // 2個以上=新しい物と、既存の水道網を全て最初の水道網に結合する
+                    if (!inputNets[0].AllThings.Contains(thing))
                     {
-                        if (!outputNets[0].AllThings.Contains(t))
-                        {
-                            outputNets[0].AddOutputThing(t);
-                        }
+                        inputNets[0].AddInputThing(thing);
                     }
 
-                    // 接続水道網の終えたので水道網を削除
-                    Nets.Remove(outputNets[i]);
+                    for (var i = 1; i < inputNets.Count; i++)
+                    {
+                        // 消滅する水道網に所属している物を全て移し替える
+                        foreach (var t in inputNets[i].AllThings)
+                        {
+                            if (!inputNets[0].AllThings.Contains(t))
+                            {
+                                inputNets[0].AddInputThing(t);
+                            }
+                        }
+
+                        // 接続水道網の終えたので水道網を削除
+                        Nets.Remove(inputNets[i]);
+                    }
+
+                    break;
+                }
+            }
+
+            switch (outputNets.Count)
+            {
+                case 0:
+                {
+                    // 0個=新しい水道網
+                    var newNet = new WaterNet();
+                    newNet.AddOutputThing(thing);
+                    AddNet(newNet);
+                    break;
+                }
+                case 1:
+                {
+                    // 1個=既存の水道網に加える
+                    if (!outputNets[0].AllThings.Contains(thing))
+                    {
+                        outputNets[0].AddOutputThing(thing);
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    // 2個以上=新しい物と、既存の水道網を全て最初の水道網に結合する
+                    if (!outputNets[0].AllThings.Contains(thing))
+                    {
+                        outputNets[0].AddOutputThing(thing);
+                    }
+
+                    for (var i = 1; i < outputNets.Count; i++)
+                    {
+                        // 消滅する水道網に所属している物を全て移し替える
+                        foreach (var t in outputNets[i].AllThings)
+                        {
+                            if (!outputNets[0].AllThings.Contains(t))
+                            {
+                                outputNets[0].AddOutputThing(t);
+                            }
+                        }
+
+                        // 接続水道網の終えたので水道網を削除
+                        Nets.Remove(outputNets[i]);
+                    }
+
+                    break;
                 }
             }
         }

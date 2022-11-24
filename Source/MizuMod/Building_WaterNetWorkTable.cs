@@ -64,12 +64,7 @@ public class Building_WaterNetWorkTable : Building_WorkTable, IBuilding_WaterNet
                 return InputWaterNet.StoredWaterType;
             }
 
-            if (tankComp != null)
-            {
-                return tankComp.StoredWaterType;
-            }
-
-            return WaterType.NoWater;
+            return tankComp?.StoredWaterType ?? WaterType.NoWater;
         }
     }
 
@@ -82,12 +77,7 @@ public class Building_WaterNetWorkTable : Building_WorkTable, IBuilding_WaterNet
                 return InputWaterNet.StoredWaterVolume;
             }
 
-            if (tankComp != null)
-            {
-                return tankComp.StoredWaterVolume;
-            }
-
-            return 0.0f;
+            return tankComp?.StoredWaterVolume ?? 0.0f;
         }
     }
 
@@ -96,8 +86,7 @@ public class Building_WaterNetWorkTable : Building_WorkTable, IBuilding_WaterNet
 
     // 水抜き機能があるか
     public bool HasDrainCapability =>
-        flickableComp != null && SourceComp != null
-                              && SourceComp.SourceType == CompProperties_WaterSource.SourceType.Building;
+        flickableComp != null && SourceComp is { SourceType: CompProperties_WaterSource.SourceType.Building };
 
     // 入力コネクタがあるか
     public virtual bool HasInputConnector => InputConnectors.Count > 0;
@@ -133,7 +122,7 @@ public class Building_WaterNetWorkTable : Building_WorkTable, IBuilding_WaterNet
     public virtual bool IsActivatedForWaterNet => true;
 
     // 水抜き中か
-    public bool IsDraining => flickableComp != null && !flickableComp.SwitchIsOn;
+    public bool IsDraining => flickableComp is { SwitchIsOn: false };
 
     // 入力コネクタと出力コネクタは同じか
     public virtual bool IsSameConnector => true;

@@ -114,9 +114,10 @@ public static class DaysWorthOfWaterCalculator
                 var canGetWater = false;
                 foreach (var compProperties in thingDefCount.ThingDef.comps)
                 {
-                    if (!(compProperties is CompProperties_WaterSource compprop)
-                        || compprop.sourceType != CompProperties_WaterSource.SourceType.Item
-                        || !(compprop.waterAmount > 0.0f))
+                    if (compProperties is not CompProperties_WaterSource
+                        {
+                            sourceType: CompProperties_WaterSource.SourceType.Item, waterAmount: > 0.0f
+                        })
                     {
                         continue;
                     }
@@ -190,7 +191,7 @@ public static class DaysWorthOfWaterCalculator
                     foreach (var compProperties in tmpWater[num2].ThingDef.comps)
                     {
                         compprop = compProperties as CompProperties_WaterSource;
-                        if (compprop != null && compprop.sourceType == CompProperties_WaterSource.SourceType.Item)
+                        if (compprop is { sourceType: CompProperties_WaterSource.SourceType.Item })
                         {
                             break;
                         }

@@ -14,40 +14,13 @@ public class Building_Faucet : Building_WaterNetWorkTable, IBuilding_DrinkWater
                 return true;
             }
 
-            if (InputWaterNet.StoredWaterVolume <= 0f)
-            {
-                return true;
-            }
-
-            return false;
+            return InputWaterNet.StoredWaterVolume <= 0f;
         }
     }
 
-    public WaterType WaterType
-    {
-        get
-        {
-            if (InputWaterNet == null)
-            {
-                return WaterType.Undefined;
-            }
+    public WaterType WaterType => InputWaterNet?.StoredWaterType ?? WaterType.Undefined;
 
-            return InputWaterNet.StoredWaterType;
-        }
-    }
-
-    public float WaterVolume
-    {
-        get
-        {
-            if (InputWaterNet == null)
-            {
-                return 0f;
-            }
-
-            return InputWaterNet.StoredWaterVolume;
-        }
-    }
+    public float WaterVolume => InputWaterNet?.StoredWaterVolume ?? 0f;
 
     public bool CanDrawFor(Pawn p)
     {
@@ -57,7 +30,7 @@ public class Building_Faucet : Building_WaterNetWorkTable, IBuilding_DrinkWater
         }
 
         var targetWaterType = InputWaterNet.StoredWaterTypeForFaucet;
-        if (targetWaterType == WaterType.Undefined || targetWaterType == WaterType.NoWater)
+        if (targetWaterType is WaterType.Undefined or WaterType.NoWater)
         {
             return false;
         }
@@ -82,8 +55,7 @@ public class Building_Faucet : Building_WaterNetWorkTable, IBuilding_DrinkWater
             return false;
         }
 
-        if (InputWaterNet.StoredWaterTypeForFaucet == WaterType.Undefined
-            || InputWaterNet.StoredWaterTypeForFaucet == WaterType.NoWater)
+        if (InputWaterNet.StoredWaterTypeForFaucet is WaterType.Undefined or WaterType.NoWater)
         {
             return false;
         }

@@ -97,7 +97,7 @@ public class JobGiver_DrawWaterByPrisoner : ThinkNode_JobGiver
         foreach (var drawer in drawerList)
         {
             // 水汲みが出来るものは水を飲むことも出来る
-            if (!(drawer is IBuilding_DrinkWater drinkWaterBuilding))
+            if (drawer is not IBuilding_DrinkWater drinkWaterBuilding)
             {
                 continue;
             }
@@ -124,8 +124,7 @@ public class JobGiver_DrawWaterByPrisoner : ThinkNode_JobGiver
             }
 
             // 水の種類が飲めないタイプの物はダメ
-            if (drinkWaterBuilding.WaterType == WaterType.Undefined
-                || drinkWaterBuilding.WaterType == WaterType.NoWater)
+            if (drinkWaterBuilding.WaterType is WaterType.Undefined or WaterType.NoWater)
             {
                 continue;
             }
@@ -141,11 +140,6 @@ public class JobGiver_DrawWaterByPrisoner : ThinkNode_JobGiver
         }
 
         // 水汲み設備が見つからなかった
-        if (bestDrawer == null)
-        {
-            return null;
-        }
-
-        return new Job(MizuDef.Job_DrawWaterByPrisoner, bestDrawer);
+        return bestDrawer == null ? null : new Job(MizuDef.Job_DrawWaterByPrisoner, bestDrawer);
     }
 }

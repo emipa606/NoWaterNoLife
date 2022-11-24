@@ -142,8 +142,8 @@ public static class Toils_Mizu
         {
             var actor = toil.actor;
             var thing = actor.CurJob.GetTarget(drawerIndex).Thing;
-            if (!(thing is IBuilding_DrinkWater building) || building.WaterType == WaterType.Undefined ||
-                building.WaterType == WaterType.NoWater || !building.CanDrawFor(actor))
+            if (thing is not IBuilding_DrinkWater building ||
+                building.WaterType is WaterType.Undefined or WaterType.NoWater || !building.CanDrawFor(actor))
             {
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                 return;
@@ -167,14 +167,9 @@ public static class Toils_Mizu
         return DrinkSomeone(
             thingIndex,
             toil => () =>
-            {
-                if (!toil.actor.CurJob.GetTarget(thingIndex).HasThing)
-                {
-                    return null;
-                }
-
-                return toil.actor.CurJob.GetTarget(thingIndex).Thing;
-            });
+                !toil.actor.CurJob.GetTarget(thingIndex).HasThing
+                    ? null
+                    : toil.actor.CurJob.GetTarget(thingIndex).Thing);
     }
 
     public static Toil DrinkFromBuilding(TargetIndex buildingIndex)
@@ -188,8 +183,8 @@ public static class Toils_Mizu
             var thing = actor.CurJob.GetTarget(buildingIndex).Thing;
             var comp = thing.TryGetComp<CompWaterSource>();
 
-            if (actor.needs?.Water() == null || !(thing is IBuilding_DrinkWater) || comp == null ||
-                !comp.IsWaterSource)
+            if (actor.needs?.Water() == null || thing is not IBuilding_DrinkWater ||
+                comp is not { IsWaterSource: true })
             {
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                 return;
@@ -235,7 +230,7 @@ public static class Toils_Mizu
             var need_water = toil.actor.needs.Water();
             var thing = toil.actor.CurJob.GetTarget(buildingIndex).Thing;
             var comp = thing.TryGetComp<CompWaterSource>();
-            if (thing == null || comp == null || !comp.IsWaterSource || !(thing is IBuilding_DrinkWater building) ||
+            if (thing == null || comp is not { IsWaterSource: true } || thing is not IBuilding_DrinkWater building ||
                 building.IsEmpty)
             {
                 toil.actor.jobs.EndCurrentJob(JobCondition.Incompletable);
@@ -291,7 +286,7 @@ public static class Toils_Mizu
             }
 
             var waterType = cell.GetTerrain(actor.Map).ToWaterType();
-            if (waterType == WaterType.NoWater || waterType == WaterType.Undefined)
+            if (waterType is WaterType.NoWater or WaterType.Undefined)
             {
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                 return;
@@ -426,7 +421,7 @@ public static class Toils_Mizu
             }
 
             // 囚人がポーンではない
-            if (!(actor.CurJob.GetTarget(prisonerIndex).Thing is Pawn))
+            if (actor.CurJob.GetTarget(prisonerIndex).Thing is not Pawn)
             {
             }
 
@@ -454,12 +449,9 @@ public static class Toils_Mizu
             {
                 var thing = f.GetActor().jobs.curJob.GetTarget(index).Thing;
                 var terrainDef = thing.Map.terrainGrid.TerrainAt(thing.Position);
-                if (!waterTerrainTypeList.Contains(terrainDef.GetWaterTerrainType()))
-                {
-                    return JobCondition.Incompletable;
-                }
-
-                return JobCondition.Ongoing;
+                return !waterTerrainTypeList.Contains(terrainDef.GetWaterTerrainType())
+                    ? JobCondition.Incompletable
+                    : JobCondition.Ongoing;
             });
         return f;
     }
@@ -475,12 +467,7 @@ public static class Toils_Mizu
                     return null;
                 }
 
-                if (!(toil.actor.CurJob.GetTarget(patientIndex).Thing is Pawn patient))
-                {
-                    return null;
-                }
-
-                return patient;
+                return toil.actor.CurJob.GetTarget(patientIndex).Thing is not Pawn patient ? null : patient;
             });
     }
 
@@ -498,7 +485,7 @@ public static class Toils_Mizu
                 return;
             }
 
-            if (!(thing is IBuilding_DrinkWater building))
+            if (thing is not IBuilding_DrinkWater building)
             {
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                 return;
@@ -649,7 +636,7 @@ public static class Toils_Mizu
                 totalWaterType = totalWaterType.GetMinType(compprop.waterType);
             }
 
-            if (!(curJob.GetTarget(billGiverIndex).Thing is Building_WaterNetWorkTable billGiver))
+            if (curJob.GetTarget(billGiverIndex).Thing is not Building_WaterNetWorkTable billGiver)
             {
                 Log.Error("billGiver is null");
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
@@ -828,7 +815,7 @@ public static class Toils_Mizu
             var actor = toil.actor;
             var thing = actor.CurJob.GetTarget(thingIndex).Thing;
             var comp = thing.TryGetComp<CompWaterSource>();
-            if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item)
+            if (comp is not { SourceType: CompProperties_WaterSource.SourceType.Item })
             {
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                 return;
@@ -855,7 +842,7 @@ public static class Toils_Mizu
                 var actor = toil.actor;
                 var thing = actor.CurJob.GetTarget(thingIndex).Thing;
                 var comp = thing.TryGetComp<CompWaterSource>();
-                if (thing == null || comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item)
+                if (thing == null || comp is not { SourceType: CompProperties_WaterSource.SourceType.Item })
                 {
                     return 1f;
                 }

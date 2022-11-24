@@ -8,18 +8,7 @@ public class Building_Valve : Building_WaterNet
 {
     private bool lastSwitchIsOn = true;
 
-    public override Graphic Graphic
-    {
-        get
-        {
-            if (flickableComp == null)
-            {
-                return base.Graphic;
-            }
-
-            return flickableComp.CurrentGraphic;
-        }
-    }
+    public override Graphic Graphic => flickableComp == null ? base.Graphic : flickableComp.CurrentGraphic;
 
     public override bool HasInputConnector => base.HasInputConnector && SwitchIsOn;
 

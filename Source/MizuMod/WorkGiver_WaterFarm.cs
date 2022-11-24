@@ -30,7 +30,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
                 // 植物
 
                 // 種植え情報を持っていない(植えられない)
-                if (plant.def.plant.sowTags == null || plant.def.plant.sowTags.Count <= 0)
+                if (plant.def.plant.sowTags is not { Count: > 0 })
                 {
                     continue;
                 }
@@ -46,7 +46,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
                 break;
             }
 
-            if (!(thing is Building_PlantGrower building))
+            if (thing is not Building_PlantGrower building)
             {
                 continue;
             }
@@ -132,12 +132,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
             return false;
         }
 
-        if (toolList.Count(t => pawn.CanReserve(t)) == 0)
-        {
-            return false;
-        }
-
-        return true;
+        return toolList.Count(t => pawn.CanReserve(t)) != 0;
     }
 
     public override Job JobOnCell(Pawn pawn, IntVec3 cell, bool forced = false)
@@ -171,12 +166,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
 
                 var maxQueueLengthForCheck = (int)Mathf.Floor(
                     comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                if (maxQueueLengthForCheck <= 0)
-                {
-                    return false;
-                }
-
-                return true;
+                return maxQueueLengthForCheck > 0;
             });
 
         foreach (var tool in toolList)
@@ -234,7 +224,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
             }
         }
 
-        if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
+        if (job.targetQueueA is { Count: >= 5 })
         {
             // 対象が5個以上あるならポーンからの距離が近い順に仕事をさせる
             job.targetQueueA.SortBy(targ => targ.Cell.DistanceToSquared(pawn.Position));
@@ -256,7 +246,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
             zone =>
             {
                 // 種まきを許可された農地ゾーンのみ手動水やりOK
-                if (zone is Zone_Growing z && z.allowSow)
+                if (zone is Zone_Growing { allowSow: true })
                 {
                     return true;
                 }

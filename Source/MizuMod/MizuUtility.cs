@@ -179,7 +179,7 @@ public static class MizuUtility
         var comp = t.TryGetComp<CompWaterSource>();
 
         // 水源ではない or 水源として使えない
-        if (comp == null || !comp.IsWaterSource)
+        if (comp is not { IsWaterSource: true })
         {
             return float.MinValue;
         }
@@ -243,13 +243,14 @@ public static class MizuUtility
 
         // 飲むのにかかる時間
         var drinkTickScore = 0f;
-        if (comp.SourceType == CompProperties_WaterSource.SourceType.Item)
+        switch (comp.SourceType)
         {
-            drinkTickScore = -comp.BaseDrinkTicks / 100f / comp.WaterAmount;
-        }
-        else if (comp.SourceType == CompProperties_WaterSource.SourceType.Building)
-        {
-            drinkTickScore = -comp.BaseDrinkTicks / 100f / 0.35f;
+            case CompProperties_WaterSource.SourceType.Item:
+                drinkTickScore = -comp.BaseDrinkTicks / 100f / comp.WaterAmount;
+                break;
+            case CompProperties_WaterSource.SourceType.Building:
+                drinkTickScore = -comp.BaseDrinkTicks / 100f / 0.35f;
+                break;
         }
 
         // 基本点合計メモ
@@ -360,19 +361,17 @@ public static class MizuUtility
         var comp = thing.TryGetComp<CompWaterSource>();
 
         // 水源ではない
-        if (comp == null || !comp.IsWaterSource)
+        if (comp is not { IsWaterSource: true })
         {
             return 0;
         }
 
         // 必要な水分がほぼゼロ
-        if (waterWanted <= 0.0001f)
-        {
-            return 0;
-        }
-
-        // それを何個摂取すれば水分が十分になるのかを返す(最低値1)
-        return Math.Max((int)Math.Round(waterWanted / comp.WaterAmount), 1);
+        return waterWanted <= 0.0001f
+            ? 0
+            :
+            // それを何個摂取すれば水分が十分になるのかを返す(最低値1)
+            Math.Max((int)Math.Round(waterWanted / comp.WaterAmount), 1);
     }
 
     public static List<ThoughtDef> ThoughtsFromGettingWater(Pawn getter, Thing t)
@@ -481,26 +480,26 @@ public static class MizuUtility
             }
         }
 
-        if (inventoryThing == null && mapThing == null)
+        switch (inventoryThing)
         {
-            // 所持品にまともな水なし、マップからいかなる水も見つけられない
-            // →ランクを落として所持品から探しなおす
-            if (canUseInventory && getter.CanManipulate())
+            case null when mapThing == null:
             {
-                // 見つかっても見つからなくてもその結果を返す
-                return BestWaterInInventory(getter, WaterPreferability.SeaWater, WaterPreferability.ClearWater, 0f,
-                    allowDrug);
+                // 所持品にまともな水なし、マップからいかなる水も見つけられない
+                // →ランクを落として所持品から探しなおす
+                if (canUseInventory && getter.CanManipulate())
+                {
+                    // 見つかっても見つからなくてもその結果を返す
+                    return BestWaterInInventory(getter, WaterPreferability.SeaWater, WaterPreferability.ClearWater, 0f,
+                        allowDrug);
+                }
+
+                // 所持品から探せる状態ではない
+                return null;
             }
-
-            // 所持品から探せる状態ではない
-            return null;
-        }
-
-        // 所持品にまともな水なし、マップから水が見つかった
-        // →マップの水を取得
-        if (inventoryThing == null)
-        {
-            return mapThing;
+            // 所持品にまともな水なし、マップから水が見つかった
+            // →マップの水を取得
+            case null:
+                return mapThing;
         }
 
         // 所持品からまともな水が見つかった、マップからはいかなる水も見つけられない
@@ -520,13 +519,11 @@ public static class MizuUtility
         scoreInventoryThing += 30f;
 
         // マップの水のほうが高スコア
-        if (scoreMapThing > scoreInventoryThing)
-        {
-            return mapThing;
-        }
-
-        // 所持品の水のほうが高スコア
-        return inventoryThing;
+        return scoreMapThing > scoreInventoryThing
+            ? mapThing
+            :
+            // 所持品の水のほうが高スコア
+            inventoryThing;
     }
 
     public static bool TryFindHiddenWaterSpot(Pawn pawn, out IntVec3 result)
@@ -569,7 +566,7 @@ public static class MizuUtility
         var comp = thing.TryGetComp<CompWaterSource>();
 
         // 水源ではない→摂取数0
-        if (comp == null || !comp.IsWaterSource)
+        if (comp is not { IsWaterSource: true })
         {
             return 0;
         }
@@ -585,12 +582,7 @@ public static class MizuUtility
             StackCountForWater(thing, getter.needs.Water().WaterWanted));
 
         // 1個未満なら1個にする
-        if (wantedWaterItemCount < 1)
-        {
-            return 1;
-        }
-
-        return wantedWaterItemCount;
+        return wantedWaterItemCount < 1 ? 1 : wantedWaterItemCount;
     }
 
     private static Thing BestWaterInInventory(Pawn holder,
@@ -662,7 +654,7 @@ public static class MizuUtility
             var comp = t.TryGetComp<CompWaterSource>();
 
             // 水源として使用できない
-            if (comp == null || !comp.IsWaterSource)
+            if (comp is not { IsWaterSource: true })
             {
                 return false;
             }
@@ -705,18 +697,9 @@ public static class MizuUtility
                 }
 
                 // 入植者は囚人部屋のアイテムを扱えないことがあるが、そのことに関するチェックでダメならfalse
-                if (!IsWaterSourceOnMapSociallyProper(t, getter, eater, allowSociallyImproper))
-                {
-                    return false;
-                }
-
-                // 取得者がそれに気づいていない
-                if (!getter.AnimalAwareOf(t))
-                {
-                    return false;
-                }
-
-                return true;
+                return IsWaterSourceOnMapSociallyProper(t, getter, eater, allowSociallyImproper) &&
+                       // 取得者がそれに気づいていない
+                       getter.AnimalAwareOf(t);
             }
 
             if (comp.SourceType != CompProperties_WaterSource.SourceType.Building)
@@ -731,7 +714,7 @@ public static class MizuUtility
             }
 
             // 水汲みに使えない
-            if (!(t is IBuilding_DrinkWater drinkWaterBuilding))
+            if (t is not IBuilding_DrinkWater drinkWaterBuilding)
             {
                 return false;
             }
@@ -815,12 +798,7 @@ public static class MizuUtility
                             return true;
                         }
 
-                        if (t is IBuilding_DrinkWater building && building.CanDrinkFor(eater))
-                        {
-                            return true;
-                        }
-
-                        return false;
+                        return t is IBuilding_DrinkWater building && building.CanDrinkFor(eater);
                     }),
                 PathEndMode.ClosestTouch,
                 TraverseParms.For(getter),
@@ -871,12 +849,7 @@ public static class MizuUtility
             }
 
             // 水の品質が最低値未満
-            if (t.GetWaterPreferability() < WaterPreferability.SeaWater)
-            {
-                return false;
-            }
-
-            return true;
+            return t.GetWaterPreferability() >= WaterPreferability.SeaWater;
         }
 
         // 指定の条件下でアクセスできるものを探す
@@ -1059,13 +1032,8 @@ public static class MizuUtility
         }
 
         // 適切な場所にある
-        if (t.IsSociallyProper(getter) ||
-            t.IsSociallyProper(eater, eater.IsPrisonerOfColony, !getter.AnimalOrWildMan()))
-        {
-            return true;
-        }
-
-        return false;
+        return t.IsSociallyProper(getter) ||
+               t.IsSociallyProper(eater, eater.IsPrisonerOfColony, !getter.AnimalOrWildMan());
     }
 
     private static Thing SpawnedWaterSearchInnerScan(Pawn eater, IntVec3 root, List<Thing> searchSet,

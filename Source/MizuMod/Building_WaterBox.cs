@@ -34,40 +34,13 @@ public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWate
                 return true;
             }
 
-            if (TankComp.StoredWaterVolume <= 0f)
-            {
-                return true;
-            }
-
-            return false;
+            return TankComp.StoredWaterVolume <= 0f;
         }
     }
 
-    public WaterType WaterType
-    {
-        get
-        {
-            if (TankComp == null)
-            {
-                return WaterType.Undefined;
-            }
+    public WaterType WaterType => TankComp?.StoredWaterType ?? WaterType.Undefined;
 
-            return TankComp.StoredWaterType;
-        }
-    }
-
-    public float WaterVolume
-    {
-        get
-        {
-            if (TankComp == null)
-            {
-                return 0f;
-            }
-
-            return TankComp.StoredWaterVolume;
-        }
-    }
+    public float WaterVolume => TankComp?.StoredWaterVolume ?? 0f;
 
     public bool CanDrawFor(Pawn p)
     {
@@ -76,7 +49,7 @@ public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWate
             return false;
         }
 
-        if (TankComp.StoredWaterType == WaterType.Undefined || TankComp.StoredWaterType == WaterType.NoWater)
+        if (TankComp.StoredWaterType is WaterType.Undefined or WaterType.NoWater)
         {
             return false;
         }
@@ -102,7 +75,7 @@ public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWate
             return false;
         }
 
-        if (TankComp.StoredWaterType == WaterType.Undefined || TankComp.StoredWaterType == WaterType.NoWater)
+        if (TankComp.StoredWaterType is WaterType.Undefined or WaterType.NoWater)
         {
             return false;
         }

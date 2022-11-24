@@ -35,8 +35,8 @@ public class ThinkNode_ConditionalStockWaterForPrisoner : ThinkNode_Conditional
 
             // 十分な水分を持った水アイテムでなければ対象外
             var comp = t.TryGetComp<CompWaterSource>();
-            if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item
-                             || comp.WaterAmount < Need_Water.MinWaterAmountPerOneDrink)
+            if (comp is not { SourceType: CompProperties_WaterSource.SourceType.Item }
+                || comp.WaterAmount < Need_Water.MinWaterAmountPerOneDrink)
             {
                 continue;
             }

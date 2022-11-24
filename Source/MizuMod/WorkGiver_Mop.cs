@@ -93,12 +93,7 @@ public class WorkGiver_Mop : WorkGiver_Scanner
             return false;
         }
 
-        if (mopList.Count(t => pawn.CanReserve(t)) == 0)
-        {
-            return false;
-        }
-
-        return true;
+        return mopList.Count(t => pawn.CanReserve(t)) != 0;
     }
 
     public override Job JobOnCell(Pawn pawn, IntVec3 cell, bool forced = false)
@@ -132,12 +127,7 @@ public class WorkGiver_Mop : WorkGiver_Scanner
 
                 var maxQueueLengthForCheck =
                     (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                if (maxQueueLengthForCheck <= 0)
-                {
-                    return false;
-                }
-
-                return true;
+                return maxQueueLengthForCheck > 0;
             });
 
         foreach (var mop in mopList)
@@ -195,7 +185,7 @@ public class WorkGiver_Mop : WorkGiver_Scanner
             }
         }
 
-        if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
+        if (job.targetQueueA is { Count: >= 5 })
         {
             // 掃除対象が5個以上あるならポーンからの距離が近い順に掃除させる
             job.targetQueueA.SortBy(targ => targ.Cell.DistanceToSquared(pawn.Position));

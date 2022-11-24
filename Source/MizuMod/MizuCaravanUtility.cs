@@ -85,8 +85,7 @@ public static class MizuCaravanUtility
     {
         var compprop = water.GetCompProperties<CompProperties_WaterSource>();
 
-        return compprop != null && compprop.waterAmount > 0.0f && compprop.waterType >= WaterType.SeaWater
-               && compprop.waterType <= WaterType.ClearWater;
+        return compprop is { waterAmount: > 0.0f, waterType: >= WaterType.SeaWater and <= WaterType.ClearWater };
     }
 
     public static float DaysWorthOfWater()

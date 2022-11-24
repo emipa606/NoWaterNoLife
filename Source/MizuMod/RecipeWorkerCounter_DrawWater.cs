@@ -15,7 +15,7 @@ public class RecipeWorkerCounter_DrawWater : RecipeWorkerCounter
             return false;
         }
 
-        if (!(bill.billStack.billGiver is IBuilding_DrinkWater))
+        if (bill.billStack.billGiver is not IBuilding_DrinkWater)
         {
             return false;
         }
@@ -26,7 +26,7 @@ public class RecipeWorkerCounter_DrawWater : RecipeWorkerCounter
     public override int CountProducts(Bill_Production bill)
     {
         // var ext = bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
-        if (!(bill.billStack.billGiver is IBuilding_DrinkWater building))
+        if (bill.billStack.billGiver is not IBuilding_DrinkWater building)
         {
             return 0;
         }

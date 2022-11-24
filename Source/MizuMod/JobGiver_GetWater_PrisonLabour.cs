@@ -24,7 +24,7 @@ public class JobGiver_GetWater_PrisonLabour : ThinkNode_JobGiver
 
     public override ThinkNode DeepCopy(bool resolve = true)
     {
-        if (!(base.DeepCopy(resolve) is JobGiver_GetWater_PrisonLabour jobGiver_GetWater_PrisonLabour))
+        if (base.DeepCopy(resolve) is not JobGiver_GetWater_PrisonLabour jobGiver_GetWater_PrisonLabour)
         {
             return null;
         }
@@ -55,30 +55,34 @@ public class JobGiver_GetWater_PrisonLabour : ThinkNode_JobGiver
         need_water.lastSearchWaterTick = Find.TickManager.TicksGame;
 
         var thing = MizuUtility.TryFindBestWaterSourceFor(pawn, pawn, false);
-        if (thing != null)
+        if (thing == null)
         {
-            if (thing.CanDrinkWater())
-            {
-                return new Job(MizuDef.Job_DrinkWater, thing)
-                {
-                    count = MizuUtility.WillGetStackCountOf(pawn, thing)
-                };
-            }
+            return MizuUtility.TryFindHiddenWaterSpot(pawn, out var foundWaterSpot)
+                ? new Job(MizuDef.Job_DrinkWater, foundWaterSpot) { count = 1 }
+                :
+                // 水を発見できず
+                null;
+        }
 
-            if (thing is IBuilding_DrinkWater)
+        if (thing.CanDrinkWater())
+        {
+            return new Job(MizuDef.Job_DrinkWater, thing)
             {
-                return new Job(MizuDef.Job_DrinkWaterFromBuilding, thing);
-            }
+                count = MizuUtility.WillGetStackCountOf(pawn, thing)
+            };
+        }
+
+        if (thing is IBuilding_DrinkWater)
+        {
+            return new Job(MizuDef.Job_DrinkWaterFromBuilding, thing);
         }
 
         // 何も見つからなかった場合は隠し水飲み場を探す
         // 人間、家畜、野生の動物全て
-        if (MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot))
-        {
-            return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 };
-        }
-
-        // 水を発見できず
-        return null;
+        return MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot)
+            ? new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 }
+            :
+            // 水を発見できず
+            null;
     }
 }

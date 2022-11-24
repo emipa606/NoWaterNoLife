@@ -52,7 +52,7 @@ internal class ITab_Pawn_Gear_DrawThingRow
 
         // 水アイテムでなかったり、食べられるものは能動的に飲むことはできない
         var comp = thing.TryGetComp<CompWaterSource>();
-        if (comp == null || comp.SourceType != CompProperties_WaterSource.SourceType.Item ||
+        if (comp is not { SourceType: CompProperties_WaterSource.SourceType.Item } ||
             thing.IsIngestibleFor(selPawn))
         {
             return;

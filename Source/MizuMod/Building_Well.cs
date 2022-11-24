@@ -21,40 +21,13 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
                 return true;
             }
 
-            if (pool.CurrentWaterVolume <= 0f)
-            {
-                return true;
-            }
-
-            return false;
+            return pool.CurrentWaterVolume <= 0f;
         }
     }
 
-    public WaterType WaterType
-    {
-        get
-        {
-            if (pool == null)
-            {
-                return WaterType.Undefined;
-            }
+    public WaterType WaterType => pool?.WaterType ?? WaterType.Undefined;
 
-            return pool.WaterType;
-        }
-    }
-
-    public float WaterVolume
-    {
-        get
-        {
-            if (pool == null)
-            {
-                return 0f;
-            }
-
-            return pool.CurrentWaterVolume;
-        }
-    }
+    public float WaterVolume => pool?.CurrentWaterVolume ?? 0f;
 
     public bool CanDrawFor(Pawn p)
     {
@@ -63,7 +36,7 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
             return false;
         }
 
-        if (pool.WaterType == WaterType.Undefined || pool.WaterType == WaterType.NoWater)
+        if (pool.WaterType is WaterType.Undefined or WaterType.NoWater)
         {
             return false;
         }
@@ -88,7 +61,7 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
             return false;
         }
 
-        if (pool.WaterType == WaterType.Undefined || pool.WaterType == WaterType.NoWater)
+        if (pool.WaterType is WaterType.Undefined or WaterType.NoWater)
         {
             return false;
         }

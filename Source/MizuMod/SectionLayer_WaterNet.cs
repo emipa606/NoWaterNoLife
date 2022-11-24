@@ -14,14 +14,14 @@ internal class SectionLayer_WaterNet : SectionLayer_Things
     public override void DrawLayer()
     {
         ThingDef thingDef = null;
-        if (Find.DesignatorManager.SelectedDesignator is Designator_Build designator_build)
+        switch (Find.DesignatorManager.SelectedDesignator)
         {
-            thingDef = designator_build.PlacingDef as ThingDef;
-        }
-
-        if (Find.DesignatorManager.SelectedDesignator is Designator_Install designator_install)
-        {
-            thingDef = designator_install.PlacingDef as ThingDef;
+            case Designator_Build designator_build:
+                thingDef = designator_build.PlacingDef as ThingDef;
+                break;
+            case Designator_Install designator_install:
+                thingDef = designator_install.PlacingDef as ThingDef;
+                break;
         }
 
         if (thingDef != null && typeof(IBuilding_WaterNet).IsAssignableFrom(thingDef.thingClass))

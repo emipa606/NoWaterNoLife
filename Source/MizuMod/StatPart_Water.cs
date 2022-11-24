@@ -24,7 +24,7 @@ public class StatPart_Water : StatPart
             return null;
         }
 
-        if (!(req.Thing is Pawn pawn) || pawn.needs.Water() == null)
+        if (req.Thing is not Pawn pawn || pawn.needs.Water() == null)
         {
             return null;
         }
@@ -41,7 +41,7 @@ public class StatPart_Water : StatPart
             return;
         }
 
-        if (!(req.Thing is Pawn pawn) || pawn.needs.Water() == null)
+        if (req.Thing is not Pawn pawn || pawn.needs.Water() == null)
         {
             return;
         }

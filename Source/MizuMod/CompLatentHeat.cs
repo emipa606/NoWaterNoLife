@@ -59,17 +59,6 @@ public class CompLatentHeat : ThingComp
         stringBuilder.AppendLine();
         stringBuilder.Append($"HiddenRotProgress:{hiddenRotProgress}");
 
-        // if (stringBuilder.ToString() != string.Empty)
-        // {
-        // stringBuilder.AppendLine();
-        // }
-        // stringBuilder.Append(MizuStrings.InspectWaterFlowInput + ": " + this.InputWaterFlow.ToString("F2") + " L/day");
-        // stringBuilder.Append(string.Concat(new string[]
-        // {
-        // "(",
-        // MizuStrings.GetInspectWaterTypeString(this.InputWaterType),
-        // ")",
-        // }));
         return stringBuilder.ToString();
     }
 

@@ -30,12 +30,7 @@ public abstract class JobDriver_DrawWater : JobDriver_DoBill
             return false;
         }
 
-        if (Ext == null)
-        {
-            return false;
-        }
-
-        return true;
+        return Ext != null;
     }
 
     protected override IEnumerable<Toil> MakeNewToils()

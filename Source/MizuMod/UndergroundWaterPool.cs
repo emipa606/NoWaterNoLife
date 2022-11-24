@@ -126,7 +126,7 @@ public class UndergroundWaterPool : IExposable
             rainRegenRatePerCell = MizuDef.GlobalSettings.forDebug.resetRainRegenRatePerCellForShallow;
         }
 
-        if (!(waterGrid is MapComponent_DeepWaterGrid))
+        if (waterGrid is not MapComponent_DeepWaterGrid)
         {
             return;
         }

@@ -26,7 +26,7 @@ public class ThoughtWorker_NeedWater : ThoughtWorker
             case ThirstCategory.Dehydration:
             {
                 var firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Dehydration);
-                var num = firstHediffOfDef != null ? firstHediffOfDef.CurStageIndex : 0;
+                var num = firstHediffOfDef?.CurStageIndex ?? 0;
 
                 // 脱水症状の1段階目=喉の渇き心情の4段階目 => +3する
                 return ThoughtState.ActiveAtStage(3 + num);
