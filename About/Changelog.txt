@@ -1,5 +1,8 @@
 # Changelog for NoWaterNoLife
 
+1.4.3 - Deathresting pawns should not get thirsty
+
+
 1.4.2 - Fixed the water drawer.
 
 

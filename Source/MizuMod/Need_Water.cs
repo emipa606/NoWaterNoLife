@@ -135,7 +135,7 @@ public class Need_Water : Need
             return;
         }
 
-        if (IsFrozen)
+        if (IsFrozen || pawn.Deathresting)
         {
             return;
         }
