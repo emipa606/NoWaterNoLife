@@ -116,7 +116,7 @@ public class CompWaterNetTank : CompWaterNet
         stringBuilder.Append(
             $"{MizuStrings.InspectWaterTankStored.Translate()}: {StoredWaterVolume:F2} / {MaxWaterVolume:F2} L");
         stringBuilder.Append(
-            string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")" }));
+            string.Concat(["(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")"]));
 
         return stringBuilder.ToString();
     }

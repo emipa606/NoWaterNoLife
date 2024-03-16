@@ -2,9 +2,4 @@
 
 namespace MizuMod;
 
-public class MapComponent_ShallowWaterGrid : MapComponent_WaterGrid
-{
-    public MapComponent_ShallowWaterGrid(Map map) : base(map)
-    {
-    }
-}
+public class MapComponent_ShallowWaterGrid(Map map) : MapComponent_WaterGrid(map);

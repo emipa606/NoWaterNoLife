@@ -18,17 +18,7 @@ public class WorkGiver_GetSnow : WorkGiver_Scanner
             return false;
         }
 
-        if (c.IsForbidden(pawn))
-        {
-            return false;
-        }
-
-        if (!pawn.CanReserve(c))
-        {
-            return false;
-        }
-
-        return true;
+        return !c.IsForbidden(pawn) && pawn.CanReserve(c);
     }
 
     public override Job JobOnCell(Pawn pawn, IntVec3 c, bool forced = false)

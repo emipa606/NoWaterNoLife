@@ -16,9 +16,9 @@ public abstract class GenStep_UndergroundWater : GenStep
 
     protected readonly int minWaterPoolNum = 3;
 
+    protected readonly float rainRegenRatePerCell = 5.0f;
+
     protected FloatRange baseRegenRateRange = new FloatRange(10.0f, 20.0f);
 
     protected IntRange poolCellRange = new IntRange(30, 100);
-
-    protected float rainRegenRatePerCell = 5.0f;
 }

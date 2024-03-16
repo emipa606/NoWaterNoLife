@@ -27,7 +27,7 @@ public class MapComponent_HiddenWaterSpot : MapComponent, ICellBoolGiver
         : base(map)
     {
         spotGrid = new ushort[map.cellIndices.NumGridCells];
-        spotCells = new HashSet<IntVec3>();
+        spotCells = [];
         drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
         lastUpdateTick = Find.TickManager.TicksGame;
     }
@@ -46,16 +46,16 @@ public class MapComponent_HiddenWaterSpot : MapComponent, ICellBoolGiver
         return spotGrid[index] != 0 ? new Color(1f, 0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f, 0f);
     }
 
-    public void CreateWaterSpot(int blockSizeX, int blockSizeZ, int allSpotNum)
+    public void CreateWaterSpot(int sizeX, int sizeZ, int num)
     {
         ClearWaterSpot();
 
-        this.blockSizeX = blockSizeX;
-        this.blockSizeZ = blockSizeZ;
-        this.allSpotNum = allSpotNum;
+        blockSizeX = sizeX;
+        blockSizeZ = sizeZ;
+        allSpotNum = num;
 
-        var blockNumX = Mathf.CeilToInt((float)map.Size.x / 2 / blockSizeX);
-        var blockNumZ = Mathf.CeilToInt((float)map.Size.z / 2 / blockSizeZ);
+        var blockNumX = Mathf.CeilToInt((float)map.Size.x / 2 / sizeX);
+        var blockNumZ = Mathf.CeilToInt((float)map.Size.z / 2 / sizeZ);
         var waterCellMap = new List<IntVec3>[blockNumX * 2, blockNumZ * 2];
         var allWaterNum = 0;
 
@@ -63,13 +63,13 @@ public class MapComponent_HiddenWaterSpot : MapComponent, ICellBoolGiver
         {
             for (var bz = -blockNumZ; bz < blockNumZ; bz++)
             {
-                waterCellMap[bx + blockNumX, bz + blockNumZ] = new List<IntVec3>();
+                waterCellMap[bx + blockNumX, bz + blockNumZ] = [];
                 var waterCells = waterCellMap[bx + blockNumX, bz + blockNumZ];
                 foreach (var c in new CellRect(
-                             (bx * blockSizeX) + (map.Size.x / 2),
-                             (bz * blockSizeZ) + (map.Size.z / 2),
-                             blockSizeX,
-                             blockSizeZ))
+                             (bx * sizeX) + (map.Size.x / 2),
+                             (bz * sizeZ) + (map.Size.z / 2),
+                             sizeX,
+                             sizeZ))
                 {
                     if (!c.InBounds(map) || !c.GetTerrain(map).IsWaterStandable())
                     {
@@ -88,7 +88,7 @@ public class MapComponent_HiddenWaterSpot : MapComponent, ICellBoolGiver
             {
                 var waterCells = waterCellMap[bx + blockNumX, bz + blockNumZ];
                 var spotNum = Mathf.Min(
-                    Mathf.CeilToInt((float)waterCells.Count / allWaterNum * allSpotNum),
+                    Mathf.CeilToInt((float)waterCells.Count / allWaterNum * num),
                     waterCells.Count);
                 var randomCells = waterCells.InRandomOrder().ToList();
                 for (var i = 0; i < spotNum; i++)
@@ -120,7 +120,7 @@ public class MapComponent_HiddenWaterSpot : MapComponent, ICellBoolGiver
             return;
         }
 
-        spotCells = new HashSet<IntVec3>();
+        spotCells = [];
         CreateWaterSpot(
             MizuDef.GlobalSettings.forDebug.resetHiddenWaterSpotBlockSizeX,
             MizuDef.GlobalSettings.forDebug.resetHiddenWaterSpotBlockSizeZ,

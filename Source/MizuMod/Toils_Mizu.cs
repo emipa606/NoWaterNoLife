@@ -41,7 +41,7 @@ public static class Toils_Mizu
             var actor = toil.actor;
             if (actor.CurJob.placedThings == null)
             {
-                actor.CurJob.placedThings = new List<ThingCountClass>();
+                actor.CurJob.placedThings = [];
             }
 
             actor.CurJob.placedThings.Add(new ThingCountClass(actor.carryTracker.CarriedThing,
@@ -467,7 +467,7 @@ public static class Toils_Mizu
                     return null;
                 }
 
-                return toil.actor.CurJob.GetTarget(patientIndex).Thing is not Pawn patient ? null : patient;
+                return toil.actor.CurJob.GetTarget(patientIndex).Thing as Pawn;
             });
     }
 

@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
 namespace MizuMod;
 
-public class Need_Water : Need
+public class Need_Water(Pawn pawn) : Need(pawn)
 {
     public const float DrinkFromBuildingMargin = 1.5f;
 
@@ -17,15 +16,9 @@ public class Need_Water : Need
 
     private bool isSetRaceThirstRate;
 
-    public int lastSearchWaterTick;
+    public int lastSearchWaterTick = Find.TickManager.TicksGame;
 
     private float raceThirstRate = 1f;
-
-    public Need_Water(Pawn pawn)
-        : base(pawn)
-    {
-        lastSearchWaterTick = Find.TickManager.TicksGame;
-    }
 
     public ThirstCategory CurCategory
     {
@@ -108,8 +101,8 @@ public class Need_Water : Need
     {
         if (threshPercents == null)
         {
-            threshPercents = new List<float>
-                { PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty };
+            threshPercents =
+                [PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty];
         }
 
         base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip, rectForTooltip, drawLabel);

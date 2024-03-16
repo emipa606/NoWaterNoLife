@@ -18,37 +18,37 @@ public class CompProperties_WaterSource : CompProperties
     // 飲むのにかかるTick
     // 水アイテムの場合、1個あたりのTick
     // 設備の場合、要求を1.0得るのにかかるTick
-    public int baseDrinkTicks = 100;
+    public readonly int baseDrinkTicks = 100;
 
     // 水アイテム用 水質が使用材料に依存するか
-    public bool dependIngredients = false;
+    public readonly bool dependIngredients = false;
 
     // 水設備用 水抜き速度
-    public float drainWaterFlow = 1000.0f;
+    public readonly float drainWaterFlow = 1000.0f;
 
     // 飲むときのエフェクト
-    public EffecterDef getEffect = null;
+    public readonly EffecterDef getEffect = null;
 
     // 飲むときの音
-    public SoundDef getSound = null;
+    public readonly SoundDef getSound = null;
 
     // 水アイテム用 1回に摂取できる最大数
-    public int maxNumToGetAtOnce = 1;
+    public readonly int maxNumToGetAtOnce = 1;
 
     // 水を飲むのに手を必要とするかどうか
-    public bool needManipulate = false;
+    public readonly bool needManipulate = false;
 
     // どのタイプの水源か
-    public SourceType sourceType = SourceType.Undefined;
+    public readonly SourceType sourceType = SourceType.Undefined;
 
     // 水アイテム用 1個あたりの水の量(Need換算)
-    public float waterAmount = 0.0f;
+    public readonly float waterAmount = 0.0f;
 
     // 水アイテム用 水質
-    public WaterType waterType = WaterType.Undefined;
+    public readonly WaterType waterType = WaterType.Undefined;
 
     // 水アイテム用 1個あたりの水の量(リットル換算)
-    public float waterVolume = 0.0f;
+    public readonly float waterVolume = 0.0f;
 
     public CompProperties_WaterSource()
     {

@@ -13,7 +13,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
 
     private static readonly string FullWaterTranslated = "MizuFullWater".Translate();
 
-    private static readonly List<IngredientCount> ingredientsOrdered = new List<IngredientCount>();
+    private static readonly List<IngredientCount> ingredientsOrdered = [];
 
     private static readonly string MissingMaterialsTranslated = "MissingMaterials".Translate();
 
@@ -21,15 +21,15 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
 
     private static readonly string MissingWaterTranslated = "MizuMissingWater".Translate();
 
-    private static readonly List<Thing> newRelevantThings = new List<Thing>();
+    private static readonly List<Thing> newRelevantThings = [];
 
-    private static readonly HashSet<Thing> processedThings = new HashSet<Thing>();
+    private static readonly HashSet<Thing> processedThings = [];
 
     private static readonly IntRange ReCheckFailedBillTicksRange = new IntRange(500, 600);
 
-    private static readonly List<Thing> relevantThings = new List<Thing>();
+    private static readonly List<Thing> relevantThings = [];
 
-    private readonly List<ThingCount> chosenIngThings = new List<ThingCount>();
+    private readonly List<ThingCount> chosenIngThings = [];
 
     public override Job JobOnThing(Pawn pawn, Thing thing, bool forced = false)
     {
@@ -229,30 +229,20 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
         processedThings.Clear();
         var foundAll = false;
 
-        // 材料の基本探索条件
-        bool baseValidator(Thing t)
-        {
-            return t.Spawned // スポーン済み
-                   && !t.IsForbidden(pawn) // 禁止されていない
-                   && (t.Position - billGiver.Position).LengthHorizontalSquared
-                   < bill.ingredientSearchRadius * bill.ingredientSearchRadius // billごとの材料探索範囲以内
-                   && bill.IsFixedOrAllowedIngredient(t) // billとして許可された材料である
-                   && bill.recipe.ingredients.Any(ingNeed => ingNeed.filter.Allows(t)) // レシピとして許可された材料である
-                   && pawn.CanReserve(t); // 予約可能
-        }
-
         var traverseParams = TraverseParms.For(pawn);
-
-        bool entryCondition(Region from, Region r)
-        {
-            return r.Allows(traverseParams, false);
-        }
 
         var adjacentRegionsAvailable = rootReg.Neighbors.Count(region => entryCondition(rootReg, region));
         var regionsProcessed = 0;
 
         // ???
         processedThings.AddRange(relevantThings);
+
+        RegionTraverser.BreadthFirstTraverse(rootReg, entryCondition, regionProcessor);
+
+        relevantThings.Clear();
+        newRelevantThings.Clear();
+
+        return foundAll;
 
         bool regionProcessor(Region r)
         {
@@ -294,14 +284,6 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
                 return false;
             }
 
-            // 二つの物の距離を比べる
-            int comparison(Thing t1, Thing t2)
-            {
-                var t1dist = (float)(t1.Position - rootCell).LengthHorizontalSquared;
-                var t2dist = (float)(t2.Position - rootCell).LengthHorizontalSquared;
-                return t1dist.CompareTo(t2dist);
-            }
-
             // 距離の昇順?にソート
             newRelevantThings.Sort(comparison);
 
@@ -322,14 +304,32 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             return true;
 
             // 全部は見つからなかった
+
+            // 二つの物の距離を比べる
+            int comparison(Thing t1, Thing t2)
+            {
+                var t1dist = (float)(t1.Position - rootCell).LengthHorizontalSquared;
+                var t2dist = (float)(t2.Position - rootCell).LengthHorizontalSquared;
+                return t1dist.CompareTo(t2dist);
+            }
         }
 
-        RegionTraverser.BreadthFirstTraverse(rootReg, entryCondition, regionProcessor);
+        bool entryCondition(Region from, Region r)
+        {
+            return r.Allows(traverseParams, false);
+        }
 
-        relevantThings.Clear();
-        newRelevantThings.Clear();
-
-        return foundAll;
+        // 材料の基本探索条件
+        bool baseValidator(Thing t)
+        {
+            return t.Spawned // スポーン済み
+                   && !t.IsForbidden(pawn) // 禁止されていない
+                   && (t.Position - billGiver.Position).LengthHorizontalSquared
+                   < bill.ingredientSearchRadius * bill.ingredientSearchRadius // billごとの材料探索範囲以内
+                   && bill.IsFixedOrAllowedIngredient(t) // billとして許可された材料である
+                   && bill.recipe.ingredients.Any(ingNeed => ingNeed.filter.Allows(t)) // レシピとして許可された材料である
+                   && pawn.CanReserve(t); // 予約可能
+        }
     }
 
     private static bool TryFindBestBillIngredientsInSet(
@@ -708,9 +708,9 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
 
     private class DefCountList
     {
-        private readonly List<float> counts = new List<float>();
+        private readonly List<float> counts = [];
 
-        private readonly List<ThingDef> defs = new List<ThingDef>();
+        private readonly List<ThingDef> defs = [];
 
         public int Count => defs.Count;
 
@@ -719,12 +719,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             get
             {
                 var num = defs.IndexOf(def);
-                if (num < 0)
-                {
-                    return 0f;
-                }
-
-                return counts[num];
+                return num < 0 ? 0f : counts[num];
             }
 
             set
@@ -756,7 +751,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             Clear();
             foreach (var t in things)
             {
-                this[t.def] = this[t.def] + t.stackCount;
+                this[t.def] += t.stackCount;
             }
         }
 

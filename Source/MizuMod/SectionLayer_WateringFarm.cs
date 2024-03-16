@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MizuMod;
@@ -12,7 +13,7 @@ public class SectionLayer_WateringFarm : SectionLayer
     public SectionLayer_WateringFarm(Section section)
         : base(section)
     {
-        relevantChangeTypes = MapMeshFlag.Terrain;
+        relevantChangeTypes = MapMeshFlagDefOf.Terrain;
         material.mainTexture = texture;
         material.color = new Color(1f, 1f, 1f, 0.1f);
     }

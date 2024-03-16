@@ -8,11 +8,10 @@ public class WorkGiver_Warden_DeliverWater : WorkGiver_Warden
 {
     public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
     {
-        var warden = pawn;
         var prisoner = t as Pawn;
 
         // 世話が必要でない
-        if (!ShouldTakeCareOfPrisoner(warden, prisoner))
+        if (!ShouldTakeCareOfPrisoner(pawn, prisoner))
         {
             return null;
         }
@@ -53,7 +52,7 @@ public class WorkGiver_Warden_DeliverWater : WorkGiver_Warden
         }
 
         // 水が見つからない
-        var thing = MizuUtility.TryFindBestWaterSourceFor(warden, prisoner, false);
+        var thing = MizuUtility.TryFindBestWaterSourceFor(pawn, prisoner, false);
         if (thing == null)
         {
             return null;

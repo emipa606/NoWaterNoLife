@@ -1,27 +1,20 @@
-﻿using Verse;
+﻿using RimWorld;
+using Verse;
 
 namespace MizuMod;
 
-public class MapComponent_Watering : MapComponent
+public class MapComponent_Watering(Map map) : MapComponent(map)
 {
     public const ushort MaxWateringValue = 10;
 
     private const int IntervalTicks = 250;
 
     // 水やり効果がなくなるまでの残りTick
-    private readonly ushort[] wateringGrid;
+    private readonly ushort[] wateringGrid = new ushort[map.cellIndices.NumGridCells];
 
     private int elapsedTicks;
 
     private int randomIndex;
-
-    public MapComponent_Watering(Map map)
-        : base(map)
-    {
-        elapsedTicks = 0;
-        randomIndex = 0;
-        wateringGrid = new ushort[map.cellIndices.NumGridCells];
-    }
 
     public void Add(int index, ushort val)
     {
@@ -68,7 +61,7 @@ public class MapComponent_Watering : MapComponent
             {
                 // 雨が降れば水やり効果
                 wateringGrid[map.cellIndices.CellToIndex(c)] = 10;
-                map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+                map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlagDefOf.Terrain;
             }
             else if (wateringGrid[map.cellIndices.CellToIndex(c)] > 0)
             {
@@ -76,7 +69,7 @@ public class MapComponent_Watering : MapComponent
                 wateringGrid[map.cellIndices.CellToIndex(c)]--;
                 if (wateringGrid[map.cellIndices.CellToIndex(c)] == 0)
                 {
-                    map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+                    map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlagDefOf.Terrain;
                 }
             }
 

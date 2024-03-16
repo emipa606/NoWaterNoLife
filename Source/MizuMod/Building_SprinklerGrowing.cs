@@ -64,7 +64,7 @@ public class Building_SprinklerGrowing : Building_WaterNet
                     foreach (var c in sameRoomCells)
                     {
                         wateringComp.Add(Map.cellIndices.CellToIndex(c), 1);
-                        Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+                        Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlagDefOf.Terrain;
 
                         // 水やりエフェクト(仮)
                         var mote = (MoteThrown)ThingMaker.MakeThing(MizuDef.Mote_SprinklerWater);

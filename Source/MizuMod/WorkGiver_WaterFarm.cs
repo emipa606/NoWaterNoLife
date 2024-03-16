@@ -120,12 +120,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
 
                 var maxQueueLength = (int)Mathf.Floor(
                     comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                if (maxQueueLength <= 0)
-                {
-                    return false;
-                }
-
-                return true;
+                return maxQueueLength > 0;
             });
         if (!toolList.Any())
         {
@@ -243,16 +238,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
 
         // 農地チェック
         var growingZoneList = pawn.Map.zoneManager.AllZones.Where(
-            zone =>
-            {
-                // 種まきを許可された農地ゾーンのみ手動水やりOK
-                if (zone is Zone_Growing { allowSow: true })
-                {
-                    return true;
-                }
-
-                return false;
-            });
+            zone => zone is Zone_Growing { allowSow: true });
         foreach (var zone in growingZoneList)
         {
             potentialCells = potentialCells == null ? zone.Cells.AsEnumerable() : potentialCells.Concat(zone.Cells);

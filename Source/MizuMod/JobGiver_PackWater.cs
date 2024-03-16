@@ -30,39 +30,6 @@ public class JobGiver_PackWater : ThinkNode_JobGiver
             return null;
         }
 
-        bool validator(Thing t)
-        {
-            // 食べられるものは携帯飲料としては選ばれない
-            if (t.def.IsIngestible)
-            {
-                return false;
-            }
-
-            var comp = t.TryGetComp<CompWaterSource>();
-            if (comp == null)
-            {
-                return false; // 水源でないもの×
-            }
-
-            if (!comp.IsWaterSource)
-            {
-                return false; // 水源でないもの×
-            }
-
-            if (comp.SourceType != CompProperties_WaterSource.SourceType.Item)
-            {
-                return false; // 水アイテムではないもの×
-            }
-
-            if (comp.WaterAmount * comp.MaxNumToGetAtOnce < Need_Water.MinWaterAmountPerOneDrink)
-            {
-                return false; // 最低水分量を満たしていないもの×
-            }
-
-            return MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability >= MinWaterPreferability;
-            // 最低の水質を満たしていないもの×
-        }
-
         // 既に条件を満たしたアイテムを持っているか？
         foreach (var thing in pawn.inventory.innerContainer)
         {
@@ -119,5 +86,38 @@ public class JobGiver_PackWater : ThinkNode_JobGiver
             count = Mathf.Min(MizuUtility.StackCountForWater(waterThing, NeedTotalWaterAmount),
                 waterThing.stackCount)
         };
+
+        bool validator(Thing t)
+        {
+            // 食べられるものは携帯飲料としては選ばれない
+            if (t.def.IsIngestible)
+            {
+                return false;
+            }
+
+            var comp = t.TryGetComp<CompWaterSource>();
+            if (comp == null)
+            {
+                return false; // 水源でないもの×
+            }
+
+            if (!comp.IsWaterSource)
+            {
+                return false; // 水源でないもの×
+            }
+
+            if (comp.SourceType != CompProperties_WaterSource.SourceType.Item)
+            {
+                return false; // 水アイテムではないもの×
+            }
+
+            if (comp.WaterAmount * comp.MaxNumToGetAtOnce < Need_Water.MinWaterAmountPerOneDrink)
+            {
+                return false; // 最低水分量を満たしていないもの×
+            }
+
+            return MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability >= MinWaterPreferability;
+            // 最低の水質を満たしていないもの×
+        }
     }
 }

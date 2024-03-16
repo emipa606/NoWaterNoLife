@@ -36,7 +36,7 @@ internal class LordToil_Siege_LordToilTick
                 AccessTools.Field(typeof(MizuDef), nameof(MizuDef.Thing_ClearWater))),
             new CodeInstruction(OpCodes.Ldc_I4_S, 20),
             new CodeInstruction(OpCodes.Call,
-                AccessTools.Method(typeof(LordToil_Siege), "DropSupplies", new[] { typeof(ThingDef), typeof(int) }))
+                AccessTools.Method(typeof(LordToil_Siege), "DropSupplies", [typeof(ThingDef), typeof(int)]))
         };
 
         codes.InsertRange(insert_index, insert_codes);

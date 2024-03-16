@@ -14,10 +14,10 @@ public static class UndergroundWaterMaterials
     {
         materials = new Material[MaterialCount];
         Color[] colorArr =
-        {
+        [
             new Color(1.0f, 0.0f, 0.0f, 0.25f), new Color(1.0f, 1.0f, 0.0f, 0.25f),
             new Color(0.0f, 1.0f, 0.8f, 0.25f), new Color(0.0f, 1.0f, 1.0f, 0.25f)
-        };
+        ];
 
         for (var i = 0; i < MaterialCount; i++)
         {

@@ -9,16 +9,16 @@ public class WaterNet
 {
     private static int nextID = 1;
 
-    private readonly HashSet<IBuilding_WaterNet> allTanks = new HashSet<IBuilding_WaterNet>();
+    private readonly HashSet<IBuilding_WaterNet> allTanks = [];
 
-    private readonly HashSet<IBuilding_WaterNet> drainers = new HashSet<IBuilding_WaterNet>();
+    private readonly HashSet<IBuilding_WaterNet> drainers = [];
 
     public readonly int ID;
 
     private readonly Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>> inputterTypeDic
         = new Dictionary<CompProperties_WaterNetInput.InputType, HashSet<IBuilding_WaterNet>>();
 
-    private readonly HashSet<IBuilding_WaterNet> outputters = new HashSet<IBuilding_WaterNet>();
+    private readonly HashSet<IBuilding_WaterNet> outputters = [];
 
     private readonly Dictionary<CompProperties_WaterNetTank.DrawType, HashSet<IBuilding_WaterNet>> tankTypeDic =
         new Dictionary<CompProperties_WaterNetTank.DrawType, HashSet<IBuilding_WaterNet>>();
@@ -32,13 +32,13 @@ public class WaterNet
         StoredWaterType = WaterType.NoWater;
         StoredWaterType = WaterType.NoWater;
 
-        inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterNet] = new HashSet<IBuilding_WaterNet>();
-        inputterTypeDic[CompProperties_WaterNetInput.InputType.Rain] = new HashSet<IBuilding_WaterNet>();
-        inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterPool] = new HashSet<IBuilding_WaterNet>();
-        inputterTypeDic[CompProperties_WaterNetInput.InputType.Terrain] = new HashSet<IBuilding_WaterNet>();
+        inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterNet] = [];
+        inputterTypeDic[CompProperties_WaterNetInput.InputType.Rain] = [];
+        inputterTypeDic[CompProperties_WaterNetInput.InputType.WaterPool] = [];
+        inputterTypeDic[CompProperties_WaterNetInput.InputType.Terrain] = [];
 
-        tankTypeDic[CompProperties_WaterNetTank.DrawType.Self] = new HashSet<IBuilding_WaterNet>();
-        tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet] = new HashSet<IBuilding_WaterNet>();
+        tankTypeDic[CompProperties_WaterNetTank.DrawType.Self] = [];
+        tankTypeDic[CompProperties_WaterNetTank.DrawType.Faucet] = [];
     }
 
     public WaterNet(IBuilding_WaterNet thing)
@@ -47,7 +47,7 @@ public class WaterNet
         AddThing(thing);
     }
 
-    public List<IBuilding_WaterNet> AllThings { get; } = new List<IBuilding_WaterNet>();
+    public List<IBuilding_WaterNet> AllThings { get; } = [];
 
     public IEnumerable<HashSet<IBuilding_WaterNet>> FlatTankList { get; private set; }
 
@@ -357,18 +357,9 @@ public class WaterNet
                     }
 
                     // タンクが満タンであれば除外
-                    if (t.TankComp is { AmountCanAccept: <= 0.0f })
-                    {
-                        return false;
-                    }
-
-                    // 出力水質が入力可能水質リストになければ除外
-                    if (!t.InputComp.AcceptWaterTypes.Contains(outputter.OutputComp.OutputWaterType))
-                    {
-                        return false;
-                    }
-
-                    return true;
+                    return t.TankComp is not { AmountCanAccept: <= 0.0f } &&
+                           // 出力水質が入力可能水質リストになければ除外
+                           t.InputComp.AcceptWaterTypes.Contains(outputter.OutputComp.OutputWaterType);
                 });
 
             // 残り出力量
@@ -640,7 +631,7 @@ public class WaterNet
             {
                 case 0:
                     // 新しい平坦化リストを作成
-                    flatTankListTmp.Add(new HashSet<IBuilding_WaterNet> { t });
+                    flatTankListTmp.Add([t]);
                     break;
                 case 1:
                     // 見つかった平坦化リストに追加

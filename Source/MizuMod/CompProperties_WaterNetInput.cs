@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MizuMod;
 
-public class CompProperties_WaterNetInput : CompProperties_WaterNet
+public class CompProperties_WaterNetInput(Type compClass) : CompProperties_WaterNet(compClass)
 {
     public enum InputType : byte
     {
@@ -27,35 +27,30 @@ public class CompProperties_WaterNetInput : CompProperties_WaterNet
         Any
     }
 
-    public List<WaterType> acceptWaterTypes = new List<WaterType>
-    {
+    public readonly List<WaterType> acceptWaterTypes =
+    [
         WaterType.ClearWater,
         WaterType.NormalWater,
         WaterType.RawWater,
         WaterType.MudWater,
         WaterType.SeaWater
-    };
+    ];
 
-    public float baseRainFlow = 1000f;
+    public readonly float baseRainFlow = 1000f;
 
     // public InputType inputType = InputType.WaterNet;
-    public List<InputType> inputTypes = new List<InputType> { InputType.WaterNet };
+    public readonly List<InputType> inputTypes = [InputType.WaterNet];
 
-    public InputWaterFlowType inputWaterFlowType = InputWaterFlowType.Any;
+    public readonly InputWaterFlowType inputWaterFlowType = InputWaterFlowType.Any;
 
-    public float maxInputWaterFlow = float.MaxValue;
+    public readonly float maxInputWaterFlow = float.MaxValue;
 
-    public int roofDistance = 1;
+    public readonly int roofDistance = 1;
 
-    public float roofEfficiency = 0.5f;
+    public readonly float roofEfficiency = 0.5f;
 
     public CompProperties_WaterNetInput()
-        : base(typeof(CompWaterNetInput))
-    {
-    }
-
-    public CompProperties_WaterNetInput(Type compClass)
-        : base(compClass)
+        : this(typeof(CompWaterNetInput))
     {
     }
 }

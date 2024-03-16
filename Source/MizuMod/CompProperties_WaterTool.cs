@@ -4,7 +4,7 @@ using Verse;
 
 namespace MizuMod;
 
-public class CompProperties_WaterTool : CompProperties
+public class CompProperties_WaterTool(Type compClass) : CompProperties(compClass)
 {
     public enum UseWorkType : byte
     {
@@ -19,19 +19,14 @@ public class CompProperties_WaterTool : CompProperties
         FightFire
     }
 
-    public float maxWaterVolume = 1f;
+    public readonly float maxWaterVolume = 1f;
 
-    public List<WorkTypeDef> supplyWorkType = new List<WorkTypeDef>();
+    public readonly List<WorkTypeDef> supplyWorkType = [];
 
-    public List<UseWorkType> useWorkType = new List<UseWorkType>();
+    public readonly List<UseWorkType> useWorkType = [];
 
     public CompProperties_WaterTool()
-        : base(typeof(CompWaterTool))
-    {
-    }
-
-    public CompProperties_WaterTool(Type compClass)
-        : base(compClass)
+        : this(typeof(CompWaterTool))
     {
     }
 }

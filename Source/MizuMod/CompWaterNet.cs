@@ -41,8 +41,8 @@ public abstract class CompWaterNet : ThingComp
         lastIsActivatedForWaterNet = IsActivatedForWaterNet;
         foreach (var vec in WaterNetBuilding.OccupiedRect().ExpandedBy(1))
         {
-            WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlag.Things);
-            WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlag.Buildings);
+            WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlagDefOf.Things);
+            WaterNetManager.map.mapDrawer.MapMeshDirty(vec, MapMeshFlagDefOf.Buildings);
         }
 
         WaterNetManager.RequestUpdateWaterNet();

@@ -28,14 +28,9 @@ public class Designator_DeconstructPipe : Designator_Deconstruct
         }
 
         // パイプの設計or施行なら〇
-        if ((t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe
-                                                     || t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater))
-        {
-            return true;
-        }
-
+        return (t.def.IsBlueprint || t.def.IsFrame) && (t.def.entityDefToBuild == MizuDef.Thing_WaterPipe
+                                                        || t.def.entityDefToBuild == MizuDef.Thing_WaterPipeInWater);
         // それ以外は×
-        return false;
     }
 
     public override void DesignateThing(Thing t)

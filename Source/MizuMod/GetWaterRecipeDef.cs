@@ -25,6 +25,6 @@ public class GetWaterRecipeDef : RecipeDef
         DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingCountClass, "thingDef", "Mizu_NormalWater");
         thingCountClass.count = 1;
 
-        products = new List<ThingDefCountClass> { thingCountClass };
+        products = [thingCountClass];
     }
 }

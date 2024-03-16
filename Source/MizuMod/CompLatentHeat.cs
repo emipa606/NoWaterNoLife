@@ -190,14 +190,7 @@ public class CompLatentHeat : ThingComp
     {
         var compRotThis = parent.TryGetComp<CompRottable>();
 
-        if (compRotThis == null)
-        {
-            // 腐敗度がないなら隠し腐敗度を返す
-            return hiddenRotProgress;
-        }
-
-        // 腐敗度があるならその値を返す
-        return compRotThis.RotProgress;
+        return compRotThis?.RotProgress ?? hiddenRotProgress;
     }
 
     private void SetRotProgress(Thing thing, float rotProgress)

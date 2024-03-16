@@ -8,11 +8,11 @@ namespace MizuMod;
 
 public static class DaysWorthOfWaterCalculator
 {
-    private static readonly List<Pawn> tmpPawns = new List<Pawn>();
+    private static readonly List<Pawn> tmpPawns = [];
 
-    private static readonly List<ThingDefCount> tmpThingDefCounts = new List<ThingDefCount>();
+    private static readonly List<ThingDefCount> tmpThingDefCounts = [];
 
-    private static readonly List<ThingCount> tmpThingStackParts = new List<ThingCount>();
+    private static readonly List<ThingCount> tmpThingStackParts = [];
 
     public static float ApproxDaysWorthOfWater(
         List<TransferableOneWay> transferables,
@@ -213,7 +213,7 @@ public static class DaysWorthOfWaterCalculator
                     var num3 = Mathf.Min(compprop.waterAmount, need_water.WaterAmountBetweenThirstyAndHealthy);
                     var num4 = num3 / need_water.WaterAmountBetweenThirstyAndHealthy
                         * need_water.TicksUntilThirstyWhenHealthy / 60000f;
-                    tmpDaysWorthOfFoodPerPawn[m] = tmpDaysWorthOfFoodPerPawn[m] + num4;
+                    tmpDaysWorthOfFoodPerPawn[m] += num4;
                     tmpWater[num2] = tmpWater[num2].WithCount(tmpWater[num2].Count - 1);
                     b = true;
                 } while (tmpDaysWorthOfFoodPerPawn[m] < num);

@@ -57,12 +57,7 @@ internal class JobDriver_WaterFeedPatient : JobDriver
                 }
 
                 // 到達不能になっていたらFail
-                if (!pawn.CanReach(Patient, PathEndMode.ClosestTouch, Danger.Deadly))
-                {
-                    return true;
-                }
-
-                return false;
+                return !pawn.CanReach(Patient, PathEndMode.ClosestTouch, Danger.Deadly);
             });
 
         // 水が予約出来ない状態なら中断

@@ -5,11 +5,11 @@ namespace MizuMod;
 
 public class Thing_Bucket : ThingWithComps
 {
-    private readonly List<float> graphicThreshold = new List<float>
-    {
+    private readonly List<float> graphicThreshold =
+    [
         0.9f,
         100f
-    };
+    ];
 
     private CompWaterTool compWaterTool;
 

@@ -50,18 +50,11 @@ public class JobDriver_Nurse : JobDriver
         // 精神崩壊状態次第で失敗とする
         this.FailOnAggroMentalState(PatientInd);
         AddEndCondition(
-            delegate
-            {
-                // 看病が必要な状況なら続ける
-                // 免疫を得る系の病気を持っている＆看病Hediffが無い
-                if (Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null)
-                {
-                    return JobCondition.Ongoing;
-                }
-
+            () => Patient.health.hediffSet.GetFirstHediffOfDef(MizuDef.Hediff_Nursed) == null
+                ? JobCondition.Ongoing
+                :
                 // 既に看病されていたら終了
-                return JobCondition.Succeeded;
-            });
+                JobCondition.Succeeded);
 
         // ツールまで移動
         yield return Toils_Goto.GotoThing(ToolInd, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(ToolInd);

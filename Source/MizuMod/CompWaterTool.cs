@@ -52,11 +52,10 @@ public class CompWaterTool : ThingComp
 
         stringBuilder.Append(
             string.Concat(
-                new[]
-                {
-                    MizuStrings.InspectWaterToolStored.Translate().RawText, ":",
-                    (StoredWaterVolumePercent * 100).ToString("F0"), "%"
-                }));
+            [
+                MizuStrings.InspectWaterToolStored.Translate().RawText, ":",
+                (StoredWaterVolumePercent * 100).ToString("F0"), "%"
+            ]));
 
         if (DebugSettings.godMode)
         {
@@ -65,7 +64,7 @@ public class CompWaterTool : ThingComp
         }
 
         stringBuilder.Append(
-            string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")" }));
+            string.Concat(["(", MizuStrings.GetInspectWaterTypeString(StoredWaterType), ")"]));
 
         return stringBuilder.ToString();
     }

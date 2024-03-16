@@ -94,7 +94,7 @@ public class Building_SprinklerExtinguishing : Building_WaterNet
             }
 
             wateringComp.Add(Map.cellIndices.CellToIndex(c), 1);
-            Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlag.Terrain;
+            Map.mapDrawer.SectionAt(c).dirtyFlags = MapMeshFlagDefOf.Terrain;
         }
     }
 }

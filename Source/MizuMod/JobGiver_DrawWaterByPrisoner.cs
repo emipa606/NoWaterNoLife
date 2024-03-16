@@ -9,7 +9,7 @@ public class JobGiver_DrawWaterByPrisoner : ThinkNode_JobGiver
 {
     private const int SearchDrawerIntervalTick = 180;
 
-    private static readonly List<Thing> drawerList = new List<Thing>();
+    private static readonly List<Thing> drawerList = [];
 
     public override float GetPriority(Pawn pawn)
     {

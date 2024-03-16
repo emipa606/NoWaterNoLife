@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MizuMod;
 
-public class CompProperties_WaterNetTank : CompProperties_WaterNet
+public class CompProperties_WaterNetTank(Type compClass) : CompProperties_WaterNet(compClass)
 {
     public enum DrawType : byte
     {
@@ -14,21 +14,16 @@ public class CompProperties_WaterNetTank : CompProperties_WaterNet
         Faucet
     }
 
-    public List<DrawType> drawTypes = new List<DrawType> { DrawType.Faucet };
+    public readonly List<DrawType> drawTypes = [DrawType.Faucet];
 
-    public int flatID = -1;
+    public readonly int flatID = -1;
 
-    public float maxWaterVolume = 0f;
+    public readonly float maxWaterVolume = 0f;
 
-    public bool showBar = true;
+    public readonly bool showBar = true;
 
     public CompProperties_WaterNetTank()
-        : base(typeof(CompWaterNetTank))
-    {
-    }
-
-    public CompProperties_WaterNetTank(Type compClass)
-        : base(compClass)
+        : this(typeof(CompWaterNetTank))
     {
     }
 }

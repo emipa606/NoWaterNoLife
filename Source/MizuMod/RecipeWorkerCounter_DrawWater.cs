@@ -15,12 +15,7 @@ public class RecipeWorkerCounter_DrawWater : RecipeWorkerCounter
             return false;
         }
 
-        if (bill.billStack.billGiver is not IBuilding_DrinkWater)
-        {
-            return false;
-        }
-
-        return true;
+        return bill.billStack.billGiver is IBuilding_DrinkWater;
     }
 
     public override int CountProducts(Bill_Production bill)

@@ -3,18 +3,13 @@ using Verse;
 
 namespace MizuMod;
 
-public class MapComponent_WaterNetManager : MapComponent
+public class MapComponent_WaterNetManager(Map map) : MapComponent(map)
 {
     private bool requestedUpdateWaterNet;
 
-    public MapComponent_WaterNetManager(Map map)
-        : base(map)
-    {
-    }
+    public List<WaterNet> Nets { get; } = [];
 
-    public List<WaterNet> Nets { get; } = new List<WaterNet>();
-
-    public List<IBuilding_WaterNet> UnNetThings { get; } = new List<IBuilding_WaterNet>();
+    public List<IBuilding_WaterNet> UnNetThings { get; } = [];
 
     public void AddThing(IBuilding_WaterNet thing)
     {

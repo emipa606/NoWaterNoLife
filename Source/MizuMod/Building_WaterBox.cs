@@ -6,14 +6,14 @@ namespace MizuMod;
 
 public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWater
 {
-    private readonly List<float> graphicThreshold = new List<float>
-    {
+    private readonly List<float> graphicThreshold =
+    [
         0.05f,
         0.35f,
         0.65f,
         0.95f,
         100f
-    };
+    ];
 
     private int graphicIndex;
 

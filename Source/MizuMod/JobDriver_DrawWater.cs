@@ -38,15 +38,9 @@ public abstract class JobDriver_DrawWater : JobDriver_DoBill
         // その他の失敗条件設定
         SetFailCondition();
 
-        PathEndMode peMode;
-        if (job.GetTarget(BillGiverInd).Thing.def.hasInteractionCell)
-        {
-            peMode = PathEndMode.InteractionCell;
-        }
-        else
-        {
-            peMode = PathEndMode.Touch;
-        }
+        var peMode = job.GetTarget(BillGiverInd).Thing.def.hasInteractionCell
+            ? PathEndMode.InteractionCell
+            : PathEndMode.Touch;
 
         // 設備まで行く
         yield return Toils_Goto.GotoThing(BillGiverInd, peMode);

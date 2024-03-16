@@ -80,7 +80,7 @@ public class JobDriver_WaterFarm : JobDriver
                 mapComp.Set(
                     Map.cellIndices.CellToIndex(WateringPos),
                     MapComponent_Watering.MaxWateringValue);
-                Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlag.Terrain;
+                Map.mapDrawer.SectionAt(WateringPos).dirtyFlags = MapMeshFlagDefOf.Terrain;
 
                 // ツールから水を減らす
                 var compTool = Tool.GetComp<CompWaterTool>();

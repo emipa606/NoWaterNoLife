@@ -89,33 +89,37 @@ public class JobGiver_GetWater : ThinkNode_JobGiver
         }
 
         need_water.lastSearchWaterTick = Find.TickManager.TicksGame;
-
+        IntVec3 hiddenWaterSpot;
         // 水の供給源を探す
         var thing = MizuUtility.TryFindBestWaterSourceFor(pawn, pawn, false);
-        if (thing != null)
+        if (thing == null)
         {
-            if (thing.CanDrinkWater())
-            {
-                // 水アイテムが見つかった
-                return new Job(MizuDef.Job_DrinkWater, thing)
-                    { count = MizuUtility.WillGetStackCountOf(pawn, thing) };
-            }
+            return MizuUtility.TryFindHiddenWaterSpot(pawn, out hiddenWaterSpot)
+                ? new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 }
+                :
+                // 水を発見できず
+                null;
+        }
 
-            if (thing is IBuilding_DrinkWater)
-            {
-                // 水を汲める設備が見つかった
-                return new Job(MizuDef.Job_DrinkWaterFromBuilding, thing);
-            }
+        if (thing.CanDrinkWater())
+        {
+            // 水アイテムが見つかった
+            return new Job(MizuDef.Job_DrinkWater, thing)
+                { count = MizuUtility.WillGetStackCountOf(pawn, thing) };
+        }
+
+        if (thing is IBuilding_DrinkWater)
+        {
+            // 水を汲める設備が見つかった
+            return new Job(MizuDef.Job_DrinkWaterFromBuilding, thing);
         }
 
         // 何も見つからなかった場合は隠し水飲み場を探す
         // 人間、家畜、野生の動物全て
-        if (MizuUtility.TryFindHiddenWaterSpot(pawn, out var hiddenWaterSpot))
-        {
-            return new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 };
-        }
-
-        // 水を発見できず
-        return null;
+        return MizuUtility.TryFindHiddenWaterSpot(pawn, out hiddenWaterSpot)
+            ? new Job(MizuDef.Job_DrinkWater, hiddenWaterSpot) { count = 1 }
+            :
+            // 水を発見できず
+            null;
     }
 }

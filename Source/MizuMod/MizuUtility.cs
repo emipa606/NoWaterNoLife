@@ -13,7 +13,7 @@ public static class MizuUtility
 {
     private const float SearchWaterRadiusForWildAnimal = 30f;
 
-    private static readonly List<ThoughtDef> thoughtList = new List<ThoughtDef>();
+    private static readonly List<ThoughtDef> thoughtList = [];
 
     public static void GenerateUndergroundWaterGrid(Map map, MapComponent_WaterGrid waterGrid, int basePoolNum = 30,
         int minWaterPoolNum = 3, float baseRainFall = 1000f, float basePlantDensity = 0.25f,
@@ -406,7 +406,7 @@ public static class MizuUtility
     }
 
     public static void ThoughtsFromWaterTypeDef(Pawn getter, WaterTypeDef waterTypeDef, bool isDirect,
-        List<ThoughtDef> thoughtList)
+        List<ThoughtDef> thoughtDefs)
     {
         // 禁欲主義は心情の変化を無視する
         if (getter.story?.traits != null && getter.story.traits.HasTrait(TraitDefOf.Ascetic))
@@ -417,7 +417,7 @@ public static class MizuUtility
         // 水ごとの飲んだ時の心情が設定されていたら、それを与える
         if (waterTypeDef.thoughts != null)
         {
-            thoughtList.AddRange(waterTypeDef.thoughts);
+            thoughtDefs.AddRange(waterTypeDef.thoughts);
         }
 
         // 飲み方による心情の変化
@@ -426,7 +426,7 @@ public static class MizuUtility
             return;
         }
 
-        thoughtList.Add(getter.CanManipulate()
+        thoughtDefs.Add(getter.CanManipulate()
             ? MizuDef.Thought_DrankScoopedWater
             : MizuDef.Thought_SippedWaterLikeBeast);
     }
@@ -631,6 +631,135 @@ public static class MizuUtility
             return null;
         }
 
+        if (getter.RaceProps.Humanlike)
+        {
+            // 取得者はHumanlikeである
+            // →条件を満たすものの中から最適な物を探す
+            return SpawnedWaterSearchInnerScan(
+                eater,
+                getter.Position,
+                getter.Map.listerThings.ThingsInGroup(ThingRequestGroup.Everything).FindAll(
+                    t =>
+                    {
+                        if (t.CanDrinkWaterNow())
+                        {
+                            return true;
+                        }
+
+                        return t is IBuilding_DrinkWater building && building.CanDrinkFor(eater);
+                    }),
+                PathEndMode.ClosestTouch,
+                TraverseParms.For(getter),
+                priorQuality,
+                9999f,
+                waterValidator);
+        }
+
+        // 取得者はHumanlikeではない
+
+        // プレイヤー派閥に所属しているかどうかでリージョン?数を変える
+        var searchRegionsMax = 30;
+        if (getter.Faction == Faction.OfPlayer)
+        {
+            searchRegionsMax = 100;
+        }
+
+        var filtered = new HashSet<Thing>();
+        foreach (var current in GenRadial.RadialDistinctThingsAround(getter.Position, getter.Map, 2f, true))
+        {
+            // 自分を中心に半径2以内の物をチェック
+            if (current is Pawn pawn && pawn != getter && pawn.AnimalOrWildMan() && pawn.CurJob != null &&
+                pawn.CurJob.def == MizuDef.Job_DrinkWater && pawn.CurJob.GetTarget(TargetIndex.A).HasThing)
+            {
+                // 自分ではない動物が現在水アイテムを摂取している
+                // →今まさに摂取している物は探索対象から除外
+                filtered.Add(pawn.CurJob.GetTarget(TargetIndex.A).Thing);
+            }
+        }
+
+        var ignoreEntirelyForbiddenRegions = !allowForbidden // 禁止物のアクセスは許可されていない
+                                             && ForbidUtility.CaresAboutForbidden(getter, true) &&
+                                             getter.playerSettings?.EffectiveAreaRestrictionInPawnCurrentMap !=
+                                             null; // 有効な制限エリアなし
+
+        // 指定の条件下でアクセスできるものを探す
+
+        // 水アイテムから
+        var thing = GenClosest.ClosestThingReachable(getter.Position, getter.Map,
+            ThingRequest.ForGroup(ThingRequestGroup.HaulableEver), PathEndMode.ClosestTouch,
+            TraverseParms.For(getter), 9999f, predicate, null, 0, searchRegionsMax, false, RegionType.Set_Passable,
+            ignoreEntirelyForbiddenRegions);
+        if (thing != null)
+        {
+            return thing;
+        }
+
+        // 水汲み設備
+        thing = GenClosest.ClosestThingReachable(getter.Position, getter.Map,
+            ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial), PathEndMode.ClosestTouch,
+            TraverseParms.For(getter), 9999f, predicate, null, 0, searchRegionsMax, false, RegionType.Set_Passable,
+            ignoreEntirelyForbiddenRegions);
+        if (thing != null)
+        {
+            return thing;
+        }
+
+        // 条件を変えて再探索
+        // 水アイテム
+        thing = GenClosest.ClosestThingReachable(
+            getter.Position,
+            getter.Map,
+            ThingRequest.ForGroup(ThingRequestGroup.HaulableEver),
+            PathEndMode.ClosestTouch,
+            TraverseParms.For(getter),
+            9999f,
+            waterValidator, // ここが変わった
+            null,
+            0,
+            searchRegionsMax,
+            false,
+            RegionType.Set_Passable,
+            ignoreEntirelyForbiddenRegions);
+        if (thing != null)
+        {
+            return thing;
+        }
+
+        // 水汲み設備
+        thing = GenClosest.ClosestThingReachable(
+            getter.Position,
+            getter.Map,
+            ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial),
+            PathEndMode.ClosestTouch,
+            TraverseParms.For(getter),
+            9999f,
+            waterValidator, // ここが変わった
+            null,
+            0,
+            searchRegionsMax,
+            false,
+            RegionType.Set_Passable,
+            ignoreEntirelyForbiddenRegions);
+        return thing;
+
+        bool predicate(Thing t)
+        {
+            // アイテムが条件を満たしていない
+            if (!waterValidator(t))
+            {
+                return false;
+            }
+
+            // すぐ近くで他の動物が飲んでいる水のリストに入っていない
+            if (filtered.Contains(t))
+            {
+                return false;
+            }
+
+            // 水の品質が最低値未満
+            return t.GetWaterPreferability() >= WaterPreferability.SeaWater;
+        }
+
         bool waterValidator(Thing t)
         {
             // 禁止されている＆禁止を無視して取得してはいけない
@@ -782,135 +911,6 @@ public static class MizuUtility
 
             // それ以外
         }
-
-        if (getter.RaceProps.Humanlike)
-        {
-            // 取得者はHumanlikeである
-            // →条件を満たすものの中から最適な物を探す
-            return SpawnedWaterSearchInnerScan(
-                eater,
-                getter.Position,
-                getter.Map.listerThings.ThingsInGroup(ThingRequestGroup.Everything).FindAll(
-                    t =>
-                    {
-                        if (t.CanDrinkWaterNow())
-                        {
-                            return true;
-                        }
-
-                        return t is IBuilding_DrinkWater building && building.CanDrinkFor(eater);
-                    }),
-                PathEndMode.ClosestTouch,
-                TraverseParms.For(getter),
-                priorQuality,
-                9999f,
-                waterValidator);
-        }
-
-        // 取得者はHumanlikeではない
-
-        // プレイヤー派閥に所属しているかどうかでリージョン?数を変える
-        var searchRegionsMax = 30;
-        if (getter.Faction == Faction.OfPlayer)
-        {
-            searchRegionsMax = 100;
-        }
-
-        var filtered = new HashSet<Thing>();
-        foreach (var current in GenRadial.RadialDistinctThingsAround(getter.Position, getter.Map, 2f, true))
-        {
-            // 自分を中心に半径2以内の物をチェック
-            if (current is Pawn pawn && pawn != getter && pawn.AnimalOrWildMan() && pawn.CurJob != null &&
-                pawn.CurJob.def == MizuDef.Job_DrinkWater && pawn.CurJob.GetTarget(TargetIndex.A).HasThing)
-            {
-                // 自分ではない動物が現在水アイテムを摂取している
-                // →今まさに摂取している物は探索対象から除外
-                filtered.Add(pawn.CurJob.GetTarget(TargetIndex.A).Thing);
-            }
-        }
-
-        var ignoreEntirelyForbiddenRegions = !allowForbidden // 禁止物のアクセスは許可されていない
-                                             && ForbidUtility.CaresAboutForbidden(getter, true) &&
-                                             getter.playerSettings?.EffectiveAreaRestrictionInPawnCurrentMap !=
-                                             null; // 有効な制限エリアなし
-
-        bool predicate(Thing t)
-        {
-            // アイテムが条件を満たしていない
-            if (!waterValidator(t))
-            {
-                return false;
-            }
-
-            // すぐ近くで他の動物が飲んでいる水のリストに入っていない
-            if (filtered.Contains(t))
-            {
-                return false;
-            }
-
-            // 水の品質が最低値未満
-            return t.GetWaterPreferability() >= WaterPreferability.SeaWater;
-        }
-
-        // 指定の条件下でアクセスできるものを探す
-
-        // 水アイテムから
-        var thing = GenClosest.ClosestThingReachable(getter.Position, getter.Map,
-            ThingRequest.ForGroup(ThingRequestGroup.HaulableEver), PathEndMode.ClosestTouch,
-            TraverseParms.For(getter), 9999f, predicate, null, 0, searchRegionsMax, false, RegionType.Set_Passable,
-            ignoreEntirelyForbiddenRegions);
-        if (thing != null)
-        {
-            return thing;
-        }
-
-        // 水汲み設備
-        thing = GenClosest.ClosestThingReachable(getter.Position, getter.Map,
-            ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial), PathEndMode.ClosestTouch,
-            TraverseParms.For(getter), 9999f, predicate, null, 0, searchRegionsMax, false, RegionType.Set_Passable,
-            ignoreEntirelyForbiddenRegions);
-        if (thing != null)
-        {
-            return thing;
-        }
-
-        // 条件を変えて再探索
-        // 水アイテム
-        thing = GenClosest.ClosestThingReachable(
-            getter.Position,
-            getter.Map,
-            ThingRequest.ForGroup(ThingRequestGroup.HaulableEver),
-            PathEndMode.ClosestTouch,
-            TraverseParms.For(getter),
-            9999f,
-            waterValidator, // ここが変わった
-            null,
-            0,
-            searchRegionsMax,
-            false,
-            RegionType.Set_Passable,
-            ignoreEntirelyForbiddenRegions);
-        if (thing != null)
-        {
-            return thing;
-        }
-
-        // 水汲み設備
-        thing = GenClosest.ClosestThingReachable(
-            getter.Position,
-            getter.Map,
-            ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial),
-            PathEndMode.ClosestTouch,
-            TraverseParms.For(getter),
-            9999f,
-            waterValidator, // ここが変わった
-            null,
-            0,
-            searchRegionsMax,
-            false,
-            RegionType.Set_Passable,
-            ignoreEntirelyForbiddenRegions);
-        return thing;
     }
 
     private static float GetWaterTerrainScore(Pawn eater, IntVec3 c, float dist, bool priorQuality)

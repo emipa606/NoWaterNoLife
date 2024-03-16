@@ -75,7 +75,7 @@ public class CompWaterNetInput : CompWaterNet
         stringBuilder.Append(
             MizuStrings.InspectWaterFlowInput.Translate() + ": " + InputWaterFlow.ToString("F2") + " L/day");
         stringBuilder.Append(
-            string.Concat(new[] { "(", MizuStrings.GetInspectWaterTypeString(InputWaterType), ")" }));
+            string.Concat(["(", MizuStrings.GetInspectWaterTypeString(InputWaterType), ")"]));
 
         return stringBuilder.ToString();
     }

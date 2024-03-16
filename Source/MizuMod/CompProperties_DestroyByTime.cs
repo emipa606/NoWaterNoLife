@@ -3,15 +3,11 @@ using Verse;
 
 namespace MizuMod;
 
-public class CompProperties_DestroyByTime : CompProperties
+public class CompProperties_DestroyByTime(Type compClass) : CompProperties(compClass)
 {
-    public int destroyTicks = 1;
+    public readonly int destroyTicks = 1;
 
-    public CompProperties_DestroyByTime() : base(typeof(CompDestroyByTime))
-    {
-    }
-
-    public CompProperties_DestroyByTime(Type compClass) : base(compClass)
+    public CompProperties_DestroyByTime() : this(typeof(CompDestroyByTime))
     {
     }
 }

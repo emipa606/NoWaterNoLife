@@ -4,16 +4,12 @@ using Verse;
 
 namespace MizuMod;
 
-public class CompProperties_DestroyMessage : CompProperties
+public class CompProperties_DestroyMessage(Type compClass) : CompProperties(compClass)
 {
     public List<DestroyMode> destroyModes;
     public string messageKey;
 
-    public CompProperties_DestroyMessage() : base(typeof(CompDestroyMessage))
-    {
-    }
-
-    public CompProperties_DestroyMessage(Type compClass) : base(compClass)
+    public CompProperties_DestroyMessage() : this(typeof(CompDestroyMessage))
     {
     }
 }

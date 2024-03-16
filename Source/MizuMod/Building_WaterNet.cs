@@ -238,8 +238,8 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
         powerTraderComp = GetComp<CompPowerTrader>();
         flickableComp = GetComp<CompFlickable>();
 
-        InputConnectors = new List<IntVec3>();
-        OutputConnectors = new List<IntVec3>();
+        InputConnectors = [];
+        OutputConnectors = [];
         CreateConnectors();
 
         WaterNetManager.AddThing(this);

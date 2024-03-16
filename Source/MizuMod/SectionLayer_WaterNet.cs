@@ -8,7 +8,7 @@ internal class SectionLayer_WaterNet : SectionLayer_Things
     public SectionLayer_WaterNet(Section section) : base(section)
     {
         requireAddToMapMesh = false;
-        relevantChangeTypes = MapMeshFlag.Buildings;
+        relevantChangeTypes = MapMeshFlagDefOf.Buildings;
     }
 
     public override void DrawLayer()

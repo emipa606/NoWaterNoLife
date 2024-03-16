@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <RecordDef>
+    <defName>Mizu_WaterDrank</defName>
+    <label>water drank</label>
+    <description>The amount of water I have drunk.</description>
+    <type>Float</type>
+  </RecordDef>
+  <RecordDef>
+    <defName>Mizu_WaterDrew</defName>
+    <label>water drew</label>
+    <description>The number of water I have drew.</description>
+    <type>Int</type>
+  </RecordDef>
+  <RecordDef>
+    <defName>Mizu_TimeDrinkingWater</defName>
+    <label>time finding water and drinking</label>
+    <description>Total time spent on finding water and drinking.</description>
+    <type>Time</type>
+    <measuredTimeJobs>
+      <li>Mizu_DrinkWater</li>
+      <li>Mizu_DrinkWaterFromBuilding</li>
+    </measuredTimeJobs>
+  </RecordDef>
+</Defs>

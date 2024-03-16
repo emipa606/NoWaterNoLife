@@ -18,20 +18,14 @@ public class Settings : ModSettings
     private const float MinFertilityFactorInWatering = 0.1f;
 
     // 水やりしていない時の肥沃度係数
-    private float fertilityFactorInNotWatering;
+    private float fertilityFactorInNotWatering = DefaultFertilityFactorInNotWatering;
 
     private string fertilityFactorInNotWateringBuffer;
 
     // 水やりした時の肥沃度係数
-    private float fertilityFactorInWatering;
+    private float fertilityFactorInWatering = DefaultFertilityFactorInWatering;
 
     private string fertilityFactorInWateringBuffer;
-
-    public Settings()
-    {
-        fertilityFactorInNotWatering = DefaultFertilityFactorInNotWatering;
-        fertilityFactorInWatering = DefaultFertilityFactorInWatering;
-    }
 
     public float FertilityFactorInNotWatering => fertilityFactorInNotWatering;
 

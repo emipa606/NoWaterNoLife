@@ -12,7 +12,7 @@ public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
 
     private ushort[] poolIDGrid;
 
-    private List<UndergroundWaterPool> pools = new List<UndergroundWaterPool>();
+    private List<UndergroundWaterPool> pools = [];
 
     protected MapComponent_WaterGrid(Map map)
         : base(map)
@@ -176,7 +176,7 @@ public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
         gridUpdates++;
         poolIDGrid = new ushort[map.cellIndices.NumGridCells];
         drawer = new CellBoolDrawer(this, map.Size.x, map.Size.z, 1f);
-        pools = new List<UndergroundWaterPool>();
+        pools = [];
         MizuUtility.GenerateUndergroundWaterGrid(map, this);
     }
 

@@ -18,13 +18,13 @@ public class DefExtension_WaterRecipe : DefModExtension
         PourWater
     }
 
-    public bool canDrawFromFaucet = false;
+    public readonly bool canDrawFromFaucet = false;
 
-    public int getItemCount = 1;
+    public readonly int getItemCount = 1;
 
-    public List<WaterTerrainType> needWaterTerrainTypes = null;
+    public readonly List<WaterTerrainType> needWaterTerrainTypes = null;
 
-    public List<WaterType> needWaterTypes = null;
+    public readonly List<WaterType> needWaterTypes = null;
 
-    public RecipeType recipeType = RecipeType.Undefined;
+    public readonly RecipeType recipeType = RecipeType.Undefined;
 }

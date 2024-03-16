@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MizuMod;
@@ -12,8 +11,8 @@ public class PlaceWorker_Valve : PlaceWorker
         var intVecNorth = center + IntVec3.North.RotatedBy(rot);
         if (def.size == IntVec2.One)
         {
-            GenDraw.DrawFieldEdges(new List<IntVec3> { intVecSouth }, Color.blue);
-            GenDraw.DrawFieldEdges(new List<IntVec3> { intVecNorth }, Color.blue);
+            GenDraw.DrawFieldEdges([intVecSouth], Color.blue);
+            GenDraw.DrawFieldEdges([intVecNorth], Color.blue);
             return;
         }
 
@@ -22,10 +21,10 @@ public class PlaceWorker_Valve : PlaceWorker
             return;
         }
 
-        GenDraw.DrawFieldEdges(new List<IntVec3> { intVecSouth }, Color.blue);
-        GenDraw.DrawFieldEdges(new List<IntVec3> { intVecSouth + IntVec3.East.RotatedBy(rot) }, Color.blue);
-        GenDraw.DrawFieldEdges(new List<IntVec3> { intVecNorth + IntVec3.North.RotatedBy(rot) }, Color.blue);
+        GenDraw.DrawFieldEdges([intVecSouth], Color.blue);
+        GenDraw.DrawFieldEdges([intVecSouth + IntVec3.East.RotatedBy(rot)], Color.blue);
+        GenDraw.DrawFieldEdges([intVecNorth + IntVec3.North.RotatedBy(rot)], Color.blue);
         GenDraw.DrawFieldEdges(
-            new List<IntVec3> { intVecNorth + IntVec3.North.RotatedBy(rot) + IntVec3.East.RotatedBy(rot) }, Color.blue);
+            [intVecNorth + IntVec3.North.RotatedBy(rot) + IntVec3.East.RotatedBy(rot)], Color.blue);
     }
 }

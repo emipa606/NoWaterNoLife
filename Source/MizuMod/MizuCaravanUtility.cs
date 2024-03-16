@@ -108,7 +108,7 @@ public static class MizuCaravanUtility
         return cachedDaysWorthOfWater;
     }
 
-    public static float DaysWorthOfWater_LoadTransporters(List<TransferableOneWay> transferables)
+    public static void DaysWorthOfWater_LoadTransporters(List<TransferableOneWay> transferables)
     {
         // if (MizuCaravanUtility.daysWorthOfWaterDirty)
         // {
@@ -118,16 +118,14 @@ public static class MizuCaravanUtility
             IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload);
 
         // }
-        return cachedDaysWorthOfWater;
     }
 
-    public static float DaysWorthOfWater_Trade(
-        List<Thing> playerCaravanAllPawnsAndItems,
+    public static void DaysWorthOfWater_Trade(List<Thing> playerCaravanAllPawnsAndItems,
         List<Tradeable> tradeables)
     {
         if (!daysWorthOfWaterDirty)
         {
-            return cachedDaysWorthOfWater;
+            return;
         }
 
         daysWorthOfWaterDirty = false;
@@ -135,8 +133,6 @@ public static class MizuCaravanUtility
             playerCaravanAllPawnsAndItems,
             tradeables,
             IgnorePawnsInventoryMode.Ignore);
-
-        return cachedDaysWorthOfWater;
     }
 
     public static void DrawDaysWorthOfWater(List<TransferableUIUtility.ExtraInfo> info)

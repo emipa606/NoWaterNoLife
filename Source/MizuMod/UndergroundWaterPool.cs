@@ -5,10 +5,8 @@ using Verse;
 
 namespace MizuMod;
 
-public class UndergroundWaterPool : IExposable
+public class UndergroundWaterPool(MapComponent_WaterGrid waterGrid) : IExposable
 {
-    private readonly MapComponent_WaterGrid waterGrid;
-
     private float baseRegenRate;
 
     private float currentWaterVolume;
@@ -18,7 +16,7 @@ public class UndergroundWaterPool : IExposable
 
     private int lastMaterialIndex = UndergroundWaterMaterials.MaterialCount;
 
-    private int lastTick;
+    private int lastTick = Find.TickManager.TicksGame;
 
     private float maxWaterVolume;
 
@@ -32,11 +30,6 @@ public class UndergroundWaterPool : IExposable
 
     // ReSharper disable once MemberCanBePrivate.Global
     // Needs to be public for the water-grid loading to work
-    public UndergroundWaterPool(MapComponent_WaterGrid waterGrid)
-    {
-        this.waterGrid = waterGrid;
-        lastTick = Find.TickManager.TicksGame;
-    }
 
     public UndergroundWaterPool(
         MapComponent_WaterGrid waterGrid,
@@ -203,7 +196,7 @@ public class UndergroundWaterPool : IExposable
 
     private void GeneratePoolCells()
     {
-        poolCells = new List<IntVec3>();
+        poolCells = [];
 
         foreach (var c in waterGrid.map.AllCells)
         {

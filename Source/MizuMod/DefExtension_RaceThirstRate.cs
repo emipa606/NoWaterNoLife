@@ -4,5 +4,5 @@ namespace MizuMod;
 
 public class DefExtension_RaceThirstRate : DefModExtension
 {
-    public float baseThirstRate = 1f;
+    public readonly float baseThirstRate = 1f;
 }

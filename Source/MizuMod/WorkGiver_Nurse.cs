@@ -29,8 +29,8 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
         }
 
         // 人間用WorkGiverで相手が人間、または動物用WorkGiverで相手が動物、の組み合わせでない
-        if (!(def.tendToHumanlikesOnly && giver.RaceProps.Humanlike
-              || def.tendToAnimalsOnly && giver.RaceProps.Animal))
+        if (!(def.feedHumanlikesOnly && giver.RaceProps.Humanlike
+              || def.feedAnimalsOnly && giver.RaceProps.Animal))
         {
             return false;
         }
@@ -117,12 +117,7 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
 
                 // 1回も使えないレベルの保有水量だったらダメ
                 // 80%未満で水を補充するので80%程度であれば使用可能とする
-                if (Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0)
-                {
-                    return false;
-                }
-
-                return true;
+                return !(Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0);
             });
         foreach (var tool in toolList)
         {
