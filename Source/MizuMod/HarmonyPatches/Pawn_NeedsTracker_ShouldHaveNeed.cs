@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Pawn_NeedsTracker))]
-[HarmonyPatch("ShouldHaveNeed")]
+[HarmonyPatch(typeof(Pawn_NeedsTracker), "ShouldHaveNeed")]
 internal class Pawn_NeedsTracker_ShouldHaveNeed
 {
     private static void Postfix(Pawn_NeedsTracker __instance, NeedDef nd, ref bool __result)

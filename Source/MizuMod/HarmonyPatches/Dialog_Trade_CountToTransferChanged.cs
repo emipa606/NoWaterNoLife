@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Dialog_Trade))]
-[HarmonyPatch("CountToTransferChanged")]
+[HarmonyPatch(typeof(Dialog_Trade), "CountToTransferChanged")]
 internal class Dialog_Trade_CountToTransferChanged
 {
     private static void Postfix()

@@ -2,10 +2,9 @@
 using RimWorld;
 using Verse;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(PawnInventoryGenerator))]
-[HarmonyPatch("GiveRandomFood")]
+[HarmonyPatch(typeof(PawnInventoryGenerator), nameof(PawnInventoryGenerator.GiveRandomFood))]
 internal class PawnInventoryGenerator_GiveRandomFood
 {
     private static void Postfix(Pawn p)

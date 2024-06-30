@@ -5,10 +5,9 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(LordToil_Siege))]
-[HarmonyPatch("LordToilTick")]
+[HarmonyPatch(typeof(LordToil_Siege), nameof(LordToil_Siege.LordToilTick))]
 internal class LordToil_Siege_LordToilTick
 {
     private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Dialog_LoadTransporters))]
-[HarmonyPatch("CalculateAndRecacheTransferables")]
+[HarmonyPatch(typeof(Dialog_LoadTransporters), "CalculateAndRecacheTransferables")]
 internal class Dialog_LoadTransporters_CountToTransferChanged
 {
     private static void Postfix()

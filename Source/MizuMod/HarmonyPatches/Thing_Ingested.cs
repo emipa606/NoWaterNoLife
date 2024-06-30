@@ -4,10 +4,9 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using Verse;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Thing))]
-[HarmonyPatch("Ingested")]
+[HarmonyPatch(typeof(Thing), nameof(Thing.Ingested))]
 internal class Thing_Ingested
 {
     private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

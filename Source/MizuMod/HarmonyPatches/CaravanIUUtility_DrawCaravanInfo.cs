@@ -4,10 +4,9 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using RimWorld.Planet;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(CaravanUIUtility))]
-[HarmonyPatch("DrawCaravanInfo")]
+[HarmonyPatch(typeof(CaravanUIUtility), nameof(CaravanUIUtility.DrawCaravanInfo))]
 internal class CaravanIUUtility_DrawCaravanInfo
 {
     private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

@@ -2,10 +2,9 @@
 using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Dialog_LoadTransporters))]
-[HarmonyPatch("DoWindowContents")]
+[HarmonyPatch(typeof(Dialog_LoadTransporters), nameof(Dialog_LoadTransporters.DoWindowContents))]
 internal class Dialog_LoadTransporters_DoWindowContents
 {
     private static void Prefix(List<TransferableOneWay> ___transferables)

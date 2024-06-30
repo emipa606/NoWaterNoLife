@@ -1,15 +1,12 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Caravan_ForageTracker))]
-[HarmonyPatch("Forage")]
-[HarmonyPatch(new Type[] { })]
-internal class Caravan_ForageTracker_Forage_Patch
+[HarmonyPatch(typeof(Caravan_ForageTracker), "Forage")]
+internal class Caravan_ForageTracker_Forage
 {
     private static void Postfix(Caravan ___caravan)
     {

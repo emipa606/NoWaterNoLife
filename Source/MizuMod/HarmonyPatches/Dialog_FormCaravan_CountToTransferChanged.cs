@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Dialog_FormCaravan))]
-[HarmonyPatch("CalculateAndRecacheTransferables")]
+[HarmonyPatch(typeof(Dialog_FormCaravan), "CalculateAndRecacheTransferables")]
 internal class Dialog_FormCaravan_CountToTransferChanged
 {
     private static void Postfix()

@@ -5,10 +5,9 @@ using Verse;
 using Verse.AI;
 using Verse.Sound;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(ITab_Pawn_Gear))]
-[HarmonyPatch("DrawThingRow")]
+[HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
 internal class ITab_Pawn_Gear_DrawThingRow
 {
     private static void Postfix(ref float y, float width, Thing thing)

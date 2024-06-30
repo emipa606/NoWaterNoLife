@@ -1,11 +1,10 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Plant))]
-[HarmonyPatch("get_GrowthRate")]
-internal class Plant_getGrowthRate
+[HarmonyPatch(typeof(Plant), nameof(Plant.GrowthRate), MethodType.Getter)]
+internal class Plant_GrowthRate
 {
     private static void Postfix(Plant __instance, ref float __result)
     {

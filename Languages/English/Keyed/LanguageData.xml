@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MizuModVersion>Installed mod-version: {0}</MizuModVersion>
+  <MizuCountAllWater>Count all watertypes in recipes</MizuCountAllWater>
+  <MizuCountAllWaterDesc>Recipes for drawing water will count all types of water on the map instead of just normal water when using the "Do until"-option</MizuCountAllWaterDesc>
   <MizuWaterAmount>Water Amount</MizuWaterAmount>
   <MizuConsumeWater>drink {0}</MizuConsumeWater>
   <MizuNoWater>no water</MizuNoWater>

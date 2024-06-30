@@ -3,10 +3,9 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Dialog_Trade))]
-[HarmonyPatch("DoWindowContents")]
+[HarmonyPatch(typeof(Dialog_Trade), nameof(Dialog_Trade.DoWindowContents))]
 internal class Dialog_Trade_DoWindowContents
 {
     private static void Prefix(List<Thing> ___playerCaravanAllPawnsAndItems, List<Tradeable> ___cachedTradeables)

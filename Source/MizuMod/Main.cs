@@ -9,7 +9,6 @@ internal class Main
 {
     static Main()
     {
-        var harmony = new Harmony("com.himesama.mizumod");
-        harmony.PatchAll(Assembly.GetExecutingAssembly());
+        new Harmony("com.himesama.mizumod").PatchAll(Assembly.GetExecutingAssembly());
     }
 }

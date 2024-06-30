@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld;
 
-namespace MizuMod;
+namespace MizuMod.HarmonyPatches;
 
-[HarmonyPatch(typeof(Dialog_FormCaravan))]
-[HarmonyPatch("DoWindowContents")]
+[HarmonyPatch(typeof(Dialog_FormCaravan), nameof(Dialog_FormCaravan.DoWindowContents))]
 internal class Dialog_FormCaravan_DoWindowContents
 {
     private static void Prefix(Dialog_FormCaravan __instance)
