@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Patch>
   <!-- 生食材を扱っているトレーダーの商品に水を追加する -->
   <Operation Class="PatchOperationInsert">

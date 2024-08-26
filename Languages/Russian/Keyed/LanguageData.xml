@@ -63,4 +63,6 @@
   <MizuGrowthRateFactorInNotWatering>Фактор скорости роста при НЕ поливе</MizuGrowthRateFactorInNotWatering>
   <MizuGrowthRateFactorInWatering>Фактор скорости роста при поливе</MizuGrowthRateFactorInWatering>
   <MizuPoisonedByDirtyWater>Пили грязную воду из-под земли.</MizuPoisonedByDirtyWater>
+  <MizuCountAllWater>Подсчитать все типы воды в рецептах</MizuCountAllWater>
+  <MizuCountAllWaterDesc>Рецепты рисования воды будут учитывать все типы воды на карте, а не только обычную воду при использовании опции "Делать до тех пор, пока".</MizuCountAllWaterDesc>
 </LanguageData>

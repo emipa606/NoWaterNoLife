@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <Mizu_DrawingWaterSpot.label>local de coleta de água</Mizu_DrawingWaterSpot.label>
   <Mizu_DrawingWaterSpot.description>Especifica um local para retirar água. Pode ser colocado em água ou pântanos.</Mizu_DrawingWaterSpot.description>

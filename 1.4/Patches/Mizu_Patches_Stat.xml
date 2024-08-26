@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Patch>
   <!-- ステータスのにある摂食状態のパーツの下に水分状態のパーツを追加する -->
   <Operation Class="PatchOperationInsert">

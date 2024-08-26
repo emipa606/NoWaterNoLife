@@ -63,4 +63,6 @@
   <MizuGrowthRateFactorInNotWatering>Faktor Wachstumsrate bei NICHT-Bewässerung</MizuGrowthRateFactorInNotWatering>
   <MizuGrowthRateFactorInWatering>Faktor Wachstumsrate bei der Bewässerung</MizuGrowthRateFactorInWatering>
   <MizuPoisonedByDirtyWater>Er trank schmutziges Wasser aus dem Boden.</MizuPoisonedByDirtyWater>
+  <MizuCountAllWater>Alle Wassertypen in Rezepten zählen</MizuCountAllWater>
+  <MizuCountAllWaterDesc>Rezepte für das Schöpfen von Wasser zählen nun alle Arten von Wasser auf der Karte, anstatt nur normales Wasser, wenn die "Do until"-Option verwendet wird</MizuCountAllWaterDesc>
 </LanguageData>

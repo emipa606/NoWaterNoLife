@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Patch made by user redbrick99
 	 https://github.com/schoos76/MizuMod/pull/48 -->
 <Patch>
@@ -84,20 +84,18 @@
         </li>
         <!-- Chocomilk -->
         <li Class="PatchOperationAdd">
-          <xpath>Defs/ThingDef[defName = "Chocomilk"]</xpath>
+          <xpath>Defs/ThingDef[defName = "Chocomilk"]/comps</xpath>
           <value>
-            <comps>
-              <li Class="MizuMod.CompProperties_WaterSource">
-                <sourceType>Item</sourceType>
-                <getSound>Ingest_Beer</getSound>
-                <baseDrinkTicks>100</baseDrinkTicks>
-                <waterType>ClearWater</waterType>
-                <needManipulate>true</needManipulate>
-                <waterAmount>0.35</waterAmount>
-                <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
-                <waterVolume>0.5</waterVolume>
-              </li>
-            </comps>
+            <li Class="MizuMod.CompProperties_WaterSource">
+              <sourceType>Item</sourceType>
+              <getSound>Ingest_Beer</getSound>
+              <baseDrinkTicks>100</baseDrinkTicks>
+              <waterType>ClearWater</waterType>
+              <needManipulate>true</needManipulate>
+              <waterAmount>0.35</waterAmount>
+              <maxNumToGetAtOnce>1</maxNumToGetAtOnce>
+              <waterVolume>0.5</waterVolume>
+            </li>
           </value>
         </li>
       </operations>

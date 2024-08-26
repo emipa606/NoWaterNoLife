@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <Mizu_DrawWater.label>NWNL: 水を汲む</Mizu_DrawWater.label>
   <Mizu_DrawWater.helpText>すべての人間は水を飲まなければ生きていけません。あなたは入植者のために水を集める必要があります。入植者は水汲み場や井戸から水を汲むことができます。</Mizu_DrawWater.helpText>

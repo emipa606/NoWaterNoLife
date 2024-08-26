@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Patch>
   <!-- バニラの調理系設備にレシピを追加する -->
   <Operation Class="PatchOperationAdd">

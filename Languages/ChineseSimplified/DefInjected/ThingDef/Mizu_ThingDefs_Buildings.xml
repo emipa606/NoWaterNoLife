@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <Mizu_DrawingWaterSpot.label>取水点</Mizu_DrawingWaterSpot.label>
   <Mizu_DrawingWaterSpot.description>指定一个位置用于取水。可以放置在水或者沼泽上。</Mizu_DrawingWaterSpot.description>

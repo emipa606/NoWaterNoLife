@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <Mizu_DrawingWaterSpot.label>Miejsce pozyskiwania wody</Mizu_DrawingWaterSpot.label>
   <Mizu_DrawingWaterSpot.description>Wyznacz miejsce, z którego będzie pobierana woda. Można umieścić na wodzie lub na bagnach.</Mizu_DrawingWaterSpot.description>

@@ -63,4 +63,6 @@
   <MizuGrowthRateFactorInNotWatering>Facteur de croissance dans l'arrosage NON</MizuGrowthRateFactorInNotWatering>
   <MizuGrowthRateFactorInWatering>Facteur de croissance de l'arrosage</MizuGrowthRateFactorInWatering>
   <MizuPoisonedByDirtyWater>Il buvait de l'eau sale provenant du sol.</MizuPoisonedByDirtyWater>
+  <MizuCountAllWater>Compter tous les types d'eau dans les recettes</MizuCountAllWater>
+  <MizuCountAllWaterDesc>Les recettes de prélèvement d'eau comptabilisent tous les types d'eau sur la carte au lieu de l'eau normale lors de l'utilisation de l'option "Faire jusqu'à".</MizuCountAllWaterDesc>
 </LanguageData>
