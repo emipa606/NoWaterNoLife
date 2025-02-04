@@ -5,6 +5,7 @@
   <Operation Class="PatchOperationFindMod">
     <mods>
       <li>VGP Garden Drinks UF</li>
+      <li>VGP Garden Drinks</li>
       <!-- li>
 			     <packageId>dismarzero.VGP.VGPGardenDrinks</packageId>
 			</li -->
@@ -23,7 +24,7 @@
         <!-- BrownAle -->
         <!-- Fruitshine -->
         <li Class="PatchOperationAdd">
-          <xpath>Defs/ThingDef[defName = "saki" or defName = "cider" or defName = "rum" or defName = "Wine" or defName = "strawberrywine" or defName = "vodka" or defName = "tequila" or defName = "whisky" or defName = "BrownAle" or defName = "Fruitshine"]</xpath>
+          <xpath>Defs/ThingDef[defName = "saki" or defName = "cider" or defName = "rum" or defName = "Wine" or defName = "strawberrywine" or defName = "CPD_Vodka" or defName = "tequila" or defName = "CPD_Whiskey" or defName = "BrownAle" or defName = "Fruitshine" or defName = "VGP_BerryWine" or defName = "CPD_Cherrywater" or defName = "VG_Kumis"]</xpath>
           <value>
             <comps>
               <li Class="MizuMod.CompProperties_WaterSource">
@@ -48,7 +49,7 @@
         <!-- BlueberrySoda -->
         <!-- WatermelonSoda -->
         <li Class="PatchOperationAdd">
-          <xpath>Defs/ThingDef[defName = "AppleSoda" or defName = "BananaSoda" or defName = "GrapeSoda" or defName = "OrangeSoda" or defName = "PeachSoda" or defName = "PineappleSoda" or defName = "BlueberrySoda" or defName = "WatermelonSoda"]</xpath>
+          <xpath>Defs/ThingDef[defName = "AppleSoda" or defName = "BananaSoda" or defName = "GrapeSoda" or defName = "OrangeSoda" or defName = "MangoSoda" or defName = "PeachSoda" or defName = "PineappleSoda" or defName = "BlueberrySoda" or defName = "WatermelonSoda"]</xpath>
           <value>
             <comps>
               <li Class="MizuMod.CompProperties_WaterSource">
@@ -71,7 +72,7 @@
         <!-- CoconutSoda -->
         <!-- CherrySoda -->
         <li Class="PatchOperationAdd">
-          <xpath>Defs/ThingDef[defName = "CloudberrySoda" or defName = "GooseberrySoda" or defName = "FigSoda" or defName = "DateSoda" or defName = "CoconutSoda" or defName = "CherrySoda"]</xpath>
+          <xpath>Defs/ThingDef[defName = "CloudberrySoda" or defName = "GooseberrySoda" or defName = "KiwiSoda" or defName = "FigSoda" or defName = "DateSoda" or defName = "CoconutSoda" or defName = "CherrySoda" or defName = "MysterySoda"]</xpath>
           <value>
             <comps>
               <li Class="MizuMod.CompProperties_WaterSource">

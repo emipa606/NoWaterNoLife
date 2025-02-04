@@ -1,5 +1,8 @@
 # Changelog for NoWaterNoLife
 
+1.5.3 - Ingested items should count water-amount correctly
+
+
 1.5.2 - Fixed workspeed inspection string issue
 
 

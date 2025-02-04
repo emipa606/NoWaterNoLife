@@ -342,6 +342,8 @@ public static class MizuUtility
             return;
         }
 
+        num = Math.Max(num, 1);
+
         // 食事のついでの水分摂取の場合、帰ってくる水分量は常に1個分
         var gotWaterAmount = GetWater(ingester, t, need_water.WaterWanted, true);
 
