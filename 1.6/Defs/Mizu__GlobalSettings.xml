@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MizuMod.GlobalSettingDef>
+    <defName>Mizu_GlobalSettings</defName>
+    <forDebug>
+      <needWaterReduceRate>1</needWaterReduceRate>
+      <latentHeatRate>1</latentHeatRate>
+      <enableChangeWaterPoolType>false</enableChangeWaterPoolType>
+      <changeWaterPoolType>RawWater</changeWaterPoolType>
+      <enableChangeWaterPoolVolume>false</enableChangeWaterPoolVolume>
+      <waterPoolVolumeRate>10</waterPoolVolumeRate>
+      <enableResetRegenRate>false</enableResetRegenRate>
+      <resetBaseRegenRateRangeForShallow>
+        <min>100</min>
+        <max>150</max>
+      </resetBaseRegenRateRangeForShallow>
+      <resetBaseRegenRateRangeForDeep>
+        <min>400</min>
+        <max>600</max>
+      </resetBaseRegenRateRangeForDeep>
+      <resetRainRegenRatePerCellForShallow>5</resetRainRegenRatePerCellForShallow>
+      <resetRainRegenRatePerCellForDeep>20</resetRainRegenRatePerCellForDeep>
+      <enableResetHiddenWaterSpot>false</enableResetHiddenWaterSpot>
+      <resetHiddenWaterSpotBlockSizeX>30</resetHiddenWaterSpotBlockSizeX>
+      <resetHiddenWaterSpotBlockSizeZ>30</resetHiddenWaterSpotBlockSizeZ>
+      <resetHiddenWaterSpotAllSpotNum>100</resetHiddenWaterSpotAllSpotNum>
+      <enableAlwaysActivateSprinklerGrowing>false</enableAlwaysActivateSprinklerGrowing>
+    </forDebug>
+  </MizuMod.GlobalSettingDef>
+</Defs>

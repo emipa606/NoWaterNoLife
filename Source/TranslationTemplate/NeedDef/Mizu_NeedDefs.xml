@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: water -->
+  <Mizu_Water.label>water</Mizu_Water.label>
+  <!-- EN: Water is the amount of water a creature has consumed recently. If it is at zero, a creature will become increasingly dehydrated and eventually die. -->
+  <Mizu_Water.description>Water is the amount of water a creature has consumed recently. If it is at zero, a creature will become increasingly dehydrated and eventually die.</Mizu_Water.description>
+</LanguageData>

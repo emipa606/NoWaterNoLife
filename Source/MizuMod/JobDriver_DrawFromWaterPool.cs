@@ -13,11 +13,8 @@ public class JobDriver_DrawFromWaterPool : JobDriver_DrawWater
     {
         get
         {
-            if (poolInt == null)
-            {
-                poolInt = WaterGrid.GetPool(
-                    TargetThingA.Map.cellIndices.CellToIndex(job.GetTarget(BillGiverInd).Thing.Position));
-            }
+            poolInt ??= WaterGrid.GetPool(
+                TargetThingA.Map.cellIndices.CellToIndex(job.GetTarget(BillGiverInd).Thing.Position));
 
             return poolInt;
         }
@@ -27,10 +24,7 @@ public class JobDriver_DrawFromWaterPool : JobDriver_DrawWater
     {
         get
         {
-            if (waterGridInt == null)
-            {
-                waterGridInt = TargetThingA.Map.GetComponent<MapComponent_ShallowWaterGrid>();
-            }
+            waterGridInt ??= TargetThingA.Map.GetComponent<MapComponent_ShallowWaterGrid>();
 
             return waterGridInt;
         }

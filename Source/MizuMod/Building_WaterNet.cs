@@ -35,10 +35,7 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
     {
         get
         {
-            if (inputComp == null)
-            {
-                inputComp = GetComp<CompWaterNetInput>();
-            }
+            inputComp ??= GetComp<CompWaterNetInput>();
 
             return inputComp;
         }
@@ -68,10 +65,7 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
     {
         get
         {
-            if (outputComp == null)
-            {
-                outputComp = GetComp<CompWaterNetOutput>();
-            }
+            outputComp ??= GetComp<CompWaterNetOutput>();
 
             return outputComp;
         }
@@ -91,10 +85,7 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
     {
         get
         {
-            if (sourceComp == null)
-            {
-                sourceComp = GetComp<CompWaterSource>();
-            }
+            sourceComp ??= GetComp<CompWaterSource>();
 
             return sourceComp;
         }
@@ -107,10 +98,7 @@ public class Building_WaterNet : Building, IBuilding_WaterNet
     {
         get
         {
-            if (tankComp == null)
-            {
-                tankComp = GetComp<CompWaterNetTank>();
-            }
+            tankComp ??= GetComp<CompWaterNetTank>();
 
             return tankComp;
         }

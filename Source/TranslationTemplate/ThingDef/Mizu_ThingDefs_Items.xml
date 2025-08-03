@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: snowball -->
+  <Mizu_Bullet_Snowball.label>snowball</Mizu_Bullet_Snowball.label>
+  <!-- EN: Ice (Clear water) -->
+  <Mizu_ClearIce.label>Ice (Clear water)</Mizu_ClearIce.label>
+  <!-- EN: Frozen clear water. Allows get water by licking it for a long time. -->
+  <Mizu_ClearIce.description>Frozen clear water. Allows get water by licking it for a long time.</Mizu_ClearIce.description>
+  <!-- EN: Clear water -->
+  <Mizu_ClearWater.label>Clear water</Mizu_ClearWater.label>
+  <!-- EN: Water for drinking. It will taste good. -->
+  <Mizu_ClearWater.description>Water for drinking. It will taste good.</Mizu_ClearWater.description>
+  <!-- EN: Ice (Mud water) -->
+  <Mizu_MudIce.label>Ice (Mud water)</Mizu_MudIce.label>
+  <!-- EN: Frozen mud water. Allows get water by licking it for a long time. -->
+  <Mizu_MudIce.description>Frozen mud water. Allows get water by licking it for a long time.</Mizu_MudIce.description>
+  <!-- EN: Mud water -->
+  <Mizu_MudWater.label>Mud water</Mizu_MudWater.label>
+  <!-- EN: Water for drinking. It will taste terrible. -->
+  <Mizu_MudWater.description>Water for drinking. It will taste terrible.</Mizu_MudWater.description>
+  <!-- EN: Ice (Water) -->
+  <Mizu_NormalIce.label>Ice (Water)</Mizu_NormalIce.label>
+  <!-- EN: Frozen water. Allows get water by licking it for a long time. -->
+  <Mizu_NormalIce.description>Frozen water. Allows get water by licking it for a long time.</Mizu_NormalIce.description>
+  <!-- EN: Water -->
+  <Mizu_NormalWater.label>Water</Mizu_NormalWater.label>
+  <!-- EN: Water for drinking. It has no special effects. -->
+  <Mizu_NormalWater.description>Water for drinking. It has no special effects.</Mizu_NormalWater.description>
+  <!-- EN: Ice (Raw water) -->
+  <Mizu_RawIce.label>Ice (Raw water)</Mizu_RawIce.label>
+  <!-- EN: Frozen raw water. Allows get water by licking it for a long time. -->
+  <Mizu_RawIce.description>Frozen raw water. Allows get water by licking it for a long time.</Mizu_RawIce.description>
+  <!-- EN: Snow (Raw water) -->
+  <Mizu_RawSnow.label>Snow (Raw water)</Mizu_RawSnow.label>
+  <!-- EN: A bottled snow. Allows get water by licking it for a long time. -->
+  <Mizu_RawSnow.description>A bottled snow. Allows get water by licking it for a long time.</Mizu_RawSnow.description>
+  <!-- EN: Raw water -->
+  <Mizu_RawWater.label>Raw water</Mizu_RawWater.label>
+  <!-- EN: Water for drinking. It will taste bad slightly. -->
+  <Mizu_RawWater.description>Water for drinking. It will taste bad slightly.</Mizu_RawWater.description>
+  <!-- EN: Ice (Seawater) -->
+  <Mizu_SeaIce.label>Ice (Seawater)</Mizu_SeaIce.label>
+  <!-- EN: Frozen seawater. Allows get water by licking it for a long time. -->
+  <Mizu_SeaIce.description>Frozen seawater. Allows get water by licking it for a long time.</Mizu_SeaIce.description>
+  <!-- EN: Seawater -->
+  <Mizu_SeaWater.label>Seawater</Mizu_SeaWater.label>
+  <!-- EN: Water for drinking. It will taste terrible and salty. -->
+  <Mizu_SeaWater.description>Water for drinking. It will taste terrible and salty.</Mizu_SeaWater.description>
+  <!-- EN: Shaved ice -->
+  <Mizu_ShavedIce.label>Shaved ice</Mizu_ShavedIce.label>
+  <!-- EN: A dessert made by shaving the block of ice. Pay attention to headaches. -->
+  <Mizu_ShavedIce.description>A dessert made by shaving the block of ice. Pay attention to headaches.</Mizu_ShavedIce.description>
+  <!-- EN: Snowball -->
+  <Mizu_Snowball.label>Snowball</Mizu_Snowball.label>
+  <!-- EN: a snowball got from fallen snow. Allows get water by licking it for a long time and use as a ranged weapon with zero damage. -->
+  <Mizu_Snowball.description>a snowball got from fallen snow. Allows get water by licking it for a long time and use as a ranged weapon with zero damage.</Mizu_Snowball.description>
+  <!-- EN: throw snowball -->
+  <Mizu_Snowball.verbs.throw_snowball.label>throw snowball</Mizu_Snowball.verbs.throw_snowball.label>
+</LanguageData>

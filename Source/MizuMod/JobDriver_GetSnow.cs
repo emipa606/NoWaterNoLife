@@ -60,8 +60,7 @@ public class JobDriver_GetSnow : JobDriver
 
             if (!GenPlace.TryPlaceThing(snowThing, actor.Position, actor.Map, ThingPlaceMode.Near))
             {
-                Log.Error(
-                    $"{actor} could not drop recipe product {snowThing} near {TargetLocA}");
+                Log.Message($"[NoWaterNoLife]: {actor} could not drop recipe product {snowThing} near {TargetLocA}");
             }
         };
         makeToil.defaultCompleteMode = ToilCompleteMode.Instant;

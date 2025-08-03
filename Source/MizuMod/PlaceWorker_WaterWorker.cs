@@ -14,7 +14,7 @@ public class PlaceWorker_WaterWorker : PlaceWorker
     {
         if (checkingDef is not ThingDef)
         {
-            Log.Error("invalid ThingDef");
+            Log.Message("[NoWaterNoLife]: invalid ThingDef");
             return false;
         }
 

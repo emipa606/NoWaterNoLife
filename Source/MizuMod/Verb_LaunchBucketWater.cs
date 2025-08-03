@@ -16,7 +16,7 @@ public class Verb_LaunchBucketWater : Verb_LaunchProjectile
         }
 
         // 通常の投擲チェック
-        if (base.TryCastShot() == false)
+        if (!base.TryCastShot())
         {
             return false;
         }
@@ -25,7 +25,7 @@ public class Verb_LaunchBucketWater : Verb_LaunchProjectile
         comp.StoredWaterVolume = 0f;
 
         // グラフィック更新
-        EquipmentSource.Tick();
+        EquipmentSource.DoTick();
 
         return true;
     }

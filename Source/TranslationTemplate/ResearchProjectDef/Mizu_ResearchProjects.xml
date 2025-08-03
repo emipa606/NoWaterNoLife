@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: Clearing water -->
+  <Mizu_CleanWater.label>Clearing water</Mizu_CleanWater.label>
+  <!-- EN: Allows you to build water purifier. -->
+  <Mizu_CleanWater.description>Allows you to build water purifier.</Mizu_CleanWater.description>
+  <!-- EN: Deep underground water -->
+  <Mizu_DeepUndergroundWater.label>Deep underground water</Mizu_DeepUndergroundWater.label>
+  <!-- EN: Allows you to build pump for drawing underground water of deep layer. -->
+  <Mizu_DeepUndergroundWater.description>Allows you to build pump for drawing underground water of deep layer.</Mizu_DeepUndergroundWater.description>
+  <!-- EN: Underground water -->
+  <Mizu_UndergroundWater.label>Underground water</Mizu_UndergroundWater.label>
+  <!-- EN: Make wells, a primitive building for drawing underground water of shallow layer. -->
+  <Mizu_UndergroundWater.description>Make wells, a primitive building for drawing underground water of shallow layer.</Mizu_UndergroundWater.description>
+  <!-- EN: Water facility -->
+  <Mizu_WaterFacility.label>Water facility</Mizu_WaterFacility.label>
+  <!-- EN: Allows you to build various facilities that use water. -->
+  <Mizu_WaterFacility.description>Allows you to build various facilities that use water.</Mizu_WaterFacility.description>
+  <!-- EN: Water filter -->
+  <Mizu_WaterFilter.label>Water filter</Mizu_WaterFilter.label>
+  <!-- EN: Allows you to build water filters for waterworks. -->
+  <Mizu_WaterFilter.description>Allows you to build water filters for waterworks.</Mizu_WaterFilter.description>
+  <!-- EN: Waterworks -->
+  <Mizu_Waterworks.label>Waterworks</Mizu_Waterworks.label>
+  <!-- EN: Allows you to build pipe, valve, faucet, tank and some type of pumps. -->
+  <Mizu_Waterworks.description>Allows you to build pipe, valve, faucet, tank and some type of pumps.</Mizu_Waterworks.description>
+</LanguageData>

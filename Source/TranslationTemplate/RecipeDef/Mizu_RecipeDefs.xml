@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: boil raw water -->
+  <Mizu_BoilRawWater.label>boil raw water</Mizu_BoilRawWater.label>
+  <!-- EN: boil raw water for converting to water. -->
+  <Mizu_BoilRawWater.description>boil raw water for converting to water.</Mizu_BoilRawWater.description>
+  <!-- EN: Boiling raw water. -->
+  <Mizu_BoilRawWater.jobString>Boiling raw water.</Mizu_BoilRawWater.jobString>
+  <!-- EN: boil raw water x5 -->
+  <Mizu_BoilRawWaterMulti.label>boil raw water x5</Mizu_BoilRawWaterMulti.label>
+  <!-- EN: boil raw water x5 for converting to water. -->
+  <Mizu_BoilRawWaterMulti.description>boil raw water x5 for converting to water.</Mizu_BoilRawWaterMulti.description>
+  <!-- EN: Boiling raw water. -->
+  <Mizu_BoilRawWaterMulti.jobString>Boiling raw water.</Mizu_BoilRawWaterMulti.jobString>
+  <!-- EN: bottle snow -->
+  <Mizu_BottleSnow.label>bottle snow</Mizu_BottleSnow.label>
+  <!-- EN: bottle snow for preservation. -->
+  <Mizu_BottleSnow.description>bottle snow for preservation.</Mizu_BottleSnow.description>
+  <!-- EN: Bottling snow. -->
+  <Mizu_BottleSnow.jobString>Bottling snow.</Mizu_BottleSnow.jobString>
+  <!-- EN: bottle snow x5 -->
+  <Mizu_BottleSnowMulti.label>bottle snow x5</Mizu_BottleSnowMulti.label>
+  <!-- EN: bottle snow x5 for preservation. -->
+  <Mizu_BottleSnowMulti.description>bottle snow x5 for preservation.</Mizu_BottleSnowMulti.description>
+  <!-- EN: Bottling snow. -->
+  <Mizu_BottleSnowMulti.jobString>Bottling snow.</Mizu_BottleSnowMulti.jobString>
+  <!-- EN: desalinate seawater -->
+  <Mizu_DesalinateSeaWater.label>desalinate seawater</Mizu_DesalinateSeaWater.label>
+  <!-- EN: desalinate seawater for converting to water. -->
+  <Mizu_DesalinateSeaWater.description>desalinate seawater for converting to water.</Mizu_DesalinateSeaWater.description>
+  <!-- EN: Desalinating seawater. -->
+  <Mizu_DesalinateSeaWater.jobString>Desalinating seawater.</Mizu_DesalinateSeaWater.jobString>
+  <!-- EN: desalinate seawater x5 -->
+  <Mizu_DesalinateSeaWaterMulti.label>desalinate seawater x5</Mizu_DesalinateSeaWaterMulti.label>
+  <!-- EN: desalinate seawater x5 for converting to water. -->
+  <Mizu_DesalinateSeaWaterMulti.description>desalinate seawater x5 for converting to water.</Mizu_DesalinateSeaWaterMulti.description>
+  <!-- EN: Desalinating seawater. -->
+  <Mizu_DesalinateSeaWaterMulti.jobString>Desalinating seawater.</Mizu_DesalinateSeaWaterMulti.jobString>
+  <!-- EN: draw water at this spot -->
+  <Mizu_DrawWater.label>draw water at this spot</Mizu_DrawWater.label>
+  <!-- EN: Draws water for drinking. the type of water depends on terrain. -->
+  <Mizu_DrawWater.description>Draws water for drinking. the type of water depends on terrain.</Mizu_DrawWater.description>
+  <!-- EN: Drawing water. -->
+  <Mizu_DrawWater.jobString>Drawing water.</Mizu_DrawWater.jobString>
+  <!-- EN: draw water from water box -->
+  <Mizu_DrawWaterFromWaterBox.label>draw water from water box</Mizu_DrawWaterFromWaterBox.label>
+  <!-- EN: Draws water from water box for drinking -->
+  <Mizu_DrawWaterFromWaterBox.description>Draws water from water box for drinking</Mizu_DrawWaterFromWaterBox.description>
+  <!-- EN: Drawing water from water box. -->
+  <Mizu_DrawWaterFromWaterBox.jobString>Drawing water from water box.</Mizu_DrawWaterFromWaterBox.jobString>
+  <!-- EN: draw water x5 from water box -->
+  <Mizu_DrawWaterFromWaterBoxMulti.label>draw water x5 from water box</Mizu_DrawWaterFromWaterBoxMulti.label>
+  <!-- EN: Draws water x5 from water box for drinking -->
+  <Mizu_DrawWaterFromWaterBoxMulti.description>Draws water x5 from water box for drinking</Mizu_DrawWaterFromWaterBoxMulti.description>
+  <!-- EN: Drawing water from water box. -->
+  <Mizu_DrawWaterFromWaterBoxMulti.jobString>Drawing water from water box.</Mizu_DrawWaterFromWaterBoxMulti.jobString>
+  <!-- EN: draw water from waterworks -->
+  <Mizu_DrawWaterFromWaterNet.label>draw water from waterworks</Mizu_DrawWaterFromWaterNet.label>
+  <!-- EN: Draws water from waterworks for drinking -->
+  <Mizu_DrawWaterFromWaterNet.description>Draws water from waterworks for drinking</Mizu_DrawWaterFromWaterNet.description>
+  <!-- EN: Drawing water from waterworks. -->
+  <Mizu_DrawWaterFromWaterNet.jobString>Drawing water from waterworks.</Mizu_DrawWaterFromWaterNet.jobString>
+  <!-- EN: draw water x5 from waterworks -->
+  <Mizu_DrawWaterFromWaterNetMulti.label>draw water x5 from waterworks</Mizu_DrawWaterFromWaterNetMulti.label>
+  <!-- EN: Draws water x5 from waterworks for drinking -->
+  <Mizu_DrawWaterFromWaterNetMulti.description>Draws water x5 from waterworks for drinking</Mizu_DrawWaterFromWaterNetMulti.description>
+  <!-- EN: Drawing water from waterworks. -->
+  <Mizu_DrawWaterFromWaterNetMulti.jobString>Drawing water from waterworks.</Mizu_DrawWaterFromWaterNetMulti.jobString>
+  <!-- EN: draw raw water from underground -->
+  <Mizu_DrawWaterFromWaterPool.label>draw raw water from underground</Mizu_DrawWaterFromWaterPool.label>
+  <!-- EN: Draws water from underground for drinking -->
+  <Mizu_DrawWaterFromWaterPool.description>Draws water from underground for drinking</Mizu_DrawWaterFromWaterPool.description>
+  <!-- EN: Drawing water from underground. -->
+  <Mizu_DrawWaterFromWaterPool.jobString>Drawing water from underground.</Mizu_DrawWaterFromWaterPool.jobString>
+  <!-- EN: draw water x5 from underground -->
+  <Mizu_DrawWaterFromWaterPoolMulti.label>draw water x5 from underground</Mizu_DrawWaterFromWaterPoolMulti.label>
+  <!-- EN: Draws water x5 from underground for drinking -->
+  <Mizu_DrawWaterFromWaterPoolMulti.description>Draws water x5 from underground for drinking</Mizu_DrawWaterFromWaterPoolMulti.description>
+  <!-- EN: Drawing water from underground. -->
+  <Mizu_DrawWaterFromWaterPoolMulti.jobString>Drawing water from underground.</Mizu_DrawWaterFromWaterPoolMulti.jobString>
+  <!-- EN: draw water x5 at this spot -->
+  <Mizu_DrawWaterMulti.label>draw water x5 at this spot</Mizu_DrawWaterMulti.label>
+  <!-- EN: Draws water x5 for drinking. the type of water depends on terrain. -->
+  <Mizu_DrawWaterMulti.description>Draws water x5 for drinking. the type of water depends on terrain.</Mizu_DrawWaterMulti.description>
+  <!-- EN: Drawing water. -->
+  <Mizu_DrawWaterMulti.jobString>Drawing water.</Mizu_DrawWaterMulti.jobString>
+  <!-- EN: harvest ice at this spot -->
+  <Mizu_HarvestIce.label>harvest ice at this spot</Mizu_HarvestIce.label>
+  <!-- EN: Harvests ice. -->
+  <Mizu_HarvestIce.description>Harvests ice.</Mizu_HarvestIce.description>
+  <!-- EN: Harvesting ice. -->
+  <Mizu_HarvestIce.jobString>Harvesting ice.</Mizu_HarvestIce.jobString>
+  <!-- EN: harvest ice x5 at this spot -->
+  <Mizu_HarvestIceMulti.label>harvest ice x5 at this spot</Mizu_HarvestIceMulti.label>
+  <!-- EN: Harvests ice x5. -->
+  <Mizu_HarvestIceMulti.description>Harvests ice x5.</Mizu_HarvestIceMulti.description>
+  <!-- EN: Harvesting ice. -->
+  <Mizu_HarvestIceMulti.jobString>Harvesting ice.</Mizu_HarvestIceMulti.jobString>
+  <!-- EN: make shaved ice -->
+  <Mizu_MakeShavedIce.label>make shaved ice</Mizu_MakeShavedIce.label>
+  <!-- EN: make shaved ice -->
+  <Mizu_MakeShavedIce.description>make shaved ice</Mizu_MakeShavedIce.description>
+  <!-- EN: Making shaved ice. -->
+  <Mizu_MakeShavedIce.jobString>Making shaved ice.</Mizu_MakeShavedIce.jobString>
+  <!-- EN: percolate mud water -->
+  <Mizu_PercolateMudWater.label>percolate mud water</Mizu_PercolateMudWater.label>
+  <!-- EN: percolate and boil mud water for converting to normal water -->
+  <Mizu_PercolateMudWater.description>percolate and boil mud water for converting to normal water</Mizu_PercolateMudWater.description>
+  <!-- EN: Percolating mud water. -->
+  <Mizu_PercolateMudWater.jobString>Percolating mud water.</Mizu_PercolateMudWater.jobString>
+  <!-- EN: percolate mud water x5 -->
+  <Mizu_PercolateMudWaterMulti.label>percolate mud water x5</Mizu_PercolateMudWaterMulti.label>
+  <!-- EN: percolate and boil mud water x5 for converting to normal water -->
+  <Mizu_PercolateMudWaterMulti.description>percolate and boil mud water x5 for converting to normal water</Mizu_PercolateMudWaterMulti.description>
+  <!-- EN: Percolating mud water. -->
+  <Mizu_PercolateMudWaterMulti.jobString>Percolating mud water.</Mizu_PercolateMudWaterMulti.jobString>
+  <!-- EN: pour water x5 -->
+  <Mizu_PourWater.label>pour water x5</Mizu_PourWater.label>
+  <!-- EN: pour water x5 to water storing building. -->
+  <Mizu_PourWater.description>pour water x5 to water storing building.</Mizu_PourWater.description>
+  <!-- EN: Pouring water. -->
+  <Mizu_PourWater.jobString>Pouring water.</Mizu_PourWater.jobString>
+  <!-- EN: pour water x25 -->
+  <Mizu_PourWaterMulti.label>pour water x25</Mizu_PourWaterMulti.label>
+  <!-- EN: pour water x25 to water storing building. -->
+  <Mizu_PourWaterMulti.description>pour water x25 to water storing building.</Mizu_PourWaterMulti.description>
+  <!-- EN: Pouring water. -->
+  <Mizu_PourWaterMulti.jobString>Pouring water.</Mizu_PourWaterMulti.jobString>
+  <!-- EN: filter water -->
+  <Mizu_PurifyWater.label>filter water</Mizu_PurifyWater.label>
+  <!-- EN: filter water by using charcoal to product clear water. -->
+  <Mizu_PurifyWater.description>filter water by using charcoal to product clear water.</Mizu_PurifyWater.description>
+  <!-- EN: Filtering water. -->
+  <Mizu_PurifyWater.jobString>Filtering water.</Mizu_PurifyWater.jobString>
+  <!-- EN: filter water x5 -->
+  <Mizu_PurifyWaterMulti.label>filter water x5</Mizu_PurifyWaterMulti.label>
+  <!-- EN: filter water x5 by using charcoal to product clear water. -->
+  <Mizu_PurifyWaterMulti.description>filter water x5 by using charcoal to product clear water.</Mizu_PurifyWaterMulti.description>
+  <!-- EN: Filtering water. -->
+  <Mizu_PurifyWaterMulti.jobString>Filtering water.</Mizu_PurifyWaterMulti.jobString>
+</LanguageData>

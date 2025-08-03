@@ -1,0 +1,97 @@
+ManifestFileVersion: 0
+CRC: 1737041300
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e6ea6184b4abf64f6f7b83312a98133e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ce3b6d18a872ca8039cd5eb3c4fb7ef5
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: e6ea6184b4abf64f6f7b83312a98133e
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_ClearWater/Mizu_ClearWater_b.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox0.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_Well_east.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFaucet_north.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_MudIce.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_ClearIce.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterNet.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_RawWater/Mizu_RawWater_a.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Dirty_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Clear_Industrial_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox3_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_Well_south.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/UI/Icons/ThingCategories/Mizu_WaterCategory_Icon.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Clear_Industrial.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Furniture/Mizu_ShavedIceFlag_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox2.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/UI/Icons/Buildings/Mizu_WaterFaucet_Icon.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_RawSnow/Mizu_RawSnow_b.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_Well_north.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_WateringPot.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_MudWater/Mizu_MudWater_b.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Dirty.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Mizu_White.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterCleaner_south.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterCleaner_north.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Mizu_Clear.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_ShavedIce.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterValve.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Projectile/Mizu_BucketWater.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Mizu_Watering.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox4_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Dirty_Industrial_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_RawIce.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox4.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFaucet_east.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Mop.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Furniture/Mizu_ShavedIceFlag.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Mizu_SprinklerWater.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterValve_Off.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_SeaWater/Mizu_SeaWater_b.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/UI/Icons/Buildings/Mizu_ShavedIceFlag_Icon.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Mop_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFaucet_south.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/UI/Icons/Buildings/Mizu_WaterBox_Icon.png
+- Assets/Data/Mlie.NoWaterNoLife/Sounds/Mizu_Gulp.ogg
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterPipe.png
+- Assets/Data/Mlie.NoWaterNoLife/Sounds/Tool/Mizu_ExplosionWater.wav
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Bucket1_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox2_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_RawSnow/Mizu_RawSnow_a.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFaucet.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_SeaIce.png
+- Assets/Data/Mlie.NoWaterNoLife/Sounds/Mizu_Pour.ogg
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_NormalWater/Mizu_NormalWater_a.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Bucket1.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_ClearWater/Mizu_ClearWater_a.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox3.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_RawWater/Mizu_RawWater_b.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_DeepPump.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_GroundPump.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Towel.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_ShallowPump.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_NormalWater/Mizu_NormalWater_b.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/UI/Icons/Buildings/Mizu_WaterPipe_Icon.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Clear_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Clear.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterCleaner_east.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterTank.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_NormalIce.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Snowball.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox1_m.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_MudWater/Mizu_MudWater_a.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterBox1.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_Bucket0.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Item/Mizu_SeaWater/Mizu_SeaWater_a.png
+- Assets/Data/Mlie.NoWaterNoLife/Textures/Things/Building/Production/Mizu_WaterFilter_Dirty_Industrial.png
+Dependencies: []

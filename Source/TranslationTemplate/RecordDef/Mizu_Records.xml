@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: time finding water and drinking -->
+  <Mizu_TimeDrinkingWater.label>time finding water and drinking</Mizu_TimeDrinkingWater.label>
+  <!-- EN: Total time spent on finding water and drinking. -->
+  <Mizu_TimeDrinkingWater.description>Total time spent on finding water and drinking.</Mizu_TimeDrinkingWater.description>
+  <!-- EN: water drank -->
+  <Mizu_WaterDrank.label>water drank</Mizu_WaterDrank.label>
+  <!-- EN: The amount of water I have drunk. -->
+  <Mizu_WaterDrank.description>The amount of water I have drunk.</Mizu_WaterDrank.description>
+  <!-- EN: water drew -->
+  <Mizu_WaterDrew.label>water drew</Mizu_WaterDrew.label>
+  <!-- EN: The number of water I have drew. -->
+  <Mizu_WaterDrew.description>The number of water I have drew.</Mizu_WaterDrew.description>
+</LanguageData>

@@ -41,8 +41,8 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
             return false;
         }
 
-        var waterItemDef = MizuDef.List_WaterItem.First(
-            thingDef => thingDef.GetCompProperties<CompProperties_WaterSource>().waterType == pool.WaterType);
+        var waterItemDef = MizuDef.List_WaterItem.First(thingDef =>
+            thingDef.GetCompProperties<CompProperties_WaterSource>().waterType == pool.WaterType);
         var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
 
         // 汲める予定の水アイテムの水の量より多い
@@ -91,16 +91,20 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
             stringBuilder.AppendLine();
         }
 
-        stringBuilder.Append(
-            string.Format(
-                MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
-                (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
-        if (DebugSettings.godMode)
+        if (pool != null)
         {
-            stringBuilder.Append($" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
+            stringBuilder.Append(
+                string.Format(
+                    MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
+                    (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
         }
 
-        return stringBuilder.ToString();
+        if (DebugSettings.godMode)
+        {
+            stringBuilder.Append($" ({pool?.CurrentWaterVolume:F2}/{pool?.MaxWaterVolume:F2} L)");
+        }
+
+        return stringBuilder.ToString().Trim();
     }
 
     public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -110,7 +114,7 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
         var waterGrid = map.GetComponent<MapComponent_ShallowWaterGrid>();
         if (waterGrid == null)
         {
-            Log.Error("waterGrid is null");
+            Log.Message("[NoWaterNoLife]: Found no watergrid, no water will be available");
         }
 
         if (waterGrid != null)
@@ -120,7 +124,7 @@ public class Building_Well : Building_WorkTable, IBuilding_DrinkWater
 
         if (pool == null)
         {
-            Log.Error("pool is null");
+            Log.Message("[NoWaterNoLife]: Found no pool, no water will be available");
         }
     }
 }

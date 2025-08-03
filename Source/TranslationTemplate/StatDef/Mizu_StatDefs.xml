@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: Drawing water speed -->
+  <Mizu_DrawingSpeed.label>Drawing water speed</Mizu_DrawingSpeed.label>
+  <!-- EN: Speed at which this person drawing water. -->
+  <Mizu_DrawingSpeed.description>Speed at which this person drawing water.</Mizu_DrawingSpeed.description>
+</LanguageData>

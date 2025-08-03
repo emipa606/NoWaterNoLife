@@ -14,10 +14,7 @@ public abstract class JobDriver_DrawWater : JobDriver_DoBill
     {
         get
         {
-            if (extInt == null)
-            {
-                extInt = job.bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
-            }
+            extInt ??= job.bill.recipe.GetModExtension<DefExtension_WaterRecipe>();
 
             return extInt;
         }

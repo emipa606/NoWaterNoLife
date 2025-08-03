@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: ate icy food in hot season -->
+  <Mizu_AteIcyFoodInHotSeason.stages.ate_icy_food_in_hot_season.label>ate icy food in hot season</Mizu_AteIcyFoodInHotSeason.stages.ate_icy_food_in_hot_season.label>
+  <!-- EN: I ate icy food in hot seadon. It's so cool! -->
+  <Mizu_AteIcyFoodInHotSeason.stages.ate_icy_food_in_hot_season.description>I ate icy food in hot seadon. It's so cool!</Mizu_AteIcyFoodInHotSeason.stages.ate_icy_food_in_hot_season.description>
+  <!-- EN: drank clear water -->
+  <Mizu_DrankClearWater.stages.drank_clear_water.label>drank clear water</Mizu_DrankClearWater.stages.drank_clear_water.label>
+  <!-- EN: I drank clear water. It's tasty good. -->
+  <Mizu_DrankClearWater.stages.drank_clear_water.description>I drank clear water. It's tasty good.</Mizu_DrankClearWater.stages.drank_clear_water.description>
+  <!-- EN: drank mud water -->
+  <Mizu_DrankMudWater.stages.drank_mud_water.label>drank mud water</Mizu_DrankMudWater.stages.drank_mud_water.label>
+  <!-- EN: I drank unfiltered mud water. so terrible taste! -->
+  <Mizu_DrankMudWater.stages.drank_mud_water.description>I drank unfiltered mud water. so terrible taste!</Mizu_DrankMudWater.stages.drank_mud_water.description>
+  <!-- EN: drank scooped water -->
+  <Mizu_DrankScoopedWater.stages.drank_scooped_water.label>drank scooped water</Mizu_DrankScoopedWater.stages.drank_scooped_water.label>
+  <!-- EN: I drank scooped water by hand. I want a cup. -->
+  <Mizu_DrankScoopedWater.stages.drank_scooped_water.description>I drank scooped water by hand. I want a cup.</Mizu_DrankScoopedWater.stages.drank_scooped_water.description>
+  <!-- EN: drank sea water -->
+  <Mizu_DrankSeaWater.stages.drank_sea_water.label>drank sea water</Mizu_DrankSeaWater.stages.drank_sea_water.label>
+  <!-- EN: I drank unfiltered sea water. so terrible and salty taste! -->
+  <Mizu_DrankSeaWater.stages.drank_sea_water.description>I drank unfiltered sea water. so terrible and salty taste!</Mizu_DrankSeaWater.stages.drank_sea_water.description>
+  <!-- EN: slightly thirsty -->
+  <Mizu_NeedWater.stages.slightly_thirsty.label>slightly thirsty</Mizu_NeedWater.stages.slightly_thirsty.label>
+  <!-- EN: I'm slightly thirsty. -->
+  <Mizu_NeedWater.stages.slightly_thirsty.description>I'm slightly thirsty.</Mizu_NeedWater.stages.slightly_thirsty.description>
+  <!-- EN: thirsty -->
+  <Mizu_NeedWater.stages.thirsty.label>thirsty</Mizu_NeedWater.stages.thirsty.label>
+  <!-- EN: I'm really thirsty. -->
+  <Mizu_NeedWater.stages.thirsty.description>I'm really thirsty.</Mizu_NeedWater.stages.thirsty.description>
+  <!-- EN: urgently thirsty -->
+  <Mizu_NeedWater.stages.urgently_thirsty.label>urgently thirsty</Mizu_NeedWater.stages.urgently_thirsty.label>
+  <!-- EN: These thirst pangs are hard to ignore. -->
+  <Mizu_NeedWater.stages.urgently_thirsty.description>These thirst pangs are hard to ignore.</Mizu_NeedWater.stages.urgently_thirsty.description>
+  <!-- EN: dehydrating (trivial) -->
+  <Mizu_NeedWater.stages.dehydrating_trivial.label>dehydrating (trivial)</Mizu_NeedWater.stages.dehydrating_trivial.label>
+  <!-- EN: It's been so long since I drank. -->
+  <Mizu_NeedWater.stages.dehydrating_trivial.description>It's been so long since I drank.</Mizu_NeedWater.stages.dehydrating_trivial.description>
+  <!-- EN: dehydrating (minor) -->
+  <Mizu_NeedWater.stages.dehydrating_minor.label>dehydrating (minor)</Mizu_NeedWater.stages.dehydrating_minor.label>
+  <!-- EN: I can feel my body wasting away. -->
+  <Mizu_NeedWater.stages.dehydrating_minor.description>I can feel my body wasting away.</Mizu_NeedWater.stages.dehydrating_minor.description>
+  <!-- EN: dehydrating (moderate) -->
+  <Mizu_NeedWater.stages.dehydrating_moderate.label>dehydrating (moderate)</Mizu_NeedWater.stages.dehydrating_moderate.label>
+  <!-- EN: I can barely think about anything but water. -->
+  <Mizu_NeedWater.stages.dehydrating_moderate.description>I can barely think about anything but water.</Mizu_NeedWater.stages.dehydrating_moderate.description>
+  <!-- EN: dehydrating (severe) -->
+  <Mizu_NeedWater.stages.dehydrating_severe.label>dehydrating (severe)</Mizu_NeedWater.stages.dehydrating_severe.label>
+  <!-- EN: I can barely move or think about anything but water. -->
+  <Mizu_NeedWater.stages.dehydrating_severe.description>I can barely move or think about anything but water.</Mizu_NeedWater.stages.dehydrating_severe.description>
+  <!-- EN: dehydrating (extreme) -->
+  <Mizu_NeedWater.stages.dehydrating_extreme.label>dehydrating (extreme)</Mizu_NeedWater.stages.dehydrating_extreme.label>
+  <!-- EN: Water... water... just a shot to drink... anything... please... -->
+  <Mizu_NeedWater.stages.dehydrating_extreme.description>Water... water... just a shot to drink... anything... please...</Mizu_NeedWater.stages.dehydrating_extreme.description>
+  <!-- EN: sipped water from nature -->
+  <Mizu_SippedWaterLikeBeast.stages.sipped_water_from_nature.label>sipped water from nature</Mizu_SippedWaterLikeBeast.stages.sipped_water_from_nature.label>
+  <!-- EN: I have no choice but to sip water like beasts. -->
+  <Mizu_SippedWaterLikeBeast.stages.sipped_water_from_nature.description>I have no choice but to sip water like beasts.</Mizu_SippedWaterLikeBeast.stages.sipped_water_from_nature.description>
+</LanguageData>

@@ -82,7 +82,7 @@ public class CompLatentHeat : ThingComp
                 direction = -1;
                 break;
             default:
-                Log.Error("AddLatentHeatCondition is invalid");
+                Log.Message("[NoWaterNoLife]: Invalid latent heat");
                 break;
         }
 
@@ -161,9 +161,9 @@ public class CompLatentHeat : ThingComp
         }
 
         // 何らかの物の中に入っている場合
-        if (owner.TryAdd(thing) == false)
+        if (!owner.TryAdd(thing))
         {
-            Log.Error("failed TryAdd");
+            Log.Message("[NoWaterNoLife]: Failed to tryadd");
         }
     }
 

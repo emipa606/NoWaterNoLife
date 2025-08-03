@@ -183,7 +183,7 @@ public static class Mizu_Extensions
         if (waterAmount == 0.0f)
         {
             // 水分量0のアイテムの必要個数を計算させようとしている
-            Log.Error("error in GetWaterCalculateAmounts : waterAmount == 0.0f");
+            Log.Message("[NoWaterNoLife]: error in GetWaterCalculateAmounts : waterAmount == 0.0f");
             numTaken = 0;
             waterGot = 0.0f;
             return;
@@ -192,7 +192,7 @@ public static class Mizu_Extensions
         if (!withIngested && t.def.IsIngestible)
         {
             // 食べられるものを飲もうとしている
-            Log.Error("error thing is ingestible.");
+            Log.Message("[NoWaterNoLife]: error thing is ingestible.");
             numTaken = 0;
             waterGot = 0.0f;
             return;
@@ -252,7 +252,7 @@ public static class Mizu_Extensions
         var result = WaterTerrainType.NoWater;
 
         // バイオーム
-        var biomeDefName = tile.biome.defName;
+        var biomeDefName = tile.PrimaryBiome.defName;
         if (biomeDefName.Contains("Desert"))
         {
             // 砂漠Desert、極限の砂漠ExtremeDesertは水なし
@@ -274,7 +274,7 @@ public static class Mizu_Extensions
             result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.RawWater);
         }
 
-        if (tile.Rivers is { Count: > 0 })
+        if (((SurfaceTile)tile).Rivers is { Count: > 0 })
         {
             // 川があれば真水が飲める(凍ってるか等はチェックしないことにする)
             result = (WaterTerrainType)Mathf.Max((int)result, (int)WaterTerrainType.RawWater);

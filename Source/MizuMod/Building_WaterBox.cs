@@ -54,9 +54,9 @@ public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWate
             return false;
         }
 
-        var waterItemDef = MizuDef.List_WaterItem.First(
-            thingDef => thingDef.GetCompProperties<CompProperties_WaterSource>().waterType
-                        == TankComp.StoredWaterType);
+        var waterItemDef = MizuDef.List_WaterItem.First(thingDef =>
+            thingDef.GetCompProperties<CompProperties_WaterSource>().waterType
+            == TankComp.StoredWaterType);
         var compprop = waterItemDef.GetCompProperties<CompProperties_WaterSource>();
 
         // 汲める予定の水アイテムの水の量より多い
@@ -97,7 +97,7 @@ public class Building_WaterBox : Building_WaterNetWorkTable, IBuilding_DrinkWate
         prevGraphicIndex = graphicIndex;
     }
 
-    public override void Tick()
+    protected override void Tick()
     {
         base.Tick();
 

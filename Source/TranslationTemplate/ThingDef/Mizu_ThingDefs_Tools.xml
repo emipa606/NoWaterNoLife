@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: Bucket -->
+  <Mizu_Bucket.label>Bucket</Mizu_Bucket.label>
+  <!-- EN: A tool for firefighting. Pawns can extinguish fires more efficiently by using this. -->
+  <Mizu_Bucket.description>A tool for firefighting. Pawns can extinguish fires more efficiently by using this.</Mizu_Bucket.description>
+  <!-- EN: throw water -->
+  <Mizu_Bucket.verbs.throw_water.label>throw water</Mizu_Bucket.verbs.throw_water.label>
+  <!-- EN: Mop -->
+  <Mizu_Mop.label>Mop</Mizu_Mop.label>
+  <!-- EN: A tool for cleaning. Allows to clean more cleanly on the artifical floors. -->
+  <Mizu_Mop.description>A tool for cleaning. Allows to clean more cleanly on the artifical floors.</Mizu_Mop.description>
+  <!-- EN: Towel -->
+  <Mizu_Towel.label>Towel</Mizu_Towel.label>
+  <!-- EN: A tool for nursing. Allows pawn to nurse patients and help them recover from disease. -->
+  <Mizu_Towel.description>A tool for nursing. Allows pawn to nurse patients and help them recover from disease.</Mizu_Towel.description>
+  <!-- EN: unfinished tool -->
+  <Mizu_UnfinishedTool.label>unfinished tool</Mizu_UnfinishedTool.label>
+  <!-- EN: Watering pot -->
+  <Mizu_WateringPot.label>Watering pot</Mizu_WateringPot.label>
+  <!-- EN: A tool for growing. Allows pawn to water growing zone for increasing fertility. -->
+  <Mizu_WateringPot.description>A tool for growing. Allows pawn to water growing zone for increasing fertility.</Mizu_WateringPot.description>
+  <!-- EN: Water from bucket -->
+  <Proj_BucketWater.label>Water from bucket</Proj_BucketWater.label>
+</LanguageData>

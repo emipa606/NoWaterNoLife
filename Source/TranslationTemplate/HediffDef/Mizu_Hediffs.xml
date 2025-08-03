@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: dehydration -->
+  <Mizu_Dehydration.label>dehydration</Mizu_Dehydration.label>
+  <!-- EN: Extended duration without fresh water. Initial effects are mild, but prolonged lack of water can be life-threatening. -->
+  <Mizu_Dehydration.description>Extended duration without fresh water. Initial effects are mild, but prolonged lack of water can be life-threatening.</Mizu_Dehydration.description>
+  <!-- EN: trivial -->
+  <Mizu_Dehydration.stages.trivial.label>trivial</Mizu_Dehydration.stages.trivial.label>
+  <!-- EN: minor -->
+  <Mizu_Dehydration.stages.minor.label>minor</Mizu_Dehydration.stages.minor.label>
+  <!-- EN: moderate -->
+  <Mizu_Dehydration.stages.moderate.label>moderate</Mizu_Dehydration.stages.moderate.label>
+  <!-- EN: severe -->
+  <Mizu_Dehydration.stages.severe.label>severe</Mizu_Dehydration.stages.severe.label>
+  <!-- EN: extreme -->
+  <Mizu_Dehydration.stages.extreme.label>extreme</Mizu_Dehydration.stages.extreme.label>
+  <!-- EN: drank sea water -->
+  <Mizu_DrankSeaWater.label>drank sea water</Mizu_DrankSeaWater.label>
+  <!-- EN: Seawater contains too much salt, and drinking it can cause electrolyte imbalance and affects organs' ability to filter blood. -->
+  <Mizu_DrankSeaWater.description>Seawater contains too much salt, and drinking it can cause electrolyte imbalance and affects organs' ability to filter blood.</Mizu_DrankSeaWater.description>
+  <!-- EN: Icecream headache -->
+  <Mizu_IcecreamHeadache.label>Icecream headache</Mizu_IcecreamHeadache.label>
+  <!-- EN: Eating frozen things too fast can cause a nasty headache. -->
+  <Mizu_IcecreamHeadache.description>Eating frozen things too fast can cause a nasty headache.</Mizu_IcecreamHeadache.description>
+  <!-- EN: nursed -->
+  <Mizu_Nursed.label>nursed</Mizu_Nursed.label>
+  <!-- EN: ? -->
+  <Mizu_Nursed.description>?</Mizu_Nursed.description>
+</LanguageData>

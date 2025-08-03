@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: purifying water -->
+  <Mizu_CleanWater.label>purifying water</Mizu_CleanWater.label>
+  <!-- EN: purifying at -->
+  <Mizu_CleanWater.gerund>purifying at</Mizu_CleanWater.gerund>
+  <!-- EN: purify -->
+  <Mizu_CleanWater.verb>purify</Mizu_CleanWater.verb>
+  <!-- EN: deliver water to prisoners -->
+  <Mizu_DeliverWaterToPrisoner.label>deliver water to prisoners</Mizu_DeliverWaterToPrisoner.label>
+  <!-- EN: delivering water for -->
+  <Mizu_DeliverWaterToPrisoner.gerund>delivering water for</Mizu_DeliverWaterToPrisoner.gerund>
+  <!-- EN: deliver water for -->
+  <Mizu_DeliverWaterToPrisoner.verb>deliver water for</Mizu_DeliverWaterToPrisoner.verb>
+  <!-- EN: doint bill about harvesting ice -->
+  <Mizu_DoBillIce.label>doint bill about harvesting ice</Mizu_DoBillIce.label>
+  <!-- EN: harvesting at -->
+  <Mizu_DoBillIce.gerund>harvesting at</Mizu_DoBillIce.gerund>
+  <!-- EN: harvest -->
+  <Mizu_DoBillIce.verb>harvest</Mizu_DoBillIce.verb>
+  <!-- EN: do water task -->
+  <Mizu_DoBillWater.label>do water task</Mizu_DoBillWater.label>
+  <!-- EN: doing water task at -->
+  <Mizu_DoBillWater.gerund>doing water task at</Mizu_DoBillWater.gerund>
+  <!-- EN: do water task -->
+  <Mizu_DoBillWater.verb>do water task</Mizu_DoBillWater.verb>
+  <!-- EN: feed animals to water -->
+  <Mizu_DoctorFeedWaterAnimals.label>feed animals to water</Mizu_DoctorFeedWaterAnimals.label>
+  <!-- EN: feeding (water) -->
+  <Mizu_DoctorFeedWaterAnimals.gerund>feeding (water)</Mizu_DoctorFeedWaterAnimals.gerund>
+  <!-- EN: feed (water) -->
+  <Mizu_DoctorFeedWaterAnimals.verb>feed (water)</Mizu_DoctorFeedWaterAnimals.verb>
+  <!-- EN: feed patients to water -->
+  <Mizu_DoctorFeedWaterHumanlikes.label>feed patients to water</Mizu_DoctorFeedWaterHumanlikes.label>
+  <!-- EN: feeding (water) -->
+  <Mizu_DoctorFeedWaterHumanlikes.gerund>feeding (water)</Mizu_DoctorFeedWaterHumanlikes.gerund>
+  <!-- EN: feed (water) -->
+  <Mizu_DoctorFeedWaterHumanlikes.verb>feed (water)</Mizu_DoctorFeedWaterHumanlikes.verb>
+  <!-- EN: get snow -->
+  <Mizu_GetSnow.label>get snow</Mizu_GetSnow.label>
+  <!-- EN: getting snow -->
+  <Mizu_GetSnow.gerund>getting snow</Mizu_GetSnow.gerund>
+  <!-- EN: get snow -->
+  <Mizu_GetSnow.verb>get snow</Mizu_GetSnow.verb>
+  <!-- EN: mop -->
+  <Mizu_Mop.label>mop</Mizu_Mop.label>
+  <!-- EN: mopping -->
+  <Mizu_Mop.gerund>mopping</Mizu_Mop.gerund>
+  <!-- EN: mop -->
+  <Mizu_Mop.verb>mop</Mizu_Mop.verb>
+  <!-- EN: nurse patients -->
+  <Mizu_NurseToHumanlikes.label>nurse patients</Mizu_NurseToHumanlikes.label>
+  <!-- EN: nursing -->
+  <Mizu_NurseToHumanlikes.gerund>nursing</Mizu_NurseToHumanlikes.gerund>
+  <!-- EN: nurse -->
+  <Mizu_NurseToHumanlikes.verb>nurse</Mizu_NurseToHumanlikes.verb>
+  <!-- EN: supply water -->
+  <Mizu_SupplyWaterToToolCleaning.label>supply water</Mizu_SupplyWaterToToolCleaning.label>
+  <!-- EN: supplying -->
+  <Mizu_SupplyWaterToToolCleaning.gerund>supplying</Mizu_SupplyWaterToToolCleaning.gerund>
+  <!-- EN: supply -->
+  <Mizu_SupplyWaterToToolCleaning.verb>supply</Mizu_SupplyWaterToToolCleaning.verb>
+  <!-- EN: supply water -->
+  <Mizu_SupplyWaterToToolDoctor.label>supply water</Mizu_SupplyWaterToToolDoctor.label>
+  <!-- EN: supplying -->
+  <Mizu_SupplyWaterToToolDoctor.gerund>supplying</Mizu_SupplyWaterToToolDoctor.gerund>
+  <!-- EN: supply -->
+  <Mizu_SupplyWaterToToolDoctor.verb>supply</Mizu_SupplyWaterToToolDoctor.verb>
+  <!-- EN: supply water -->
+  <Mizu_SupplyWaterToToolDrawing.label>supply water</Mizu_SupplyWaterToToolDrawing.label>
+  <!-- EN: supplying -->
+  <Mizu_SupplyWaterToToolDrawing.gerund>supplying</Mizu_SupplyWaterToToolDrawing.gerund>
+  <!-- EN: supply -->
+  <Mizu_SupplyWaterToToolDrawing.verb>supply</Mizu_SupplyWaterToToolDrawing.verb>
+  <!-- EN: water farm -->
+  <Mizu_WaterFarm.label>water farm</Mizu_WaterFarm.label>
+  <!-- EN: watering -->
+  <Mizu_WaterFarm.gerund>watering</Mizu_WaterFarm.gerund>
+  <!-- EN: water -->
+  <Mizu_WaterFarm.verb>water</Mizu_WaterFarm.verb>
+</LanguageData>

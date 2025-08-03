@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: Clear water filter -->
+  <Mizu_ClearWaterFilter.label>Clear water filter</Mizu_ClearWaterFilter.label>
+  <!-- EN: Convert normal water to clear water in waterworks. Need electrical power. -->
+  <Mizu_ClearWaterFilter.description>Convert normal water to clear water in waterworks. Need electrical power.</Mizu_ClearWaterFilter.description>
+  <!-- EN: Industrial clear water filter -->
+  <Mizu_ClearWaterFilterIndustrial.label>Industrial clear water filter</Mizu_ClearWaterFilterIndustrial.label>
+  <!-- EN: Convert normal water to clear water in waterworks. Need electrical power. 10x effective. -->
+  <Mizu_ClearWaterFilterIndustrial.description>Convert normal water to clear water in waterworks. Need electrical power. 10x effective.</Mizu_ClearWaterFilterIndustrial.description>
+  <!-- EN: Dirty water filter -->
+  <Mizu_DirtyWaterFilter.label>Dirty water filter</Mizu_DirtyWaterFilter.label>
+  <!-- EN: Convert raw/mud/sea water to normal water in waterworks. Need electrical power. -->
+  <Mizu_DirtyWaterFilter.description>Convert raw/mud/sea water to normal water in waterworks. Need electrical power.</Mizu_DirtyWaterFilter.description>
+  <!-- EN: Industrial dirty water filter -->
+  <Mizu_DirtyWaterFilterIndustrial.label>Industrial dirty water filter</Mizu_DirtyWaterFilterIndustrial.label>
+  <!-- EN: Convert raw/mud/sea water to normal water in waterworks. Need electrical power. 10x effective. -->
+  <Mizu_DirtyWaterFilterIndustrial.description>Convert raw/mud/sea water to normal water in waterworks. Need electrical power. 10x effective.</Mizu_DirtyWaterFilterIndustrial.description>
+  <!-- EN: Drawing water spot -->
+  <Mizu_DrawingWaterSpot.label>Drawing water spot</Mizu_DrawingWaterSpot.label>
+  <!-- EN: A place for drawing water. This can be built on water or marsh. -->
+  <Mizu_DrawingWaterSpot.description>A place for drawing water. This can be built on water or marsh.</Mizu_DrawingWaterSpot.description>
+  <!-- EN: Electric water purifier -->
+  <Mizu_ElectricWaterCleaner.label>Electric water purifier</Mizu_ElectricWaterCleaner.label>
+  <!-- EN: An electrically-powered water purifier. -->
+  <Mizu_ElectricWaterCleaner.description>An electrically-powered water purifier.</Mizu_ElectricWaterCleaner.description>
+  <!-- EN: Fueled water purifier -->
+  <Mizu_FueledWaterCleaner.label>Fueled water purifier</Mizu_FueledWaterCleaner.label>
+  <!-- EN: A simple wood-fueled water purifier. -->
+  <Mizu_FueledWaterCleaner.description>A simple wood-fueled water purifier.</Mizu_FueledWaterCleaner.description>
+  <!-- EN: Ground water pump -->
+  <Mizu_GroundWaterPump.label>Ground water pump</Mizu_GroundWaterPump.label>
+  <!-- EN: A building for pumping water for river, lake, pond, sea and marsh. Need electrical power. -->
+  <Mizu_GroundWaterPump.description>A building for pumping water for river, lake, pond, sea and marsh. Need electrical power.</Mizu_GroundWaterPump.description>
+  <!-- EN: Ice harvesting spot -->
+  <Mizu_IceHarvestingSpot.label>Ice harvesting spot</Mizu_IceHarvestingSpot.label>
+  <!-- EN: A place for harvesting ice. This can be built on ice. -->
+  <Mizu_IceHarvestingSpot.description>A place for harvesting ice. This can be built on ice.</Mizu_IceHarvestingSpot.description>
+  <!-- EN: Sprinkler (extinguishing) -->
+  <Mizu_SprinklerExtinguishing.label>Sprinkler (extinguishing)</Mizu_SprinklerExtinguishing.label>
+  <!-- EN: Automatically extinguish fire within range. Need electrical power. -->
+  <Mizu_SprinklerExtinguishing.description>Automatically extinguish fire within range. Need electrical power.</Mizu_SprinklerExtinguishing.description>
+  <!-- EN: Sprinkler (growing) -->
+  <Mizu_SprinklerGrowing.label>Sprinkler (growing)</Mizu_SprinklerGrowing.label>
+  <!-- EN: Water farm every morning. Need electrical power. -->
+  <Mizu_SprinklerGrowing.description>Water farm every morning. Need electrical power.</Mizu_SprinklerGrowing.description>
+  <!-- EN: Off(Active time 5-6am) -->
+  <Mizu_SprinklerGrowing.comps.CompSchedule.offMessage>Off(Active time 5-6am)</Mizu_SprinklerGrowing.comps.CompSchedule.offMessage>
+  <!-- EN: Underground water pump (deep) -->
+  <Mizu_UndergroundWaterPumpDeep.label>Underground water pump (deep)</Mizu_UndergroundWaterPumpDeep.label>
+  <!-- EN: A building for pumping water for underground deep layer. Need electrical power. -->
+  <Mizu_UndergroundWaterPumpDeep.description>A building for pumping water for underground deep layer. Need electrical power.</Mizu_UndergroundWaterPumpDeep.description>
+  <!-- EN: Underground water pump (shallow) -->
+  <Mizu_UndergroundWaterPumpShallow.label>Underground water pump (shallow)</Mizu_UndergroundWaterPumpShallow.label>
+  <!-- EN: A building for pumping water for underground shallow layer. Need electrical power. -->
+  <Mizu_UndergroundWaterPumpShallow.description>A building for pumping water for underground shallow layer. Need electrical power.</Mizu_UndergroundWaterPumpShallow.description>
+  <!-- EN: Water box -->
+  <Mizu_WaterBox.label>Water box</Mizu_WaterBox.label>
+  <!-- EN: A topless facility for storing small amount of water. It allows animals to drink water. -->
+  <Mizu_WaterBox.description>A topless facility for storing small amount of water. It allows animals to drink water.</Mizu_WaterBox.description>
+  <!-- EN: Faucet -->
+  <Mizu_WaterFaucet.label>Faucet</Mizu_WaterFaucet.label>
+  <!-- EN: In use this tool, you take water for drinking from water tank. -->
+  <Mizu_WaterFaucet.description>In use this tool, you take water for drinking from water tank.</Mizu_WaterFaucet.description>
+  <!-- EN: Water pipe -->
+  <Mizu_WaterPipe.label>Water pipe</Mizu_WaterPipe.label>
+  <!-- EN: A building for connecting water network tools (pump, tank, faucet ...) -->
+  <Mizu_WaterPipe.description>A building for connecting water network tools (pump, tank, faucet ...)</Mizu_WaterPipe.description>
+  <!-- EN: Water pipe (in water) -->
+  <Mizu_WaterPipeInWater.label>Water pipe (in water)</Mizu_WaterPipeInWater.label>
+  <!-- EN: A building for connecting water network tools (pump, tank, faucet ...) -->
+  <Mizu_WaterPipeInWater.description>A building for connecting water network tools (pump, tank, faucet ...)</Mizu_WaterPipeInWater.description>
+  <!-- EN: Water tank -->
+  <Mizu_WaterTank.label>Water tank</Mizu_WaterTank.label>
+  <!-- EN: A building for storing water. -->
+  <Mizu_WaterTank.description>A building for storing water.</Mizu_WaterTank.description>
+  <!-- EN: Water valve -->
+  <Mizu_WaterValve.label>Water valve</Mizu_WaterValve.label>
+  <!-- EN: A building for connect water network. You can switch state (open/close). -->
+  <Mizu_WaterValve.description>A building for connect water network. You can switch state (open/close).</Mizu_WaterValve.description>
+  <!-- EN: Well -->
+  <Mizu_Well.label>Well</Mizu_Well.label>
+  <!-- EN: A building for drawing underground water. -->
+  <Mizu_Well.description>A building for drawing underground water.</Mizu_Well.description>
+</LanguageData>

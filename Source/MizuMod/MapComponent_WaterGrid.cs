@@ -50,7 +50,7 @@ public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
             var existPool = pools.Find(p => p.ID == GetID(c));
             if (existPool == null)
             {
-                Log.Error("existPool is null");
+                Log.Message("[NoWaterNoLife]: Found no pool");
             }
 
             if (!mergePools.Contains(existPool))
@@ -238,13 +238,13 @@ public abstract class MapComponent_WaterGrid : MapComponent, ICellBoolGiver
                     var curPool = pools.Find(p => p.ID == GetID(curIndex));
                     if (curPool == null)
                     {
-                        Log.Error("curPool is null");
+                        Log.Message("[NoWaterNoLife]: Found no current pool");
                     }
 
                     var nearPool = pools.Find(p => p.ID == GetID(nearIndex));
                     if (nearPool == null)
                     {
-                        Log.Error("nearPool is null");
+                        Log.Message("[NoWaterNoLife]: Found no near pool");
                     }
 
                     curPool?.MergePool(nearPool, poolIDGrid);

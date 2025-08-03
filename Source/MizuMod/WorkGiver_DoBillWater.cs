@@ -9,7 +9,7 @@ namespace MizuMod;
 
 public class WorkGiver_DoBillWater : WorkGiver_DoBill
 {
-    private static readonly DefCountList availableCounts = new DefCountList();
+    private static readonly DefCountList availableCounts = new();
 
     private static readonly string FullWaterTranslated = "MizuFullWater".Translate();
 
@@ -25,7 +25,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
 
     private static readonly HashSet<Thing> processedThings = [];
 
-    private static readonly IntRange ReCheckFailedBillTicksRange = new IntRange(500, 600);
+    private static readonly IntRange ReCheckFailedBillTicksRange = new(500, 600);
 
     private static readonly List<Thing> relevantThings = [];
 
@@ -86,7 +86,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             case DefExtension_WaterRecipe.RecipeType.PourWater:
                 return new Job(MizuDef.Job_PourWater);
             default:
-                Log.Error("recipeType is Undefined");
+                Log.Message("[NoWaterNoLife]: recipeType is Undefined");
                 return null;
         }
     }
@@ -108,21 +108,20 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
         // 建造物だけど作業場所が無い場合
 
         // 周囲8方向で立つことが出来るセルを探す
-        var standableAdjacentCells = building.OccupiedRect().ExpandedBy(1).EdgeCells.Where(
-            c =>
+        var standableAdjacentCells = building.OccupiedRect().ExpandedBy(1).EdgeCells.Where(c =>
+        {
+            foreach (var t in building.Map.thingGrid.ThingsListAt(c))
             {
-                foreach (var t in building.Map.thingGrid.ThingsListAt(c))
+                // そのセルに、「立つことが出来る」以外の物がある⇒立てないセルはfalse
+                if (t.def.passability != Traversability.Standable)
                 {
-                    // そのセルに、「立つことが出来る」以外の物がある⇒立てないセルはfalse
-                    if (t.def.passability != Traversability.Standable)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
+            }
 
-                // 立てるセルの場合true
-                return true;
-            });
+            // 立てるセルの場合true
+            return true;
+        });
 
         var adjacentCells = standableAdjacentCells as IntVec3[] ?? standableAdjacentCells.ToArray();
         return !adjacentCells.Any()
@@ -536,7 +535,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             case DefExtension_WaterRecipe.RecipeType.PourWater:
                 return true;
             default:
-                Log.Error("recipeType is Undefined");
+                Log.Message("[NoWaterNoLife]: recipeType is Undefined");
                 return false;
         }
     }
@@ -582,7 +581,7 @@ public class WorkGiver_DoBillWater : WorkGiver_DoBill
             }
 
             default:
-                Log.Error("recipeType is Undefined");
+                Log.Message("[NoWaterNoLife]: recipeType is Undefined");
                 return false;
         }
     }

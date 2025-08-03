@@ -95,7 +95,7 @@ public class CompWaterNetTank : CompWaterNet
     {
         if (amount < 0f)
         {
-            Log.Error($"Cannot add negative water volume {amount}");
+            Log.Message($"[NoWaterNoLife]: Cannot add negative water volume {amount}");
             return 0.0f;
         }
 
@@ -125,7 +125,7 @@ public class CompWaterNetTank : CompWaterNet
     {
         if (amount < 0f)
         {
-            Log.Error($"Cannot draw negative water volume {amount}");
+            Log.Message($"[NoWaterNoLife]: Cannot draw negative water volume {amount}");
             return 0.0f;
         }
 

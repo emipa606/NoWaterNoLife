@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: feeding TargetA to TargetB. -->
+  <Mizu_DeliverWater.reportString>feeding TargetA to TargetB.</Mizu_DeliverWater.reportString>
+  <!-- EN: doing bill at TargetA. -->
+  <Mizu_DrawFromTerrain.reportString>doing bill at TargetA.</Mizu_DrawFromTerrain.reportString>
+  <!-- EN: doing bill at TargetA. -->
+  <Mizu_DrawFromWaterNet.reportString>doing bill at TargetA.</Mizu_DrawFromWaterNet.reportString>
+  <!-- EN: doing bill at TargetA. -->
+  <Mizu_DrawFromWaterPool.reportString>doing bill at TargetA.</Mizu_DrawFromWaterPool.reportString>
+  <!-- EN: drawing water from TargetA. -->
+  <Mizu_DrawWaterByPrisoner.reportString>drawing water from TargetA.</Mizu_DrawWaterByPrisoner.reportString>
+  <!-- EN: drinking TargetA. -->
+  <Mizu_DrinkWater.reportString>drinking TargetA.</Mizu_DrinkWater.reportString>
+  <!-- EN: drinking from TargetA. -->
+  <Mizu_DrinkWaterFromBuilding.reportString>drinking from TargetA.</Mizu_DrinkWaterFromBuilding.reportString>
+  <!-- EN: feeding TargetA to TargetB. -->
+  <Mizu_FeedWaterPatient.reportString>feeding TargetA to TargetB.</Mizu_FeedWaterPatient.reportString>
+  <!-- EN: getting snow. -->
+  <Mizu_GetSnow.reportString>getting snow.</Mizu_GetSnow.reportString>
+  <!-- EN: mopping TargetA. -->
+  <Mizu_Mop.reportString>mopping TargetA.</Mizu_Mop.reportString>
+  <!-- EN: nursing TargetA. -->
+  <Mizu_Nurse.reportString>nursing TargetA.</Mizu_Nurse.reportString>
+  <!-- EN: doing bill at TargetA. -->
+  <Mizu_PourWater.reportString>doing bill at TargetA.</Mizu_PourWater.reportString>
+  <!-- EN: supplying water to TargetB. -->
+  <Mizu_SupplyWaterToTool.reportString>supplying water to TargetB.</Mizu_SupplyWaterToTool.reportString>
+  <!-- EN: watering TargetA. -->
+  <Mizu_WaterFarm.reportString>watering TargetA.</Mizu_WaterFarm.reportString>
+</LanguageData>

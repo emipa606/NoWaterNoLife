@@ -23,16 +23,20 @@ public abstract class Building_UndergroundWaterPump : Building_WaterNet
             stringBuilder.AppendLine();
         }
 
-        stringBuilder.Append(
-            string.Format(
-                MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
-                (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
-        if (DebugSettings.godMode)
+        if (pool != null)
         {
-            stringBuilder.Append($" ({pool.CurrentWaterVolume:F2}/{pool.MaxWaterVolume:F2} L)");
+            stringBuilder.Append(
+                string.Format(
+                    MizuStrings.InspectStoredWaterPool.Translate() + ": {0}%",
+                    (pool.CurrentWaterVolumePercent * 100).ToString("F0")));
         }
 
-        return stringBuilder.ToString();
+        if (DebugSettings.godMode)
+        {
+            stringBuilder.Append($" ({pool?.CurrentWaterVolume:F2}/{pool?.MaxWaterVolume:F2} L)");
+        }
+
+        return stringBuilder.ToString().Trim();
     }
 
     public override void SpawnSetup(Map map, bool respawningAfterLoad)
@@ -42,7 +46,7 @@ public abstract class Building_UndergroundWaterPump : Building_WaterNet
         pool = WaterGrid.GetPool(map.cellIndices.CellToIndex(Position));
         if (pool == null)
         {
-            Log.Error("pool is null");
+            Log.Message("[NoWaterNoLife]: Found no pool, no water will be available");
         }
     }
 }

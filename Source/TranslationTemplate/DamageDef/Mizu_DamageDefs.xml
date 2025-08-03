@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: extinguish -->
+  <Mizu_Extinguish.label>extinguish</Mizu_Extinguish.label>
+  <!-- EN: {0} has been killed. -->
+  <Mizu_Extinguish.deathMessage>{0} has been killed.</Mizu_Extinguish.deathMessage>
+</LanguageData>

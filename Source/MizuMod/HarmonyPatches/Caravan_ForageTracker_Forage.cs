@@ -93,7 +93,7 @@ internal class Caravan_ForageTracker_Forage
                 inventoryPawn.inventory.innerContainer.Remove(waterThing);
 
                 // 移動不可状態を一旦リセット(して再計算させる？)
-                ___caravan.RecacheImmobilizedNow();
+                ___caravan.RecacheInventory();
 
                 // 水の残量再計算フラグON
                 MizuCaravanUtility.daysWorthOfWaterDirty = true;

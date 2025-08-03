@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: Clean the floor with tools. -->
+  <Mizu_Cleaning.description>Clean the floor with tools.</Mizu_Cleaning.description>
+  <!-- EN: cleaning -->
+  <Mizu_Cleaning.gerundLabel>cleaning</Mizu_Cleaning.gerundLabel>
+  <!-- EN: Clean -->
+  <Mizu_Cleaning.labelShort>Clean</Mizu_Cleaning.labelShort>
+  <!-- EN: Cleaner -->
+  <Mizu_Cleaning.pawnLabel>Cleaner</Mizu_Cleaning.pawnLabel>
+  <!-- EN: Clean -->
+  <Mizu_Cleaning.verb>Clean</Mizu_Cleaning.verb>
+  <!-- EN: Drawing water for drinking -->
+  <Mizu_Drawing.description>Drawing water for drinking</Mizu_Drawing.description>
+  <!-- EN: Drawing -->
+  <Mizu_Drawing.gerundLabel>Drawing</Mizu_Drawing.gerundLabel>
+  <!-- EN: Draw -->
+  <Mizu_Drawing.labelShort>Draw</Mizu_Drawing.labelShort>
+  <!-- EN: Drawer -->
+  <Mizu_Drawing.pawnLabel>Drawer</Mizu_Drawing.pawnLabel>
+  <!-- EN: Draw -->
+  <Mizu_Drawing.verb>Draw</Mizu_Drawing.verb>
+</LanguageData>

@@ -98,30 +98,29 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
         }
 
         // ツールチェック
-        var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
-            t =>
+        var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
+        {
+            // 使用禁止チェック
+            if (t.IsForbidden(pawn))
             {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+            var comp = t.TryGetComp<CompWaterTool>();
+            if (comp == null)
+            {
+                return false;
+            }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
-                {
-                    return false;
-                }
+            if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
+            {
+                return false;
+            }
 
-                var maxQueueLength = (int)Mathf.Floor(
-                    comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                return maxQueueLength > 0;
-            });
+            var maxQueueLength = (int)Mathf.Floor(
+                comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+            return maxQueueLength > 0;
+        });
         if (!toolList.Any())
         {
             return false;
@@ -139,30 +138,29 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
         // 一番近いツールを探す
         Thing candidateTool = null;
         var minDist = int.MaxValue;
-        var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
-            t =>
+        var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
+        {
+            // 使用禁止チェック
+            if (t.IsForbidden(pawn))
             {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+            var comp = t.TryGetComp<CompWaterTool>();
+            if (comp == null)
+            {
+                return false;
+            }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
-                {
-                    return false;
-                }
+            if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.WaterFarm))
+            {
+                return false;
+            }
 
-                var maxQueueLengthForCheck = (int)Mathf.Floor(
-                    comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
-                return maxQueueLengthForCheck > 0;
-            });
+            var maxQueueLengthForCheck = (int)Mathf.Floor(
+                comp.StoredWaterVolume / JobDriver_WaterFarm.ConsumeWaterVolume);
+            return maxQueueLengthForCheck > 0;
+        });
 
         foreach (var tool in toolList)
         {
@@ -184,7 +182,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
 
         if (candidateTool == null)
         {
-            Log.Error("candidateTool is null");
+            Log.Message("[NoWaterNoLife]: candidateTool is null");
             return null;
         }
 
@@ -237,8 +235,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
         IEnumerable<IntVec3> potentialCells = null;
 
         // 農地チェック
-        var growingZoneList = pawn.Map.zoneManager.AllZones.Where(
-            zone => zone is Zone_Growing { allowSow: true });
+        var growingZoneList = pawn.Map.zoneManager.AllZones.Where(zone => zone is Zone_Growing { allowSow: true });
         foreach (var zone in growingZoneList)
         {
             potentialCells = potentialCells == null ? zone.Cells.AsEnumerable() : potentialCells.Concat(zone.Cells);
@@ -258,10 +255,7 @@ public class WorkGiver_WaterFarm : WorkGiver_Scanner
                 : potentialCells.Concat(building.OccupiedRect().Cells);
         }
 
-        if (potentialCells == null)
-        {
-            potentialCells = new List<IntVec3>();
-        }
+        potentialCells ??= new List<IntVec3>();
 
         return potentialCells;
     }

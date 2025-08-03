@@ -93,7 +93,7 @@ public static class MizuStrings
             case WaterType.SeaWater:
                 return InspectWaterTypeSea.Translate();
             default:
-                Log.Error("unknown water type");
+                Log.Message("[NoWaterNoLife]: unknown water type");
                 return "unknown";
         }
     }

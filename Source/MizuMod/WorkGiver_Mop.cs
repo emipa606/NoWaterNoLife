@@ -22,7 +22,7 @@ public class WorkGiver_Mop : WorkGiver_Scanner
         }
 
         // モップエリア外はやらない
-        if (pawn.Map.areaManager.Mop()[c] == false)
+        if (!pawn.Map.areaManager.Mop()[c])
         {
             return false;
         }
@@ -59,30 +59,29 @@ public class WorkGiver_Mop : WorkGiver_Scanner
         }
 
         // モップアイテムのチェック
-        var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
-            t =>
+        var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
+        {
+            // 使用禁止チェック
+            if (t.IsForbidden(pawn))
             {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+            var comp = t.TryGetComp<CompWaterTool>();
+            if (comp == null)
+            {
+                return false;
+            }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
-                {
-                    return false;
-                }
+            if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+            {
+                return false;
+            }
 
-                var maxQueueLength =
-                    (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                return maxQueueLength > 0;
-            });
+            var maxQueueLength =
+                (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+            return maxQueueLength > 0;
+        });
         if (!mopList.Any())
         {
             return false;
@@ -100,30 +99,29 @@ public class WorkGiver_Mop : WorkGiver_Scanner
         // 一番近いモップを探す
         Thing candidateMop = null;
         var minDist = int.MaxValue;
-        var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
-            t =>
+        var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(t =>
+        {
+            // 使用禁止チェック
+            if (t.IsForbidden(pawn))
             {
-                // 使用禁止チェック
-                if (t.IsForbidden(pawn))
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var comp = t.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+            var comp = t.TryGetComp<CompWaterTool>();
+            if (comp == null)
+            {
+                return false;
+            }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
-                {
-                    return false;
-                }
+            if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Mop))
+            {
+                return false;
+            }
 
-                var maxQueueLengthForCheck =
-                    (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
-                return maxQueueLengthForCheck > 0;
-            });
+            var maxQueueLengthForCheck =
+                (int)Mathf.Floor(comp.StoredWaterVolume / JobDriver_Mop.ConsumeWaterVolume);
+            return maxQueueLengthForCheck > 0;
+        });
 
         foreach (var mop in mopList)
         {
@@ -145,7 +143,7 @@ public class WorkGiver_Mop : WorkGiver_Scanner
 
         if (candidateMop == null)
         {
-            Log.Error("candidateMop is null");
+            Log.Message("[NoWaterNoLife]: candidateMop is null");
             return null;
         }
 

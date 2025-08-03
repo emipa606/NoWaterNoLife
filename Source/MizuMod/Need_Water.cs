@@ -66,10 +66,7 @@ public class Need_Water(Pawn pawn) : Need(pawn)
     {
         get
         {
-            if (extInt == null)
-            {
-                extInt = def.GetModExtension<DefExtension_NeedWater>();
-            }
+            extInt ??= def.GetModExtension<DefExtension_NeedWater>();
 
             return extInt;
         }
@@ -99,11 +96,7 @@ public class Need_Water(Pawn pawn) : Need(pawn)
     public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1F,
         bool drawArrows = true, bool doTooltip = true, Rect? rectForTooltip = null, bool drawLabel = true)
     {
-        if (threshPercents == null)
-        {
-            threshPercents =
-                [PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty];
-        }
+        threshPercents ??= [PercentageThreshUrgentlyThirsty, PercentageThreshThirsty, PercentageThreshSlightlyThirsty];
 
         base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip, rectForTooltip, drawLabel);
     }
@@ -173,7 +166,6 @@ public class Need_Water(Pawn pawn) : Need(pawn)
         switch (cat)
         {
             case ThirstCategory.Healthy:
-                return fallPerTickBase;
             case ThirstCategory.SlightlyThirsty:
                 return fallPerTickBase;
             case ThirstCategory.Thirsty:

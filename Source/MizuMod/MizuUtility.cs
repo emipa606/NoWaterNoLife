@@ -82,14 +82,14 @@ public static class MizuUtility
         // 食事と同時に水分摂取する場合は既に消滅しているので無視する
         if (!withIngested && thing.Destroyed)
         {
-            Log.Error($"{getter} drank destroyed thing {thing}");
+            Log.Message($"[NoWaterNoLife]: {getter} drank destroyed thing {thing}");
             return 0f;
         }
 
         // 現在飲めないはずのものを飲もうとしている(エラー)
         if (!thing.CanDrinkWaterNow())
         {
-            Log.Error($"{getter} drank CanDrinkWaterNow()=false thing {thing}");
+            Log.Message($"[NoWaterNoLife]: {getter} drank CanDrinkWaterNow()=false thing {thing}");
             return 0f;
         }
 
@@ -106,19 +106,19 @@ public static class MizuUtility
         var comp = thing.TryGetComp<CompWaterSource>();
         if (comp == null)
         {
-            Log.Error("comp is null");
+            Log.Message("[NoWaterNoLife]: comp is null");
             return 0.0f;
         }
 
-        if (!comp.IsWaterSource && comp.DependIngredients == false)
+        if (!comp.IsWaterSource && !comp.DependIngredients)
         {
-            Log.Error("not watersource");
+            Log.Message("[NoWaterNoLife]: not watersource");
             return 0.0f;
         }
 
         if (comp.SourceType != CompProperties_WaterSource.SourceType.Item)
         {
-            Log.Error("source type is not item");
+            Log.Message("[NoWaterNoLife]: source type is not item");
             return 0.0f;
         }
 
@@ -533,7 +533,7 @@ public static class MizuUtility
         var hiddenWaterSpot = pawn.Map.GetComponent<MapComponent_HiddenWaterSpot>();
         if (hiddenWaterSpot == null)
         {
-            Log.Error("hiddenWaterSpot is null");
+            Log.Message("[NoWaterNoLife]: hiddenWaterSpot is null");
             result = IntVec3.Invalid;
             return false;
         }
@@ -629,7 +629,8 @@ public static class MizuUtility
             // 取得者は操作不可、取得者と摂取者が違う
             // →マップから取得して持ち運ぶことができない
             // →エラー
-            Log.Error($"{getter} tried to find food to bring to {eater} but {getter} is incapable of Manipulation.");
+            Log.Message(
+                $"[NoWaterNoLife]: {getter} tried to find food to bring to {eater} but {getter} is incapable of Manipulation.");
             return null;
         }
 
@@ -640,16 +641,15 @@ public static class MizuUtility
             return SpawnedWaterSearchInnerScan(
                 eater,
                 getter.Position,
-                getter.Map.listerThings.ThingsInGroup(ThingRequestGroup.Everything).FindAll(
-                    t =>
+                getter.Map.listerThings.ThingsInGroup(ThingRequestGroup.Everything).FindAll(t =>
+                {
+                    if (t.CanDrinkWaterNow())
                     {
-                        if (t.CanDrinkWaterNow())
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        return t is IBuilding_DrinkWater building && building.CanDrinkFor(eater);
-                    }),
+                    return t is IBuilding_DrinkWater building && building.CanDrinkFor(eater);
+                }),
                 PathEndMode.ClosestTouch,
                 TraverseParms.For(getter),
                 priorQuality,
@@ -994,7 +994,7 @@ public static class MizuUtility
 
         // 建物、もしくはアイテムでも設定された水質を直接使用する場合
         if (compSource.SourceType == CompProperties_WaterSource.SourceType.Building ||
-            compSource.DependIngredients == false)
+            !compSource.DependIngredients)
         {
             return compSource.WaterType;
         }

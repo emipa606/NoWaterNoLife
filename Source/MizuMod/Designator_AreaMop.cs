@@ -20,7 +20,7 @@ public abstract class Designator_AreaMop : Designator
 
     public override bool DragDrawMeasurements => true;
 
-    public override int DraggableDimensions => 2;
+    public override DrawStyleCategoryDef DrawStyleCategory => DrawStyleCategoryDefOf.Areas;
 
     public override AcceptanceReport CanDesignateCell(IntVec3 c)
     {

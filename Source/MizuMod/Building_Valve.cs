@@ -34,7 +34,7 @@ public class Building_Valve : Building_WaterNet
         Scribe_Values.Look(ref lastSwitchIsOn, "lastSwitchIsOn");
     }
 
-    public override void Tick()
+    protected override void Tick()
     {
         base.Tick();
 

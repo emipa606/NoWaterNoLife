@@ -39,10 +39,7 @@ public static class Toils_Mizu
         toil.initAction = () =>
         {
             var actor = toil.actor;
-            if (actor.CurJob.placedThings == null)
-            {
-                actor.CurJob.placedThings = [];
-            }
+            actor.CurJob.placedThings ??= [];
 
             actor.CurJob.placedThings.Add(new ThingCountClass(actor.carryTracker.CarriedThing,
                 actor.carryTracker.CarriedThing.stackCount));
@@ -79,7 +76,7 @@ public static class Toils_Mizu
 
             curJob.bill.Notify_DoBillStarted(actor);
         };
-        toil.tickAction = delegate
+        toil.tickIntervalAction = delegate(int delta)
         {
             var actor = toil.actor;
             var curJob = actor.jobs.curJob;
@@ -100,7 +97,7 @@ public static class Toils_Mizu
                 : 1f;
             if (jobDriver_DoBill.BillGiver is Building_WorkTable building_WorkTable)
             {
-                num *= building_WorkTable.GetStatValue(StatDefOf.WorkTableWorkSpeedFactor);
+                num *= building_WorkTable.GetStatValue(StatDefOf.WorkTableWorkSpeedFactor) * delta;
             }
 
             if (DebugSettings.fastCrafting)
@@ -111,7 +108,7 @@ public static class Toils_Mizu
             jobDriver_DoBill.workLeft -= num;
 
             // 椅子から快適さを得る
-            actor.GainComfortFromCellIfPossible();
+            actor.GainComfortFromCellIfPossible(delta);
 
             // 完了チェック
             if (jobDriver_DoBill.workLeft <= 0f)
@@ -152,7 +149,7 @@ public static class Toils_Mizu
             actor.rotationTracker.FaceCell(actor.Position);
             actor.jobs.curDriver.ticksLeftThisToil = drawTicks;
         };
-        toil.tickAction = delegate { toil.actor.GainComfortFromCellIfPossible(); };
+        toil.tickIntervalAction = delegate(int delta) { toil.actor.GainComfortFromCellIfPossible(delta); };
         toil.defaultCompleteMode = ToilCompleteMode.Delay;
         toil.FailOnDestroyedOrNull(drawerIndex);
 
@@ -224,9 +221,9 @@ public static class Toils_Mizu
                 FoodUtility.AddFoodPoisoningHediff(actor, thing, FoodPoisonCause.Unknown);
             }
         };
-        toil.tickAction = delegate
+        toil.tickIntervalAction = delegate(int delta)
         {
-            toil.actor.GainComfortFromCellIfPossible();
+            toil.actor.GainComfortFromCellIfPossible(delta);
             var need_water = toil.actor.needs.Water();
             var thing = toil.actor.CurJob.GetTarget(buildingIndex).Thing;
             var comp = thing.TryGetComp<CompWaterSource>();
@@ -238,30 +235,29 @@ public static class Toils_Mizu
             }
 
             // 徐々に飲む
-            var riseNeedWater = 1 / (float)comp.BaseDrinkTicks;
+            var riseNeedWater = 1 / (float)comp.BaseDrinkTicks * delta;
             need_water.CurLevel = Mathf.Min(need_water.CurLevel + riseNeedWater, need_water.MaxLevel);
             building.DrawWater(riseNeedWater * Need_Water.NeedWaterVolumePerDay);
         };
         toil.WithProgressBar(buildingIndex,
             () => 1f - ((float)toil.actor.jobs.curDriver.ticksLeftThisToil / initialTicks));
         toil.defaultCompleteMode = ToilCompleteMode.Delay;
-        toil.FailOn(
-            _ =>
+        toil.FailOn(_ =>
+        {
+            var actor = toil.actor;
+            var target = actor.CurJob.GetTarget(buildingIndex);
+
+            if (target.Thing.def.hasInteractionCell)
             {
-                var actor = toil.actor;
-                var target = actor.CurJob.GetTarget(buildingIndex);
+                // 使用場所があるなら使用場所基準
+                return target.Thing.InteractionCell.IsForbidden(actor) ||
+                       !actor.CanReach(target.Thing.InteractionCell, PathEndMode.OnCell, Danger.Deadly);
+            }
 
-                if (target.Thing.def.hasInteractionCell)
-                {
-                    // 使用場所があるなら使用場所基準
-                    return target.Thing.InteractionCell.IsForbidden(actor) ||
-                           !actor.CanReach(target.Thing.InteractionCell, PathEndMode.OnCell, Danger.Deadly);
-                }
-
-                // 使用場所がないなら設備の場所基準
-                return target.Thing.Position.IsForbidden(actor) || !actor.CanReach(target.Thing.Position,
-                    PathEndMode.ClosestTouch, Danger.Deadly);
-            });
+            // 使用場所がないなら設備の場所基準
+            return target.Thing.Position.IsForbidden(actor) || !actor.CanReach(target.Thing.Position,
+                PathEndMode.ClosestTouch, Danger.Deadly);
+        });
 
         // エフェクト追加
         toil.PlaySustainerOrSound(() => DefDatabase<SoundDef>.GetNamed("Ingest_Water"));
@@ -340,9 +336,9 @@ public static class Toils_Mizu
                 .CapitalizeFirst();
             Messages.Message(text, actor, MessageTypeDefOf.NegativeEvent);
         };
-        toil.tickAction = delegate
+        toil.tickIntervalAction = delegate(int delta)
         {
-            toil.actor.GainComfortFromCellIfPossible();
+            toil.actor.GainComfortFromCellIfPossible(delta);
             var need_water = toil.actor.needs.Water();
 
             // var cell = toil.actor.CurJob.GetTarget(cellIndex).Cell;
@@ -353,19 +349,18 @@ public static class Toils_Mizu
             }
 
             // 徐々に飲む
-            var riseNeedWater = 1 / (float)baseDrinkTicksFromTerrain;
+            var riseNeedWater = 1 / (float)baseDrinkTicksFromTerrain * delta;
             need_water.CurLevel = Mathf.Min(need_water.CurLevel + riseNeedWater, need_water.MaxLevel);
         };
         toil.WithProgressBar(cellIndex,
             () => 1f - ((float)toil.actor.jobs.curDriver.ticksLeftThisToil / initialTicks));
         toil.defaultCompleteMode = ToilCompleteMode.Delay;
-        toil.FailOn(
-            _ =>
-            {
-                var actor = toil.actor;
-                return actor.CurJob.targetA.Cell.IsForbidden(actor) ||
-                       !actor.CanReach(actor.CurJob.targetA.Cell, PathEndMode.OnCell, Danger.Deadly);
-            });
+        toil.FailOn(_ =>
+        {
+            var actor = toil.actor;
+            return actor.CurJob.targetA.Cell.IsForbidden(actor) ||
+                   !actor.CanReach(actor.CurJob.targetA.Cell, PathEndMode.OnCell, Danger.Deadly);
+        });
 
         // エフェクト追加
         toil.PlaySustainerOrSound(() => DefDatabase<SoundDef>.GetNamed("Ingest_Water"));
@@ -444,15 +439,14 @@ public static class Toils_Mizu
         List<WaterTerrainType> waterTerrainTypeList)
         where T : IJobEndable
     {
-        f.AddEndCondition(
-            () =>
-            {
-                var thing = f.GetActor().jobs.curJob.GetTarget(index).Thing;
-                var terrainDef = thing.Map.terrainGrid.TerrainAt(thing.Position);
-                return !waterTerrainTypeList.Contains(terrainDef.GetWaterTerrainType())
-                    ? JobCondition.Incompletable
-                    : JobCondition.Ongoing;
-            });
+        f.AddEndCondition(() =>
+        {
+            var thing = f.GetActor().jobs.curJob.GetTarget(index).Thing;
+            var terrainDef = thing.Map.terrainGrid.TerrainAt(thing.Position);
+            return !waterTerrainTypeList.Contains(terrainDef.GetWaterTerrainType())
+                ? JobCondition.Incompletable
+                : JobCondition.Ongoing;
+        });
         return f;
     }
 
@@ -479,12 +473,6 @@ public static class Toils_Mizu
             var actor = toil.actor;
             var curJob = actor.jobs.curJob;
             var thing = curJob.GetTarget(drawerIndex).Thing;
-            if (thing == null)
-            {
-                actor.jobs.EndCurrentJob(JobCondition.Incompletable);
-                return;
-            }
-
             if (thing is not IBuilding_DrinkWater building)
             {
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
@@ -528,7 +516,7 @@ public static class Toils_Mizu
             // 床置き指定
             if (!GenPlace.TryPlaceThing(createThing, actor.Position, actor.Map, ThingPlaceMode.Near))
             {
-                Log.Error($"{actor} could not drop recipe product {thing} near {actor.Position}");
+                Log.Message($"[NoWaterNoLife]: {actor} could not drop recipe product {thing} near {actor.Position}");
             }
 
             actor.jobs.EndCurrentJob(JobCondition.Succeeded);
@@ -627,7 +615,7 @@ public static class Toils_Mizu
                 var compprop = thingDef.GetCompProperties<CompProperties_WaterSource>();
                 if (compprop == null)
                 {
-                    Log.Error("compprop is null");
+                    Log.Message("[NoWaterNoLife]: compprop is null");
                     actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                     return;
                 }
@@ -638,7 +626,7 @@ public static class Toils_Mizu
 
             if (curJob.GetTarget(billGiverIndex).Thing is not Building_WaterNetWorkTable billGiver)
             {
-                Log.Error("billGiver is null");
+                Log.Message("[NoWaterNoLife]: billGiver is null");
                 actor.jobs.EndCurrentJob(JobCondition.Incompletable);
                 return;
             }
@@ -702,7 +690,8 @@ public static class Toils_Mizu
             {
                 if (!GenPlace.TryPlaceThing(thing, actor.Position, actor.Map, ThingPlaceMode.Near))
                 {
-                    Log.Error($"{actor} could not drop recipe product {thing} near {actor.Position}");
+                    Log.Message(
+                        $"[NoWaterNoLife]: {actor} could not drop recipe product {thing} near {actor.Position}");
                 }
 
                 actor.jobs.EndCurrentJob(JobCondition.Succeeded);
@@ -723,7 +712,7 @@ public static class Toils_Mizu
 
             if (!GenPlace.TryPlaceThing(thing, actor.Position, actor.Map, ThingPlaceMode.Near))
             {
-                Log.Error($"Bill doer could not drop product {thing} near {actor.Position}");
+                Log.Message($"[NoWaterNoLife]: Bill doer could not drop product {thing} near {actor.Position}");
             }
 
             actor.jobs.EndCurrentJob(JobCondition.Succeeded);
@@ -834,7 +823,7 @@ public static class Toils_Mizu
                 thing.Map.physicalInteractionReservationManager.Reserve(actor, actor.CurJob, thing);
             }
         };
-        toil.tickAction = delegate { toil.actor.GainComfortFromCellIfPossible(); };
+        toil.tickIntervalAction = delegate(int delta) { toil.actor.GainComfortFromCellIfPossible(delta); };
         toil.WithProgressBar(
             thingIndex,
             delegate

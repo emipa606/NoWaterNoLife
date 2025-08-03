@@ -2,8 +2,14 @@
   "Continued": true,
   "CanAdd": "1",
   "CanRemove": "1",
-  "PreviewVersion": "1.5",
+  "PreviewVersion": "1.6",
   "SocialImageSet": true,
   "SearchTags": " survival",
-  "LastXmlCleaning": "2025-02-04T11:02:50.6944052+01:00"
+  "LastXmlCleaning": "2025-08-03T22:23:16.9435406+02:00",
+  "Patches": true,
+  "Defs": true,
+  "Assemblies": true,
+  "LinesOfCode": 445813,
+  "LinesOfXML": 166183,
+  "CodeBaseSize": 91
 }

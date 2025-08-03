@@ -55,29 +55,28 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
         }
 
         // 看病アイテムのチェック
-        var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
-            thing =>
+        var mopList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(thing =>
+        {
+            // 使用禁止チェック
+            if (thing.IsForbidden(pawn))
             {
-                // 使用禁止チェック
-                if (thing.IsForbidden(pawn))
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var comp = thing.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+            var comp = thing.TryGetComp<CompWaterTool>();
+            if (comp == null)
+            {
+                return false;
+            }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
-                {
-                    return false;
-                }
+            if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
+            {
+                return false;
+            }
 
-                // 1回も使えないレベルの保有水量だったらダメ
-                return !(Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0);
-            });
+            // 1回も使えないレベルの保有水量だったらダメ
+            return !(Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0);
+        });
         if (!mopList.Any())
         {
             return false;
@@ -95,30 +94,29 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
         // 一番近いツールを探す
         Thing candidateTool = null;
         var minDist = int.MaxValue;
-        var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(
-            thing =>
+        var toolList = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.HaulableAlways).Where(thing =>
+        {
+            // 使用禁止チェック
+            if (thing.IsForbidden(pawn))
             {
-                // 使用禁止チェック
-                if (thing.IsForbidden(pawn))
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var comp = thing.TryGetComp<CompWaterTool>();
-                if (comp == null)
-                {
-                    return false;
-                }
+            var comp = thing.TryGetComp<CompWaterTool>();
+            if (comp == null)
+            {
+                return false;
+            }
 
-                if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
-                {
-                    return false;
-                }
+            if (!comp.UseWorkType.Contains(CompProperties_WaterTool.UseWorkType.Nurse))
+            {
+                return false;
+            }
 
-                // 1回も使えないレベルの保有水量だったらダメ
-                // 80%未満で水を補充するので80%程度であれば使用可能とする
-                return !(Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0);
-            });
+            // 1回も使えないレベルの保有水量だったらダメ
+            // 80%未満で水を補充するので80%程度であれば使用可能とする
+            return !(Mathf.Floor(comp.StoredWaterVolume / JobDriver_Nurse.ConsumeWaterVolume / 0.79f) <= 0);
+        });
         foreach (var tool in toolList)
         {
             // 予約できないツールはパス
@@ -139,7 +137,7 @@ public class WorkGiver_Nurse : WorkGiver_TendOther
 
         if (candidateTool == null)
         {
-            Log.Error("candidateTool is null");
+            Log.Message("[NoWaterNoLife]: candidateTool is null");
             return null;
         }
 

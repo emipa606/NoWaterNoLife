@@ -18,7 +18,7 @@ public class Building_UndergroundDeepWaterPump : Building_UndergroundWaterPump
             waterGrid = Map.GetComponent<MapComponent_DeepWaterGrid>();
             if (waterGrid == null)
             {
-                Log.Error("waterGrid is null");
+                Log.Message("[NoWaterNoLife]: Found no watergrid");
             }
 
             return waterGrid;

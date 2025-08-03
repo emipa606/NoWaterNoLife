@@ -34,7 +34,7 @@ public class Thing_Bucket : ThingWithComps
         prevGraphicIndex = graphicIndex;
     }
 
-    public override void Tick()
+    protected override void Tick()
     {
         base.Tick();
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: H2O -->
+  <Mizu_H2O.label>H2O</Mizu_H2O.label>
+  <!-- EN: Ices -->
+  <Mizu_Ices.label>Ices</Mizu_Ices.label>
+  <!-- EN: Snows -->
+  <Mizu_Snows.label>Snows</Mizu_Snows.label>
+  <!-- EN: Tools -->
+  <Mizu_Tools.label>Tools</Mizu_Tools.label>
+  <!-- EN: Waters -->
+  <Mizu_Waters.label>Waters</Mizu_Waters.label>
+</LanguageData>
