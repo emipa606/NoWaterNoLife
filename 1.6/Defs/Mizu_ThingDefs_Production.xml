@@ -300,6 +300,8 @@
     <building>
       <isInert>true</isInert>
       <isEdifice>false</isEdifice>
+      <canLandGravshipOn>true</canLandGravshipOn>
+      <canConstructInCorner>true</canConstructInCorner>
     </building>
     <altitudeLayer>FloorEmplacement</altitudeLayer>
     <passability>Standable</passability>

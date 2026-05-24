@@ -6,4 +6,58 @@
     <BuildType Name="Release" />
   </Configurations>
   <Project Path="MizuMod/MizuMod.csproj" />
+  <Folder Name="/XML/About/">
+    <File Path="../About/about.xml" />
+  </Folder>
+  <Folder Name="/XML/1.6/Patches/">
+    <File Path="../1.6/Patches/Alpha_Animals.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Building.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Duty.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Food.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_PrisonLabour.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Race.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Recipe.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Scenario.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Stat.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_Terrain.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_ThinkTree.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_TraderKind.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_VGP_Drinks.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_VGP_Gourmet.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches_VGP.xml" />
+    <File Path="../1.6/Patches/Mizu_Patches.xml" />
+  </Folder>
+  <Folder Name="/XML/Languages/English/Keyed/">
+    <File Path="../Languages/English/Keyed/LanguageData.xml" />
+  </Folder>
+  <Folder Name="/XML/1.6/Defs/">
+    <File Path="../1.6/Defs/Mizu__GlobalSettings.xml" />
+    <File Path="../1.6/Defs/Mizu_Concepts.xml" />
+    <File Path="../1.6/Defs/Mizu_DamageDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_DesignationCategories.xml" />
+    <File Path="../1.6/Defs/Mizu_GenStep.xml" />
+    <File Path="../1.6/Defs/Mizu_Hediffs.xml" />
+    <File Path="../1.6/Defs/Mizu_JobDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_JoyGiver.xml" />
+    <File Path="../1.6/Defs/Mizu_NeedDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_RecipeDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_Records.xml" />
+    <File Path="../1.6/Defs/Mizu_ResearchProjects.xml" />
+    <File Path="../1.6/Defs/Mizu_ResearchTabs.xml" />
+    <File Path="../1.6/Defs/Mizu_Sounds.xml" />
+    <File Path="../1.6/Defs/Mizu_StatCategoryDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_StatDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingCategoryDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingDefs_FilthLike.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingDefs_Furniture.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingDefs_Items.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingDefs_Mote.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingDefs_Production.xml" />
+    <File Path="../1.6/Defs/Mizu_ThingDefs_Tools.xml" />
+    <File Path="../1.6/Defs/Mizu_ThinkTrees.xml" />
+    <File Path="../1.6/Defs/Mizu_Thoughts.xml" />
+    <File Path="../1.6/Defs/Mizu_WaterTypes.xml" />
+    <File Path="../1.6/Defs/Mizu_WorkGiverDefs.xml" />
+    <File Path="../1.6/Defs/Mizu_WorkTypeDefs.xml" />
+  </Folder>
 </Solution>

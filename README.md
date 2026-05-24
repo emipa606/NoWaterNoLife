@@ -1,6 +1,6 @@
 # [No Water, No Life (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2387857358)
 
-![Image](https://i.imgur.com/buuPQel.png)
+![Image](https://img.litet.net/logos/Info.png)
 
 Update of himesama, schooss mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=1541840184
@@ -15,9 +15,9 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2024595829
 
 - This info was a part of the original mod but was removed by the previous mod author for some reason: ”This mod should NOT be applied to saved games, it is best to start with a new game. This mod cannot be removed form a savegame.”
 
-![Image](https://i.imgur.com/pufA0kM.png)
+![Image](https://img.litet.net/logos/Notice.png)
 	
-![Image](https://i.imgur.com/Z4GOv8H.png)
+![Image](https://img.litet.net/logos/OriginalDescription.png)
 
 for RimWorld 1.1
 mod version 1.8.1
@@ -60,13 +60,13 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1541840184
 
 This workshop post was intended to get a working 1.1 version of this mod. Eventually my goal will be to merge this back into schoos76's workshop post and github repository as I'm not a skilled game programmer.
 
-![Image](https://i.imgur.com/PwoNOj4.png)
+![Image](https://img.litet.net/logos/ReportingIssues.png)
 
 
 
 -  See if the the error persists if you just have this mod and its requirements active.
 -  If not, try adding your other mods until it happens again.
--  Post your error-log using the [Log Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) or the standalone [Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) and command Ctrl+F12
+-  Always post your log using the [Log Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404)
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
@@ -74,4 +74,4 @@ This workshop post was intended to get a working 1.1 version of this mod. Eventu
 
  
 
-[![Image](https://img.shields.io/github/v/release/emipa606/NoWaterNoLife?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2387857358) | tags:  survival
+[![Image](https://img.shields.io/github/v/release/emipa606/NoWaterNoLife?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2387857358) | tags: survival

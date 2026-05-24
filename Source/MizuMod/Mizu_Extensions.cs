@@ -30,28 +30,6 @@ public static class Mizu_Extensions
         // 心情あり、水分要求あり、状態はまだ大丈夫 = 地形から水を摂取しない
     }
 
-    public static bool CanDrinkWater(this Thing t)
-    {
-        var comp = t.TryGetComp<CompWaterSource>();
-        return comp is { SourceType: CompProperties_WaterSource.SourceType.Item };
-    }
-
-    public static bool CanDrinkWaterNow(this Thing t)
-    {
-        return !t.IsBurning() && t.CanDrinkWater();
-    }
-
-    public static bool CanGetWater(this Thing t)
-    {
-        if (!t.CanDrinkWater())
-        {
-            return false;
-        }
-
-        var comp = t.TryGetComp<CompWaterSource>();
-        return comp.WaterAmount > 0.0f;
-    }
-
     public static bool CanGetWater(this TerrainDef def)
     {
         return def.IsRiver() || def.IsLakeOrPond() || def.IsMarsh() || def.IsSea();
@@ -161,65 +139,6 @@ public static class Mizu_Extensions
         return (float)unroofedCells / allCells;
     }
 
-    public static float GetWaterAmount(this Thing t)
-    {
-        var comp = t.TryGetComp<CompWaterSource>();
-        if (comp == null)
-        {
-            return 0f;
-        }
-
-        return comp.SourceType != CompProperties_WaterSource.SourceType.Item ? 0f : Math.Max(comp.WaterAmount, 0.0f);
-    }
-
-    public static void GetWaterCalculateAmounts(
-        this Thing t,
-        float waterWanted,
-        bool withIngested,
-        out int numTaken,
-        out float waterGot)
-    {
-        var waterAmount = t.GetWaterAmount();
-        if (waterAmount == 0.0f)
-        {
-            // 水分量0のアイテムの必要個数を計算させようとしている
-            Log.Message("[NoWaterNoLife]: error in GetWaterCalculateAmounts : waterAmount == 0.0f");
-            numTaken = 0;
-            waterGot = 0.0f;
-            return;
-        }
-
-        if (!withIngested && t.def.IsIngestible)
-        {
-            // 食べられるものを飲もうとしている
-            Log.Message("[NoWaterNoLife]: error thing is ingestible.");
-            numTaken = 0;
-            waterGot = 0.0f;
-            return;
-        }
-
-        numTaken = (int)Math.Ceiling(waterWanted / waterAmount); // そのアイテムで必要な水分を満たすのに何個必要か
-        numTaken = Mathf.Min(
-            numTaken,
-            t.stackCount,
-            t.TryGetComp<CompWaterSource>().MaxNumToGetAtOnce); // 必要数、スタック数、同時摂取可能数のうち最も低い数字
-        numTaken = Math.Max(numTaken, 1); // 最低値は1
-        waterGot = numTaken * waterAmount; // 個数と1個当たりの水分の積→摂取水分量
-    }
-
-    public static WaterPreferability GetWaterPreferability(this Thing t)
-    {
-        var comp = t.TryGetComp<CompWaterSource>();
-        if (comp == null)
-        {
-            return WaterPreferability.Undefined;
-        }
-
-        return !comp.IsWaterSource
-            ? WaterPreferability.Undefined
-            : MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability;
-    }
-
     public static WaterTerrainType GetWaterTerrainType(this TerrainDef def)
     {
         if (def.IsSea())
@@ -289,19 +208,6 @@ public static class Mizu_Extensions
         return result;
     }
 
-    public static bool IsConnectedAnd(
-        this IBuilding_WaterNet t1,
-        IBuilding_WaterNet t2,
-        bool ignoreActivate = false)
-    {
-        return t1.IsOutputTo(t2, ignoreActivate) && t2.IsOutputTo(t1, ignoreActivate);
-    }
-
-    public static bool IsConnectedOr(this IBuilding_WaterNet t1, IBuilding_WaterNet t2, bool ignoreActivate = false)
-    {
-        return t1.IsOutputTo(t2, ignoreActivate) || t2.IsOutputTo(t1, ignoreActivate);
-    }
-
     public static bool IsIce(this TerrainDef def)
     {
         return def.defName == "Ice";
@@ -310,16 +216,6 @@ public static class Mizu_Extensions
     public static bool IsIngestibleFor(this Thing thing, Pawn pawn)
     {
         return thing.def.IsNutritionGivingIngestible && thing.IngestibleNow && pawn.RaceProps.CanEverEat(thing);
-    }
-
-    public static bool IsLakeOrPond(this TerrainDef def)
-    {
-        return !def.IsSea() && !def.IsRiver() && def.defName.Contains("Water");
-    }
-
-    public static bool IsMarsh(this TerrainDef def)
-    {
-        return def.defName.Contains("Marsh");
     }
 
     public static bool IsOutputTo(this IBuilding_WaterNet t1, IBuilding_WaterNet t2, bool ignoreActivate = false)
@@ -402,21 +298,6 @@ public static class Mizu_Extensions
         // 腐る水で、現在は新鮮で、あと1日以内に腐ってしまう場合、腐りかけと判断する
     }
 
-    public static bool IsSea(this TerrainDef def)
-    {
-        return def.defName.Contains("WaterOcean");
-    }
-
-    public static bool IsWater(this TerrainDef def)
-    {
-        return def.IsSea() || def.IsRiver() || def.IsLakeOrPond() || def.IsMarsh();
-    }
-
-    public static bool IsWaterStandable(this TerrainDef def)
-    {
-        return def.IsWater() && def.passability == Traversability.Standable;
-    }
-
     public static Toil JumpIfOutsideMopArea(this Toil toil, TargetIndex ind, Toil jumpToil)
     {
         return toil.JumpIf(
@@ -428,32 +309,6 @@ public static class Mizu_Extensions
                 return !toil.actor.Map.areaManager.Mop()[pos];
             },
             jumpToil);
-    }
-
-    public static Area_Mop Mop(this AreaManager areaManager)
-    {
-        var area = areaManager.Get<Area_Mop>();
-        if (area != null)
-        {
-            return area;
-        }
-
-        var newArea = new Area_Mop(areaManager);
-        areaManager.AllAreas.Add(newArea);
-        return newArea;
-    }
-
-    public static Area_SnowGet SnowGet(this AreaManager areaManager)
-    {
-        var area = areaManager.Get<Area_SnowGet>();
-        if (area != null)
-        {
-            return area;
-        }
-
-        var newArea = new Area_SnowGet(areaManager);
-        areaManager.AllAreas.Add(newArea);
-        return newArea;
     }
 
     public static float TotalWater(this ResourceCounter rc)
@@ -529,5 +384,166 @@ public static class Mizu_Extensions
     private static bool IsMud(this TerrainDef def)
     {
         return def.defName.Contains("Mud");
+    }
+
+    extension(Thing t)
+    {
+        public bool CanDrinkWater()
+        {
+            var comp = t.TryGetComp<CompWaterSource>();
+            return comp is { SourceType: CompProperties_WaterSource.SourceType.Item };
+        }
+
+        public bool CanDrinkWaterNow()
+        {
+            return !t.IsBurning() && t.CanDrinkWater();
+        }
+
+        public bool CanGetWater()
+        {
+            if (!t.CanDrinkWater())
+            {
+                return false;
+            }
+
+            var comp = t.TryGetComp<CompWaterSource>();
+            return comp.WaterAmount > 0.0f;
+        }
+    }
+
+    extension(Thing t)
+    {
+        public float GetWaterAmount()
+        {
+            var comp = t.TryGetComp<CompWaterSource>();
+            if (comp == null)
+            {
+                return 0f;
+            }
+
+            return comp.SourceType != CompProperties_WaterSource.SourceType.Item
+                ? 0f
+                : Math.Max(comp.WaterAmount, 0.0f);
+        }
+
+        public void GetWaterCalculateAmounts(float waterWanted,
+            bool withIngested,
+            out int numTaken,
+            out float waterGot)
+        {
+            var waterAmount = t.GetWaterAmount();
+            if (waterAmount == 0.0f)
+            {
+                // 水分量0のアイテムの必要個数を計算させようとしている
+                Log.Message("[NoWaterNoLife]: error in GetWaterCalculateAmounts : waterAmount == 0.0f");
+                numTaken = 0;
+                waterGot = 0.0f;
+                return;
+            }
+
+            if (!withIngested && t.def.IsIngestible)
+            {
+                // 食べられるものを飲もうとしている
+                Log.Message("[NoWaterNoLife]: error thing is ingestible.");
+                numTaken = 0;
+                waterGot = 0.0f;
+                return;
+            }
+
+            numTaken = (int)Math.Ceiling(waterWanted / waterAmount); // そのアイテムで必要な水分を満たすのに何個必要か
+            numTaken = Mathf.Min(
+                numTaken,
+                t.stackCount,
+                t.TryGetComp<CompWaterSource>().MaxNumToGetAtOnce); // 必要数、スタック数、同時摂取可能数のうち最も低い数字
+            numTaken = Math.Max(numTaken, 1); // 最低値は1
+            waterGot = numTaken * waterAmount; // 個数と1個当たりの水分の積→摂取水分量
+        }
+
+        public WaterPreferability GetWaterPreferability()
+        {
+            var comp = t.TryGetComp<CompWaterSource>();
+            if (comp == null)
+            {
+                return WaterPreferability.Undefined;
+            }
+
+            return !comp.IsWaterSource
+                ? WaterPreferability.Undefined
+                : MizuDef.Dic_WaterTypeDef[comp.WaterType].waterPreferability;
+        }
+    }
+
+    extension(IBuilding_WaterNet t1)
+    {
+        public bool IsConnectedAnd(IBuilding_WaterNet t2,
+            bool ignoreActivate = false)
+        {
+            return t1.IsOutputTo(t2, ignoreActivate) && t2.IsOutputTo(t1, ignoreActivate);
+        }
+
+        public bool IsConnectedOr(IBuilding_WaterNet t2, bool ignoreActivate = false)
+        {
+            return t1.IsOutputTo(t2, ignoreActivate) || t2.IsOutputTo(t1, ignoreActivate);
+        }
+    }
+
+    extension(TerrainDef def)
+    {
+        public bool IsLakeOrPond()
+        {
+            return !def.IsSea() && !def.IsRiver() && def.defName.Contains("Water");
+        }
+
+        public bool IsMarsh()
+        {
+            return def.defName.Contains("Marsh");
+        }
+    }
+
+    extension(TerrainDef def)
+    {
+        public bool IsSea()
+        {
+            return def.defName.Contains("WaterOcean");
+        }
+
+        public bool IsWater()
+        {
+            return def.IsSea() || def.IsRiver() || def.IsLakeOrPond() || def.IsMarsh();
+        }
+
+        public bool IsWaterStandable()
+        {
+            return def.IsWater() && def.passability == Traversability.Standable;
+        }
+    }
+
+    extension(AreaManager areaManager)
+    {
+        public Area_Mop Mop()
+        {
+            var area = areaManager.Get<Area_Mop>();
+            if (area != null)
+            {
+                return area;
+            }
+
+            var newArea = new Area_Mop(areaManager);
+            areaManager.AllAreas.Add(newArea);
+            return newArea;
+        }
+
+        public Area_SnowGet SnowGet()
+        {
+            var area = areaManager.Get<Area_SnowGet>();
+            if (area != null)
+            {
+                return area;
+            }
+
+            var newArea = new Area_SnowGet(areaManager);
+            areaManager.AllAreas.Add(newArea);
+            return newArea;
+        }
     }
 }

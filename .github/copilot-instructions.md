@@ -1,48 +1,52 @@
-# GitHub Copilot Instructions for No Water, No Life (Continued)
+# Copilot Instructions for No Water, No Life (Continued)
 
 ## Mod Overview and Purpose
-
-The "No Water, No Life (Continued)" mod enhances the immersive experience of RimWorld by introducing a "Need Water" mechanic for pawns. Originally initiated by himesama and schooss, this mod updates the previous version based on grapenuts' 1.1 release. The mod introduces various components to manage water resources effectively, including wells, pumps, water pipes, faucets, water cleaners, and much more.
-
-**Important Note:** This mod should not be applied mid-game to save files. It is recommended to start a new game with this mod. Removal from an existing save game is also not advised.
+**No Water, No Life (Continued)** is a mod initially created by himesama and schooss, further updated by grapenuts, and now continued by the community. The mod introduces a new "Need Water" mechanic to RimWorld pawns, significantly altering gameplay by requiring pawns to manage their hydration alongside other survival needs. It includes a variety of new gameplay elements focused on water acquisition, transport, and purification.
 
 ## Key Features and Systems
-
-- **Water Management**: Introduces a comprehensive system to manage water needs for both pawns and colonies.
-- **Infrastructure**: Includes buildings and tools such as water wells, pumps, and pipelines to facilitate water gathering and distribution.
-- **Compatibility Patches**: Updates include patches for Alpha Animals and VGP_Core & VGP_Gourmet.
-- **Translation**: Added Polish translation along with updates from other contributors for multilingual support.
-- **Industrial Water Filters**: Provides buildings with increased capacity for processing water.
-- **Sound Enhancements**: Updated custom sounds instead of using built-in sounds.
+- **Water Needs for Pawns:** Adds a hydration need to pawns, similar to food and rest.
+- **Water Systems:** Implements wells, pumps, water pipes, faucets, water filters, and other constructions for water collection and management.
+- **Integration with Other Mods:** Patches for VGP Core, VGP Gourmet, and Alpha Animals.
+- **Industrial Water Filters:** New industrial water filters with ten times the throughput capacity.
+- **Translation Support:** New Polish translation added (thanks to BLyy).
 
 ## Coding Patterns and Conventions
-
-- **Naming Conventions**: Classes and methods follow PascalCase naming convention, while variables within methods are typically camelCase.
-- **Access Modifiers**: Prefer 'internal' for classes that don't need external access, ensuring encapsulation.
-- **Inheritance**: Extensively uses base classes and interfaces (e.g., Building_WorkTable, IBuilding_DrinkWater) for functionality sharing and polymorphism.
-- **Methods**: Keep methods focused and concise, with descriptive names indicating their purpose.
-
+- **Class Conventions:** All classes are designed as either `internal` or `public` depending on the scope. Files usually follow the naming pattern `Functionality_Description`, e.g., `Building_Well.cs`.
+- **Inheritances:** Key classes inherit from `Building_WorkTable`, `Building_WaterNet`, and other abstract or base classes to implement behavior specific to water management.
+- **Internal Methods:** Keeping helper methods like `CanDrinkFor`, `DrawWater`, private or protected unless needed publicly.
+  
 ## XML Integration
-
-- **Def Mod Extensions**: Classes such as `DefExtension_NeedWater` and `DefExtension_ThirstRate` allow XML configuration for expanding the mod's functionality and adjusting to different scenarios.
-- **Recipe Definitions**: Managed using classes like `GetWaterRecipeDef` to define and extend water-related recipes.
+- **DefModExtensions:** Utilize `DefModExtension` for extending XML definitions and adding custom attributes where necessary.
+- **Translation Files:** Ensure translations are stored in appropriate `Languages` folders with flexibility for future localization updates.
+- **XML Patch Files:** Use XML patch operations for integrating content from other mods.
 
 ## Harmony Patching
-
-- The mod begins modifying existing core behavior using Harmony patches. Files include changes to dialogues and caravan systems to integrate the water need.
-- Prefer structuring patches to minimize conflicts with other mods and ensure consistent behavior.
+Harmony is used to patch the game functions, particularly those involving water needs and inter-mod compatibility:
+- Implement patches cautiously, ensuring compatibility with the base game and other mods.
+- Example of a patch file could be:
+  csharp
+  [HarmonyPatch(typeof(SomeGameClass), "SomeMethod")]
+  public static class MyPatch {
+      static bool Prefix(ref ReturnType __result) {
+          // custom logic
+          return false; // to skip original method
+      }
+  }
+  
 
 ## Suggestions for Copilot
+- **Water Mechanic Enhancements:** Recommend new features such as weather effects impacting water needs (e.g. rain increases water availability).
+- **Performance Optimization:** Leverage Copilot to identify parts of the code that might be optimized for performance, especially around water calculations.
+- **Code Safety Checks:** Add null checking and exception handling where necessary, Copilot can assist in identifying such areas.
+- **Feature Integrations:** Suggest expansions like compatibility patches for popular mods, using suggestions from Copilot to generate templates.
+- **User Experience Improvements:** Prompt Copilot to suggest code for HUD enhancements showing water status or alerts about dehydration risks.
 
-1. **Water Net Code Enhancements**: Improve water flow calculations in `CompWaterNet.cs` by optimizing how inputs and outputs are handled.
-2. **Dialogue Interface Adjustments**: Enhance user interfaces in `Dialog_FormCaravan_DoWindowContents.cs` to better inform players about water resources.
-3. **Additional Sound Integration**: Write custom water-related events in classes that involve interaction, e.g., `JobDriver_DrinkWater`.
-4. **Performance Improvements**: Use tools like `CompWaterNet` to optimize calculations and interactions within the water management network.
-5. **Debug Tools**: Develop debugging tools within `GSForDebug.cs` to assist in mod development and testing.
+By incorporating these elements, the `No Water, No Life (Continued)` mod aims to offer an engaging and challenging survival mechanic that feels seamlessly integrated into the RimWorld experience.
 
----
-
-By following these guidelines, contributors can ensure consistent code quality and maintainability while utilizing GitHub Copilot's capabilities efficiently.
-
-
-This markdown file provides detailed instructions for contributors using GitHub Copilot on the "No Water, No Life (Continued)" mod for RimWorld, outlining the purpose, features, coding practices, and integration aspects crucial for development.
+## Project Solution Guidelines
+- Relevant mod XML files are included as Solution Items under the solution folder named XML, these can be read and modified from within the solution.
+- Use these in-solution XML files as the primary files for reference and modification.
+- The `.github/copilot-instructions.md` file is included in the solution under the `.github` solution folder, so it should be read/modified from within the solution instead of using paths outside the solution. Update this file once only, as it and the parent-path solution reference point to the same file in this workspace.
+- When making functional changes in this mod, ensure the documented features stay in sync with implementation; use the in-solution `.github` copy as the primary file.
+- In the solution is also a project called Assembly-CSharp, containing a read-only version of the decompiled game source, for reference and debugging purposes.
+- For any new documentation, update this copilot-instructions.md file rather than creating separate documentation files.

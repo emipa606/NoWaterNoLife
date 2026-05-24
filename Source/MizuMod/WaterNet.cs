@@ -411,18 +411,39 @@ public class WaterNet
             }
 
             {
-                // 均等割り
-                var aveOutputWaterFlow = remainOutputWaterFlow / buildingWaterNets.Length;
-                foreach (var inputter in buildingWaterNets)
+                // 均等割り(余剰分を再分配するループ)
+                var remainingInputters = new List<IBuilding_WaterNet>(buildingWaterNets);
+                var exhausted = new List<IBuilding_WaterNet>();
+                while (remainOutputWaterFlow > 0.01f && remainingInputters.Count > 0)
                 {
-                    // 最大を超えない量を計算して入力量を増加
-                    var actualInputWaterFlow = Mathf.Min(
-                        aveOutputWaterFlow,
-                        inputter.InputComp.MaxInputWaterFlow - inputter.InputComp.InputWaterFlow);
-                    inputter.InputComp.InputWaterFlow += actualInputWaterFlow;
-                    inputter.InputComp.InputWaterType =
-                        inputter.InputComp.InputWaterType.GetMinType(outputter.OutputComp.OutputWaterType);
-                    remainOutputWaterFlow -= actualInputWaterFlow;
+                    var aveOutputWaterFlow = remainOutputWaterFlow / remainingInputters.Count;
+                    exhausted.Clear();
+                    foreach (var inputter in remainingInputters)
+                    {
+                        // 最大を超えない量を計算して入力量を増加
+                        var actualInputWaterFlow = Mathf.Min(
+                            aveOutputWaterFlow,
+                            inputter.InputComp.MaxInputWaterFlow - inputter.InputComp.InputWaterFlow);
+                        inputter.InputComp.InputWaterFlow += actualInputWaterFlow;
+                        inputter.InputComp.InputWaterType =
+                            inputter.InputComp.InputWaterType.GetMinType(outputter.OutputComp.OutputWaterType);
+                        remainOutputWaterFlow -= actualInputWaterFlow;
+                        if (inputter.InputComp.InputWaterFlow >= inputter.InputComp.MaxInputWaterFlow)
+                        {
+                            exhausted.Add(inputter);
+                        }
+                    }
+
+                    // 満タンになったものを取り除く。変化がなければ終了
+                    if (exhausted.Count == 0)
+                    {
+                        break;
+                    }
+
+                    foreach (var e in exhausted)
+                    {
+                        remainingInputters.Remove(e);
+                    }
                 }
             }
         }
